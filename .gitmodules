@@ -1,0 +1,12 @@
+[submodule "vim"]
+	path = vim
+	url = git@github.com:SuperPaintman/dotfiles-vim.git
+[submodule "zsh"]
+	path = zsh
+	url = git@github.com:SuperPaintman/dotfiles-zsh.git
+[submodule "tmux"]
+	path = tmux
+	url = git@github.com:SuperPaintman/dotfiles-tmux.git
+[submodule "git"]
+	path = git
+	url = git@github.com:SuperPaintman/dotfiles-git.git
