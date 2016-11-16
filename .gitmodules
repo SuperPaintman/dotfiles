@@ -10,3 +10,6 @@
 [submodule "git"]
 	path = git
 	url = git@github.com:SuperPaintman/dotfiles-git.git
+[submodule "ctags"]
+	path = ctags
+	url = git@github.com:SuperPaintman/dotfiles-ctags.git
