@@ -13,3 +13,9 @@
 [submodule "ctags"]
 	path = ctags
 	url = git@github.com:SuperPaintman/dotfiles-ctags.git
+[submodule "npm"]
+	path = npm
+	url = git@github.com:SuperPaintman/dotfiles-npm.git
+[submodule "yarn"]
+	path = yarn
+	url = git@github.com:SuperPaintman/dotfiles-yarn.git
