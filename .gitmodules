@@ -19,3 +19,6 @@
 [submodule "yarn"]
 	path = yarn
 	url = git@github.com:SuperPaintman/dotfiles-yarn.git
+[submodule "vscode"]
+	path = vscode
+	url = git@github.com:SuperPaintman/dotfiles-vscode.git
