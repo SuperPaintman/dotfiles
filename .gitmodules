@@ -22,3 +22,6 @@
 [submodule "vscode"]
 	path = vscode
 	url = git@github.com:SuperPaintman/dotfiles-vscode.git
+[submodule "lein"]
+	path = lein
+	url = git@github.com:SuperPaintman/dotfiles-lein.git
