@@ -1,0 +1,6 @@
+--regex-javascript=/\bimport\s+('([^']+)'|"([^"]+)")/\2\3/i,imports/
+--regex-javascript=/\bfrom\s+('([^']+)'|"([^"]+)")/\2\3/i,imports/
+--regex-javascript=/\bclass\s+([a-z0-9$_]+)/\1/c,classes/i
+
+
+--langmap=Ruby:.cr

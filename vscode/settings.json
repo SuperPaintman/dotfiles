@@ -1,0 +1,203 @@
+{
+  /** Internal */
+  // Editor
+  "editor.fontFamily": "'DejaVu Sans Mono', Consolas, 'Courier New', monospace",
+  "editor.fontSize": 16,
+  "editor.fontWeight": "normal",
+  "editor.rulers": [80],
+  "editor.tabSize": 2,
+  "editor.multiCursorModifier": "ctrlCmd",
+  "editor.insertSpaces": true,
+  "editor.wordWrap": "off",
+  "editor.autoClosingBrackets": false,
+  "editor.renderWhitespace": "all",
+  "editor.renderControlCharacters": true,
+  "editor.renderLineHighlight": "line",
+  "editor.dragAndDrop": false,
+
+  // Workbench
+  "workbench.colorTheme": "Monokai Extended",
+  "workbench.welcome.enabled": false,
+  "workbench.colorCustomizations": {
+    "statusBar.background": "#23241F",
+    "statusBar.noFolderBackground": "#23241F",
+    "statusBar.debuggingBackground": "#23241F"
+  },
+
+  // Explorer
+  "explorer.autoReveal": false,
+  "explorer.decorations.colors": false,
+
+  // Files
+  "files.exclude": {
+    // Common
+    "**/.git": true,
+    "**/.gitkeep": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    // JavaScript / Node.js
+    "**/node_modules": true,
+    // Python
+    "**/__pycache__": true,
+    // Dart
+    "**/.pub/": true
+  },
+  "files.associations": {
+    // Common
+    "*.eslintignore": "gitignore",
+    // Sublime
+    "*.sublime-settings": "json",
+    "*.sublime-theme": "json",
+    // Dart
+    "*.analysis_options": "yaml",
+    "pubspec.lock": "yaml",
+    // Scala
+    "*.sbt": "scala"
+  },
+  "files.eol": "\n",
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+  "files.autoSave": "off",
+
+  // Extensions
+  "extensions.autoUpdate": false,
+  "extensions.ignoreRecommendations": true,
+
+  // Telemetry
+  "telemetry.enableTelemetry": false,
+  "telemetry.enableCrashReporter": false,
+
+  // HTML
+  "html.format.wrapLineLength": 0,
+
+  // GIT
+  "git.confirmSync": false,
+
+  /** Plugins */
+  // ESLint
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+
+  // Align
+  "align.rightSeparators": [
+    "=",
+    "+=",
+    "-=",
+    "*=",
+    "/=",
+    "?=",
+    "|=",
+    "%=",
+    ".=",
+    "=>",
+    "from"
+  ],
+
+  "align.spaceSeparators": [
+    "=",
+    "+=",
+    "-=",
+    "*=",
+    "/=",
+    "?=",
+    "|=",
+    "%=",
+    ".=",
+    "=>",
+    "from"
+  ],
+
+  // Julia
+  "julia.executablePath": "/usr/local/bin/julia",
+
+  // Vim
+  "vim.disableAnnoyingNeovimMessage": true,
+  "vim.insertModeKeyBindings": [
+    {
+      "before": ["j", "k"],
+      "after": ["<Esc>"]
+    }
+  ],
+  "vim.otherModesKeyBindingsNonRecursive": [
+    // Easymotion
+    {
+      "before": ["<leader>", "s", "<character>"],
+      "after": ["<leader>", "<leader>", "s", "<character>"]
+    },
+    {
+      "before": ["<leader>", "f", "<character>"],
+      "after": ["<leader>", "<leader>", "f", "<character>"]
+    },
+    {
+      "before": ["<leader>", "F", "<character>"],
+      "after": ["<leader>", "<leader>", "F", "<character>"]
+    },
+    {
+      "before": ["<leader>", "t", "<character>"],
+      "after": ["<leader>", "<leader>", "t", "<character>"]
+    },
+    {
+      "before": ["<leader>", "T", "<character>"],
+      "after": ["<leader>", "<leader>", "T", "<character>"]
+    },
+    {
+      "before": ["<leader>", "w"],
+      "after": ["<leader>", "<leader>", "w"]
+    },
+    {
+      "before": ["<leader>", "e"],
+      "after": ["<leader>", "<leader>", "e"]
+    },
+    {
+      "before": ["<leader>", "g", "e"],
+      "after": ["<leader>", "<leader>", "g", "e"]
+    },
+    {
+      "before": ["<leader>", "b"],
+      "after": ["<leader>", "<leader>", "b"]
+    },
+    {
+      "before": ["<leader>", "j"],
+      "after": ["<leader>", "<leader>", "j"]
+    },
+    {
+      "before": ["<leader>", "k"],
+      "after": ["<leader>", "<leader>", "k"]
+    }
+  ],
+  "vim.textwidth": 0,
+  "vim.easymotion": true,
+  "vim.easymotionMarkerBackgroundColor": "#252620",
+  "vim.easymotionMarkerFontFamily": "'DejaVu Sans Mono', Consolas, 'Courier New', monospace",
+  "vim.easymotionMarkerFontSize": "16",
+  "vim.easymotionMarkerYOffset": 16,
+  "vim.easymotionMarkerHeight": 16,
+  "vim.easymotionMarkerWidthPerChar": 16,
+  "vim.surround": true,
+  "vim.hlsearch": true,
+  "vim.statusBarColorControl": true,
+  "vim.statusBarColors": {
+    // Tomorrow (day) colors
+    "normal": "#23241F", // Black
+    "insert": "#eab700", // Yellow
+    "visual": "#f5871f", // Orange
+    "visualline": "#f5871f", // Orange
+    "visualblock": "#f5871f", // Orange
+    "replace": "#c82829" // Red
+  },
+
+  // Git Lens
+  "gitlens.blame.line.enabled": false,
+  "gitlens.statusBar.enabled": false,
+  "gitlens.codeLens.enabled": false,
+  "gitlens.advanced.telemetry.enabled": false,
+
+  // REST Client
+  "rest-client.enableTelemetry": false
+}

@@ -1,0 +1,89 @@
+## Vim
+[submodule "vim/.vim/bundle/vim-surround"]
+	path = vim/.vim/bundle/vim-surround
+	url = https://github.com/tpope/vim-surround
+[submodule "vim/.vim/bundle/vim-javascript"]
+	path = vim/.vim/bundle/vim-javascript
+	url = https://github.com/pangloss/vim-javascript
+[submodule "vim/.vim/bundle/vim-gitgutter"]
+	path = vim/.vim/bundle/vim-gitgutter
+	url = https://github.com/airblade/vim-gitgutter
+[submodule "vim/.vim/bundle/vim-pug"]
+	path = vim/.vim/bundle/vim-pug
+	url = https://github.com/digitaltoad/vim-pug
+[submodule "vim/.vim/bundle/nerdtree"]
+	path = vim/.vim/bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree
+[submodule "vim/.vim/bundle/vim-powerline"]
+	path = vim/.vim/bundle/vim-powerline
+	url = https://github.com/Lokaltog/vim-powerline
+[submodule "vim/.vim/bundle/vim-coffee-script"]
+	path = vim/.vim/bundle/vim-coffee-script
+	url = https://github.com/kchmck/vim-coffee-script
+[submodule "vim/.vim/bundle/editorconfig-vim"]
+	path = vim/.vim/bundle/editorconfig-vim
+	url = https://github.com/editorconfig/editorconfig-vim
+[submodule "vim/.vim/bundle/vim-fish"]
+	path = vim/.vim/bundle/vim-fish
+	url = https://github.com/dag/vim-fish
+[submodule "vim/.vim/bundle/vim-stylus"]
+	path = vim/.vim/bundle/vim-stylus
+	url = https://github.com/wavded/vim-stylus
+[submodule "vim/.vim/bundle/vim-crystal"]
+	path = vim/.vim/bundle/vim-crystal
+	url = https://github.com/rhysd/vim-crystal
+[submodule "vim/.vim/bundle/nerdcommenter"]
+	path = vim/.vim/bundle/nerdcommenter
+	url = https://github.com/scrooloose/nerdcommenter
+[submodule "vim/.vim/bundle/vim-go"]
+	path = vim/.vim/bundle/vim-go
+	url = https://github.com/fatih/vim-go
+[submodule "vim/.vim/bundle/vim-node"]
+	path = vim/.vim/bundle/vim-node
+	url = https://github.com/moll/vim-node
+[submodule "vim/.vim/bundle/vim-easymotion"]
+	path = vim/.vim/bundle/vim-easymotion
+	url = https://github.com/easymotion/vim-easymotion
+[submodule "vim/.vim/bundle/undotree"]
+	path = vim/.vim/bundle/undotree
+	url = https://github.com/mbbill/undotree
+[submodule "vim/.vim/bundle/nim.vim"]
+	path = vim/.vim/bundle/nim.vim
+	url = https://github.com/zah/nim.vim
+[submodule "vim/.vim/bundle/vim-signature"]
+	path = vim/.vim/bundle/vim-signature
+	url = https://github.com/kshenoy/vim-signature
+[submodule "vim/.vim/bundle/tagbar"]
+	path = vim/.vim/bundle/tagbar
+	url = https://github.com/majutsushi/tagbar
+[submodule "vim/.vim/bundle/vim-scala"]
+	path = vim/.vim/bundle/vim-scala
+	url = https://github.com/derekwyatt/vim-scala
+[submodule "vim/.vim/bundle/python-syntax"]
+	path = vim/.vim/bundle/python-syntax
+	url = https://github.com/hdima/python-syntax
+[submodule "vim/.vim/bundle/dart-vim-plugin"]
+	path = vim/.vim/bundle/dart-vim-plugin
+	url = https://github.com/dart-lang/dart-vim-plugin
+
+## ZSH
+[submodule "zsh/.oh-my-zsh"]
+	path = zsh/.oh-my-zsh
+	url = https://github.com/robbyrussell/oh-my-zsh
+[submodule "zsh/.oh-my-zsh-custom/plugins/zsh-autosuggestions"]
+	path = zsh/.oh-my-zsh-custom/plugins/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions
+[submodule "zsh/.oh-my-zsh-custom/plugins/zsh-syntax-highlighting"]
+	path = zsh/.oh-my-zsh-custom/plugins/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting
+
+## Tmux
+[submodule "tmux/.tmux/plugins/tpm"]
+	path = tmux/.tmux/plugins/tpm
+	url = https://github.com/tmux-plugins/tpm
+[submodule "tmux/.tmux/plugins/tmux-sidebar"]
+	path = tmux/.tmux/plugins/tmux-sidebar
+	url = https://github.com/tmux-plugins/tmux-sidebar
+[submodule "tmux/.tmux/plugins/tmux-prefix-highlight"]
+	path = tmux/.tmux/plugins/tmux-prefix-highlight
+	url = https://github.com/tmux-plugins/tmux-prefix-highlight
