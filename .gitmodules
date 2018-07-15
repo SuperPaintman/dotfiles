@@ -25,3 +25,6 @@
 [submodule "lein"]
 	path = lein
 	url = git@github.com:SuperPaintman/dotfiles-lein.git
+[submodule "sbt"]
+	path = sbt
+	url = git@github.com:SuperPaintman/dotfiles-sbt.git
