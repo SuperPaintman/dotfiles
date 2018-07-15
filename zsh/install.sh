@@ -1,5 +1,12 @@
 #!/usr/bin/env bash
 
+if ! which realpath > /dev/null; then
+  # OSX dirty replacement for `realpath`
+  realpath() {
+    [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+  }
+fi
+
 is_force=false
 for arg in "$@"; do
   case $arg in
