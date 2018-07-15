@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 for module in ./*; do
   if [ -f "$module" ]; then
