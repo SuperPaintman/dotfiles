@@ -1,5 +1,68 @@
 [user]
 	email = SuperPaintmanDeveloper@gmail.com
 	name = SuperPaintman
+
 [color]
 	ui = true
+
+[alias]
+	# A
+	## Alias
+	aliases = config --get-regexp alias
+
+	# B
+	## Branch
+	branches = branch -a
+
+	# C
+	## Checkout
+	co = checkout
+	cb = checkout -b
+
+	## Commit
+	c = commit
+	cm = commit -m
+
+	## Contributors
+	contributors = shortlog --summary --numbered --email
+
+	## Current Branch
+	current-branch = rev-parse --abbrev-ref HEAD
+	cb = !git current-branch
+
+	# D
+	## Diff
+	d = diff
+	di = diff --color-words
+	#di = difftool -y -x "diff -W `tput cols` -y" | colordiff | less # TODO
+
+	# F
+	## Fetch
+	f = fetch --all
+
+	# L
+	## Logs
+	l = log --graph --all --abbrev-commit --date=relative --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'
+	lo = log --graph --all --decorate=auto
+	lol = log --graph --all --decorate=auto --pretty=oneline
+
+	# M
+	## Merge
+	m = merge --no-ff
+	noff = merge --no-ff
+
+	# P
+	## Push
+	p = push
+	poc = !git push origin "$(git current-branch)"
+
+	# S
+	## Status
+	s = status -sb
+
+	# T
+	## Tag
+	tags = tag -l
+
+[include]
+	path = ~/.gitconfig.local
