@@ -34,14 +34,13 @@ alias afk="systemctl suspend -i"
 alias fs='stat --format="%s bytes"'
 
 # Git
-# alias git="noglob git"
-alias gl="git log --graph --all --abbrev-commit --date=relative --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'"
-alias glog="git log --graph --all --decorate=auto"
-alias glol="git log --graph --all --decorate=auto --pretty=oneline"
-alias gd="git diff"
-alias gdiff='git difftool -y -x "diff -W `tput cols` -y" | colordiff | less'
-alias gs="git status"
-alias gcb="git rev-parse --abbrev-ref HEAD"
+alias gl="git l"
+alias glo="git lo"
+alias glol="git lol"
+alias gd="git d"
+alias gdi="git di"
+alias gs="git s"
+alias gcb="git cb"
 
 # SSH
 alias sshpass="ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no"
