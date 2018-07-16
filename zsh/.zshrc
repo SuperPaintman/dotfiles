@@ -2,17 +2,10 @@
 # Autoload
 autoload -U zmv
 
-# Env
-source ~/.zsh/env.zsh
-
-# Path
-source ~/.zsh/path.zsh
-
-# Functions
-source ~/.zsh/functions.zsh
-
-# Aliases
-source ~/.zsh/aliases.zsh
+# Init default bash config
+if [ -f ~/.bashrc ]; then
+    source ~/.bashrc
+fi
 
 # Completion
 source ~/.zsh/completion.zsh
