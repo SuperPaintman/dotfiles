@@ -14,6 +14,10 @@ for module in ./*; do
     continue
   fi
 
+  if [ ! -f "$module/install.sh" ]; then
+    continue
+  fi
+
   if [[ $is_force = true ]]; then
     "$module/install.sh" -f
   else
