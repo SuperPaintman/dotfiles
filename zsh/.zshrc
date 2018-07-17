@@ -8,10 +8,10 @@ if [ -f ~/.bashrc ]; then
 fi
 
 # Completion
-source ~/.zsh/completion.zsh
+if [ -f ~/.zsh/completion.zsh ]; then source ~/.zsh/completion.zsh; fi
 
 # Oh My ZSH
-source ~/.zsh/oh-my-zsh-config.zsh
+if [ -f  ~/.zsh/oh-my-zsh-config.zsh ]; then source ~/.zsh/oh-my-zsh-config.zsh; fi
 
 # Theme
-source ~/.zsh/theme.zsh
+if [ -f  ~/.zsh/theme.zsh ]; then source ~/.zsh/theme.zsh; fi
