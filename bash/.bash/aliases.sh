@@ -34,6 +34,7 @@ alias afk="systemctl suspend -i"
 alias fs='stat --format="%s bytes"'
 
 # Git
+alias g="git"
 alias gl="git l"
 alias glo="git lo"
 alias glol="git lol"
