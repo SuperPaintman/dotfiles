@@ -56,9 +56,16 @@
 	p = push
 	poc = !git push origin "$(git current-branch)"
 
+	## Pull
+	puc = !git pull origin "$(git current-branch)"
+
 	# S
 	## Status
 	s = status -sb
+
+	## Stash
+	sin = stash --include-untracked
+	sout = stash pop
 
 	# T
 	## Tag
