@@ -7,6 +7,9 @@ if [ -f ~/.bashrc ]; then
     source ~/.bashrc
 fi
 
+# Functions
+if [ -f ~/.zsh/functions.zsh ]; then source ~/.zsh/functions.zsh; fi
+
 # Completion
 if [ -f ~/.zsh/completion.zsh ]; then source ~/.zsh/completion.zsh; fi
 

@@ -142,3 +142,10 @@ crun() {
     return "$exitcode"
 }
 
+mkd() {
+    mkdir -p "$@" && cd "$_"
+}
+
+reload() {
+    source ~/.bashrc
+}
