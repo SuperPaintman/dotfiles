@@ -20,6 +20,8 @@ else
   error "$(blue ZSH) is not installed"
 fi
 
+echo ""
+
 # Setup modules
 title1 "Setup modules"
 
