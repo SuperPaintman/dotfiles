@@ -7,7 +7,7 @@ if ! which realpath > /dev/null; then
   }
 fi
 
-TARGET="$HOME/.lein"
+source "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/../common.sh"
 
 is_force=false
 for arg in "$@"; do
@@ -18,21 +18,13 @@ for arg in "$@"; do
   esac
 done
 
+TARGET_ROOT="$HOME/.lein"
+SOURCE_ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
-mkdir -p "$TARGET"
+mkdir -p "$TARGET_ROOT"
 
-for target in "profiles.clj"; do
-  ln_target="$TARGET/$target"
-  ln_source="$(dirname "$(realpath "${BASH_SOURCE[0]}")")/$target"
-
-  if [[ -e "$ln_target" || -L "$ln_target" ]]; then
-    if [[ $is_force = true ]]; then
-      rm -fr "$ln_target"
-    else
-      echo "$target already exist"
-      exit 1
-    fi
-  fi
-
-  ln -s "$ln_source" "$ln_target"
-done
+linkall \
+  "$SOURCE_ROOT" \
+  "$TARGET_ROOT" \
+  "$is_force" \
+  "profiles.clj"

@@ -7,6 +7,8 @@ if ! which realpath > /dev/null; then
   }
 fi
 
+source "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/../common.sh"
+
 is_force=false
 for arg in "$@"; do
   case $arg in
@@ -16,18 +18,11 @@ for arg in "$@"; do
   esac
 done
 
-for target in ".npmrc"; do
-  ln_target="$HOME/$target"
-  ln_source="$(dirname "$(realpath "${BASH_SOURCE[0]}")")/$target"
+TARGET_ROOT="$HOME"
+SOURCE_ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
-  if [[ -e "$ln_target" || -L "$ln_target" ]]; then
-    if [[ $is_force = true ]]; then
-      rm -fr "$ln_target"
-    else
-      echo "$target already exist"
-      exit 1
-    fi
-  fi
-
-  ln -s "$ln_source" "$ln_target"
-done
+linkall \
+  "$SOURCE_ROOT" \
+  "$TARGET_ROOT" \
+  "$is_force" \
+  ".npmrc"
