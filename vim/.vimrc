@@ -2,8 +2,8 @@ execute pathogen#infect()
 
 " Langmenu
 if has("gui_running")
-    set langmenu=en_US
-    let $LANG = &langmenu
+  set langmenu=en_US
+  let $LANG = &langmenu
 endif
 
 syntax on
@@ -15,15 +15,15 @@ set encoding=utf-8
 
 " guifont
 if has("gui_running")
-    if has("win32") || has("win64")
-        set guifont=Consolas:h14
-    endif
+  if has("win32") || has("win64")
+    set guifont=Consolas:h14
+  endif
 endif
 
 " Theme
 try
-    " colorscheme vim-tomorrow-theme/Tomorrow-Night
-    colorscheme monokai/monokai
+  " colorscheme vim-tomorrow-theme/Tomorrow-Night
+  colorscheme monokai/monokai
 catch
 endtry
 
@@ -35,35 +35,35 @@ hi CursorLineNR cterm=bold
 
 "" JavaScript
 if exists('g:colors_name') && g:colors_name == 'monokai'
-    """ normal
-    hi Normal ctermbg=234 guibg=#272822
+  """ normal
+  hi Normal ctermbg=234 guibg=#272822
 
-    """ template string braces
-    hi jsTemplateBraces ctermbg=NONE ctermfg=179 guifg=#e69f66
+  """ template string braces
+  hi jsTemplateBraces ctermbg=NONE ctermfg=179 guifg=#e69f66
 endif
 
 "" Markdown
 if exists('g:colors_name') && g:colors_name == 'monokai'
-    """ Bold
-    hi markdownBold     term=bold   cterm=bold    gui=bold    ctermfg=197 guifg=#f92772
+  """ Bold
+  hi markdownBold     term=bold   cterm=bold    gui=bold    ctermfg=197 guifg=#f92772
 
-    "" Italic
-    hi markdownItalic   term=italic cterm=italic  gui=italic  ctermfg=197 guifg=#f92772
+  "" Italic
+  hi markdownItalic   term=italic cterm=italic  gui=italic  ctermfg=197 guifg=#f92772
 
-    "" Bold Italic
-    hi markdownBoldItalic term=bold,italic cterm=bold,italic gui=bold,italic ctermfg=197 guifg=#f92772
+  "" Bold Italic
+  hi markdownBoldItalic term=bold,italic cterm=bold,italic gui=bold,italic ctermfg=197 guifg=#f92772
 
-    """ Headings
-    hi markdownHeadingDelimiter ctermfg=208 guifg=#FD9720
-    hi markdownH1 ctermfg=208 guifg=#FD9720
-    hi markdownH2 ctermfg=208 guifg=#FD9720
-    hi markdownH3 ctermfg=208 guifg=#FD9720
-    hi markdownH4 ctermfg=208 guifg=#FD9720
-    hi markdownH5 ctermfg=208 guifg=#FD9720
-    hi markdownH6 ctermfg=208 guifg=#FD9720
+  """ Headings
+  hi markdownHeadingDelimiter ctermfg=208 guifg=#FD9720
+  hi markdownH1 ctermfg=208 guifg=#FD9720
+  hi markdownH2 ctermfg=208 guifg=#FD9720
+  hi markdownH3 ctermfg=208 guifg=#FD9720
+  hi markdownH4 ctermfg=208 guifg=#FD9720
+  hi markdownH5 ctermfg=208 guifg=#FD9720
+  hi markdownH6 ctermfg=208 guifg=#FD9720
 
-    """ Rule
-    hi markdownRule term=bold cterm=bold gui=bold ctermfg=243 guifg=#8F908A ctermbg=237 guibg=#575b61
+  """ Rule
+  hi markdownRule term=bold cterm=bold gui=bold ctermfg=243 guifg=#8F908A ctermbg=237 guibg=#575b61
 endif
 
 "" Grey whitespaces
@@ -73,7 +73,7 @@ hi SpecialKey ctermbg=NONE ctermfg=59 guifg=#75715E
 set hlsearch
 
 " Drawing
-set lazyredraw 
+set lazyredraw
 
 " Statusline
 set laststatus=2
@@ -84,9 +84,9 @@ set number
 
 " Show hidden characters
 try
-    set listchars=eol:¬,tab:>-,space:·,trail:·,extends:>,precedes:<
+  set listchars=eol:¬,tab:>-,space:·,trail:·,extends:>,precedes:<
 catch
-    set listchars=eol:¬,tab:>-,trail:·,extends:>,precedes:<
+  set listchars=eol:¬,tab:>-,trail:·,extends:>,precedes:<
 endtry
 set list
 
@@ -144,38 +144,38 @@ nnoremap <C-j> :m +1<CR>
 
 "" NERDTree
 try
-    map <C-n> :NERDTreeToggle<CR>
+  map <C-n> :NERDTreeToggle<CR>
 catch
 endtry
 
 "" NERDCommenter
 try
-    map <C-_> <plug>NERDCommenterComment
-    map <C-?> <plug>NERDCommenterToggle
+  map <C-_> <plug>NERDCommenterComment
+  map <C-?> <plug>NERDCommenterToggle
 catch
 endtry
 
 "" EasyMotion
 try
-    map <Leader> <Plug>(easymotion-prefix)
+  map <Leader> <Plug>(easymotion-prefix)
 
-    map  / <Plug>(easymotion-sn)
-    omap / <Plug>(easymotion-tn)
+  map  / <Plug>(easymotion-sn)
+  omap / <Plug>(easymotion-tn)
 
-    map <Leader>L <Plug>(easymotion-bd-jk)
-    "nmap <Leader>L <Plug>(easymotion-overwin-line)
+  map <Leader>L <Plug>(easymotion-bd-jk)
+  "nmap <Leader>L <Plug>(easymotion-overwin-line)
 catch
 endtry
 
 "" undotree
 try
-    nmap ,u :UndotreeToggle<CR>
+  nmap ,u :UndotreeToggle<CR>
 catch
 endtry
 
 "" Tagbar
 try
-    nmap ,x :TagbarToggle<CR>
+  nmap ,x :TagbarToggle<CR>
 catch
 endtry
 
@@ -185,16 +185,16 @@ autocmd BufRead,BufNewFile *.babelrc setfiletype json
 " Syntax
 "" JavaScripe
 function! AutoCMDSyntaxJS()
-    " ...
-    syntax match   jsOperator       /\.\.\./
+  " ...
+  syntax match   jsOperator       /\.\.\./
 
-    syntax keyword jsGlobalObjects  Buffer __dirname __filename console module exports global process
+  syntax keyword jsGlobalObjects  Buffer __dirname __filename console module exports global process
 
-    " async / await
-    syntax clear jsAsyncKeyword
-    syntax keyword jsAsyncKeyword   async
-    syntax keyword jsAwaitKeyword   await
-    syntax cluster jsAll            add=jsAwaitKeyword
+  " async / await
+  syntax clear jsAsyncKeyword
+  syntax keyword jsAsyncKeyword   async
+  syntax keyword jsAwaitKeyword   await
+  syntax cluster jsAll            add=jsAwaitKeyword
 endfunction
 autocmd Syntax javascript call AutoCMDSyntaxJS()
 
@@ -232,12 +232,12 @@ let python_highlight_all = 1
 
 "" Markdown
 let g:markdown_fenced_languages = [
-    \'javascript',
-    \'js=javascript',
-    \'sh',
-    \'bash=sh',
-    \'yaml'
-    \]
+  \'javascript',
+  \'js=javascript',
+  \'sh',
+  \'bash=sh',
+  \'yaml'
+  \]
 
 "" NERDTree
 let g:NERDTreeShowHidden = 1
@@ -245,40 +245,40 @@ let g:NERDTreeShowHidden = 1
 "" Tagbar
 """ see: https://github.com/ramitos/jsctags
 let g:tagbar_type_javascript = {
-    \'ctagsbin': 'jsctags'
-    \}
+  \'ctagsbin': 'jsctags'
+  \}
 
 let g:tagbar_type_crystal = {
-    \'ctagstype': 'ruby',
-    \'kinds': [
-        \'m:modules',
-        \'c:classes',
-        \'d:describes',
-        \'C:contexts',
-        \'f:methods',
-        \'F:singleton methods'
-        \]
-    \}
+  \'ctagstype': 'ruby',
+  \'kinds': [
+    \'m:modules',
+    \'c:classes',
+    \'d:describes',
+    \'C:contexts',
+    \'f:methods',
+    \'F:singleton methods'
+    \]
+  \}
 
 """ see: https://github.com/jszakmeister/markdown2ctags
 let g:tagbar_type_markdown = {
-    \'ctagstype': 'markdown',
-    \'ctagsbin': '/usr/local/bin/markdown2ctags',
-    \'ctagsargs': '-f - --sort=yes',
-    \'kinds': [
-        \'s:sections',
-        \'i:images'
-        \],
-    \'sro': '|',
-    \'kind2scope' : {
-        \'s' : 'section',
-        \},
-    \'sort': 0,
-    \}
+  \'ctagstype': 'markdown',
+  \'ctagsbin': '/usr/local/bin/markdown2ctags',
+  \'ctagsargs': '-f - --sort=yes',
+  \'kinds': [
+    \'s:sections',
+    \'i:images'
+    \],
+  \'sro': '|',
+  \'kind2scope' : {
+    \'s' : 'section',
+    \},
+  \'sort': 0,
+  \}
 
 " Presets
 "" NERDTree
 " try
-"     autocmd vimenter * NERDTree
+"   autocmd vimenter * NERDTree
 " catch
 " endtry
