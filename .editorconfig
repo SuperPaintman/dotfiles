@@ -1,0 +1,27 @@
+root = true
+
+[*]
+end_of_line = lf
+charset = utf-8
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+
+[*.{js,jsx,json,ts,tsx}]
+indent_size = 2
+
+[{*.sh,*.zsh,*.bash,.bashrc,.bash_*,.zshrc}]
+indent_size = 4
+
+[*.yml]
+indent_size = 4
+
+[*.md]
+indent_size = 2
+
+[.gitconfig]
+indent_style = tab
+indent_size = 4
+
+[{.vimrc,*.vim}]
+indent_size = 2
