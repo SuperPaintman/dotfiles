@@ -14,9 +14,54 @@ for arg in "$@"; do
     case $arg in
         -f)
             is_force=true
-        ;;
+            ;;
     esac
 done
+
+if is_osx; then
+    # Install brew
+    if ! which brew > /dev/null; then
+        title1 "Install brew"
+
+        ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+        echo ""
+    fi
+
+    # Install brew formulas
+    if which brew > /dev/null; then
+        title1 "Install brew formulas"
+
+        for formula in "coreutils" "zsh" "tmux" "htop" "tree" "wget" "jq"; do
+            if ! brew ls --versions "$formula" > /dev/null; then
+                brew install "$formula"
+
+                ok "$(blue "$formula") has installed ($(gray "$(brew ls --versions "$formula")"))"
+            else
+                ok "$(blue "$formula") is already installed ($(gray "$(brew ls --versions "$formula")"))"
+            fi
+        done
+
+        echo ""
+    fi
+
+    # Install brew casks
+    if which brew > /dev/null; then
+        title1 "Install brew casks"
+
+        for cask in "iterm2"; do
+            if ! brew cask ls --versions "$cask" > /dev/null; then
+                brew cask install "$cask"
+
+                ok "$(blue "$cask") has installed ($(gray "$(brew cask ls --versions "$cask")"))"
+            else
+                ok "$(blue "$cask") is already installed ($(gray "$(brew cask ls --versions "$cask")"))"
+            fi
+        done
+
+        echo ""
+    fi
+fi
 
 # Install modules
 title1 "Install modules"

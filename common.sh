@@ -43,6 +43,16 @@ error() {
     echo "$(red "[error]")" $@
 }
 
+is_osx() {
+    case "$(uname)" in
+        Darwin*)
+            return 0
+            ;;
+    esac
+
+    return 1
+}
+
 linkall() {
     local source_root="$1"
     local target_root="$2"
