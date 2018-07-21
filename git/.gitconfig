@@ -17,7 +17,7 @@
 	# C
 	## Checkout
 	co = checkout
-	cb = checkout -b
+	cob = checkout -b
 
 	## Commit
 	c = commit
