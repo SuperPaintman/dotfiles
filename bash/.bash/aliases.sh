@@ -10,25 +10,29 @@ alias ......="cd ../../../../.."
 alias ~="cd ~"
 
 ## `ls` aliases
-alias ll="ls -alF"
-alias la="ls -A"
-alias l="ls -CF"
+if _is_osx; then
+    alias ls="gls --color=auto"
+else
+    alias ls="ls --color=auto"
+fi
+alias ll="ls -alFh --group-directories-first"
+alias la="ls -Ah --group-directories-first"
+alias l="ls -CFh --group-directories-first"
 
 ## `df` aliases
 alias dfh="df -h --total"
 
-## Colored output
-if [ -x /usr/bin/dircolors ]; then
-    alias ls='ls --color=auto'
-    # alias dir='dir --color=auto'
-    # alias vdir='vdir --color=auto'
+## `tree` aliases
+alias tree="tree -C"
+alias t="tree"
 
-    alias grep='grep --color=auto'
-    alias fgrep='fgrep --color=auto'
-    alias egrep='egrep --color=auto'
-fi
+## `grep`, `fgrep`, `egrep` aliases
+alias grep="grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}"
+alias fgrep="fgrep --color=auto"
+alias egrep="egrep --color=auto"
 
 ## Other
+alias e="$EDITOR"
 alias where="which"
 alias afk="systemctl suspend -i"
 alias fs='stat --format="%s bytes"'
@@ -52,6 +56,9 @@ alias py3="python3"
 
 # Pygments
 alias ccat="colorize"
+
+# NPM and NPX
+alias npx="npx --no-install"
 
 # Webpack
 alias wds="npx webpack-dev-server"
