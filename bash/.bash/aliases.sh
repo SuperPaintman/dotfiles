@@ -36,6 +36,7 @@ alias e="$EDITOR"
 alias where="which"
 alias afk="systemctl suspend -i"
 alias fs='stat --format="%s bytes"'
+alias map="xargs -n1"
 
 # Git
 alias g="git"
