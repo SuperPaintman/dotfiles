@@ -150,3 +150,15 @@ mkd() {
 reload() {
     source ~/.bashrc
 }
+
+readme() {
+    for readme in {readme,README}.{md,MD,markdown,txt,TXT,mkd}; do
+        if [ -f "$readme" ]; then
+            cat "$readme" | less -RFX
+            return 0
+        fi
+    done
+
+    echo "Readme file is not found"
+    return 1
+}
