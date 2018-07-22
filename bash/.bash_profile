@@ -1,4 +1,15 @@
 #!/usr/bin/env bash
+# Start tmux
+if which tmux > /dev/null; then
+    if [ -z "$TMUX" ] && [ "$TERM_PROGRAM" = "iTerm.app" ]; then
+        if tmux list-session > /dev/null; then
+            tmux attach-session && exit
+        else
+            tmux && exit
+        fi
+    fi
+fi
+
 # Init
 if [ -x /usr/bin/lesspipe ]; then
     eval "$(SHELL=/bin/sh lesspipe)"
