@@ -6,6 +6,9 @@ if ! is_osx; then
     exit
 fi
 
+PREFERENCES="$HOME/Library/Preferences"
+FINDER_PREFERENCES="$PREFERENCES/com.apple.finder.plist"
+
 ################################################################################
 # Trackpad, mouse, keyboard, Bluetooth accessories, and etc.                   #
 ################################################################################
@@ -44,11 +47,39 @@ defaults write com.apple.dock static-only -bool false
 defaults write com.apple.dock tilesize -int 48
 
 ################################################################################
+# Finder                                                                       #
+################################################################################
+title2 "Finder"
+
+# Show hidden files by default
+defaults write com.apple.finder AppleShowAllFiles -bool true
+
+# Show all filename extensions
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+
+# Show side bar
+defaults write com.apple.finder ShowSidebar -boolean true
+
+# Show path bar
+defaults write com.apple.finder ShowPathbar -boolean true
+
+# Show status bar
+defaults write com.apple.finder ShowStatusBar -bool false
+
+# Show preview pane
+defaults write com.apple.finder ShowPreviewPane -bool false
+
+# Enable snap-to-grid for icons on the desktop and in other icon views
+/usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" "$FINDER_PREFERENCES"
+/usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" "$FINDER_PREFERENCES"
+/usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" "$FINDER_PREFERENCES"
+
+################################################################################
 # Reload affected applications                                                 #
 ################################################################################
 title2 "Reload affected applications"
 
-for app in "ControlStrip" "Dock"; do
+for app in "ControlStrip" "Dock" "Finder"; do
     if killall "$app" 2>&1 > /dev/null; then
         ok "$(blue "$app") has reloaded"
     fi
