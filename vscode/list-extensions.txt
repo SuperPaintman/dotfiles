@@ -1,6 +1,8 @@
+DanTup.dart-code@2.0.0
+MariusAlchimavicius.json-to-ts@1.4.3
+SuperPaintman.monokai-extended@0.5.1
 christian-kohler.path-intellisense@1.4.2
 codezombiech.gitignore@0.5.0
-DanTup.dart-code@2.0.0
 dbaeumer.vscode-eslint@1.2.11
 donjayamanne.python@0.6.5
 eamodio.gitlens@4.3.1
@@ -13,11 +15,9 @@ joelday.docthis@0.4.4
 josa.markdown-table-formatter@0.2.3
 julialang.language-julia@0.6.0
 kofno.crystal-ide@0.0.4
-MariusAlchimavicius.json-to-ts@1.4.3
 ms-vscode.Go@0.10.2
 ryu1kn.partial-diff@0.3.1
 shanoor.vscode-nginx@0.3.1
 steve8708.Align@0.2.0
-SuperPaintman.monokai-extended@0.5.1
 sysoev.language-stylus@1.7.3
 vscodevim.vim@0.9.0
