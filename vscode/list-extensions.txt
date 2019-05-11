@@ -19,6 +19,6 @@ ms-vscode.sublime-keybindings@2.0.1
 ryu1kn.partial-diff@0.3.1
 shanoor.vscode-nginx@0.3.1
 steve8708.Align@0.2.0
-SuperPaintman.monokai-extended@0.4.1
+SuperPaintman.monokai-extended@0.5.1
 sysoev.language-stylus@1.7.3
 vscodevim.vim@0.9.0
