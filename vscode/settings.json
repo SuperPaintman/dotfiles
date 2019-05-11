@@ -4,7 +4,9 @@
   "editor.fontFamily": "'DejaVu Sans Mono', Consolas, 'Courier New', monospace",
   "editor.fontSize": 16,
   "editor.fontWeight": "normal",
-  "editor.rulers": [80],
+  "editor.rulers": [
+    80
+  ],
   "editor.tabSize": 2,
   "editor.multiCursorModifier": "ctrlCmd",
   "editor.insertSpaces": true,
@@ -14,7 +16,6 @@
   "editor.renderControlCharacters": true,
   "editor.renderLineHighlight": "line",
   "editor.dragAndDrop": false,
-
   // Workbench
   "workbench.colorTheme": "Monokai Extended",
   "workbench.welcome.enabled": false,
@@ -23,11 +24,9 @@
     "statusBar.noFolderBackground": "#23241F",
     "statusBar.debuggingBackground": "#23241F"
   },
-
   // Explorer
   "explorer.autoReveal": false,
   "explorer.decorations.colors": false,
-
   // Files
   "files.exclude": {
     // Common
@@ -60,21 +59,16 @@
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
   "files.autoSave": "off",
-
   // Extensions
   "extensions.autoUpdate": false,
   "extensions.ignoreRecommendations": true,
-
   // Telemetry
   "telemetry.enableTelemetry": false,
   "telemetry.enableCrashReporter": false,
-
   // HTML
   "html.format.wrapLineLength": 0,
-
   // GIT
   "git.confirmSync": false,
-
   /** Plugins */
   // ESLint
   "eslint.validate": [
@@ -83,7 +77,6 @@
     "typescript",
     "typescriptreact"
   ],
-
   // Align
   "align.rightSeparators": [
     "=",
@@ -98,7 +91,6 @@
     "=>",
     "from"
   ],
-
   "align.spaceSeparators": [
     "=",
     "+=",
@@ -112,63 +104,155 @@
     "=>",
     "from"
   ],
-
   // Julia
   "julia.executablePath": "/usr/local/bin/julia",
-
   // Vim
   "vim.disableAnnoyingNeovimMessage": true,
   "vim.insertModeKeyBindings": [
     {
-      "before": ["j", "k"],
-      "after": ["<Esc>"]
+      "before": [
+        "j",
+        "k"
+      ],
+      "after": [
+        "<Esc>"
+      ]
     }
   ],
   "vim.otherModesKeyBindingsNonRecursive": [
     // Easymotion
     {
-      "before": ["<leader>", "s", "<character>"],
-      "after": ["<leader>", "<leader>", "s", "<character>"]
+      "before": [
+        "<leader>",
+        "s",
+        "<character>"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "s",
+        "<character>"
+      ]
     },
     {
-      "before": ["<leader>", "f", "<character>"],
-      "after": ["<leader>", "<leader>", "f", "<character>"]
+      "before": [
+        "<leader>",
+        "f",
+        "<character>"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "f",
+        "<character>"
+      ]
     },
     {
-      "before": ["<leader>", "F", "<character>"],
-      "after": ["<leader>", "<leader>", "F", "<character>"]
+      "before": [
+        "<leader>",
+        "F",
+        "<character>"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "F",
+        "<character>"
+      ]
     },
     {
-      "before": ["<leader>", "t", "<character>"],
-      "after": ["<leader>", "<leader>", "t", "<character>"]
+      "before": [
+        "<leader>",
+        "t",
+        "<character>"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "t",
+        "<character>"
+      ]
     },
     {
-      "before": ["<leader>", "T", "<character>"],
-      "after": ["<leader>", "<leader>", "T", "<character>"]
+      "before": [
+        "<leader>",
+        "T",
+        "<character>"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "T",
+        "<character>"
+      ]
     },
     {
-      "before": ["<leader>", "w"],
-      "after": ["<leader>", "<leader>", "w"]
+      "before": [
+        "<leader>",
+        "w"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "w"
+      ]
     },
     {
-      "before": ["<leader>", "e"],
-      "after": ["<leader>", "<leader>", "e"]
+      "before": [
+        "<leader>",
+        "e"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "e"
+      ]
     },
     {
-      "before": ["<leader>", "g", "e"],
-      "after": ["<leader>", "<leader>", "g", "e"]
+      "before": [
+        "<leader>",
+        "g",
+        "e"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "g",
+        "e"
+      ]
     },
     {
-      "before": ["<leader>", "b"],
-      "after": ["<leader>", "<leader>", "b"]
+      "before": [
+        "<leader>",
+        "b"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "b"
+      ]
     },
     {
-      "before": ["<leader>", "j"],
-      "after": ["<leader>", "<leader>", "j"]
+      "before": [
+        "<leader>",
+        "j"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "j"
+      ]
     },
     {
-      "before": ["<leader>", "k"],
-      "after": ["<leader>", "<leader>", "k"]
+      "before": [
+        "<leader>",
+        "k"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "k"
+      ]
     }
   ],
   "vim.textwidth": 0,
@@ -191,13 +275,11 @@
     "visualblock": "#f5871f", // Orange
     "replace": "#c82829" // Red
   },
-
   // Git Lens
   "gitlens.blame.line.enabled": false,
   "gitlens.statusBar.enabled": false,
   "gitlens.codeLens.enabled": false,
   "gitlens.advanced.telemetry.enabled": false,
-
   // REST Client
   "rest-client.enableTelemetry": false
 }
