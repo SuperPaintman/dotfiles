@@ -2,10 +2,11 @@
   /** Internal */
   // Editor
   "editor.fontFamily": "'DejaVu Sans Mono', Consolas, 'Courier New', monospace",
-  "editor.fontSize": 16,
+  "editor.fontSize": 12,
   "editor.fontWeight": "normal",
   "editor.rulers": [
-    80
+    80,
+    120
   ],
   "editor.tabSize": 2,
   "editor.multiCursorModifier": "ctrlCmd",
@@ -65,6 +66,7 @@
   // Telemetry
   "telemetry.enableTelemetry": false,
   "telemetry.enableCrashReporter": false,
+  "workbench.enableExperiments": false,
   // HTML
   "html.format.wrapLineLength": 0,
   // GIT
@@ -280,6 +282,32 @@
   "gitlens.statusBar.enabled": false,
   "gitlens.codeLens.enabled": false,
   "gitlens.advanced.telemetry.enabled": false,
+  "gitlens.currentLine.enabled": false,
   // REST Client
-  "rest-client.enableTelemetry": false
+  "rest-client.enableTelemetry": false,
+  // Go
+  "go.inferGopath": true,
+  "go.formatTool": "gofmt",
+  "go.lintTool": "golangci-lint",
+  "go.gopath": "~/.go",
+  // Prettier
+  "prettier.singleQuote": true,
+  "prettier.arrowParens": "always",
+  /** Language specific settings */
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features",
+    "editor.formatOnSave": true
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features",
+    "editor.formatOnSave": true
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  }
 }
