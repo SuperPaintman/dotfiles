@@ -53,6 +53,38 @@ is_osx() {
     return 1
 }
 
+is_linux() {
+    case "$(uname)" in
+        Linux)
+            return 0
+            ;;
+    esac
+
+    return 1
+}
+
+is_x86_64() {
+    case "$(uname -m)" in
+        x86_64)
+            return 0
+            ;;
+    esac
+
+    return 1
+}
+
+is_ubuntu() {
+    if [ -f "/etc/os-release" ]; then
+        case "$(eval "$(cat /etc/os-release) echo \$NAME")" in
+            Ubuntu)
+                return 0
+                ;;
+        esac
+    fi
+
+    return 1
+}
+
 linkall() {
     local source_root="$1"
     local target_root="$2"

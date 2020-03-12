@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 source "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/../common.sh"
 
 is_force=false

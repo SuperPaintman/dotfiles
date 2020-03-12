@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 if ! which realpath > /dev/null; then
     # OSX dirty replacement for `realpath`
     realpath() {
@@ -61,6 +63,55 @@ if is_osx; then
 
         echo ""
     fi
+fi
+
+if is_linux; then
+    # Retrieve new lists of packages
+    if is_ubuntu; then
+        title1 "Retrieve new lists of packages"
+
+        apt-get update
+
+        echo ""
+    fi
+
+    # Install packages
+    if is_ubuntu; then
+        title1 "Install packages"
+
+        for package in "jq"; do
+            # if ! brew ls --versions "$formula" > /dev/null; then
+            if ! dpkg -l "$package" 2>&1 > /dev/null; then
+                apt-get install -y jq
+
+                ok "$(blue "$package") has installed"
+            else
+                ok "$(blue "$package") is already installed"
+            fi
+        done
+
+        echo ""
+    fi
+
+    # Install 1Password CLI
+    # See: https://1password.com/downloads/command-line/
+    title1 "Install 1Password CLI"
+
+    tmpdir="$(mktemp -d)"
+    if is_x86_64; then
+        curl -Ls "https://cache.agilebits.com/dist/1P/op/pkg/v0.9.2/op_linux_amd64_v0.9.2.zip" -o "$tmpdir/op.zip"
+
+        unzip -o "$tmpdir/op.zip" -d "$tmpdir/op"
+
+        cp "$tmpdir/op/op" /usr/local/bin/op
+
+        ok "$(blue "op") has installed"
+    else
+        error "Installing 1Password CLI for $(blue "$(uname -m)") is not implemented"
+    fi
+    rm -rf "$tmpdir"
+
+    echo ""
 fi
 
 # Install modules
