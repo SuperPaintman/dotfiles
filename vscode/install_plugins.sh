@@ -2,7 +2,6 @@
 
 EXTENSIONS_FILE="$(dirname "$(realpath "${BASH_SOURCE[0]}")")/list-extensions.txt"
 
-
 extensions="$(cat "$EXTENSIONS_FILE")"
 
 for extension in $extensions; do

@@ -9,10 +9,10 @@ drmall() {
 
     for arg in "$@"; do
         case $arg in
-            -f|--force)
+            -f | --force)
                 is_force=true
                 ;;
-            -h|--help)
+            -h | --help)
                 echo -e "Usage: $funcname [-f|--force]"
                 echo -e "  -f | --force   - remove all containers force"
 
@@ -21,7 +21,7 @@ drmall() {
         esac
     done
 
-    if [[ $is_force = true ]]; then
+    if [[ $is_force == true ]]; then
         docker rm -f $(docker ps -qa)
     else
         docker rm $(docker ps -qa)
@@ -34,10 +34,10 @@ drmiall() {
 
     for arg in "$@"; do
         case $arg in
-            -f|--force)
+            -f | --force)
                 is_force=true
                 ;;
-            -h|--help)
+            -h | --help)
                 echo -e "Usage: $funcname [-f|--force]"
                 echo -e "  -f | --force   - remove all images force"
 
@@ -46,7 +46,7 @@ drmiall() {
         esac
     done
 
-    if [[ $is_force = true ]]; then
+    if [[ $is_force == true ]]; then
         docker rmi -f $(docker ps -qa)
     else
         docker rmi $(docker ps -qa)

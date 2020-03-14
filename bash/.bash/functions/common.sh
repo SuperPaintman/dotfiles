@@ -15,9 +15,9 @@ markdown() {
 
 }
 
-if ! which serve >/dev/null; then
+if ! which serve > /dev/null; then
     serve() {
-        if ! which python >/dev/null; then
+        if ! which python > /dev/null; then
             echo "Please install python" 1>&2
             return 1
         fi
@@ -110,11 +110,11 @@ extract() {
 }
 
 image() {
-    if ! which convert >/dev/null; then
+    if ! which convert > /dev/null; then
         echo "Please install imagemagick" 1>&2
         return 1
     fi
-    if ! which jp2a >/dev/null; then
+    if ! which jp2a > /dev/null; then
         echo "Please install jp2a" 1>&2
         return 1
     fi

@@ -5,7 +5,7 @@ set -e
 if ! which realpath > /dev/null; then
     # OSX dirty replacement for `realpath`
     realpath() {
-        [[ $1 = /* ]] && echo "$1" || echo "$PWD/${1#./}"
+        [[ $1 == /* ]] && echo "$1" || echo "$PWD/${1#./}"
     }
 fi
 
@@ -128,7 +128,7 @@ for module in *; do
 
     title2 "Install $module"
 
-    if [[ $is_force = true ]]; then
+    if [[ $is_force == true ]]; then
         "$module/install.sh" -f
     else
         "$module/install.sh"

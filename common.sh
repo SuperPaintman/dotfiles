@@ -95,8 +95,8 @@ linkall() {
         ln_target="$target_root/$target"
         ln_source="$source_root/$target"
 
-        if [[ -e "$ln_target" || -L "$ln_target" ]]; then
-            if [[ "$is_force" = true ]]; then
+        if [[ -e $ln_target || -L $ln_target ]]; then
+            if [[ $is_force == true ]]; then
                 rm -fr "$ln_target"
             else
                 error "$(blue "$target") already exists ($(gray "$ln_target"))"

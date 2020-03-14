@@ -23,7 +23,7 @@ gtrackall() {
 
     for arg in "$@"; do
         case $arg in
-            -h|--help)
+            -h | --help)
                 echo -e "Usage: $funcname <remote_name>"
 
                 return 0

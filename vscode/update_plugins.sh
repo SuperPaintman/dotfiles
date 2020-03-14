@@ -4,7 +4,8 @@ EXTENSIONS_FILE="$(dirname "$(realpath "${BASH_SOURCE[0]}")")/list-extensions.tx
 
 # Because every OS implements it's own sort function
 sort_words() {
-    node -e "$(cat <<EOF
+    node -e "$(
+        cat << EOF
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
 
@@ -19,7 +20,7 @@ process.stdin
         process.stdout.write(result);
     });
 EOF
-)"
+    )"
 }
 
 code --list-extensions --show-versions | sort_words > "$EXTENSIONS_FILE"

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 _tmpreset1() {
-    tmux split-window -v -p 33 \
-        && tmux split-window -v -p 50
+    tmux split-window -v -p 33 &&
+        tmux split-window -v -p 50
 }
 
 tmpreset() {
