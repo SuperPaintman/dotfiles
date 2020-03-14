@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -e
+
 # go get github.com/mvdan/sh/cmd/shfmt
 shfmt -i 4 -ci -sr -s -w $(
     find . \
