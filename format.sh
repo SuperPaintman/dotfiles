@@ -13,5 +13,7 @@ shfmt -i 4 -ci -sr -s -w $(
         -and \
         -not -path './vim/.vim/bundle/**' \
         -and \
-        -not -path './tmux/.tmux/plugins/**'
+        -not -path './tmux/.tmux/plugins/**' \
+        -and \
+        -not -path '**/node_modules/**'
 )
