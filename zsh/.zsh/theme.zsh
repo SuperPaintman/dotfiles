@@ -1,13 +1,17 @@
 #!/usr/bin/env zsh
 # Prompt
 ## Common
-_user_color="green"; [ $UID -eq 0 ] && _user_color="red"
-_user_caret=">"; [ $UID -eq 0 ] && _user_caret="#"
+_user_color="green"
+[ $UID -eq 0 ] && _user_color="red"
+_user_caret=">"
+[ $UID -eq 0 ] && _user_caret="#"
 if [ "$TERM" = cygwin ]; then
     # Cygwin is not supported emojis
-    _user_emoji="@"; [ $UID -eq 0 ] && _user_emoji="!"
+    _user_emoji="@"
+    [ $UID -eq 0 ] && _user_emoji="!"
 else
-    _user_emoji="$emoji[panda_face]"; [ $UID -eq 0 ] && _user_emoji="$emoji[skull]"
+    _user_emoji="$emoji[panda_face]"
+    [ $UID -eq 0 ] && _user_emoji="$emoji[skull]"
 fi
 
 _fish_pwd() {
