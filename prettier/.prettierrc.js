@@ -14,7 +14,16 @@ module.exports = {
   arrowParens: 'always',
   overrides: [
     {
-      files: ['*.yml', '.*.yml'],
+      files: [
+        '*.yml',
+        '.*.yml',
+        '*.yaml',
+        '.*.yaml',
+        '*.yml.j2',
+        '.*.yml.j2',
+        '*.yaml.j2',
+        '.*.yaml.j2'
+      ],
       options: {
         tabWidth: 4,
         singleQuote: false
