@@ -112,6 +112,26 @@ if is_linux; then
     rm -rf "$tmpdir"
 
     echo ""
+
+    # Install Terraform
+    # See: https://www.terraform.io/downloads.html
+    title1 "Install Terraform"
+
+    tmpdir="$(mktemp -d)"
+    if is_x86_64; then
+        curl -Ls "https://releases.hashicorp.com/terraform/0.12.24/terraform_0.12.24_linux_amd64.zip" -o "$tmpdir/terraform.zip"
+
+        unzip -o "$tmpdir/terraform.zip" -d "$tmpdir/terraform"
+
+        cp "$tmpdir/terraform/terraform" /usr/local/bin/terraform
+
+        ok "$(blue "terraform") has installed"
+    else
+        error "Installing Terraform for $(blue "$(uname -m)") is not implemented"
+    fi
+    rm -rf "$tmpdir"
+
+    echo ""
 fi
 
 # Install modules
