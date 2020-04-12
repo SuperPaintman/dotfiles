@@ -2,141 +2,141 @@
   {
     "path": "tmux/.tmux/plugins/tmux-prefix-highlight",
     "remote": "https://github.com/tmux-plugins/tmux-prefix-highlight",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "41d4ef4990d9435017a5607bbb9ee4b4eafe7b31"
   },
   {
     "path": "tmux/.tmux/plugins/tmux-sidebar",
     "remote": "https://github.com/tmux-plugins/tmux-sidebar",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "aacbdb45bc5ab69db448a72de4155d0b8dbac677"
   },
   {
     "path": "tmux/.tmux/plugins/tpm",
     "remote": "https://github.com/tmux-plugins/tpm",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "06d41226af02ca4f5bcf58169dd4f0a2aa42218c"
   },
   {
     "path": "vim/.vim/bundle/dart-vim-plugin",
     "remote": "https://github.com/dart-lang/dart-vim-plugin",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "4375ab9cc1fe0077c36a9aba5dd7145ce4a2fa6f"
   },
   {
     "path": "vim/.vim/bundle/editorconfig-vim",
     "remote": "https://github.com/editorconfig/editorconfig-vim",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "8aff78a03357bf573abcec407a543762f281b7d3"
   },
   {
     "path": "vim/.vim/bundle/nerdcommenter",
     "remote": "https://github.com/scrooloose/nerdcommenter",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "c62e618a1ab5a50a4028e3296500ba29d9b033d8"
   },
   {
     "path": "vim/.vim/bundle/nerdtree",
     "remote": "https://github.com/scrooloose/nerdtree",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "f767dd34a0bda0a6db8efa43257c90981947f0ab"
   },
   {
     "path": "vim/.vim/bundle/nim.vim",
     "remote": "https://github.com/zah/nim.vim",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "88f5e708a739fb26be6364ab2fabadf9fffb8d7b"
   },
   {
     "path": "vim/.vim/bundle/python-syntax",
     "remote": "https://github.com/hdima/python-syntax",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "69760cb3accce488cc072772ca918ac2cbf384ba"
   },
   {
     "path": "vim/.vim/bundle/tagbar",
     "remote": "https://github.com/majutsushi/tagbar",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "679a9d9ac9579bd18225409d85ed4870fb6c9c62"
   },
   {
     "path": "vim/.vim/bundle/undotree",
     "remote": "https://github.com/mbbill/undotree",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "be23eacb2a63380bd79e207a738c728214ecc9d3"
   },
   {
     "path": "vim/.vim/bundle/vim-coffee-script",
     "remote": "https://github.com/kchmck/vim-coffee-script",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "9e3b4de2a476caeb6ff21b5da20966d7c67a98bb"
   },
   {
     "path": "vim/.vim/bundle/vim-crystal",
     "remote": "https://github.com/rhysd/vim-crystal",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "f0d607d5d4993da0cfffcb045c17fe775c7c0d53"
   },
   {
     "path": "vim/.vim/bundle/vim-easymotion",
     "remote": "https://github.com/easymotion/vim-easymotion",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "dd7b4b526775bc8553e16bc402020573b04a948c"
   },
   {
     "path": "vim/.vim/bundle/vim-fish",
     "remote": "https://github.com/dag/vim-fish",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "50b95cbbcd09c046121367d49039710e9dc9c15f"
   },
   {
     "path": "vim/.vim/bundle/vim-gitgutter",
     "remote": "https://github.com/airblade/vim-gitgutter",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "b7db78b258aa9925f3c86968b348413732964b3b"
   },
   {
     "path": "vim/.vim/bundle/vim-go",
     "remote": "https://github.com/fatih/vim-go",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "b995086646f29de25acbe7df2c08cc196c4641d7"
   },
   {
     "path": "vim/.vim/bundle/vim-javascript",
     "remote": "https://github.com/pangloss/vim-javascript",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "db595656304959dcc3805cf63ea9a430e3f01e8f"
   },
   {
     "path": "vim/.vim/bundle/vim-node",
     "remote": "https://github.com/moll/vim-node",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "ede047791792b9530ba1ae73ed86e9671cdd96b8"
   },
   {
     "path": "vim/.vim/bundle/vim-powerline",
     "remote": "https://github.com/Lokaltog/vim-powerline",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "09c0cea859a2e0989eea740655b35976d951a84e"
   },
   {
     "path": "vim/.vim/bundle/vim-pug",
     "remote": "https://github.com/digitaltoad/vim-pug",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "ea39cd942cf3194230cf72bfb838901a5344d3b3"
   },
   {
     "path": "vim/.vim/bundle/vim-scala",
     "remote": "https://github.com/derekwyatt/vim-scala",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "bbdfea4b98fdb8866a8a6060ec1294643cfeb413"
   },
   {
     "path": "vim/.vim/bundle/vim-signature",
     "remote": "https://github.com/kshenoy/vim-signature",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "6bc3dd1294a22e897f0dcf8dd72b85f350e306bc"
   },
   {
     "path": "vim/.vim/bundle/vim-stylus",
     "remote": "https://github.com/wavded/vim-stylus",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "0514757a4795843978517ee73d7fa7d8bf2e5545"
   },
   {
     "path": "vim/.vim/bundle/vim-surround",
     "remote": "https://github.com/tpope/vim-surround",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "f51a26d3710629d031806305b6c8727189cd1935"
   },
   {
     "path": "zsh/.oh-my-zsh",
     "remote": "https://github.com/robbyrussell/oh-my-zsh",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "d53355ab38763c6f637008d019c8e8b98f19b714"
   },
   {
     "path": "zsh/.oh-my-zsh-custom/plugins/zsh-autosuggestions",
     "remote": "https://github.com/zsh-users/zsh-autosuggestions",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "ae315ded4dba10685dbbafbfa2ff3c1aefeb490d"
   },
   {
     "path": "zsh/.oh-my-zsh-custom/plugins/zsh-syntax-highlighting",
     "remote": "https://github.com/zsh-users/zsh-syntax-highlighting",
-    "rev": "bc19ffab393c24185c419f40c56ac0efd1327d14"
+    "rev": "f5d1be7ec2436cfa9d45dfc2bb72fb060eae650f"
   }
 ]
