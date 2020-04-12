@@ -1,0 +1,142 @@
+[
+  {
+    "path": "tmux/.tmux/plugins/tmux-prefix-highlight",
+    "remote": "https://github.com/tmux-plugins/tmux-prefix-highlight",
+    "rev": "61e8293452083f41b1cf633be503e8abf0c494ba"
+  },
+  {
+    "path": "tmux/.tmux/plugins/tmux-sidebar",
+    "remote": "https://github.com/tmux-plugins/tmux-sidebar",
+    "rev": "23014524cab53f8d36373983500fe05a527a444d"
+  },
+  {
+    "path": "tmux/.tmux/plugins/tpm",
+    "remote": "https://github.com/tmux-plugins/tpm",
+    "rev": "95f78336c3972f3e6648b7b3db754f2224320a5e"
+  },
+  {
+    "path": "vim/.vim/bundle/dart-vim-plugin",
+    "remote": "https://github.com/dart-lang/dart-vim-plugin",
+    "rev": "940addeedc7fd81cdc1d5765472c8f01a0d487d7"
+  },
+  {
+    "path": "vim/.vim/bundle/editorconfig-vim",
+    "remote": "https://github.com/editorconfig/editorconfig-vim",
+    "rev": "0abb0634a8bf3c760a283e9e7475594b83869a46"
+  },
+  {
+    "path": "vim/.vim/bundle/nerdcommenter",
+    "remote": "https://github.com/scrooloose/nerdcommenter",
+    "rev": "9a32fd2534427f7a1dcfe22e9c0ea6b67b6dbe78"
+  },
+  {
+    "path": "vim/.vim/bundle/nerdtree",
+    "remote": "https://github.com/scrooloose/nerdtree",
+    "rev": "d6032c876c6d6932ab7f07e262a16c9a85a31d5b"
+  },
+  {
+    "path": "vim/.vim/bundle/nim.vim",
+    "remote": "https://github.com/zah/nim.vim",
+    "rev": "704dd5d63cac54c22fe25c6efbcf18796df412e7"
+  },
+  {
+    "path": "vim/.vim/bundle/python-syntax",
+    "remote": "https://github.com/hdima/python-syntax",
+    "rev": "69760cb3accce488cc072772ca918ac2cbf384ba"
+  },
+  {
+    "path": "vim/.vim/bundle/tagbar",
+    "remote": "https://github.com/majutsushi/tagbar",
+    "rev": "387bbadda98e1376ff3871aa461b1f0abd4ece70"
+  },
+  {
+    "path": "vim/.vim/bundle/undotree",
+    "remote": "https://github.com/mbbill/undotree",
+    "rev": "a80159c9f5c238575b63984b8bc610bc5de6b233"
+  },
+  {
+    "path": "vim/.vim/bundle/vim-coffee-script",
+    "remote": "https://github.com/kchmck/vim-coffee-script",
+    "rev": "9e3b4de2a476caeb6ff21b5da20966d7c67a98bb"
+  },
+  {
+    "path": "vim/.vim/bundle/vim-crystal",
+    "remote": "https://github.com/rhysd/vim-crystal",
+    "rev": "2ba42bd42463a1203d5d377c421afc7f76c61f2d"
+  },
+  {
+    "path": "vim/.vim/bundle/vim-easymotion",
+    "remote": "https://github.com/easymotion/vim-easymotion",
+    "rev": "1a0244c90c3ff46219cf9597bb13662be4232407"
+  },
+  {
+    "path": "vim/.vim/bundle/vim-fish",
+    "remote": "https://github.com/dag/vim-fish",
+    "rev": "50b95cbbcd09c046121367d49039710e9dc9c15f"
+  },
+  {
+    "path": "vim/.vim/bundle/vim-gitgutter",
+    "remote": "https://github.com/airblade/vim-gitgutter",
+    "rev": "6076c9678643a8b2fc9973f16ec9efcd5dbe1aca"
+  },
+  {
+    "path": "vim/.vim/bundle/vim-go",
+    "remote": "https://github.com/fatih/vim-go",
+    "rev": "03c93b2957ccc76bf58ac35a30305f387b8a86f5"
+  },
+  {
+    "path": "vim/.vim/bundle/vim-javascript",
+    "remote": "https://github.com/pangloss/vim-javascript",
+    "rev": "39e332a3c36c0115e1eab85c34cf121b7585869d"
+  },
+  {
+    "path": "vim/.vim/bundle/vim-node",
+    "remote": "https://github.com/moll/vim-node",
+    "rev": "ede047791792b9530ba1ae73ed86e9671cdd96b8"
+  },
+  {
+    "path": "vim/.vim/bundle/vim-powerline",
+    "remote": "https://github.com/Lokaltog/vim-powerline",
+    "rev": "09c0cea859a2e0989eea740655b35976d951a84e"
+  },
+  {
+    "path": "vim/.vim/bundle/vim-pug",
+    "remote": "https://github.com/digitaltoad/vim-pug",
+    "rev": "ddc5592f8c36bf4bd915c16b38b8c76292c2b975"
+  },
+  {
+    "path": "vim/.vim/bundle/vim-scala",
+    "remote": "https://github.com/derekwyatt/vim-scala",
+    "rev": "0b909e24f31d94552eafae610da0f31040c08f2b"
+  },
+  {
+    "path": "vim/.vim/bundle/vim-signature",
+    "remote": "https://github.com/kshenoy/vim-signature",
+    "rev": "6bc3dd1294a22e897f0dcf8dd72b85f350e306bc"
+  },
+  {
+    "path": "vim/.vim/bundle/vim-stylus",
+    "remote": "https://github.com/wavded/vim-stylus",
+    "rev": "0514757a4795843978517ee73d7fa7d8bf2e5545"
+  },
+  {
+    "path": "vim/.vim/bundle/vim-surround",
+    "remote": "https://github.com/tpope/vim-surround",
+    "rev": "aa1f120ad3a29c27cc41d581cda3751c59343cce"
+  },
+  {
+    "path": "zsh/.oh-my-zsh",
+    "remote": "https://github.com/robbyrussell/oh-my-zsh",
+    "rev": "d3e3b2dd0d7c7574d2a47c0d3a0d79583c58b2b8"
+  },
+  {
+    "path": "zsh/.oh-my-zsh-custom/plugins/zsh-autosuggestions",
+    "remote": "https://github.com/zsh-users/zsh-autosuggestions",
+    "rev": "ebaf409002be498a681267a75f5efcaf45cd0ccc"
+  },
+  {
+    "path": "zsh/.oh-my-zsh-custom/plugins/zsh-syntax-highlighting",
+    "remote": "https://github.com/zsh-users/zsh-syntax-highlighting",
+    "rev": "db6cac391bee957c20ff3175b2f03c4817253e60"
+  }
+]
