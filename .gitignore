@@ -1,3 +1,6 @@
+.modules.json.bak
+.modules.json.new
+
 **/node_modules
 
 tmux/.tmux/sidebar/
