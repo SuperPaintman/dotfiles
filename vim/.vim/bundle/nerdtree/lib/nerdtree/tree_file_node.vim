@@ -1,7 +1,7 @@
 " ============================================================================
 " CLASS: TreeFileNode
 "
-" This class is the parent of the "TreeDirNode" class and is the "Component"
+" This class is the parent of the TreeDirNode class and is the 'Component'
 " part of the composite design pattern between the NERDTree node classes.
 " ============================================================================
 
@@ -42,7 +42,7 @@ function! s:TreeFileNode.cacheParent()
     if empty(self.parent)
         let parentPath = self.path.getParent()
         if parentPath.equals(self.path)
-            throw "NERDTree.CannotCacheParentError: already at root"
+            throw 'NERDTree.CannotCacheParentError: already at root'
         endif
         let self.parent = s:TreeFileNode.New(parentPath, self.getNerdtree())
     endif
@@ -116,67 +116,39 @@ function! s:TreeFileNode.findNode(path)
     return {}
 endfunction
 
-" FUNCTION: TreeFileNode.findOpenDirSiblingWithVisibleChildren(direction) {{{1
-"
-" Finds the next sibling for this node in the indicated direction. This sibling
-" must be a directory and may/may not have children as specified.
-"
-" Args:
-" direction: 0 if you want to find the previous sibling, 1 for the next sibling
-"
-" Return:
-" a treenode object or {} if no appropriate sibling could be found
-function! s:TreeFileNode.findOpenDirSiblingWithVisibleChildren(direction)
-    " if we have no parent then we can have no siblings
-    if self.parent != {}
-        let nextSibling = self.findSibling(a:direction)
-
-        while nextSibling != {}
-            if nextSibling.path.isDirectory && nextSibling.hasVisibleChildren() && nextSibling.isOpen
-                return nextSibling
-            endif
-            let nextSibling = nextSibling.findSibling(a:direction)
-        endwhile
-    endif
-
-    return {}
-endfunction
-
 " FUNCTION: TreeFileNode.findSibling(direction) {{{1
-"
-" Finds the next sibling for this node in the indicated direction
+" Find the next or previous sibling of this node.
 "
 " Args:
-" direction: 0 if you want to find the previous sibling, 1 for the next sibling
+" direction: 0 for previous, 1 for next
 "
 " Return:
-" a treenode object or {} if no sibling could be found
+" The next/previous TreeFileNode object or an empty dictionary if not found.
 function! s:TreeFileNode.findSibling(direction)
-    " if we have no parent then we can have no siblings
-    if self.parent != {}
 
-        " get the index of this node in its parents children
-        let siblingIndx = self.parent.getChildIndex(self.path)
-
-        if siblingIndx != -1
-            " move a long to the next potential sibling node
-            let siblingIndx = a:direction ==# 1 ? siblingIndx+1 : siblingIndx-1
-
-            " keep moving along to the next sibling till we find one that is valid
-            let numSiblings = self.parent.getChildCount()
-            while siblingIndx >= 0 && siblingIndx < numSiblings
-
-                " if the next node is not an ignored node (i.e. wont show up in the
-                " view) then return it
-                if self.parent.children[siblingIndx].path.ignore(self.getNerdtree()) ==# 0
-                    return self.parent.children[siblingIndx]
-                endif
-
-                " go to next node
-                let siblingIndx = a:direction ==# 1 ? siblingIndx+1 : siblingIndx-1
-            endwhile
-        endif
+    " There can be no siblings if there is no parent.
+    if empty(self.parent)
+        return {}
     endif
+
+    let l:nodeIndex = self.parent.getChildIndex(self.path)
+
+    if l:nodeIndex == -1
+        return {}
+    endif
+
+    " Get the next index to begin the search.
+    let l:nodeIndex += a:direction ? 1 : -1
+
+    while 0 <= l:nodeIndex && l:nodeIndex < self.parent.getChildCount()
+
+        " Return the next node if it is not ignored.
+        if !self.parent.children[l:nodeIndex].path.ignore(self.getNerdtree())
+            return self.parent.children[l:nodeIndex]
+        endif
+
+        let l:nodeIndex += a:direction ? 1 : -1
+    endwhile
 
     return {}
 endfunction
@@ -208,7 +180,7 @@ function! s:TreeFileNode.GetSelected()
         endif
 
         return b:NERDTree.root.findNode(l:path)
-    catch /^NERDTree/
+    catch
         return {}
     endtry
 endfunction
@@ -223,7 +195,7 @@ endfunction
 " FUNCTION: TreeFileNode.isRoot() {{{1
 function! s:TreeFileNode.isRoot()
     if !g:NERDTree.ExistsForBuf()
-        throw "NERDTree.NoTreeError: No tree exists for the current buffer"
+        throw 'NERDTree.NoTreeError: No tree exists for the current buffer'
     endif
 
     return self.equals(self.getNerdtree().root)
@@ -270,8 +242,14 @@ endfunction
 
 " FUNCTION: TreeFileNode.openInNewTab(options) {{{1
 function! s:TreeFileNode.openInNewTab(options)
-    echomsg 'TreeFileNode.openInNewTab is deprecated'
+    call nerdtree#deprecated('TreeFileNode.openinNewTab', 'is deprecated, use .open() instead.')
     call self.open(extend({'where': 't'}, a:options))
+endfunction
+
+" FUNCTION: TreeFileNode.openExplorer()
+function! s:TreeFileNode.openExplorer()
+    execute 'wincmd p'
+    execute 'edit '.self.path.getParent().str({'format':'Edit'})
 endfunction
 
 " FUNCTION: TreeFileNode.putCursorHere(isJump, recurseUpward){{{1
@@ -287,7 +265,7 @@ function! s:TreeFileNode.putCursorHere(isJump, recurseUpward)
         if a:isJump
             mark '
         endif
-        call cursor(ln, col("."))
+        call cursor(ln, col('.'))
     else
         if a:recurseUpward
             let node = self
@@ -339,17 +317,13 @@ endfunction
 " child nodes are rendered only)
 " for each depth in the tree
 function! s:TreeFileNode._renderToString(depth, drawText)
-    let output = ""
+    let output = ''
     if a:drawText ==# 1
 
         let treeParts = repeat('  ', a:depth - 1)
-
-        if !self.path.isDirectory
-            let treeParts = treeParts . '  '
-        endif
+        let treeParts .= (self.path.isDirectory || g:NERDTreeDirArrowExpandable ==# '' ? '' : '  ')
 
         let line = treeParts . self.displayString()
-
         let output = output . line . "\n"
     endif
 

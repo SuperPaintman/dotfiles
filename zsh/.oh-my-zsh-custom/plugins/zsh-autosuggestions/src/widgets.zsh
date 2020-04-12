@@ -53,8 +53,10 @@ _zsh_autosuggest_modify() {
 	_zsh_autosuggest_invoke_original_widget $@
 	retval=$?
 
+	emulate -L zsh
+
 	# Don't fetch a new suggestion if there's more input to be read immediately
-	if (( $PENDING > 0 )) || (( $KEYS_QUEUED_COUNT > 0 )); then
+	if (( $PENDING > 0 || $KEYS_QUEUED_COUNT > 0 )); then
 		POSTDISPLAY="$orig_postdisplay"
 		return $retval
 	fi
@@ -93,17 +95,19 @@ _zsh_autosuggest_modify() {
 
 # Fetch a new suggestion based on what's currently in the buffer
 _zsh_autosuggest_fetch() {
-	if zpty -t "$ZSH_AUTOSUGGEST_ASYNC_PTY_NAME" &>/dev/null; then
+	if (( ${+ZSH_AUTOSUGGEST_USE_ASYNC} )); then
 		_zsh_autosuggest_async_request "$BUFFER"
 	else
 		local suggestion
-		_zsh_autosuggest_strategy_$ZSH_AUTOSUGGEST_STRATEGY "$BUFFER"
+		_zsh_autosuggest_fetch_suggestion "$BUFFER"
 		_zsh_autosuggest_suggest "$suggestion"
 	fi
 }
 
 # Offer a suggestion
 _zsh_autosuggest_suggest() {
+	emulate -L zsh
+
 	local suggestion="$1"
 
 	if [[ -n "$suggestion" ]] && (( $#BUFFER )); then
@@ -115,7 +119,7 @@ _zsh_autosuggest_suggest() {
 
 # Accept the entire suggestion
 _zsh_autosuggest_accept() {
-	local -i max_cursor_pos=$#BUFFER
+	local -i retval max_cursor_pos=$#BUFFER
 
 	# When vicmd keymap is active, the cursor can't move all the way
 	# to the end of the buffer
@@ -123,19 +127,33 @@ _zsh_autosuggest_accept() {
 		max_cursor_pos=$((max_cursor_pos - 1))
 	fi
 
-	# Only accept if the cursor is at the end of the buffer
-	if [[ $CURSOR = $max_cursor_pos ]]; then
-		# Add the suggestion to the buffer
-		BUFFER="$BUFFER$POSTDISPLAY"
-
-		# Remove the suggestion
-		unset POSTDISPLAY
-
-		# Move the cursor to the end of the buffer
-		CURSOR=${#BUFFER}
+	# If we're not in a valid state to accept a suggestion, just run the
+	# original widget and bail out
+	if (( $CURSOR != $max_cursor_pos || !$#POSTDISPLAY )); then
+		_zsh_autosuggest_invoke_original_widget $@
+		return
 	fi
 
+	# Only accept if the cursor is at the end of the buffer
+	# Add the suggestion to the buffer
+	BUFFER="$BUFFER$POSTDISPLAY"
+
+	# Remove the suggestion
+	unset POSTDISPLAY
+
+	# Run the original widget before manually moving the cursor so that the
+	# cursor movement doesn't make the widget do something unexpected
 	_zsh_autosuggest_invoke_original_widget $@
+	retval=$?
+
+	# Move the cursor to the end of the buffer
+	if [[ "$KEYMAP" = "vicmd" ]]; then
+		CURSOR=$(($#BUFFER - 1))
+	else
+		CURSOR=$#BUFFER
+	fi
+
+	return $retval
 }
 
 # Accept the entire suggestion and execute it
@@ -186,28 +204,31 @@ _zsh_autosuggest_partial_accept() {
 	return $retval
 }
 
-for action in clear modify fetch suggest accept partial_accept execute enable disable toggle; do
-	eval "_zsh_autosuggest_widget_$action() {
-		local -i retval
+() {
+	local action
+	for action in clear modify fetch suggest accept partial_accept execute enable disable toggle; do
+		eval "_zsh_autosuggest_widget_$action() {
+			local -i retval
 
-		_zsh_autosuggest_highlight_reset
+			_zsh_autosuggest_highlight_reset
 
-		_zsh_autosuggest_$action \$@
-		retval=\$?
+			_zsh_autosuggest_$action \$@
+			retval=\$?
 
-		_zsh_autosuggest_highlight_apply
+			_zsh_autosuggest_highlight_apply
 
-		zle -R
+			zle -R
 
-		return \$retval
-	}"
-done
+			return \$retval
+		}"
+	done
 
-zle -N autosuggest-fetch _zsh_autosuggest_widget_fetch
-zle -N autosuggest-suggest _zsh_autosuggest_widget_suggest
-zle -N autosuggest-accept _zsh_autosuggest_widget_accept
-zle -N autosuggest-clear _zsh_autosuggest_widget_clear
-zle -N autosuggest-execute _zsh_autosuggest_widget_execute
-zle -N autosuggest-enable _zsh_autosuggest_widget_enable
-zle -N autosuggest-disable _zsh_autosuggest_widget_disable
-zle -N autosuggest-toggle _zsh_autosuggest_widget_toggle
+	zle -N autosuggest-fetch _zsh_autosuggest_widget_fetch
+	zle -N autosuggest-suggest _zsh_autosuggest_widget_suggest
+	zle -N autosuggest-accept _zsh_autosuggest_widget_accept
+	zle -N autosuggest-clear _zsh_autosuggest_widget_clear
+	zle -N autosuggest-execute _zsh_autosuggest_widget_execute
+	zle -N autosuggest-enable _zsh_autosuggest_widget_enable
+	zle -N autosuggest-disable _zsh_autosuggest_widget_disable
+	zle -N autosuggest-toggle _zsh_autosuggest_widget_toggle
+}

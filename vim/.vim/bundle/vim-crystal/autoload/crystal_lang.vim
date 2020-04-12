@@ -5,6 +5,8 @@ let s:V = vital#crystal#new()
 let s:P = s:V.import('Process')
 let s:C = s:V.import('ColorEcho')
 
+let s:IS_WINDOWS = has('win32')
+
 if exists('*json_decode')
     function! s:decode_json(text) abort
         return json_decode(a:text)
@@ -33,28 +35,59 @@ function! s:run_cmd(cmd) abort
     return s:P.system(a:cmd)
 endfunction
 
-function! s:find_root_by_spec(d) abort
-    let dir = finddir('spec', a:d . ';')
-    if dir ==# ''
+function! s:find_root_by(search_dir, d) abort
+    let found_dir = finddir(a:search_dir, a:d . ';')
+    if found_dir ==# ''
         return ''
     endif
 
-    " Note: ':h:h' for {root}/spec/ -> {root}/spec -> {root}
-    return fnamemodify(dir, ':p:h:h')
+    " Note: ':h:h' for {root}/{search_dir}/ -> {root}/{search_dir} -> {root}
+    return fnamemodify(found_dir, ':p:h:h')
+endfunction
+
+" Search the root directory containing a 'spec/' and a 'src/' directories.
+"
+" Searching for the 'spec/' directory is not enough: for example the crystal
+" compiler has a 'cr_sources/src/spec/' directory that would otherwise give the root
+" directory as 'cr_source/src/' instead of 'cr_sources/'.
+function! s:find_root_by_spec_and_src(d) abort
+    " Search for 'spec/'
+    let root = s:find_root_by('spec', a:d)
+    " Check that 'src/' is also there
+    if root !=# '' && isdirectory(root . '/src')
+        return root
+    endif
+
+    " Search for 'src/'
+    let root = s:find_root_by('src', a:d)
+    " Check that 'spec/' is also there
+    if root !=# '' && isdirectory(root . '/spec')
+        return root
+    endif
+
+    " Cannot find a directory containing both 'src/' and 'spec/'
+    return ''
 endfunction
 
 function! crystal_lang#entrypoint_for(file_path) abort
     let parent_dir = fnamemodify(a:file_path, ':p:h')
-    let root_dir = s:find_root_by_spec(parent_dir)
+    let root_dir = s:find_root_by_spec_and_src(parent_dir)
     if root_dir ==# ''
-        " No spec diretory found. No need to make temporary file
+        " No spec directory found. No need to make temporary file
         return a:file_path
+    endif
+
+    let required_spec_path = get(b:, 'crystal_required_spec_path', get(g:, 'crystal_required_spec_path', ''))
+    if required_spec_path !=# ''
+      let require_spec_str = './' . required_spec_path
+    else
+      let require_spec_str = './spec/**'
     endif
 
     let temp_name = root_dir . '/__vim-crystal-temporary-entrypoint-' . fnamemodify(a:file_path, ':t')
     let contents = [
                 \   'require "spec"',
-                \   'require "./spec/**"',
+                \   'require "' . require_spec_str . '"',
                 \   printf('require "./%s"', fnamemodify(a:file_path, ':p')[strlen(root_dir)+1 : ])
                 \ ]
 
@@ -228,7 +261,7 @@ endfunction
 
 function! crystal_lang#run_all_spec(...) abort
     let path = a:0 == 0 ? expand('%:p:h') : a:1
-    let root_path = s:find_root_by_spec(path)
+    let root_path = s:find_root_by_spec_and_src(path)
     if root_path ==# ''
         return s:echo_error("'spec' directory is not found")
     endif
@@ -246,9 +279,9 @@ function! crystal_lang#run_current_spec(...) abort
     let source_dir = fnamemodify(path, ':h')
 
     " /foo/bar
-    let root_dir = s:find_root_by_spec(source_dir)
+    let root_dir = s:find_root_by_spec_and_src(source_dir)
     if root_dir ==# ''
-        return s:echo_error("'spec' directory is not found")
+        return s:echo_error("Root directory with 'src/' and 'spec/' not found")
     endif
 
     " src
@@ -266,29 +299,47 @@ function! crystal_lang#run_current_spec(...) abort
 endfunction
 
 function! crystal_lang#format_string(code, ...) abort
+    if s:IS_WINDOWS
+        let redirect = '2> nul'
+    else
+        let redirect = '2>/dev/null'
+    endif
     let cmd = printf(
-            \   '%s tool format --no-color %s -',
+            \   '%s tool format --no-color %s - %s',
             \   g:crystal_compiler_command,
-            \   get(a:, 1, '')
+            \   get(a:, 1, ''),
+            \   redirect,
             \ )
     let output = s:P.system(cmd, a:code)
     if s:P.get_last_status()
-        throw 'vim-crystal: Error on formatting: ' . output
+        throw 'vim-crystal: Error on formatting with command: ' . cmd
     endif
     return output
 endfunction
 
 " crystal_lang#format(option_str [, on_save])
 function! crystal_lang#format(option_str, ...) abort
-    if !executable(g:crystal_compiler_command)
-        " Finish command silently
-        return
-    endif
-
     let on_save = a:0 > 0 ? a:1 : 0
 
+    if !executable(g:crystal_compiler_command)
+        if on_save
+            " Finish command silently on save
+            return
+        else
+            throw 'vim-crystal: Command for formatting is not executable: ' . g:crystal_compiler_command
+        endif
+    endif
+
     let before = join(getline(1, '$'), "\n")
-    let formatted = crystal_lang#format_string(before, a:option_str)
+    try
+        let formatted = crystal_lang#format_string(before, a:option_str)
+    catch /^vim-crystal: /
+        echohl ErrorMsg
+        echomsg v:exception . ': Your code was not formatted. Exception was thrown at ' . v:throwpoint
+        echohl None
+        return
+    endtry
+
     if !on_save
         let after = substitute(formatted, '\n$', '', '')
         if before ==# after
@@ -306,6 +357,10 @@ function! crystal_lang#format(option_str, ...) abort
     call setline(1, lines)
     call winrestview(view_save)
     call setpos('.', pos_save)
+endfunction
+
+function! crystal_lang#expand(file, pos, ...) abort
+    return crystal_lang#tool('expand', a:file, a:pos, get(a:, 1, ''))
 endfunction
 
 let &cpo = s:save_cpo

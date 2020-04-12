@@ -263,11 +263,16 @@ function! s:wrap(string,char,type,removed,special)
     elseif keeper =~ '\n$' && after =~ '^\n'
       let after = strpart(after,1)
     endif
-    if before !~ '\n\s*$'
+    if keeper !~ '^\n' && before !~ '\n\s*$'
       let before .= "\n"
       if a:special
         let before .= "\t"
       endif
+    elseif keeper =~ '^\n' && before =~ '\n\s*$'
+      let keeper = strcharpart(keeper,1)
+    endif
+    if type ==# 'V' && keeper =~ '\n\s*\n$'
+      let keeper = strcharpart(keeper,0,strchars(keeper) - 1)
     endif
   endif
   if type ==# 'V'
@@ -331,7 +336,16 @@ function! s:insert(...) " {{{1
   if exists("g:surround_insert_tail")
     call setreg('"',g:surround_insert_tail,"a".getregtype('"'))
   endif
-  if col('.') >= col('$')
+  if &ve != 'all' && col('.') >= col('$')
+    if &ve == 'insert'
+      let extra_cols = virtcol('.') - virtcol('$')
+      if extra_cols > 0
+        let [regval,regtype] = [getreg('"',1,1),getregtype('"')]
+        call setreg('"',join(map(range(extra_cols),'" "'),''),'v')
+        norm! ""p
+        call setreg('"',regval,regtype)
+      endif
+    endif
     norm! ""p
   else
     norm! ""P
@@ -433,7 +447,7 @@ function! s:dosurround(...) " {{{1
     let keeper = substitute(keeper,'^\s\+','','')
     let keeper = substitute(keeper,'\s\+$','','')
   endif
-  if col("']") == col("$") && col('.') + 1 == col('$')
+  if col("']") == col("$") && virtcol('.') + 1 == virtcol('$')
     if oldhead =~# '^\s*$' && a:0 < 2
       let keeper = substitute(keeper,'\%^\n'.oldhead.'\(\s*.\{-\}\)\n\s*\%$','\1','')
     endif

@@ -1,6 +1,6 @@
 Filetype Support for [Crystal](http://crystal-lang.org/)
 ========================================================
-[![Build Status](https://travis-ci.org/rhysd/vim-crystal.svg?branch=travis)](https://travis-ci.org/rhysd/vim-crystal)
+[![CI](https://github.com/rhysd/vim-crystal/workflows/CI/badge.svg?event=push)](https://github.com/rhysd/vim-crystal/actions?query=CI+branch%3Amaster)
 
 This is filetype support for [Crystal programming language](http://crystal-lang.org/).
 
@@ -100,6 +100,15 @@ It shows types hierarchy of current code.
 
 ![screenshot](https://raw.githubusercontent.com/rhysd/ss/master/vim-crystal/show-hierarchy.gif)
 
+### `:CrystalImpl`
+
+It shows how the identifier under the cursor is implemented. For example, when the cursor is on some
+property of an object instance, `:CrystalImpl` would report where the property is defined with
+`property` macro.
+
+### `:CrystalExpand`
+
+It expands macro invocation under the cursor.
 
 
 ## Completion

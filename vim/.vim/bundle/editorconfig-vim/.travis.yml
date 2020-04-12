@@ -1,9 +1,16 @@
-language: ruby
+# Make sure xvfb works - https://docs.travis-ci.com/user/gui-and-headless-browsers/#using-xvfb-directly
+dist: trusty
 
-rvm:
-  - 2.2.4
-
-gemfile: tests/Gemfile
+matrix:
+  include:
+    - name: "plugin"
+      env: TEST_WHICH=plugin
+      language: ruby
+      rvm:
+        - 2.2.4
+      gemfile: tests/plugin/Gemfile
+    - name: "core"
+      env: TEST_WHICH=core
 
 addons:
   apt:
@@ -15,7 +22,7 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
 
 script:
-  bundle exec rspec tests/spec/editorconfig_spec.rb
+  ./tests/travis-test.sh
 
 notifications:
   email:

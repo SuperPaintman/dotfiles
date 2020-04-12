@@ -73,7 +73,7 @@ run_test_internal() {
 
   # Measure the time taken by _zsh_highlight.
   TIMEFMT="%*Es"
-  time (BUFFER="$BUFFER" && _zsh_highlight)
+  { time (BUFFER="$BUFFER" && _zsh_highlight) } 2>&1
 }
 
 run_test() {
@@ -92,6 +92,7 @@ run_test() {
 }
 
 # Process each test data file in test data directory.
+local data_file
 for data_file in ${0:h:h}/highlighters/$1/test-data/*.zsh; do
   run_test "$data_file"
   (( $pipestatus[1] )) && exit 2

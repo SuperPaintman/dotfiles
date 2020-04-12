@@ -15,6 +15,4 @@ for m in $modules; do
     git clone "$remote" "$path"
     (cd "$path" && git checkout "$rev")
     rm -rf "$path/.git"
-
-    git add "$path"
 done
