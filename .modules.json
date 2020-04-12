@@ -90,11 +90,6 @@
     "rev": "db595656304959dcc3805cf63ea9a430e3f01e8f"
   },
   {
-    "path": "vim/.vim/bundle/vim-node",
-    "remote": "https://github.com/moll/vim-node",
-    "rev": "ede047791792b9530ba1ae73ed86e9671cdd96b8"
-  },
-  {
     "path": "vim/.vim/bundle/vim-powerline",
     "remote": "https://github.com/Lokaltog/vim-powerline",
     "rev": "09c0cea859a2e0989eea740655b35976d951a84e"
@@ -103,11 +98,6 @@
     "path": "vim/.vim/bundle/vim-pug",
     "remote": "https://github.com/digitaltoad/vim-pug",
     "rev": "ea39cd942cf3194230cf72bfb838901a5344d3b3"
-  },
-  {
-    "path": "vim/.vim/bundle/vim-scala",
-    "remote": "https://github.com/derekwyatt/vim-scala",
-    "rev": "bbdfea4b98fdb8866a8a6060ec1294643cfeb413"
   },
   {
     "path": "vim/.vim/bundle/vim-signature",
