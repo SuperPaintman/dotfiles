@@ -1,7 +1,7 @@
 {
   /** Internal */
   // Editor
-  "editor.fontFamily": "'DejaVu Sans Mono', Consolas, 'Courier New', monospace",
+  "editor.fontFamily": "'JetBrains Mono', 'DejaVu Sans Mono', Consolas, 'Courier New', monospace",
   "editor.fontSize": 12,
   "editor.fontWeight": "normal",
   "editor.rulers": [
