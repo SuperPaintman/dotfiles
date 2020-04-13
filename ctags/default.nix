@@ -1,0 +1,3 @@
+{
+  ".ctags".source = ./.ctags;
+}

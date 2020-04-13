@@ -1,0 +1,3 @@
+{
+  ".yarnrc".source = ./.yarnrc;
+}
