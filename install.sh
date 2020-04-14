@@ -2,7 +2,7 @@
 
 set -e
 
-if ! which realpath > /dev/null; then
+if ! which realpath > /dev/null 2>&1; then
     # OSX dirty replacement for `realpath`
     realpath() {
         [[ $1 == /* ]] && echo "$1" || echo "$PWD/${1#./}"
@@ -22,7 +22,7 @@ done
 
 if is_osx; then
     # Install brew
-    if ! which brew > /dev/null; then
+    if ! which brew > /dev/null 2>&1; then
         title1 "Install brew"
 
         ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -31,11 +31,11 @@ if is_osx; then
     fi
 
     # Install brew formulas
-    if which brew > /dev/null; then
+    if which brew > /dev/null 2>&1; then
         title1 "Install brew formulas"
 
         for formula in "coreutils" "zsh" "tmux" "htop" "tree" "wget" "jq"; do
-            if ! brew ls --versions "$formula" > /dev/null; then
+            if ! brew ls --versions "$formula" > /dev/null 2>&1; then
                 brew install "$formula"
 
                 ok "$(blue "$formula") has installed ($(gray "$(brew ls --versions "$formula")"))"
@@ -48,11 +48,11 @@ if is_osx; then
     fi
 
     # Install brew casks
-    if which brew > /dev/null; then
+    if which brew > /dev/null 2>&1; then
         title1 "Install brew casks"
 
         for cask in "iterm2"; do
-            if ! brew cask ls --versions "$cask" > /dev/null; then
+            if ! brew cask ls --versions "$cask" > /dev/null 2>&1; then
                 brew cask install "$cask"
 
                 ok "$(blue "$cask") has installed ($(gray "$(brew cask ls --versions "$cask")"))"
@@ -80,8 +80,8 @@ if is_linux; then
         title1 "Install packages"
 
         for package in "jq"; do
-            # if ! brew ls --versions "$formula" > /dev/null; then
-            if ! dpkg -l "$package" 2>&1 > /dev/null; then
+            # if ! brew ls --versions "$formula" > /dev/null 2>&1; then
+            if ! dpkg -l "$package" 2>&1 > /dev/null 2>&1; then
                 apt-get install -y jq
 
                 ok "$(blue "$package") has installed"

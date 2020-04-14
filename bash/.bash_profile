@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Start tmux
-if which tmux > /dev/null; then
+if which tmux > /dev/null 2>&1; then
     if [ -z "$TMUX" ] && [ "$TERM_PROGRAM" = "iTerm.app" ]; then
-        if tmux list-session > /dev/null; then
+        if tmux list-session > /dev/null 2>&1; then
             tmux attach-session && exit
         else
             tmux && exit

@@ -82,7 +82,7 @@ defaults write com.apple.finder ShowPreviewPane -bool false
 title2 "Reload affected applications"
 
 for app in "ControlStrip" "Dock" "Finder"; do
-    if killall "$app" 2>&1 > /dev/null; then
+    if killall "$app" > /dev/null 2>&1; then
         ok "$(blue "$app") has reloaded"
     fi
 done

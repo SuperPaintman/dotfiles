@@ -5,7 +5,7 @@ source "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/common.sh"
 # Setup default shell
 title1 "Setup default shell"
 
-if which zsh > /dev/null; then
+if which zsh > /dev/null 2>&1; then
     chsh -s "$(which zsh)" "$USER"
 
     ok "Set $(blue ZSH) as default shell"
