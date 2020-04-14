@@ -10,7 +10,7 @@ alias ......="cd ../../../../.."
 alias ~="cd ~"
 
 ## `ls` aliases
-if _is_osx; then
+if which gls > /dev/null 2>&1; then
     alias ls="gls --color=auto"
 else
     alias ls="ls --color=auto"
@@ -63,3 +63,11 @@ alias npx="npx --no-install"
 
 # Webpack
 alias wds="npx webpack-dev-server"
+
+# `pbcopy` and `pbpaste`
+if ! which pbcopy > /dev/null 2>&1; then
+    alias pbcopy="xclip -selection clipboard"
+fi
+if ! which pbpaste > /dev/null 2>&1; then
+    alias pbpaste="xclip -selection clipboard -o"
+fi

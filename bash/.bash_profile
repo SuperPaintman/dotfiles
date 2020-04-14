@@ -23,16 +23,6 @@ if [ -x /usr/bin/dircolors ]; then
     fi
 fi
 
-_is_osx() {
-    case "$(uname)" in
-        Darwin*)
-            return 0
-            ;;
-    esac
-
-    return 1
-}
-
 # Env
 if [ -f ~/.bash/env.sh ]; then source ~/.bash/env.sh; fi
 
