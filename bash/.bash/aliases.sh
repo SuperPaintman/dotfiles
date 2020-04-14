@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 # Common
+## `cat` aliases
+if which bat > /dev/null 2>&1; then
+    alias cat="bat"
+fi
+
 ## `cd` aliases
 alias ..="cd .."
 alias cd..="cd .."
@@ -10,14 +15,16 @@ alias ......="cd ../../../../.."
 alias ~="cd ~"
 
 ## `ls` aliases
-if which gls > /dev/null 2>&1; then
+if which exa > /dev/null 2>&1; then
+    alias ls="exa --color=auto"
+elif which gls > /dev/null 2>&1; then
     alias ls="gls --color=auto"
 else
     alias ls="ls --color=auto"
 fi
 alias ll="ls -alFh --group-directories-first"
-alias la="ls -Ah --group-directories-first"
-alias l="ls -CFh --group-directories-first"
+alias la="ls -ah --group-directories-first"
+alias l="ls -Fh --group-directories-first"
 
 ## `df` aliases
 alias dfh="df -h --total"
