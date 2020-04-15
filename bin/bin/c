@@ -1,0 +1,186 @@
+#!/usr/bin/env bash
+
+TAB="$(printf '\t')"
+
+flags=()
+arguments=()
+
+while test $# -gt 0; do
+  case "$1" in
+    -*)
+      flags+=("$1")
+      ;;
+
+    *)
+      arguments+=("$1")
+      ;;
+  esac
+
+  shift
+done
+
+# Helpers
+get_filename() {
+  local v="$1"
+  v="${v%.*}"
+  v="${v##*/}"
+  echo "$v"
+}
+
+# Commands
+## `asm`
+help_asm() {
+  cat <<EOF
+usage: c asm <filename>
+EOF
+}
+
+asm() {
+  local source="$1"
+
+  clang -S ${@:2} "$source"
+}
+
+## `build`
+help_build() {
+  cat <<EOF
+usage: c build <filename>
+EOF
+}
+
+build() {
+  local source="$1"
+  local filename="$(get_filename "$source")"
+
+  clang -o "$filename" ${@:2} "$source"
+}
+
+## `fmt`
+help_fmt() {
+  cat <<EOF
+usage: c fmt <filename>
+EOF
+}
+
+fmt() {
+  local source="$1"
+
+  clang-format -i ${@:2} "$source"
+}
+
+## `llvm`
+help_llvm() {
+  cat <<EOF
+usage: c llvm <filename>
+EOF
+}
+
+llvm() {
+  local source="$1"
+
+  clang -S -emit-llvm ${@:2} "$source"
+}
+
+## `run`
+help_run() {
+  cat <<EOF
+usage: c run <filename>
+EOF
+}
+
+run() {
+  local source="$1"
+  local filename="$(mktemp)"
+  local exitcode="0"
+
+  clang -o "$filename" ${@:2} "$source"
+
+  "$filename"
+  exitcode="$?"
+
+  rm -f "$filename"
+
+  return "$exitcode"
+}
+
+## `help`
+help() {
+  case $1 in
+  asm)
+    help_asm
+    ;;
+
+  build)
+    help_build
+    ;;
+
+  fmt)
+    help_fmt
+    ;;
+
+  llvm)
+    help_llvm
+    ;;
+
+  run)
+    help_run
+    ;;
+
+  "")
+    cat <<EOF
+C is a tool for managing C source code.
+
+Usage:
+
+${TAB}c <command> [arguments]
+
+The commands are:
+
+${TAB}asm         compile C program into ASM
+${TAB}build       compile C program
+${TAB}fmt         clang-format (reformat) source files
+${TAB}llvm        compile C program into LLVM IR
+${TAB}run         compile and run C program
+EOF
+    ;;
+
+  *)
+    cat <<EOF
+c help $1: unknown help topic. Run 'c help'.
+EOF
+    ;;
+  esac
+}
+
+# Main
+case "${arguments[0]}" in
+  asm)
+    asm "${arguments[1]}" ${flags[@]}
+    ;;
+
+  build)
+    build "${arguments[1]}" ${flags[@]}
+    ;;
+
+  fmt)
+    fmt "${arguments[1]}" ${flags[@]}
+    ;;
+
+  llvm)
+    llvm "${arguments[1]}" ${flags[@]}
+    ;;
+
+  run)
+    run "${arguments[1]}" ${flags[@]}
+    ;;
+
+  help)
+    help "${arguments[1]}" ${flags[@]}
+    ;;
+  *)
+    help
+    exit 2
+    ;;
+esac
+
+exit "$?"
