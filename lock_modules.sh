@@ -15,7 +15,7 @@ for m in $modules; do
     git clone "$remote" "$path"
     (cd "$path" && git checkout "$rev")
 
-    cat <<EOF >> "$MODULES_FILE.new"
+    cat << EOF >> "$MODULES_FILE.new"
 {
   "path": "$path",
   "remote": "$(cd $path && git remote get-url origin)",
