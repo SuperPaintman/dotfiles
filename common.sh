@@ -43,6 +43,10 @@ error() {
     echo "$(red "[error]")" $@
 }
 
+point() {
+    echo "$(gray " * ")" $@
+}
+
 is_osx() {
     case "$(uname)" in
         Darwin*)
