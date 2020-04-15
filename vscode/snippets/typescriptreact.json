@@ -1,0 +1,51 @@
+{
+  "console.log()": {
+    "prefix": "clog",
+    "body": "console.log($1);$0"
+  },
+  "new Promise()": {
+    "prefix": "promise",
+    "body": "new Promise((resolve, reject) => $1);$0"
+  },
+  "async wrapper": {
+    "prefix": "asyncwrap",
+    "body": [
+      "(async function () {",
+      "  $0",
+      "})()",
+      "  .catch((err) => ${1:console.error(err)});"
+    ]
+  },
+  "Promise with timeout": {
+    "prefix": "ptimeout",
+    "body": "new Promise((resolve, reject) => setTimeout(resolve, ${1:1000}));$0"
+  },
+  "await Promise with timeout": {
+    "prefix": "aptimeout",
+    "body": "await new Promise((resolve, reject) => setTimeout(resolve, ${1:1000}));$0"
+  },
+  "'ngInject'": {
+    "prefix": "ni",
+    "body": "'ngInject';$0"
+  },
+  "'use strict'": {
+    "prefix": "us",
+    "body": "'use strict';$0"
+  },
+  "JSON.parse()": {
+    "prefix": "fromjson",
+    "body": "JSON.parse($1);$0"
+  },
+  "JSON.stringify()": {
+    "prefix": "tojson",
+    "body": "JSON.stringify($1${2:, null, 2});$0"
+  },
+  "import 'babel-polyfill'": {
+    "prefix": "bp",
+    "body": "import 'babel-polyfill';$0"
+  },
+  "import 'source-map-support/register'": {
+    "prefix": "sms",
+    "body": "import 'source-map-support/register';$0"
+  }
+}
