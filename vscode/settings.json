@@ -12,7 +12,7 @@
   "editor.multiCursorModifier": "ctrlCmd",
   "editor.insertSpaces": true,
   "editor.wordWrap": "off",
-  "editor.autoClosingBrackets": false,
+  "editor.autoClosingBrackets": "never",
   "editor.renderWhitespace": "all",
   "editor.renderControlCharacters": true,
   "editor.renderLineHighlight": "line",
@@ -26,9 +26,16 @@
     "statusBar.noFolderBackground": "#23241F",
     "statusBar.debuggingBackground": "#23241F"
   },
+  // Breadcrumbs
+  "breadcrumbs.enabled": true,
   // Explorer
   "explorer.autoReveal": false,
   "explorer.decorations.colors": false,
+  "explorer.compactFolders": false,
+  "editor.suggest.showIcons": true,
+  "editor.suggest.filteredTypes": {
+    "keyword": false
+  },
   // Files
   "files.exclude": {
     // Common
@@ -64,6 +71,11 @@
   // Extensions
   "extensions.autoUpdate": false,
   "extensions.ignoreRecommendations": true,
+  // Diff editor
+  "diffEditor.renderSideBySide": false,
+  "diffEditor.ignoreTrimWhitespace": false,
+  // Search
+  "search.usePCRE2": true,
   // Telemetry
   "telemetry.enableTelemetry": false,
   "telemetry.enableCrashReporter": false,
@@ -286,20 +298,45 @@
   "gitlens.currentLine.enabled": false,
   // REST Client
   "rest-client.enableTelemetry": false,
+  // TypeScript
+  "typescript.updateImportsOnFileMove.enabled": "never",
   // Go
   "go.inferGopath": true,
   "go.formatTool": "gofmt",
   "go.lintTool": "golangci-lint",
+  "go.lintFlags": [
+    "--fast"
+  ],
   "go.gopath": "~/.go",
+  "go.useLanguageServer": true,
+  "go.languageServerExperimentalFeatures": {
+    "format": true,
+    "autoComplete": true,
+    "rename": true,
+    "goToDefinition": true,
+    "hover": true,
+    "signatureHelp": true,
+    "goToTypeDefinition": true,
+    "goToImplementation": true,
+    "documentSymbols": true,
+    "workspaceSymbols": true,
+    "findReferences": true,
+    "diagnostics": true,
+    "documentLink": true
+  },
   // Prettier
   "prettier.singleQuote": true,
   "prettier.arrowParens": "always",
+  "prettier.semi": true,
   /** Language specific settings */
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -308,12 +345,18 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[html]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[go]": {
+    "editor.snippetSuggestions": "none",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
   }
 }
