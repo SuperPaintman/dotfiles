@@ -34,7 +34,7 @@ if is_osx; then
     if which brew > /dev/null 2>&1; then
         title1 "Install brew formulas"
 
-        for formula in "coreutils" "zsh" "tmux" "htop" "tree" "wget" "jq"; do
+        for formula in "coreutils" "zsh" "tmux" "htop" "tree" "wget" "jq" "cmake" "llvm" "node" "imagemagick" "bat" "go" "dep" "ansible"; do
             if ! brew ls --versions "$formula" > /dev/null 2>&1; then
                 brew install "$formula"
 
@@ -51,7 +51,7 @@ if is_osx; then
     if which brew > /dev/null 2>&1; then
         title1 "Install brew casks"
 
-        for cask in "iterm2"; do
+        for cask in "iterm2" "docker" "alfred" "zaplin"; do
             if ! brew cask ls --versions "$cask" > /dev/null 2>&1; then
                 brew cask install "$cask"
 
@@ -133,6 +133,21 @@ if is_linux; then
 
     echo ""
 fi
+
+# Install NPM packages
+title1 "Install NPM packages"
+
+for package in "node-gyp" "node-static" "uuid" "prettier" "ramda-cli"; do
+    if ! npm list "$package" -g --depth 0 > /dev/null 2>&1 || [[ "$(npm list "$package" -g --depth 0 --json | jq ".dependencies.\"${package}\".version" -r > /dev/null)" -ne "null" ]]; then
+        npm install -g "$package"
+
+        ok "$(blue "$package") has installed ($(gray "$(npm list "$package" -g --depth 0 --json | jq ".dependencies.\"${package}\".version" -r)"))"
+    else
+        ok "$(blue "$package") is already installed ($(gray "$(npm list "$package" -g --depth 0 --json | jq ".dependencies.\"${package}\".version" -r)"))"
+    fi
+done
+
+echo ""
 
 # Install modules
 title1 "Install modules"
