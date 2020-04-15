@@ -1,3 +1,3 @@
 {
-  # "bin".source = ./bin;
+  "bin".source = ./bin;
 }
