@@ -9,6 +9,7 @@ merge [
   (import ./git)
   (import ./htop)
   (import ./lein)
+  (import ./neofetch)
   (import ./npm)
   (import ./prettier)
   (import ./sbt)
