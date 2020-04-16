@@ -18,3 +18,8 @@ if [ -f ~/.zsh/completion.zsh ]; then source ~/.zsh/completion.zsh; fi
 
 # Theme
 if [ -f  ~/.zsh/theme.zsh ]; then source ~/.zsh/theme.zsh; fi
+
+# Show system information
+if which neofetch > /dev/null 2>&1; then
+    neofetch
+fi

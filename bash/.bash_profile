@@ -56,3 +56,8 @@ shopt -s checkwinsize
 
 # Completion
 if [ -f ~/.bash/completion.sh ]; then source ~/.bash/completion.sh; fi
+
+# Show system information
+if which neofetch > /dev/null 2>&1; then
+    neofetch
+fi
