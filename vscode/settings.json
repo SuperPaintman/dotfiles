@@ -4,6 +4,7 @@
   "editor.fontFamily": "'JetBrains Mono', 'DejaVu Sans Mono', Consolas, 'Courier New', monospace",
   "editor.fontSize": 12,
   "editor.fontWeight": "normal",
+  "editor.fontLigatures": false,
   "editor.rulers": [
     80,
     120
@@ -62,7 +63,19 @@
     "*.analysis_options": "yaml",
     "pubspec.lock": "yaml",
     // Scala
-    "*.sbt": "scala"
+    "*.sbt": "scala",
+    // J2
+    "*.ini.j2": "ini",
+    "*.json.j2": "json",
+    "*.yml.j2": "yaml",
+    "*.yaml.j2": "yaml",
+    "iptables.j2": "shellscript",
+    "ip6tables.j2": "shellscript",
+    "Dockerfile.j2": "dockerfile",
+    "*.conf.j2": "NGINX",
+    // Other
+    "iptables": "shellscript",
+    "ip6tables": "shellscript"
   },
   "files.eol": "\n",
   "files.trimTrailingWhitespace": true,
