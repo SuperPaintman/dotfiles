@@ -14,6 +14,7 @@ merge [
   (import ./prettier)
   (import ./sbt)
   (import ./tmux)
+  (import ./vim)
   (import ./vscode)
   (import ./yarn)
   (import ./zsh)
