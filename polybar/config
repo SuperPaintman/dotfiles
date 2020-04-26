@@ -1,3 +1,5 @@
+; See: https://github.com/polybar/polybar/wiki/Configuration
+
 ;===============================================================================
 ; Global
 ;===============================================================================
@@ -12,7 +14,7 @@ margin-bottom = 0
 black-50-transparent = #80000000
 black-75-transparent = #C0000000
 
-background = ${colors.black-75-transparent}
+background = ${self.black-75-transparent}
 ; background = ${xrdb:background}
 foreground = ${xrdb:foreground}
 
@@ -24,27 +26,39 @@ foreground = ${xrdb:foreground}
 width = 100%
 height = 24
 
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 3
+line-color = #FF0000
+
 padding-left = 2
 padding-right = 2
 
+module-margin-left = 2
+module-margin-right = 2
+
 font-0 = "Sans Serif:pixelsize=10;2"
+font-1 = "Siji:pixelsize=10;2"
 
 modules-right = date
 
-background = ${colors.background}
-foreground = ${colors.foreground}
+separator = "|"
+
+enable-ipc = true
 
 ;===============================================================================
 ; Modules
 ;===============================================================================
 [module/date]
 type = internal/date
-interval = 1
+
+interval = 1.0
 
 label = %date% %time%
 
 date = %h %d
-date-alt = %Y-%m-%d
-
 time = %I:%M:%S %p
+
+date-alt = %Y-%m-%d
 time-alt = %H:%M:%S
