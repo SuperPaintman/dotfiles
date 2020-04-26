@@ -1,0 +1,34 @@
+#!/bin/sh
+
+set -e
+
+color_red="#CC6666"
+color_green="#B5BD68"
+color_transparent="#00000000"
+
+connection="$(pgrep -a openvpn$ | head -n 1 | awk '{ print $NF }' | cut -d '.' -f 1)"
+
+if [ ! -n "$connection" ]; then
+    echo "%{u${color_red}}%{F${color_red}}VPN%{F-}%{u-}"
+    exit 0
+fi
+
+# Check ip.
+ip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
+
+# Find VPN config name.
+vpn_name="[?]"
+vpn_name_color="$color_red"
+
+for i in $HOME/.openvpn/*.conf; do
+    vpn_ip="$(cat ~/.openvpn/server.conf | grep remote | awk '{print $2}')"
+
+    if [ "$ip" = "$vpn_ip" ]; then
+        vpn_name="$(basename "$i" '.conf')"
+        vpn_name_color="$color_green"
+        break
+    fi
+done
+
+echo "%{u${vpn_name_color}}%{F${color_green}}VPN%{F-}  ${ip}  %{F${vpn_name_color}}$vpn_name%{F-}%{u-}"
+
