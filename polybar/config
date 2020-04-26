@@ -59,7 +59,7 @@ module-margin-right = 2
 font-0 = "Sans Serif:pixelsize=10;2"
 font-1 = "Siji:pixelsize=10;2"
 
-modules-right = cpu memory network separator pulseaudio separator date
+modules-right = cpu memory network separator xkeyboard separator pulseaudio separator date
 
 ; separator = "%{F#80FFFFFF}|%{F-}"
 
@@ -146,8 +146,18 @@ ramp-volume-2 = 
 
 click-right = pavucontrol &
 
+[module/xkeyboard]
+type = internal/xkeyboard
+
+blacklist-0 = num lock
+blacklist-1 = scroll lock
+
+;===============================================================================
+; Custom modules
+;===============================================================================
 [module/separator]
 type = custom/text
 
 content = " | "
 content-foreground = ${colors.white-50-transparent}
+
