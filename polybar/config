@@ -11,13 +11,25 @@ margin-bottom = 0
 ; Colors
 ;===============================================================================
 [colors]
+red = #CC6666
+;red = ${xrdb:color1}
+green = #B5BD68
+;green = ${xrdb:color2}
+blue = #81A2BE
+;blue = ${xrdb:color4}
+
 black-50-transparent = #80000000
 black-75-transparent = #C0000000
+
+white-50-transparent = #80FFFFFF
+white-75-transparent = #C0FFFFFF
 
 background = ${self.black-75-transparent}
 ; background = ${xrdb:background}
 foreground = ${xrdb:foreground}
+foreground-alt = ${self.white-50-transparent}
 
+cpu = ${self.red}
 
 ;===============================================================================
 ; Bars
@@ -41,15 +53,27 @@ module-margin-right = 2
 font-0 = "Sans Serif:pixelsize=10;2"
 font-1 = "Siji:pixelsize=10;2"
 
-modules-right = date
+modules-right = cpu date
 
-separator = "|"
+separator = "%{F#80FFFFFF}|%{F-}"
 
 enable-ipc = true
 
 ;===============================================================================
 ; Modules
 ;===============================================================================
+[module/cpu]
+type = internal/cpu
+
+interval = 2.0
+
+format = <label>
+format-prefix = ""
+format-prefix-foreground = ${colors.cpu}
+format-underline = ${colors.cpu}
+
+label = %percentage:2%%
+
 [module/date]
 type = internal/date
 
