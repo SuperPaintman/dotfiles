@@ -1,22 +1,24 @@
 let
   merge = items: builtins.foldl' (res: item: res // item) {} items;
+
+  imports = items: merge (builtins.map import items);
 in
-merge [
-  (import ./ansible)
-  (import ./bash)
-  (import ./bin)
-  (import ./ctags)
-  (import ./git)
-  (import ./htop)
-  (import ./lein)
-  (import ./lf)
-  (import ./neofetch)
-  (import ./npm)
-  (import ./prettier)
-  (import ./sbt)
-  (import ./tmux)
-  (import ./vim)
-  (import ./vscode)
-  (import ./yarn)
-  (import ./zsh)
+imports [
+  ./ansible
+  ./bash
+  ./bin
+  ./ctags
+  ./git
+  ./htop
+  ./lein
+  ./lf
+  ./neofetch
+  ./npm
+  ./prettier
+  ./sbt
+  ./tmux
+  ./vim
+  ./vscode
+  ./yarn
+  ./zsh
 ]
