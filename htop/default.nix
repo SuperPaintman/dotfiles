@@ -1,3 +1,3 @@
 {
-  "htoprc".source = ./htoprc;
+  ".config/htop/htoprc".source = ./htoprc;
 }

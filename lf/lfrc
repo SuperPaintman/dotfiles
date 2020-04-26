@@ -1,0 +1,17 @@
+# Options.
+set color256 on
+set dircounts on
+set hidden on
+set promptfmt
+
+# Key bindings.
+map <c-h> set hidden!
+map <bs> set hidden! # Same as `<c-h>`.
+map <enter> open
+map <c-c> quit
+
+# Commands.
+cmd edit $$EDITOR $f
+
+# Aliases.
+cmd q quit # alias for `:q`.

@@ -38,6 +38,11 @@ alias grep="grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}"
 alias fgrep="fgrep --color=auto"
 alias egrep="egrep --color=auto"
 
+## Open
+if ! which open > /dev/null 2>&1 && which xdg-open > /dev/null 2>&1; then
+    alias open="xdg-open"
+fi
+
 ## Other
 alias e="$EDITOR"
 alias where="which"

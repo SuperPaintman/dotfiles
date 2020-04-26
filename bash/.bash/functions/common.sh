@@ -162,3 +162,22 @@ readme() {
     echo "Readme file is not found"
     return 1
 }
+
+lfcd() {
+    if ! which lf > /dev/null 2>&1; then
+        echo "Please install lf" 1>&2
+        return 1
+    fi
+
+    tmp="$(mktemp)"
+    lf -last-dir-path="$tmp" "$@"
+    if [ -f "$tmp" ]; then
+        dir="$(cat "$tmp")"
+        rm -f "$tmp"
+        if [ -d "$dir" ]; then
+            if [ "$dir" != "$(pwd)" ]; then
+                cd "$dir"
+            fi
+        fi
+    fi
+}

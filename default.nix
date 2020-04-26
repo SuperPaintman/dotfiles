@@ -8,6 +8,7 @@ merge [
   (import ./ctags)
   (import ./git)
   (import ./htop)
+  (import ./lf)
   (import ./lein)
   (import ./neofetch)
   (import ./npm)
