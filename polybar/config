@@ -1,0 +1,51 @@
+;===============================================================================
+; Global
+;===============================================================================
+[global/wm]
+margin-top = 0
+margin-bottom = 0
+
+;===============================================================================
+; Colors
+;===============================================================================
+[colors]
+black-50-transparent = #80000000
+black-75-transparent = #C0000000
+
+background = ${colors.black-75-transparent}
+; background = ${xrdb:background}
+foreground = ${xrdb:foreground}
+
+
+;===============================================================================
+; Bars
+;===============================================================================
+[bar/main]
+width = 100%
+height = 24
+
+padding-left = 2
+padding-right = 2
+
+font-0 = "Sans Serif:pixelsize=10;2"
+
+modules-right = date
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+;===============================================================================
+; Modules
+;===============================================================================
+
+[module/date]
+type = internal/date
+interval = 1
+
+label = %date% %time%
+
+date = %h %d
+date-alt = %Y-%m-%d
+
+time = %I:%M:%S %p
+time-alt = %H:%M:%S

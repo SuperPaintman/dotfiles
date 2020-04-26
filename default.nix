@@ -14,6 +14,7 @@ imports [
   ./lf
   ./neofetch
   ./npm
+  ./polybar
   ./prettier
   ./sbt
   ./tmux
