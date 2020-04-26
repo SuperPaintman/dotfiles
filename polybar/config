@@ -59,9 +59,9 @@ module-margin-right = 2
 font-0 = "Sans Serif:pixelsize=10;2"
 font-1 = "Siji:pixelsize=10;2"
 
-modules-right = cpu memory network pulseaudio date
+modules-right = cpu memory network separator pulseaudio separator date
 
-separator = "%{F#80FFFFFF}|%{F-}"
+; separator = "%{F#80FFFFFF}|%{F-}"
 
 enable-ipc = true
 
@@ -145,3 +145,9 @@ ramp-volume-1 = 
 ramp-volume-2 = 
 
 click-right = pavucontrol &
+
+[module/separator]
+type = custom/text
+
+content = " | "
+content-foreground = ${colors.white-50-transparent}
