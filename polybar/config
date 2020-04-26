@@ -171,3 +171,5 @@ type = custom/script
 exec = ~/.config/polybar/modules/vpn-status
 
 interval = 2.0
+
+click-left = ~/.config/polybar/modules/vpn-status toggle

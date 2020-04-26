@@ -8,6 +8,18 @@ color_transparent="#00000000"
 
 connection="$(pgrep -a openvpn$ | head -n 1 | awk '{ print $NF }' | cut -d '.' -f 1)"
 
+case "$1" in
+    toggle)
+        if [ -n "$connection" ]; then
+            systemctl stop openvpn-server.service
+        else
+            systemctl start openvpn-server.service
+        fi
+
+        exit 0
+        ;;
+esac
+
 if [ ! -n "$connection" ]; then
     echo "%{u${color_red}}%{F${color_red}}VPN%{F-}%{u-}"
     exit 0
