@@ -6,6 +6,7 @@ in
 imports [
   ./alacritty
   ./ansible
+  ./awesome
   ./bash
   ./bin
   ./ctags
