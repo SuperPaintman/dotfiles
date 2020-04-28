@@ -14,6 +14,16 @@ alias .....="cd ../../../.."
 alias ......="cd ../../../../.."
 alias ~="cd ~"
 
+if which lfcd > /dev/null 2>&1; then
+    cd() {
+        if [ "$#" = 0 ]; then
+            lfcd
+        else
+            builtin cd $@
+        fi
+    }
+fi
+
 ## `ls` aliases
 if which exa > /dev/null 2>&1; then
     alias ls="exa --color=auto"
