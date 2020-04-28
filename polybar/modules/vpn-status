@@ -11,9 +11,9 @@ connection="$(pgrep -a openvpn$ | head -n 1 | awk '{ print $NF }' | cut -d '.' -
 case "$1" in
     toggle)
         if [ -n "$connection" ]; then
-            systemctl stop openvpn-server.service
+            sudo systemctl stop openvpn-server.service
         else
-            systemctl start openvpn-server.service
+            sudo systemctl start openvpn-server.service
         fi
 
         exit 0
