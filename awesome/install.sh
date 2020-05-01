@@ -22,4 +22,5 @@ linkall \
     "$SOURCE_ROOT" \
     "$TARGET_ROOT" \
     "$is_force" \
-    "rc.lua"
+    "rc.lua" \
+    "autostart.sh"

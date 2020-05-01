@@ -878,3 +878,9 @@ client.connect_signal(
     end
 )
 -- }}}
+
+-- Startup displays.
+awful.spawn("xrandr --output DVI-D-0 --left-of DVI-I-1", {})
+
+-- Auto-start programs.
+awful.spawn.with_shell(os.getenv("HOME") .. "/.config/awesome/autostart.sh")
