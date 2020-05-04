@@ -142,10 +142,6 @@ lfcd() {
 }
 
 # Docker.
-dstats() {
-    docker stats $(docker ps | awk '{print $NF}' | grep -v NAMES)
-}
-
 drmall() {
     local funcname="$(_get_funcname)"
     local is_force=false
@@ -194,35 +190,4 @@ drmiall() {
     else
         docker rmi $(docker ps -qa)
     fi
-}
-
-drestartnlog() {
-    local funcname="$(_get_funcname)"
-
-    if [[ $# != 1 ]]; then
-        echo -e "Usage: $funcname <container_name>" 1>&2
-        return 1
-    fi
-
-    docker restart "$1" && docker logs -f --tail=1 "$1"
-}
-
-# Tmux.
-_tmpreset1() {
-    tmux split-window -v -p 33 &&
-        tmux split-window -v -p 50
-}
-
-tmpreset() {
-    local preset="${1:-1}"
-
-    case $preset in
-        "1")
-            _tmpreset1
-            ;;
-        *)
-            echo -e "Unknown preset: $preset" 1>&2
-            return 1
-            ;;
-    esac
 }
