@@ -19,6 +19,7 @@ blue = #81A2BE
 ;blue = ${xrdb:color4}
 yellow = #F0C674
 ;yellow = ${xrdb:color11}
+transparent = #00000000
 
 black-50-transparent = #80000000
 black-75-transparent = #C0000000
@@ -61,6 +62,33 @@ font-1 = "Siji:pixelsize=10;2"
 
 modules-center = xwindow
 modules-right = cpu memory network separator vpn-status separator xkeyboard separator pulseaudio separator date
+
+; separator = "%{F#80FFFFFF}|%{F-}"
+
+enable-ipc = true
+
+[bar/plasma]
+width = 40%
+height = 24
+
+offset-x = 45%
+
+background = ${colors.transparent}
+foreground = ${colors.foreground}
+
+line-size = 2
+line-color = #FF0000
+
+padding-left = 2
+padding-right = 2
+
+module-margin-left = 2
+module-margin-right = 2
+
+font-0 = "Sans Serif:pixelsize=10;2"
+font-1 = "Siji:pixelsize=10;2"
+
+modules-right = separator cpu memory network separator vpn-status separator pulseaudio separator
 
 ; separator = "%{F#80FFFFFF}|%{F-}"
 
