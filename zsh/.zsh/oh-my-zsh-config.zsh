@@ -11,6 +11,9 @@ DISABLE_AUTO_UPDATE="true"
 
 # Plugins.
 plugins=()
+
+plugins+=(sudo)
+
 plugins+=(zsh-autosuggestions)
 plugins+=(zsh-syntax-highlighting)
 
