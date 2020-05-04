@@ -25,7 +25,10 @@ if [ -f ~/.bashrc ]; then source ~/.bashrc; fi
 if [ -f ~/.zsh/functions.zsh ]; then source ~/.zsh/functions.zsh; fi
 
 # Theme.
-if [ -f  ~/.zsh/theme.zsh ]; then source ~/.zsh/theme.zsh; fi
+if [ -f ~/.zsh/theme.zsh ]; then source ~/.zsh/theme.zsh; fi
+
+# Key bindings.
+if [ -f ~/.zsh/key-bindings.zsh ]; then source ~/.zsh/key-bindings.zsh; fi
 
 # Show system information.
 if can neofetch; then
