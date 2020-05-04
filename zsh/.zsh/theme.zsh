@@ -30,7 +30,7 @@ _theme_fish_pwd() {
 
 # Parts.
 local _theme_username="%{$fg[cyan]%}%n%{$reset_color%}"
-local _theme_hostname="@%{$fg[cyan]%}%m%{$reset_color%}"
+local _theme_hostname="@%{$fg_bold[cyan]%}%m%{$reset_color%}"
 local _theme_ret_status="%(?:%{$fg[$_theme_user_color]%}:%{$fg[red]%})$_theme_user_caret %{$reset_color%}"
 
 # Left prompt.
