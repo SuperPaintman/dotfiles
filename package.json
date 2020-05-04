@@ -1,0 +1,9 @@
+{
+  "private": true,
+  "dependencies": {
+    "glob": "7.1.6",
+    "handlebars": "4.7.6",
+    "js-yaml": "3.13.1",
+    "tinycolor2": "1.4.1"
+  }
+}

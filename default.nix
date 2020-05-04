@@ -20,6 +20,7 @@ imports [
   ./tmux
   ./vim
   ./vscode
+  ./xresources
   ./yarn
   ./zsh
 ]

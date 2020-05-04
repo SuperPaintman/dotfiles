@@ -1,0 +1,109 @@
+#!/usr/bin/env node
+
+'use strict';
+/* Imports */
+const fs = require('fs');
+const path = require('path');
+const { promisify } = require('util');
+const assert = require('assert');
+
+const glob = require('glob');
+const yaml = require('js-yaml');
+const tinycolor = require('tinycolor2');
+const Handlebars = require('handlebars');
+
+/* Helpers */
+function colorConvert(method, color, ...args) {
+  return tinycolor(color)
+    [method](...args)
+    .toHex8String()
+    .replace(/ff$/, '')
+    .toUpperCase();
+}
+
+function polybarColor(color) {
+  // Move alpha at the begining.
+  if (color.length === 9) {
+    return '#' + color.slice(7, 9) + color.slice(1, 7);
+  }
+
+  return color;
+}
+
+function makeHelper(fn) {
+  const { length } = fn;
+
+  return function () {
+    assert(arguments.length >= length + 1);
+
+    for (let i = 0; i < length; i++) {
+      assert(arguments[i] !== undefined);
+    }
+
+    return fn(...arguments);
+  };
+}
+
+function makeHelperColor(method, argsLen = 0) {
+  const length = argsLen + 1;
+
+  return function (color, ...rest) {
+    assert(arguments.length >= length + 1);
+
+    for (let i = 0; i < length; i++) {
+      assert(arguments[i] !== undefined);
+    }
+
+    return colorConvert(method, color, ...rest);
+  };
+}
+
+/* Init */
+const readFileAsync = promisify(fs.readFile);
+const writeFileAsync = promisify(fs.writeFile);
+const globAsync = promisify(glob);
+
+const configFilename = path.join(__dirname, '../config.yml');
+
+Handlebars.registerHelper({
+  brighten: makeHelperColor('brighten', 1),
+  alpha: makeHelper((color, value) => colorConvert('setAlpha', color, value)),
+  polybar: polybarColor,
+});
+
+/* Main */
+async function main() {
+  // Load config.
+  const configContent = await readFileAsync(configFilename, 'utf-8');
+  const config = yaml.load(configContent);
+
+  // Search all template files.
+  const templates = await globAsync('**/*.hbs', {
+    dot: true,
+  });
+
+  for (const templateFilename of templates) {
+    // Read template.
+    const templateContent = await readFileAsync(templateFilename, 'utf-8');
+
+    const template = Handlebars.compile(templateContent, {
+      strict: true,
+    });
+
+    const result = template({
+      ...config,
+      warning: 'This file is generated; DO NOT EDIT.',
+    });
+
+    // Write result.
+    const { dir, name } = path.parse(templateFilename);
+
+    await writeFileAsync(path.join(dir, name), result);
+  }
+}
+
+main().catch((err) => {
+  console.error(err);
+
+  process.exit(1);
+});

@@ -1,0 +1,19 @@
+; This file is generated; DO NOT EDIT.
+
+black = #000000
+grey = #373B41
+white = #F2F2F2
+red = #CC6666
+green = #B5BD68
+yellow = #F0C674
+blue = #81A2BE
+magenta = #B294BB
+cyan = #8ABEB7
+
+transparent = #00000000
+
+black-50-transparent = #80000000
+black-75-transparent = #BF000000
+
+white-50-transparent = #80F2F2F2
+white-75-transparent = #BFF2F2F2

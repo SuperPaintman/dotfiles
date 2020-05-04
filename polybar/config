@@ -11,21 +11,7 @@ margin-bottom = 0
 ; Colors
 ;===============================================================================
 [colors]
-red = #CC6666
-;red = ${xrdb:color1}
-green = #B5BD68
-;green = ${xrdb:color2}
-blue = #81A2BE
-;blue = ${xrdb:color4}
-yellow = #F0C674
-;yellow = ${xrdb:color11}
-transparent = #00000000
-
-black-50-transparent = #80000000
-black-75-transparent = #C0000000
-
-white-50-transparent = #80FFFFFF
-white-75-transparent = #C0FFFFFF
+include-file = ~/.config/polybar/colors
 
 background = ${self.black-75-transparent}
 ; background = ${xrdb:background}
@@ -49,7 +35,7 @@ background = ${colors.background}
 foreground = ${colors.foreground}
 
 line-size = 2
-line-color = #FF0000
+line-color = ${colors.red}
 
 padding-left = 2
 padding-right = 2
@@ -77,7 +63,7 @@ background = ${colors.transparent}
 foreground = ${colors.foreground}
 
 line-size = 2
-line-color = #FF0000
+line-color = ${colors.red}
 
 padding-left = 2
 padding-right = 2

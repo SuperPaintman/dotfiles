@@ -1,0 +1,55 @@
+! This file is generated; DO NOT EDIT.
+
+! Colors.
+! Special.
+*.foreground: #f2f2f2
+*.background: #1D1F21
+*cursorColor: #E6E6E6
+
+! Black.
+*.color0: #000000
+
+! Red.
+*.color1: #CC6666
+
+! Green.
+*.color2: #B5BD68
+
+! Yellow.
+*.color3: #F0C674
+
+! Blue.
+*.color4: #81A2BE
+
+! Magenta.
+*.color5: #B294BB
+
+! Cyan.
+*.color6: #8ABEB7
+
+! Grey.
+*.color7: #373B41
+
+! White.
+*.color8: #F2F2F2
+
+! Bright Red.
+*.color9: #B24C4C
+
+! Bright Green.
+*.color10: #9BA34E
+
+! Bright Yellow.
+*.color11: #D6AC5A
+
+! Bright Blue.
+*.color12: #6788A4
+
+! Bright Magenta.
+*.color13: #987AA1
+
+! Bright Cyan.
+*.color14: #70A49D
+
+! Bright Grey.
+*.color15: #1D2127

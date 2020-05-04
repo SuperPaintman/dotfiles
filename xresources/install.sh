@@ -13,15 +13,11 @@ for arg in "$@"; do
     esac
 done
 
-TARGET_ROOT="$HOME/.config/polybar"
+TARGET_ROOT="$HOME"
 SOURCE_ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
-
-mkdir -p "$TARGET_ROOT"
 
 linkall \
     "$SOURCE_ROOT" \
     "$TARGET_ROOT" \
     "$is_force" \
-    "config" \
-    "colors" \
-    "modules"
+    ".Xresources"

@@ -1,0 +1,3 @@
+{
+  ".Xresources".source = ./.Xresources;
+}
