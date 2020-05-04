@@ -69,6 +69,7 @@ alias gd="git d"
 alias gdi="git di"
 alias gs="git s"
 alias gcb="git cb"
+alias gcm="git cm"
 
 # SSH
 alias sshpass="ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no"
