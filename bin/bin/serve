@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -eu
+
+if ! which python > /dev/null 2>&1; then
+    echo "Please install python" 1>&2
+    exit 1
+fi
+
+if [ "$#" = 0 ]; then
+    port=8000
+else
+    port="$1"
+fi
+
+python -m SimpleHTTPServer "$port"

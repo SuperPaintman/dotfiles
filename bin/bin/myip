@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -eu
+
+dig +short myip.opendns.com @resolver1.opendns.com
