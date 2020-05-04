@@ -30,6 +30,10 @@
 	current-branch = rev-parse --abbrev-ref HEAD
 	cb = !git current-branch
 
+	## Current Commit.
+	current-commit = rev-parse HEAD
+	cm = !git current-commit
+
 	# D
 	## Diff
 	d = diff
