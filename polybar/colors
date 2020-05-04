@@ -1,6 +1,6 @@
 ; This file is generated; DO NOT EDIT.
 
-black = #000000
+black = #272822
 grey = #373B41
 white = #F2F2F2
 red = #CC6666
@@ -12,8 +12,8 @@ cyan = #8ABEB7
 
 transparent = #00000000
 
-black-50-transparent = #80000000
-black-75-transparent = #BF000000
+black-50-transparent = #80272822
+black-75-transparent = #BF272822
 
 white-50-transparent = #80F2F2F2
 white-75-transparent = #BFF2F2F2

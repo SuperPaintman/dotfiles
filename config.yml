@@ -1,5 +1,5 @@
 colors:
-    black: "#000000"
+    black: "#272822" # "#000000"
     grey: "#373B41"
     white: "#F2F2F2" # "#FFFFFF"
     red: "#CC6666"
