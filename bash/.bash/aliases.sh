@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
+
 # Common
 ## `cat` aliases
-if which bat > /dev/null 2>&1; then
+if can bat; then
     alias cat="bat"
 fi
 
@@ -25,9 +26,9 @@ if which lfcd > /dev/null 2>&1; then
 fi
 
 ## `ls` aliases
-if which exa > /dev/null 2>&1; then
+if can exa; then
     alias ls="exa --color=auto"
-elif which gls > /dev/null 2>&1; then
+elif can gls; then
     alias ls="gls --color=auto"
 else
     alias ls="ls --color=auto"
@@ -49,7 +50,7 @@ alias fgrep="fgrep --color=auto"
 alias egrep="egrep --color=auto"
 
 ## Open
-if ! which open > /dev/null 2>&1 && which xdg-open > /dev/null 2>&1; then
+if ! can open && can xdg-open; then
     alias open="xdg-open"
 fi
 
@@ -88,9 +89,9 @@ alias npx="npx --no-install"
 alias wds="npx webpack-dev-server"
 
 # `pbcopy` and `pbpaste`
-if ! which pbcopy > /dev/null 2>&1; then
+if ! can pbcopy; then
     alias pbcopy="xclip -selection clipboard"
 fi
-if ! which pbpaste > /dev/null 2>&1; then
+if ! can pbpaste; then
     alias pbpaste="xclip -selection clipboard -o"
 fi

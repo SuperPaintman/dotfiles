@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
 

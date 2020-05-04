@@ -1,6 +1,19 @@
 #!/usr/bin/env bash
-# Start tmux
-if which tmux > /dev/null 2>&1; then
+
+# Global functions.
+
+# Replacement for `which $1 > /dev/null 2>&1`.
+can() {
+    if [ "$#" = 0 ]; then
+        return 1
+    fi
+
+    command -v "$1" > /dev/null
+    return "$?"
+}
+
+# Start tmux.
+if can tmux; then
     if [ -z "$TMUX" ] && [ "$TERM_PROGRAM" = "iTerm.app" ]; then
         if tmux list-session > /dev/null 2>&1; then
             tmux attach-session && exit
@@ -10,7 +23,7 @@ if which tmux > /dev/null 2>&1; then
     fi
 fi
 
-# Init
+# Init.
 if [ -x /usr/bin/lesspipe ]; then
     eval "$(SHELL=/bin/sh lesspipe)"
 fi
@@ -23,19 +36,19 @@ if [ -x /usr/bin/dircolors ]; then
     fi
 fi
 
-# Env
+# Env.
 if [ -f ~/.bash/env.sh ]; then source ~/.bash/env.sh; fi
 
-# Path
+# Path.
 if [ -f ~/.bash/path.sh ]; then source ~/.bash/path.sh; fi
 
-# Functions
+# Functions.
 if [ -f ~/.bash/functions.sh ]; then source ~/.bash/functions.sh; fi
 
-# Aliases
+# Aliases.
 if [ -f ~/.bash/aliases.sh ]; then source ~/.bash/aliases.sh; fi
 
-# Theme
+# Theme.
 if [ -f ~/.bash/theme.sh ]; then source ~/.bash/theme.sh; fi
 
 
@@ -58,6 +71,6 @@ shopt -s checkwinsize
 if [ -f ~/.bash/completion.sh ]; then source ~/.bash/completion.sh; fi
 
 # Show system information
-if which neofetch > /dev/null 2>&1; then
+if can neofetch; then
     neofetch --no_config
 fi
