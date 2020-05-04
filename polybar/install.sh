@@ -24,4 +24,5 @@ linkall \
     "$is_force" \
     "config" \
     "colors" \
+    "lib" \
     "modules"

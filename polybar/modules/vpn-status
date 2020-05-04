@@ -2,9 +2,7 @@
 
 set -e
 
-color_red="#CC6666"
-color_green="#B5BD68"
-color_transparent="#00000000"
+source ~/.config/polybar/lib/colors.sh
 
 connection="$(pgrep -a openvpn$ | head -n 1 | awk '{ print $NF }' | cut -d '.' -f 1)"
 

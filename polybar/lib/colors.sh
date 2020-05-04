@@ -1,0 +1,11 @@
+color_black="#272822"
+color_grey="#373B41"
+color_white="#F2F2F2"
+color_red="#CC6666"
+color_green="#B5BD68"
+color_yellow="#F0C674"
+color_blue="#81A2BE"
+color_magenta="#B294BB"
+color_cyan="#8ABEB7"
+
+color_transparent="#00000000"
