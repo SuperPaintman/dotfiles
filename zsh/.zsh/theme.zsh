@@ -31,20 +31,20 @@ _theme_fish_pwd() {
 # Parts.
 local _theme_username="%{$fg[cyan]%}%n%{$reset_color%}"
 local _theme_hostname="@%{$fg_bold[cyan]%}%m%{$reset_color%}"
-local _theme_ret_status="%(?:%{$fg[$_theme_user_color]%}:%{$fg[red]%})$_theme_user_caret %{$reset_color%}"
+local _theme_ret_status="%(?::[%{$fg_bold[red]%}%?%{$reset_color%}] )%(?:%{$fg[$_theme_user_color]%}:%{$fg[red]%})$_theme_user_caret%{$reset_color%}"
 
 # Left prompt.
 _theme_prompt_left() {
     local theme_pwd="%{$fg[red]%}$(_theme_fish_pwd)%{$reset_color%}"
 
     if [ "$COLUMNS" -ge 80 ]; then
-        echo "$_theme_username$_theme_hostname $theme_pwd $_theme_ret_status"
+        echo "$_theme_username$_theme_hostname $theme_pwd $_theme_ret_status "
     elif [ "$COLUMNS" -ge 60 ]; then
-        echo "$_theme_hostname $theme_pwd $_theme_ret_status"
+        echo "$_theme_hostname $theme_pwd $_theme_ret_status "
     elif [ "$COLUMNS" -ge 30 ]; then
-        echo "$_theme_hostname $_theme_ret_status"
+        echo "$_theme_hostname $_theme_ret_status "
     else
-        echo "$_theme_ret_status"
+        echo "$_theme_ret_status "
     fi
 }
 
