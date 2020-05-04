@@ -1,20 +1,21 @@
 #!/usr/bin/env zsh
-# Init
+
+# Init.
 ZSH="$HOME/.oh-my-zsh"
 
-# Theme
+# Theme.
 ZSH_THEME="amuse"
 
-# Oh My ZSH custom
+# Oh My ZSH custom.
 ZSH_CUSTOM="$HOME/.oh-my-zsh-custom"
 
-# Configs
+# Configs.
 DISABLE_AUTO_UPDATE="true"
 
-# Plugins
+# Plugins.
 plugins=()
 
-## Vendor
+## Vendor.
 #plugins+=(git)
 plugins+=(emoji)
 #plugins+=(thefuck)
@@ -22,9 +23,9 @@ plugins+=(emoji)
 #plugins+=(web-search)
 plugins+=(colorize)
 
-## Custom
+## Custom.
 plugins+=(zsh-autosuggestions)
 plugins+=(zsh-syntax-highlighting)
 
-# Init
+# Init.
 source "$ZSH/oh-my-zsh.sh"
