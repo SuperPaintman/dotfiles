@@ -1,0 +1,16 @@
+/* This file is generated; DO NOT EDIT. */
+
+* {
+    color-foreground: #F2F2F2;
+    color-background: #222222;
+
+    color-black: #2B2B2B;
+    color-grey: #3C3D3D;
+    color-white: #C1C2C2;
+    color-red: #E42222;
+    color-green: #AABB39;
+    color-yellow: #FCAE25;
+    color-blue: #6699D6;
+    color-magenta: #AB53D6;
+    color-cyan: #5FC0AE;
+}

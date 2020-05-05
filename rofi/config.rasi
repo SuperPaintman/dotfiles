@@ -1,0 +1,18 @@
+/* See: https://github.com/davatorium/rofi/wiki/Configuring-Rofi */
+/* See: https://github.com/davatorium/rofi/blob/next/doc/rofi-theme.5.markdown */
+
+configuration {
+  modi: "window,drun,run";
+
+  show-icons: true;
+
+  font: "sans 16";
+
+  fixed-num-lines: false;
+
+  cycle: true;
+
+  lines: 10;
+}
+
+@import "~/.config/rofi/theme.rasi"

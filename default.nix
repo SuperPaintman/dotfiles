@@ -16,6 +16,7 @@ imports [
   ./npm
   ./polybar
   ./prettier
+  ./rofi
   ./sbt
   ./tmux
   ./vim

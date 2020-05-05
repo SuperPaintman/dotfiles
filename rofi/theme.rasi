@@ -1,0 +1,22 @@
+@import "~/.config/rofi/colors.rasi"
+
+* {
+    background-color: @color-background;
+    text-color: @color-foreground;
+
+    color-border: @color-blue;
+
+}
+
+#window {
+    padding: 8;
+
+    border: 1;
+    border-radius: 4;
+    border-color: @color-border;
+
+    location: north;
+    anchor: north;
+
+    y-offset: 20%;
+}
