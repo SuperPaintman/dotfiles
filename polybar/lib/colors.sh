@@ -1,7 +1,7 @@
 color_black="#2B2B2B"
 color_grey="#3C3D3D"
 color_white="#C1C2C2"
-color_red="#D3232F"
+color_red="#E42222"
 color_green="#AABB39"
 color_yellow="#FCAE25"
 color_blue="#6699D6"

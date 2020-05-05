@@ -12,7 +12,7 @@
 *.color0: #2B2B2B
 
 ! Red.
-*.color1: #D3232F
+*.color1: #E42222
 
 ! Green.
 *.color2: #AABB39
@@ -36,7 +36,7 @@
 *.color8: #C1C2C2
 
 ! Bright Red.
-*.color9: #B90915
+*.color9: #CA0808
 
 ! Bright Green.
 *.color10: #90A11F
