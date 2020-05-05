@@ -33,7 +33,7 @@
 
     background-color: @color-background-light;
 
-    children: [entry, case-indicator, prompt];
+    children: [entry, case-indicator, /* prompt, */ mode-switcher];
 }
 
 #prompt,entry,case-indicator {
@@ -76,7 +76,30 @@
     background-color: @color-background-light;
 }
 
-#element text {
-    background-color: red;
+#mode-switcher {
+    margin: 6 3;
+
+    border-radius: 2;
+
+    background-color: @color-background;
+
+
+
+    // vertical-align: 0.5;
+
+
+
+    // orientation: vertical;
+}
+
+#button {
+    padding: 3 11;
+    // border-radius: 2;
+    width: 80;
+
     font: "sans 10";
+}
+
+#button.selected {
+    background-color: @color-magenta;
 }
