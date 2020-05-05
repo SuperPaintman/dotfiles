@@ -1,0 +1,108 @@
+#!/usr/bin/env bash
+
+source ~/.config/rofi/lib/colors.sh
+
+# Constants.
+color_connected="$color_green"
+color_connecting="$color_red"
+color_disconnected="$color_red"
+
+# Helpers.
+rofi_set() {
+    echo -en "\0""$1""\x1f""$2""\n"
+}
+
+color() {
+    if [ "$#" = 0 ]; then
+        return 1
+    fi
+
+    local clr="$1"
+
+    echo "<span color='$clr'>${@:2}</span>"
+}
+
+option() {
+    echo $@
+}
+
+# Main.
+connection="$(pgrep -a openvpn$ | head -n 1 | awk '{ print $NF }' | cut -d '.' -f 1)"
+active_vpn_name="$(echo "$connection" | sed 's/.*-config-//')"
+
+ip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
+
+# Little note (for me):
+#   Get keys: ${!vpn_configs[@]}
+#   Get values: ${vpn_configs[@]}
+declare -A vpn_configs
+
+for i in $HOME/.openvpn/*.conf; do
+    vpn_name="$(basename "$i" '.conf')"
+    vpn_ip="$(cat ~/.openvpn/server.conf | grep remote | awk '{print $2}')"
+
+    vpn_configs["${vpn_name}"]="${vpn_name} ${vpn_ip}"
+done
+
+find_vpn_name() {
+    for key in ${!vpn_configs[@]}; do
+        vpn=(${vpn_configs["$key"]})
+
+        vpn_name="${vpn[0]}"
+
+        case "$@" in
+            "$vpn_name "* | *">$vpn_name"*)
+                echo "$vpn_name"
+                return 0
+                ;;
+        esac
+    done
+
+    return 1
+}
+
+rofi_set "markup-rows" "true"
+
+if [ ! "$@" = "" ]; then
+    vpn_name="$(find_vpn_name "$@")"
+
+    if [ "$vpn_name" = "" ]; then
+        exit 1
+    fi
+
+    if [ -n "$active_vpn_name" ]; then
+        sudo systemctl stop "openvpn-${vpn_name}.service"
+
+        if [ ! "$?" = "0" ]; then
+            exit "$?"
+        fi
+    fi
+
+    if [ ! "$vpn_name" = "$active_vpn_name" ]; then
+        sudo systemctl start "openvpn-${vpn_name}.service"
+
+        exit "$?"
+    fi
+
+    exit 0
+fi
+
+for key in ${!vpn_configs[@]}; do
+    vpn=(${vpn_configs["$key"]})
+
+    vpn_name="${vpn[0]}"
+    vpn_ip="${vpn[1]}"
+
+    if [ "$ip" = "$vpn_ip" ]; then
+        vpn_name="$(color "$color_connected" "${vpn[0]}")"
+        vpn_status="$(color "$color_connected" "CONNECTED")"
+    elif [ "$active_vpn_name" = "$vpn_name" ]; then
+        vpn_name="$(color "$color_connected" "${vpn[0]}")"
+        vpn_status="$(color "$color_connecting" "CONNECTING")"
+    else
+        vpn_name="$(color "$color_disconnected" "${vpn[0]}")"
+        vpn_status="$(color "$color_disconnected" "DISCONNECTED")"
+    fi
+
+    option "$vpn_name $vpn_ip <span size='x-small'>($vpn_status)</span>"
+done

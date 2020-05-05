@@ -24,4 +24,6 @@ linkall \
     "$is_force" \
     "config.rasi" \
     "colors.rasi" \
-    "theme.rasi"
+    "theme.rasi" \
+    "lib" \
+    "modes"
