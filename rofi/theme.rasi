@@ -60,6 +60,8 @@
 #listview {
     // margin-top.
     margin: 11 0 0;
+
+    spacing: 0;
 }
 
 #element {
@@ -67,7 +69,7 @@
     margin: 0;
 
     border: 1 0 0 0;
-    border-color: rgba(255, 255, 255, 10%);
+    border-color: @color-background-light;
 
     font: "sans 14";
 }
