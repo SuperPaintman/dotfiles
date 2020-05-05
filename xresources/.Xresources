@@ -1,55 +1,63 @@
 ! This file is generated; DO NOT EDIT.
 
+!===============================================================================
 ! Colors.
+!===============================================================================
 ! Special.
-*.foreground: #f2f2f2
-*.background: #1D1F21
+*.foreground: #F2F2F2
+*.background: #222222
 *.cursorColor: #282A2E
 
 ! Black.
-*.color0: #272822
+*.color0: #2B2B2B
 
 ! Red.
-*.color1: #CC6666
+*.color1: #D3232F
 
 ! Green.
-*.color2: #B5BD68
+*.color2: #AABB39
 
 ! Yellow.
-*.color3: #F0C674
+*.color3: #FCAE25
 
 ! Blue.
-*.color4: #81A2BE
+*.color4: #6699D6
 
 ! Magenta.
-*.color5: #B294BB
+*.color5: #AB53D6
 
 ! Cyan.
-*.color6: #8ABEB7
+*.color6: #5FC0AE
 
 ! Grey.
-*.color7: #373B41
+*.color7: #3C3D3D
 
 ! White.
-*.color8: #F2F2F2
+*.color8: #C1C2C2
 
 ! Bright Red.
-*.color9: #B24C4C
+*.color9: #B90915
 
 ! Bright Green.
-*.color10: #9BA34E
+*.color10: #90A11F
 
 ! Bright Yellow.
-*.color11: #D6AC5A
+*.color11: #E2940B
 
 ! Bright Blue.
-*.color12: #6788A4
+*.color12: #4C7FBC
 
 ! Bright Magenta.
-*.color13: #987AA1
+*.color13: #9139BC
 
 ! Bright Cyan.
-*.color14: #70A49D
+*.color14: #45A694
 
 ! Bright Grey.
-*.color15: #1D2127
+*.color15: #222323
+
+!===============================================================================
+! xst
+!===============================================================================
+!st.opacity: 243
+st.font: JetBrains Mono:pixelsize=12

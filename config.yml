@@ -1,16 +1,18 @@
+# Theme: Later This Evening (modificated)
 colors:
-    black: "#272822" # "#000000"
-    grey: "#373B41"
-    white: "#F2F2F2" # "#FFFFFF"
-    red: "#CC6666"
-    green: "#B5BD68"
-    yellow: "#F0C674"
-    blue: "#81A2BE"
-    magenta: "#B294BB"
-    cyan: "#8ABEB7"
+    black: "#2B2B2B" # "#000000"
+    grey: "#3C3D3D"
+    white: "#C1C2C2" # "#FFFFFF"
 
-    foreground: "#f2f2f2"
-    background: "#1D1F21"
+    red: "#D3232F"
+    green: "#AABB39"
+    yellow: "#FCAE25"
+    blue: "#6699D6"
+    magenta: "#AB53D6"
+    cyan: "#5FC0AE"
+
+    foreground: "#F2F2F2"
+    background: "#222222"
     cursor_color: "#282A2E"
 
     transparent: "#00000000"
