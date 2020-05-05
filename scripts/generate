@@ -69,6 +69,7 @@ Handlebars.registerHelper({
   mul: (...args) => args.slice(0, -1).reduce((acc, i) => acc * i),
   ceil: Math.ceil,
   brighten: makeHelperColor('brighten', 1),
+  lighten: makeHelperColor('lighten', 1),
   alpha: makeHelper((color, value) => colorConvert('setAlpha', color, value)),
   polybar: polybarColor,
 });

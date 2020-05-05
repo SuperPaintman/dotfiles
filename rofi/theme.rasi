@@ -6,10 +6,11 @@
 
     color-border: @color-blue;
 
+    font: "sans 16";
 }
 
 #window {
-    padding: 8;
+    padding: 11;
 
     border: 1;
     border-radius: 4;
@@ -19,4 +20,61 @@
     anchor: north;
 
     y-offset: 20%;
+}
+
+#mainbox {
+    children: [inputbar, message, listview];
+}
+
+#inputbar {
+    padding: 11;
+
+    border-radius: 3;
+
+    background-color: @color-background-light;
+
+    children: [entry, case-indicator, prompt];
+}
+
+#prompt,entry,case-indicator {
+    background-color: inherit;
+}
+
+#entry {
+    font: "sans 24";
+}
+
+#prompt {
+    padding: 2 10;
+    margin: 6 2;
+
+    border-radius: 2;
+
+    background-color: @color-magenta;
+
+    font: "sans 12";
+}
+
+#listview {
+    // margin-top.
+    margin: 11 0 0;
+}
+
+#element {
+    padding: 11;
+    margin: 0;
+
+    border: 1 0 0 0;
+    border-color: rgba(255, 255, 255, 10%);
+
+    font: "sans 14";
+}
+
+#element.selected {
+    background-color: @color-background-light;
+}
+
+#element text {
+    background-color: red;
+    font: "sans 10";
 }

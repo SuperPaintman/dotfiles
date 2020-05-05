@@ -2,17 +2,28 @@
 /* See: https://github.com/davatorium/rofi/blob/next/doc/rofi-theme.5.markdown */
 
 configuration {
-  modi: "window,drun,run";
+    modi: "window,drun,run";
 
-  show-icons: true;
+    show-icons: true;
 
-  font: "sans 16";
+    font: "sans 16";
 
-  fixed-num-lines: false;
+    fixed-num-lines: false;
 
-  cycle: true;
+    cycle: true;
 
-  lines: 10;
+    lines: 10;
+
+    // Vim mode.
+    kb-mode-next: "Shift+Right,Control+Tab,Control+l";
+    kb-mode-previous: "Shift+Left,Control+Shift+Tab,Control+h";
+    kb-row-up: "Up,Control+p,Control+k";
+    kb-row-down: "Down,Control+n,Control+j";
+    kb-accept-entry: "Return,Control+m,KP_Enter"; // Default `Control+j`.
+    kb-remove-to-eol: ""; // Default `Control+k`.
+    kb-remove-char-back: "BackSpace"; // Default `Control+h`.
+
+    kb-cancel: "Escape,Control+bracketleft,Control+c";
 }
 
 @import "~/.config/rofi/theme.rasi"

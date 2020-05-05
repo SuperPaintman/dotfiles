@@ -13,4 +13,7 @@
     color-blue: #6699D6;
     color-magenta: #AB53D6;
     color-cyan: #5FC0AE;
+
+    color-foreground-light: #FFFFFF;
+    color-background-light: #2F2F2F;
 }
