@@ -53,6 +53,8 @@
     background-color: @color-magenta;
 
     font: "sans 12";
+
+    vertical-align: 0.5;
 }
 
 #listview {
