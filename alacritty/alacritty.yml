@@ -1,0 +1,49 @@
+# See: https://github.com/alacritty/alacritty/blob/master/alacritty.yml .
+
+window:
+    padding:
+        x: 2
+        y: 2
+
+    dynamic_padding: true
+
+font:
+    normal:
+        family: monospace # JetBrains Mono.
+
+    size: 10
+
+colors:
+    primary:
+        background: "#222222" # background
+        foreground: "#F2F2F2" # foreground
+
+    cursor:
+        text: "#282A2E" # cursorColor
+        cursor: "#F2F2F2" # foreground
+
+    normal:
+        black: "#2B2B2B"
+        red: "#E42222"
+        green: "#AABB39"
+        yellow: "#FCAE25"
+        blue: "#6699D6"
+        magenta: "#AB53D6"
+        cyan: "#5FC0AE"
+        white: "#3C3D3D"
+
+    bright:
+        black: "#C1C2C2"
+        red: "#CA0808"
+        green: "#90A11F"
+        yellow: "#E2940B"
+        blue: "#4C7FBC"
+        magenta: "#9139BC"
+        cyan: "#45A694"
+        white: "#222323"
+
+mouse_bindings:
+    - { mouse: Middle, action: None } # No more paste.
+
+key_bindings:
+    - { key: V, mods: Control, action: Paste }

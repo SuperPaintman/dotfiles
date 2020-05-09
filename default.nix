@@ -4,6 +4,7 @@ let
   imports = items: merge (builtins.map import items);
 in
 imports [
+  ./alacritty
   ./ansible
   ./bash
   ./bin
