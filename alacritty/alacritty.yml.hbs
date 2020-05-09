@@ -1,0 +1,51 @@
+# {{ warning }}
+
+# See: https://github.com/alacritty/alacritty/blob/master/alacritty.yml .
+
+window:
+    padding:
+        x: 2
+        y: 2
+
+    dynamic_padding: true
+
+font:
+    normal:
+        family: monospace # JetBrains Mono.
+
+    size: 10
+
+colors:
+    primary:
+        background: "{{ colors.background }}"
+        foreground: "{{ colors.foreground }}"
+
+    cursor:
+        text: "{{ colors.cursor_color }}"
+        cursor: "{{ colors.foreground }}"
+
+    normal:
+        black: "{{ colors.black }}"
+        red: "{{ colors.red }}"
+        green: "{{ colors.green }}"
+        yellow: "{{ colors.yellow }}"
+        blue: "{{ colors.blue }}"
+        magenta: "{{ colors.magenta }}"
+        cyan: "{{ colors.cyan }}"
+        white: "{{ colors.grey }}" # TODO(SuperPaintman): yeah, white...
+
+    bright:
+        black: "{{ colors.white }}" # TODO(SuperPaintman): yeah, black...
+        red: "{{ brighten colors.red -10 }}"
+        green: "{{ brighten colors.green -10 }}"
+        yellow: "{{ brighten colors.yellow -10 }}"
+        blue: "{{ brighten colors.blue -10 }}"
+        magenta: "{{ brighten colors.magenta -10 }}"
+        cyan: "{{ brighten colors.cyan -10 }}"
+        white: "{{ brighten colors.grey -10 }}" # TODO(SuperPaintman): yeah, white...
+
+mouse_bindings:
+    - { mouse: Middle, action: None } # No more paste.
+
+key_bindings:
+    - { key: V, mods: Control, action: Paste }
