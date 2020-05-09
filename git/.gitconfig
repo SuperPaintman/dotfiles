@@ -44,6 +44,10 @@
 	## Fetch
 	f = fetch --all
 
+	# G
+	## Get.
+	get = !git-get
+
 	# L
 	## Logs
 	l = log --graph --all --abbrev-commit --date=relative --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'

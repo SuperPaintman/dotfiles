@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+
+# Constants.
+color_reset=""
+color_red=""
+color_green=""
+color_blue=""
+
+# Check if stdout is a terminal.
+if [ -t 1 ]; then
+    color_reset="$(printf "\033[0m")"
+    color_red="$(printf "\033[31;01m")"
+    color_green="$(printf "\033[0;32m")"
+    color_blue="$(printf "\033[0;34m")"
+fi
+
+# Helpers.
+help() {
+    cat <<EOF
+usage: git get <repo>
+EOF
+}
+
+fatal() {
+  echo "${color_red}fatal${color_reset}: $@."
+
+  echo
+
+  help
+
+  exit 1
+}
+
+parse_repository() {
+    if [ "$#" = 0 ]; then
+        return 1
+    fi
+
+    local repository="$1"
+
+    node <<EOF
+const repository = "$repository";
+
+const HTTP_LIKE_RE = /^http(?:s)?:\\/\\/([a-z0-9_\\-.]+)\\/([a-z0-9_\\-]+)\\/([a-z0-9_\\-]+)\\/?$/i;
+const SSH_LIKE_RE = /^git@([a-z0-9_\\-.]+):([a-z0-9_\\-]+)\\/([a-z0-9_\\-]+)\\.git$/i;
+
+function parseRepository(repository) {
+  let match = null;
+
+  match = repository.match(HTTP_LIKE_RE);
+  if (match !== null) {
+    return match[1] + " " + match[2] + " " + match[3];
+  }
+
+  match = repository.match(SSH_LIKE_RE);
+  if (match !== null) {
+    return match[1] + " " + match[2] + " " + match[3];
+  }
+
+  return "";
+}
+
+const res = parseRepository(repository);
+
+if (res === "") {
+  process.exit(1);
+}
+
+console.log(res);
+EOF
+}
+
+repository="$1"
+if [ -z "$repository" ]; then
+    fatal "You must specify a repository to get"
+fi
+
+parts=($(parse_repository "$repository"))
+if [ ! "$?" = 0 ]; then
+    fatal "Something went wrong"
+fi
+
+host="${parts[0]}"
+user="${parts[1]}"
+repo="${parts[2]}"
+
+dir="$HOME/Projects/${host}/${user}/${repo}"
+
+echo "Getting ${color_blue}${user}/${repo}${color_reset} from ${color_blue}${host}${color_reset} into '${color_green}${dir}${color_reset}'"
+
+git clone "$repository" "$dir"
