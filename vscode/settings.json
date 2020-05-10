@@ -73,6 +73,15 @@
     "ip6tables.j2": "shellscript",
     "Dockerfile.j2": "dockerfile",
     "*.conf.j2": "NGINX",
+    // HBS
+    "*.ini.hbs": "ini",
+    "*.json.hbs": "json",
+    "*.yml.hbs": "yaml",
+    "*.yaml.hbs": "yaml",
+    "iptables.hbs": "shellscript",
+    "ip6tables.hbs": "shellscript",
+    "Dockerfile.hbs": "dockerfile",
+    "*.conf.hbs": "NGINX",
     // Other
     "iptables": "shellscript",
     "ip6tables": "shellscript"
@@ -371,5 +380,8 @@
     "editor.codeActionsOnSave": {
       "source.organizeImports": true
     }
+  },
+  "[handlebars]": {
+    "editor.formatOnSave": false
   }
 }

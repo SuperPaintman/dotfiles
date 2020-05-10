@@ -22,7 +22,11 @@ module.exports = {
         '*.yml.j2',
         '.*.yml.j2',
         '*.yaml.j2',
-        '.*.yaml.j2'
+        '.*.yaml.j2',
+        '*.yml.hbs',
+        '.*.yml.hbs',
+        '*.yaml.hbs',
+        '.*.yaml.hbs'
       ],
       options: {
         tabWidth: 4,
