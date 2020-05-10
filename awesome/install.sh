@@ -23,4 +23,7 @@ linkall \
     "$TARGET_ROOT" \
     "$is_force" \
     "rc.lua" \
+    "colors.lua" \
+    "keys.lua" \
+    "apps.lua" \
     "autostart.sh"
