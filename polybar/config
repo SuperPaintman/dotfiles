@@ -13,9 +13,6 @@ margin-bottom = 0
 [colors]
 include-file = ~/.config/polybar/colors
 
-background = ${self.black-75-transparent}
-; background = ${xrdb:background}
-foreground = ${xrdb:foreground}
 foreground-alt = ${self.white-50-transparent}
 
 main = ${self.green}

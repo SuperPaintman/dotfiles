@@ -7,12 +7,33 @@ const path = require('path');
 const { promisify } = require('util');
 const assert = require('assert');
 
+const { mapValues, isArray, isObject, isString } = require('lodash');
 const glob = require('glob');
 const yaml = require('js-yaml');
 const tinycolor = require('tinycolor2');
 const Handlebars = require('handlebars');
 
 /* Helpers */
+function processConfig(cfg) {
+  function walk(node) {
+    if (isArray(node)) {
+      return node.map(walk);
+    }
+
+    if (isObject(node)) {
+      return mapValues(node, (value) => walk(value));
+    }
+
+    if (isString(node)) {
+      return Handlebars.compile(node, { strict: true })(cfg);
+    }
+
+    return node;
+  }
+
+  return walk(cfg);
+}
+
 function colorConvert(method, color, ...args) {
   return tinycolor(color)
     [method](...args)
@@ -78,7 +99,7 @@ Handlebars.registerHelper({
 async function main() {
   // Load config.
   const configContent = await readFileAsync(configFilename, 'utf-8');
-  const config = yaml.load(configContent);
+  const config = processConfig(yaml.load(configContent));
 
   // Search all template files.
   const templates = await globAsync('**/*.hbs', {

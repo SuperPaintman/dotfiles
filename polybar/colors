@@ -1,14 +1,25 @@
 ; This file is generated; DO NOT EDIT.
 
+background = #222222
+foreground = #F2F2F2
+
 black = #2B2B2B
-grey = #3C3D3D
-white = #C1C2C2
 red = #E42222
 green = #AABB39
 yellow = #FCAE25
 blue = #6699D6
 magenta = #AB53D6
 cyan = #5FC0AE
+white = #C1C2C2
+
+black-bright = #3C3D3D
+red-bright = #FD3B3B
+green-bright = #C3D452
+yellow-bright = #FFC73E
+blue-bright = #7FB2EF
+magenta-bright = #C46CEF
+cyan-bright = #78D9C7
+white-bright = #DADBDB
 
 transparent = #00000000
 

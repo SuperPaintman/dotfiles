@@ -5,14 +5,22 @@
     color-background: #222222;
 
     color-black: #2B2B2B;
-    color-grey: #3C3D3D;
-    color-white: #C1C2C2;
     color-red: #E42222;
     color-green: #AABB39;
     color-yellow: #FCAE25;
     color-blue: #6699D6;
     color-magenta: #AB53D6;
     color-cyan: #5FC0AE;
+    color-white: #C1C2C2;
+
+    color-black-bright: #3C3D3D;
+    color-red-bright: #FD3B3B;
+    color-green-bright: #C3D452;
+    color-yellow-bright: #FFC73E;
+    color-blue-bright: #7FB2EF;
+    color-magenta-bright: #C46CEF;
+    color-cyan-bright: #78D9C7;
+    color-white-bright: #DADBDB;
 
     color-foreground-light: #FFFFFF;
     color-background-light: #2F2F2F;

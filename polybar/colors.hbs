@@ -1,19 +1,30 @@
 ; {{ warning }}
 
-black = {{ polybar colors.black }}
-grey = {{ polybar colors.grey }}
-white = {{ polybar colors.white }}
-red = {{ polybar colors.red }}
-green = {{ polybar colors.green }}
-yellow = {{ polybar colors.yellow }}
-blue = {{ polybar colors.blue }}
-magenta = {{ polybar colors.magenta }}
-cyan = {{ polybar colors.cyan }}
+background = {{ polybar colors.primary.background }}
+foreground = {{ polybar colors.primary.foreground }}
 
-transparent = {{ polybar colors.transparent }}
+black = {{ polybar colors.normal.black }}
+red = {{ polybar colors.normal.red }}
+green = {{ polybar colors.normal.green }}
+yellow = {{ polybar colors.normal.yellow }}
+blue = {{ polybar colors.normal.blue }}
+magenta = {{ polybar colors.normal.magenta }}
+cyan = {{ polybar colors.normal.cyan }}
+white = {{ polybar colors.normal.white }}
 
-black-50-transparent = {{ polybar (alpha colors.black 0.5) }}
-black-75-transparent = {{ polybar (alpha colors.black 0.75) }}
+black-bright = {{ polybar colors.bright.black }}
+red-bright = {{ polybar colors.bright.red }}
+green-bright = {{ polybar colors.bright.green }}
+yellow-bright = {{ polybar colors.bright.yellow }}
+blue-bright = {{ polybar colors.bright.blue }}
+magenta-bright = {{ polybar colors.bright.magenta }}
+cyan-bright = {{ polybar colors.bright.cyan }}
+white-bright = {{ polybar colors.bright.white }}
 
-white-50-transparent = {{ polybar (alpha colors.white 0.5) }}
-white-75-transparent = {{ polybar (alpha colors.white 0.75) }}
+transparent = #00000000
+
+black-50-transparent = {{ polybar (alpha colors.normal.black 0.5) }}
+black-75-transparent = {{ polybar (alpha colors.normal.black 0.75) }}
+
+white-50-transparent = {{ polybar (alpha colors.normal.white 0.5) }}
+white-75-transparent = {{ polybar (alpha colors.normal.white 0.75) }}

@@ -1,19 +1,27 @@
 /* {{ warning }} */
 
 * {
-    color-foreground: {{ colors.foreground }};
-    color-background: {{ colors.background }};
+    color-foreground: {{ colors.primary.foreground }};
+    color-background: {{ colors.primary.background }};
 
-    color-black: {{ colors.black }};
-    color-grey: {{ colors.grey }};
-    color-white: {{ colors.white }};
-    color-red: {{ colors.red }};
-    color-green: {{ colors.green }};
-    color-yellow: {{ colors.yellow }};
-    color-blue: {{ colors.blue }};
-    color-magenta: {{ colors.magenta }};
-    color-cyan: {{ colors.cyan }};
+    color-black: {{ colors.normal.black }};
+    color-red: {{ colors.normal.red }};
+    color-green: {{ colors.normal.green }};
+    color-yellow: {{ colors.normal.yellow }};
+    color-blue: {{ colors.normal.blue }};
+    color-magenta: {{ colors.normal.magenta }};
+    color-cyan: {{ colors.normal.cyan }};
+    color-white: {{ colors.normal.white }};
 
-    color-foreground-light: {{ lighten colors.foreground 5 }};
-    color-background-light: {{ lighten colors.background 5 }};
+    color-black-bright: {{ colors.bright.black }};
+    color-red-bright: {{ colors.bright.red }};
+    color-green-bright: {{ colors.bright.green }};
+    color-yellow-bright: {{ colors.bright.yellow }};
+    color-blue-bright: {{ colors.bright.blue }};
+    color-magenta-bright: {{ colors.bright.magenta }};
+    color-cyan-bright: {{ colors.bright.cyan }};
+    color-white-bright: {{ colors.bright.white }};
+
+    color-foreground-light: {{ lighten colors.primary.foreground 5 }}; /* TODO(SuperPaintman): move it into config. */
+    color-background-light: {{ lighten colors.primary.background 5 }}; /* TODO(SuperPaintman): move it into config. */
 }

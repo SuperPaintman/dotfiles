@@ -29,32 +29,32 @@
 ! Cyan.
 *.color6: #5FC0AE
 
-! Grey.
-*.color7: #3C3D3D
-
 ! White.
-*.color8: #C1C2C2
+*.color7: #C1C2C2
+
+! Bright Black.
+*.color8: #3C3D3D
 
 ! Bright Red.
-*.color9: #CA0808
+*.color9: #FD3B3B
 
 ! Bright Green.
-*.color10: #90A11F
+*.color10: #C3D452
 
 ! Bright Yellow.
-*.color11: #E2940B
+*.color11: #FFC73E
 
 ! Bright Blue.
-*.color12: #4C7FBC
+*.color12: #7FB2EF
 
 ! Bright Magenta.
-*.color13: #9139BC
+*.color13: #C46CEF
 
 ! Bright Cyan.
-*.color14: #45A694
+*.color14: #78D9C7
 
-! Bright Grey.
-*.color15: #222323
+! Bright White.
+*.color15: #DADBDB
 
 !===============================================================================
 ! xst
