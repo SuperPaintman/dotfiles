@@ -84,14 +84,6 @@
     border-radius: 2;
 
     background-color: @color-background;
-
-
-
-    // vertical-align: 0.5;
-
-
-
-    // orientation: vertical;
 }
 
 #button {
