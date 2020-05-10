@@ -72,5 +72,5 @@ if [ -f ~/.bash/completion.sh ]; then source ~/.bash/completion.sh; fi
 
 # Show system information
 if can neofetch; then
-    neofetch --no_config
+    neofetch --no_config --config ~/.config/neofetch/config.conf
 fi

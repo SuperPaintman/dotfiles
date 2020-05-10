@@ -32,5 +32,5 @@ if [ -f ~/.zsh/key-bindings.zsh ]; then source ~/.zsh/key-bindings.zsh; fi
 
 # Show system information.
 if can neofetch; then
-    neofetch --no_config
+    neofetch --no_config --config ~/.config/neofetch/config.conf
 fi
