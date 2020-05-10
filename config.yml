@@ -16,7 +16,7 @@ colors:
         white: "#C1C2C2" # "#FFFFFF"
 
     bright:
-        black: "#3C3D3D" # "{{ brighten colors.normal.black 10 }}"
+        black: "{{ brighten colors.normal.black 20 }}"
         red: "{{ brighten colors.normal.red 10 }}"
         green: "{{ brighten colors.normal.green 10 }}"
         yellow: "{{ brighten colors.normal.yellow 10 }}"
