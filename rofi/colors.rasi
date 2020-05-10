@@ -13,7 +13,7 @@
     color-cyan: #5FC0AE;
     color-white: #C1C2C2;
 
-    color-black-bright: #3C3D3D;
+    color-black-bright: #5E5E5E;
     color-red-bright: #FD3B3B;
     color-green-bright: #C3D452;
     color-yellow-bright: #FFC73E;
@@ -22,6 +22,6 @@
     color-cyan-bright: #78D9C7;
     color-white-bright: #DADBDB;
 
-    color-foreground-light: #FFFFFF;
-    color-background-light: #2F2F2F;
+    color-foreground-light: #FFFFFF; /* TODO(SuperPaintman): move it into config. */
+    color-background-light: #2F2F2F; /* TODO(SuperPaintman): move it into config. */
 }

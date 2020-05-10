@@ -7,7 +7,7 @@ color_magenta="#AB53D6"
 color_cyan="#5FC0AE"
 color_white="#C1C2C2"
 
-color_black_bright="#3C3D3D"
+color_black_bright="#5E5E5E"
 color_red_bright="#FD3B3B"
 color_green_bright="#C3D452"
 color_yellow_bright="#FFC73E"

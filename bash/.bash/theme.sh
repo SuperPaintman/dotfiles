@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 
 # Constants.
-_theme_color_red="\[\033[01;31m\]"
-_theme_color_green="\[\033[01;32m\]"
-_theme_color_cyan="\[\033[01;36m\]"
-_theme_color_cyan_bold="\[\033[01;36;1m\]"
+_theme_color_red="\[\033[00;31m\]"
+_theme_color_green="\[\033[00;32m\]"
+_theme_color_green_bold="\[\033[01;32m\]"
+_theme_color_cyan="\[\033[00;36m\]"
+_theme_color_cyan_bold="\[\033[01;36m\]"
 _theme_color_reset="\[\033[00m\]"
 
 # User specific variables.
@@ -29,8 +30,9 @@ _theme_fish_pwd() {
 }
 
 # Parts.
-_theme_username="${_theme_color_cyan}\u${_theme_color_reset}"
-_theme_hostname="@${_theme_color_cyan_bold}\h${_theme_color_reset}"
+_theme_username="${_theme_color_green_bold}\u${_theme_color_reset}"
+_theme_hostname="@${_theme_color_green_bold}\h${_theme_color_reset}"
+_theme_pwd="${_theme_color_red}"'$(_theme_fish_pwd)'"${_theme_color_reset}"
 _theme_ret_status="${_theme_user_color}${_theme_user_caret}${_theme_color_reset}"
 
 # Left prompt.
