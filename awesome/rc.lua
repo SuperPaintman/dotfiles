@@ -21,6 +21,8 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 require("awful.hotkeys_popup.keys")
 
 local keys = require("keys")
+local cpu_widget = require("widgets.cpu")
+local ram_widget = require("widgets.ram")
 
 local modkey = keys.modkey
 
@@ -221,14 +223,21 @@ local function set_wallpaper(s)
     end
 end
 
-local function widget_margin(w)
-    local wrapped = wibox.container.margin(
-        w,
-        beautiful.wibar_widget_margin,
-        beautiful.wibar_widget_margin,
-        beautiful.wibar_widget_margin,
-        beautiful.wibar_widget_margin
-    )
+local function widget_margin(w, s)
+    s = s or beautiful.wibar_widget_margin
+
+    local wrapped = wibox.container.margin(w, s, s, s, s)
+
+    -- Debug.
+    -- wrapped = wibox.container.background(wrapped, "#FF0000")
+
+    return wrapped
+end
+
+local function widget_margin_horizontal(w, s)
+    s = s or beautiful.wibar_widget_margin
+
+    local wrapped = wibox.container.margin(w, s, s)
 
     -- Debug.
     -- wrapped = wibox.container.background(wrapped, "#FF0000")
@@ -311,6 +320,9 @@ awful.screen.connect_for_each_screen(
         s.mysystray = wibox.widget.systray()
         s.mysystray.set_base_size(beautiful.wibar_height - beautiful.wibar_widget_margin * 2)
 
+        s.mycpu = cpu_widget()
+        s.myram = ram_widget()
+
         -- Add widgets to the wibox
         s.mywibox:setup {
             layout = wibox.layout.align.horizontal,
@@ -327,6 +339,8 @@ awful.screen.connect_for_each_screen(
             {
                 -- Right widgets
                 layout = wibox.layout.fixed.horizontal,
+                widget_margin_horizontal(s.mycpu, 4),
+                widget_margin_horizontal(s.myram, 4),
                 widget_margin(mykeyboardlayout),
                 widget_margin(s.mysystray),
                 widget_margin(mytextclock),

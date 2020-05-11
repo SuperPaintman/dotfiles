@@ -27,4 +27,5 @@ linkall \
     "keys.lua" \
     "apps.lua" \
     "theme" \
+    "widgets" \
     "autostart.sh"
