@@ -620,3 +620,41 @@ awful.spawn("xrandr --output DVI-D-0 --left-of DVI-I-1", {})
 
 -- Auto-start programs.
 awful.spawn.with_shell(gears.filesystem.get_configuration_dir() .. "autostart.sh")
+
+-- Show titlebar only when window is floating.
+local function should_show_client_titlebar(c)
+    if c.maximized then
+        return false
+    end
+
+    if c.floating then
+        return true
+    end
+
+    -- On startup client does not have a "first_tab".
+    if c.first_tag ~= nil and c.first_tag.layout == awful.layout.suit.floating then
+        return true
+    end
+
+    return false
+end
+
+local function update_client_titlebar(c)
+    if should_show_client_titlebar(c) then
+        awful.titlebar.show(c)
+    else
+        awful.titlebar.hide(c)
+    end
+end
+
+client.connect_signal("property::maximized", update_client_titlebar)
+
+client.connect_signal("property::floating", update_client_titlebar)
+
+client.connect_signal("manage", update_client_titlebar)
+
+tag.connect_signal("property::layout", function(t)
+    for _, c in pairs(t:clients()) do
+        update_client_titlebar(c)
+    end
+end)
