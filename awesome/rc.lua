@@ -221,6 +221,21 @@ local function set_wallpaper(s)
     end
 end
 
+local function widget_margin(w)
+    local wrapped = wibox.container.margin(
+        w,
+        beautiful.wibar_widget_margin,
+        beautiful.wibar_widget_margin,
+        beautiful.wibar_widget_margin,
+        beautiful.wibar_widget_margin
+    )
+
+    -- Debug.
+    -- wrapped = wibox.container.background(wrapped, "#FF0000")
+
+    return wrapped
+end
+
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
@@ -286,12 +301,15 @@ awful.screen.connect_for_each_screen(
         }
 
         -- Create the wibox
-        s.mywibox = awful.wibar({
+        s.mywibox = awful.wibar {
             position = beautiful.wibar_position or "top",
             screen = s,
             width = beautiful.wibar_width,
             height = beautiful.wibar_height
-        })
+        }
+
+        s.mysystray = wibox.widget.systray()
+        s.mysystray.set_base_size(beautiful.wibar_height - beautiful.wibar_widget_margin * 2)
 
         -- Add widgets to the wibox
         s.mywibox:setup {
@@ -299,22 +317,20 @@ awful.screen.connect_for_each_screen(
             {
                 -- Left widgets
                 layout = wibox.layout.fixed.horizontal,
-                -- mylauncher,
-                s.mytaglist,
-                s.mypromptbox
+                s.mytaglist
             },
             {
                 -- Middle widget
                 layout = wibox.layout.flex.horizontal,
-                s.mytasklist
+                widget_margin(s.mytasklist)
             },
             {
                 -- Right widgets
                 layout = wibox.layout.fixed.horizontal,
-                mykeyboardlayout,
-                wibox.widget.systray(),
-                mytextclock,
-                s.mylayoutbox
+                widget_margin(mykeyboardlayout),
+                widget_margin(s.mysystray),
+                widget_margin(mytextclock),
+                widget_margin(s.mylayoutbox)
             }
         }
     end

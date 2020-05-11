@@ -49,7 +49,8 @@ theme.bg_normal = colors.primary.background -- .. "98"
 -- Borders.
 --------------------------------------------------------------------------------
 theme.border_width = dpi(1)
-theme.border_focus  = color_border
+theme.border_normal = colors.normal.white
+theme.border_focus = color_border
 
 
 --------------------------------------------------------------------------------
@@ -61,7 +62,7 @@ theme.useless_gap = dpi(2)
 --------------------------------------------------------------------------------
 -- Titlebars.
 --------------------------------------------------------------------------------
-theme.titlebar_size = dpi(20)
+theme.titlebar_size = dpi(22)
 theme.titlebar_fg_normal = colors.primary.foreground
 theme.titlebar_bg_normal = colors.primary.background -- .. "98"
 
@@ -69,7 +70,15 @@ theme.titlebar_bg_normal = colors.primary.background -- .. "98"
 --------------------------------------------------------------------------------
 -- Wibars.
 --------------------------------------------------------------------------------
-theme.wibar_height = dpi(20)
+theme.wibar_height = dpi(22)
+theme.wibar_widget_margin = dpi(2)
+
+
+--------------------------------------------------------------------------------
+-- Systray.
+--------------------------------------------------------------------------------
+theme.bg_systray = colors.primary.background
+theme.systray_icon_spacing = theme.wibar_widget_margin
 
 
 return theme
