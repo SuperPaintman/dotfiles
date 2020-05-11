@@ -3,5 +3,6 @@
   ".config/awesome/colors.lua".source = ./colors.lua;
   ".config/awesome/keys.lua".source = ./keys.lua;
   ".config/awesome/apps.lua".source = ./apps.lua;
+  ".config/awesome/theme".source = ./theme;
   ".config/awesome/autostart.sh".source = ./autostart.sh;
 }

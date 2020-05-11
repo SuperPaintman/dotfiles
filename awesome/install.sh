@@ -26,4 +26,5 @@ linkall \
     "colors.lua" \
     "keys.lua" \
     "apps.lua" \
+    "theme" \
     "autostart.sh"

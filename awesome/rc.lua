@@ -64,7 +64,7 @@ end
 
 -- {{{ Variable definitions
 -- Themes define colours, icons, font and wallpapers.
-beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
+beautiful.init(require("theme"))
 
 -- This is used later as the default terminal and editor to run.
 terminal = "alacritty"
@@ -286,7 +286,12 @@ awful.screen.connect_for_each_screen(
         }
 
         -- Create the wibox
-        s.mywibox = awful.wibar({position = "top", screen = s})
+        s.mywibox = awful.wibar({
+            position = beautiful.wibar_position or "top",
+            screen = s,
+            width = beautiful.wibar_width,
+            height = beautiful.wibar_height
+        })
 
         -- Add widgets to the wibox
         s.mywibox:setup {
@@ -554,7 +559,10 @@ client.connect_signal(
             )
         )
 
-        awful.titlebar(c):setup {
+        awful.titlebar(c, {
+            position = beautiful.titlebar_position or "top",
+            size = beautiful.titlebar_size
+        }):setup {
             {
                 -- Left
                 awful.titlebar.widget.iconwidget(c),
@@ -611,4 +619,4 @@ client.connect_signal(
 awful.spawn("xrandr --output DVI-D-0 --left-of DVI-I-1", {})
 
 -- Auto-start programs.
-awful.spawn.with_shell(os.getenv("HOME") .. "/.config/awesome/autostart.sh")
+awful.spawn.with_shell(gears.filesystem.get_configuration_dir() .. "autostart.sh")
