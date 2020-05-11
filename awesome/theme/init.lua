@@ -19,6 +19,8 @@ local theme_dir = gears.filesystem.get_configuration_dir() .. "theme"
 -- local theme = {}
 local theme = gears.table.clone(base_theme)
 
+local color_border = colors.normal.blue -- TODO(SuperPaintman): move it into `config.yml`. It's also used in rofi.
+
 
 --------------------------------------------------------------------------------
 -- Font.
@@ -44,7 +46,8 @@ end
 --------------------------------------------------------------------------------
 -- Borders.
 --------------------------------------------------------------------------------
-theme.border_width  = dpi(1)
+theme.border_width = dpi(1)
+theme.border_focus  = color_border
 
 
 --------------------------------------------------------------------------------
