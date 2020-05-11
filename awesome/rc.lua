@@ -299,11 +299,15 @@ awful.screen.connect_for_each_screen(
             {
                 -- Left widgets
                 layout = wibox.layout.fixed.horizontal,
-                mylauncher,
+                -- mylauncher,
                 s.mytaglist,
                 s.mypromptbox
             },
-            s.mytasklist, -- Middle widget
+            {
+                -- Middle widget
+                layout = wibox.layout.flex.horizontal,
+                s.mytasklist
+            },
             {
                 -- Right widgets
                 layout = wibox.layout.fixed.horizontal,

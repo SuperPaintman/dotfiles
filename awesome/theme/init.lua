@@ -41,6 +41,8 @@ end
 --------------------------------------------------------------------------------
 -- Colors.
 --------------------------------------------------------------------------------
+theme.fg_normal = colors.primary.foreground
+theme.bg_normal = colors.primary.background -- .. "98"
 
 
 --------------------------------------------------------------------------------
@@ -60,6 +62,8 @@ theme.useless_gap = dpi(2)
 -- Titlebars.
 --------------------------------------------------------------------------------
 theme.titlebar_size = dpi(20)
+theme.titlebar_fg_normal = colors.primary.foreground
+theme.titlebar_bg_normal = colors.primary.background -- .. "98"
 
 
 --------------------------------------------------------------------------------
