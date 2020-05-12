@@ -25,6 +25,7 @@ local keys = require("keys")
 local cpu_widget = require("widgets.cpu")
 local ram_widget = require("widgets.ram")
 local vpn_status_widget = require("widgets.vpn_status")
+local telegram_widget = require("widgets.telegram")
 
 local modkey = keys.modkey
 
@@ -327,6 +328,7 @@ awful.screen.connect_for_each_screen(
         s.mycpu = cpu_widget()
         s.myram = ram_widget()
         s.myvpn_status = vpn_status_widget()
+        s.mytelegram = telegram_widget()
 
         -- Add widgets to the wibox
         s.mywibox:setup {
@@ -345,6 +347,8 @@ awful.screen.connect_for_each_screen(
             {
                 -- Right widgets
                 layout = wibox.layout.fixed.horizontal,
+                widget_margin_horizontal(s.myseparator, dpi(12)),
+                widget_margin_horizontal(s.mytelegram, dpi(6)),
                 widget_margin_horizontal(s.myseparator, dpi(12)),
                 widget_margin_horizontal(s.mycpu, dpi(6)),
                 widget_margin_horizontal(s.myram, dpi(6)),

@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+
+# See: https://docs.telethon.dev/en/latest/index.html.
+# See: https://docs.telethon.dev/en/latest/quick-references/client-reference.html.
+
+import json
+from pathlib import Path, PurePath
+from telethon import TelegramClient, sync
+from telethon.sessions import StringSession
+
+# Check if config dir exists.
+config_dir = Path(Path.home(), ".telethon")
+
+config_dir.mkdir(parents=True, exist_ok=True)
+
+# Read session file.
+session_file = Path(config_dir, "session.json")
+
+if not session_file.exists():
+    print("Please, create '%s' file" % session_file)
+    exit(1)
+
+with session_file.open() as f:
+    session_content = json.loads(f.read())
+
+if "api_id" not in session_content or "api_hash" not in session_content:
+    print("Please, add 'api_id' and 'api_hash' into '%s' file. Visit https://my.telegram.org/apps." % session_file)
+    exit(1)
+
+# Create Telegram session.
+session = StringSession(session_content["session"] if "session" in session_content else None)
+
+# Create Telegram client.
+client = TelegramClient(session,
+                        session_content["api_id"],
+                        session_content["api_hash"])
+
+client.start()
+
+# Save session into the file.
+if "session" not in session_content:
+    with session_file.open("w") as f:
+        content = json.dumps({**session_content,
+                              "session": session.save()},
+                              indent=2)
+
+        f.write(content)
+
+# Count unread messages.
+unread_count = 0
+for dialog in client.iter_dialogs(archived=False):
+    # Count only direct messages.
+    if dialog.is_user:
+        unread_count += dialog.unread_count
+        pass
+    else:
+        unread_count += dialog.unread_mentions_count
+
+print(unread_count)
