@@ -251,6 +251,39 @@ end
 -- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
 screen.connect_signal("property::geometry", set_wallpaper)
 
+-- TODO(SuperPaintman): add `z-index`-like thing.
+-- TODO(SuperPaintman): hide it whet we have at least one window on the screen.
+awful.screen.connect_for_each_screen(
+    function(s)
+        local dashboard = wibox({
+            screen = s,
+            visible = true,
+            ontop = false,
+            type = "dock",
+            input_passthrough = true,
+            bg = "#00000000"
+        })
+
+        local clock = wibox.widget.textclock("%I:%M", 60)
+        clock:set_align("center")
+        clock.font = "sans bold 128"
+
+        dashboard:setup {
+            nil,
+            {
+                nil,
+                clock,
+                nil,
+                layout = wibox.layout.align.horizontal
+            },
+            nil,
+            layout = wibox.layout.align.vertical
+        }
+
+        awful.placement.maximize(dashboard)
+    end
+)
+
 awful.screen.connect_for_each_screen(
     function(s)
         -- Wallpaper
