@@ -27,10 +27,13 @@ option() {
 }
 
 # Main.
-connection="$(pgrep -a openvpn$ | head -n 1 | awk '{ print $NF }' | cut -d '.' -f 1)"
-active_vpn_name="$(echo "$connection" | sed 's/.*-config-//')"
+res=($(~/bin/vpnstatus))
+if [ ! "$?" = 0"" ]; then
+    exit "$?"
+fi
 
-ip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
+active_vpn_name="${res[1]}"
+ip="${res[2]}"
 
 # Little note (for me):
 #   Get keys: ${!vpn_configs[@]}

@@ -1,44 +1,40 @@
 #!/bin/sh
 
 set -e
+set -u
+set -o pipefail
 
 source ~/.config/polybar/lib/colors.sh
 
-connection="$(pgrep -a openvpn$ | head -n 1 | awk '{ print $NF }' | cut -d '.' -f 1)"
+res=($(~/bin/vpnstatus))
+status="${res[0]}"
 
-case "$1" in
-    toggle)
-        if [ -n "$connection" ]; then
-            sudo systemctl stop openvpn-server.service
-        else
-            sudo systemctl start openvpn-server.service
-        fi
+if [ ! "$#" = 0 ]; then
+    case "$1" in
+        toggle)
+            if [ "$status" = "connected" ]; then
+                sudo systemctl stop openvpn-server.service
+            elif [ "$status" = "disconnected" ]; then
+                sudo systemctl start openvpn-server.service
+            fi
 
-        exit 0
-        ;;
-esac
+            exit 0
+            ;;
+    esac
+fi
 
-if [ ! -n "$connection" ]; then
+if [ "$status" = "disconnected" ]; then
     echo "%{u${color_red}}%{F${color_red}}VPN%{F-}%{u-}"
     exit 0
 fi
 
-# Check ip.
-ip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
+active_vpn_name="${res[1]}"
+ip="${res[2]}"
 
-# Find VPN config name.
-vpn_name="[?]"
 vpn_name_color="$color_red"
+if [ "$status" = "connected" ]; then
+    vpn_name_color="$color_green"
+fi
 
-for i in $HOME/.openvpn/*.conf; do
-    vpn_ip="$(cat ~/.openvpn/server.conf | grep remote | awk '{print $2}')"
-
-    if [ "$ip" = "$vpn_ip" ]; then
-        vpn_name="$(basename "$i" '.conf')"
-        vpn_name_color="$color_green"
-        break
-    fi
-done
-
-echo "%{u${vpn_name_color}}%{F${color_green}}VPN%{F-}  ${ip}  %{F${vpn_name_color}}$vpn_name%{F-}%{u-}"
+echo "%{u${vpn_name_color}}%{F${color_green}}VPN%{F-}  ${ip}  %{F${vpn_name_color}}$active_vpn_name%{F-}%{u-}"
 

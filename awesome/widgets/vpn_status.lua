@@ -28,17 +28,17 @@ local function new(args)
     local textbox_widget = textbox("")
     local widget = underline(textbox_widget, color_disconnected)
 
-    local function handler(status, vpn_name, vpn_ip)
+    local function handler(status, active_vpn_name, ip)
         local color = color_disconnected
         local markup = ""
         local error
 
         if status == status_connected then
             color = color_connected
-            markup = string.format("<span foreground='%s'><b>VPN</b></span>  %s  <span foreground='%s'>%s</span>", color_connected_marker, vpn_ip, color_connected, vpn_name)
+            markup = string.format("<span foreground='%s'><b>VPN</b></span>  %s  <span foreground='%s'>%s</span>", color_connected_marker, ip, color_connected, active_vpn_name)
         elseif status == status_connecting then
             color = color_connecting
-            markup = string.format("<span foreground='%s'><b>VPN</b></span>  %s  <span foreground='%s'>%s</span>", color_connecting_marker, vpn_ip, color_connecting, vpn_name)
+            markup = string.format("<span foreground='%s'><b>VPN</b></span>  %s  <span foreground='%s'>%s</span>", color_connecting_marker, ip, color_connecting, active_vpn_name)
         elseif status == status_disconnected then
             color = color_disconnected
             markup = string.format("<span foreground='%s'><b>VPN</b></span>", color_disconnected_marker)
@@ -76,7 +76,7 @@ watch(
             return
         end
 
-        local status, vpn_name, vpn_ip = stdout:match('(%w+)%s+([^%s]+)%s+([0-9\\.]+)')
+        local status, active_vpn_name, ip = stdout:match('(%w+)%s+([^%s]+)%s+([0-9\\.]+)')
 
         if status == nil then
             if stdout:match("disconnected") then
@@ -88,7 +88,7 @@ watch(
             return
         end
 
-        awesome.emit_signal(signal_name, status, vpn_name, vpn_ip)
+        awesome.emit_signal(signal_name, status, active_vpn_name, ip)
     end
 )
 
