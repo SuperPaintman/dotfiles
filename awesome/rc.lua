@@ -19,6 +19,7 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- Enable hotkeys help widget for VIM and other apps
 -- when client with a matching name is opened:
 require("awful.hotkeys_popup.keys")
+local dpi = require("beautiful.xresources").apply_dpi
 
 local keys = require("keys")
 local cpu_widget = require("widgets.cpu")
@@ -129,7 +130,7 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 
 -- {{{ Wibar
 -- Create a textclock widget
-mytextclock = wibox.widget.textclock()
+mytextclock = wibox.widget.textclock("%h %d  %I:%M:%S  %p", 1)
 
 -- Create a wibox for each screen and add it
 local taglist_buttons =
@@ -257,6 +258,8 @@ awful.screen.connect_for_each_screen(
         -- Each screen has its own tag table.
         awful.tag({"1", "2", "3", "4", "5", "6", "7", "8", "9"}, s, awful.layout.layouts[1])
 
+        s.myseparator = wibox.widget.textbox("<span foreground='#FFFFFF3F'>|</span>")
+
         -- Create a promptbox for each screen
         s.mypromptbox = awful.widget.prompt()
         -- Create an imagebox widget which will contain an icon indicating which layout we're using.
@@ -331,7 +334,8 @@ awful.screen.connect_for_each_screen(
             {
                 -- Left widgets
                 layout = wibox.layout.fixed.horizontal,
-                s.mytaglist
+                s.mytaglist,
+                widget_margin_horizontal(s.myseparator, dpi(12))
             },
             {
                 -- Middle widget
@@ -341,9 +345,12 @@ awful.screen.connect_for_each_screen(
             {
                 -- Right widgets
                 layout = wibox.layout.fixed.horizontal,
-                widget_margin_horizontal(s.mycpu, 4),
-                widget_margin_horizontal(s.myram, 4),
-                widget_margin_horizontal(s.myvpn_status, 4),
+                widget_margin_horizontal(s.myseparator, dpi(12)),
+                widget_margin_horizontal(s.mycpu, dpi(6)),
+                widget_margin_horizontal(s.myram, dpi(6)),
+                widget_margin_horizontal(s.myseparator, dpi(12)),
+                widget_margin_horizontal(s.myvpn_status, dpi(6)),
+                widget_margin_horizontal(s.myseparator, dpi(12)),
                 widget_margin(mykeyboardlayout),
                 widget_margin(s.mysystray),
                 widget_margin(mytextclock),
