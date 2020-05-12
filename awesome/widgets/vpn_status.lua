@@ -1,9 +1,9 @@
 local textbox = require("wibox.widget.textbox")
-local margin = require("wibox.container.margin")
 local watch = require("awful.widget.watch")
 local gears = require("gears")
 
 local colors = require("colors")
+local underline = require("widgets.underline")
 
 
 local signal_name = "widgets::vpn"
@@ -13,12 +13,6 @@ local status_connecting = "connecting"
 local status_disconnected = "disconnected"
 
 local vpn_status = {}
-
-local function underline(w, color)
-    underline_margin = margin(w, 0, 0, 2)
-
-    return margin(underline_margin, 0, 0, 0, 2, color)
-end
 
 local function new(args)
     local color_connected = colors.normal.green

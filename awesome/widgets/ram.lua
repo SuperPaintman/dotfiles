@@ -1,19 +1,13 @@
 local textbox = require("wibox.widget.textbox")
-local margin = require("wibox.container.margin")
 local watch = require("awful.widget.watch")
 
 local colors = require("colors")
+local underline = require("widgets.underline")
 
 
 local signal_name = "widgets::ram"
 
 local ram = {}
-
-local function underline(w, color)
-  underline_margin = margin(w, 0, 0, 0, 2, color)
-
-  return margin(underline_margin, 0, 0, 2)
-end
 
 local function new()
     local color = colors.normal.blue
