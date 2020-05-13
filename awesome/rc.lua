@@ -260,13 +260,46 @@ awful.screen.connect_for_each_screen(
             visible = true,
             ontop = false,
             type = "dock",
-            input_passthrough = true,
+            -- input_passthrough = true,
             bg = "#00000000"
         })
 
+        local hidden = false
+
         local clock = wibox.widget.textclock("%I:%M", 60)
         clock:set_align("center")
-        clock.font = "sans bold 128"
+        clock:set_font("sans bold 128")
+
+        local eye_button = wibox.widget.textbox("HIDE DASHBOARD")
+        eye_button:set_font("sans bold 8")
+        eye_button:buttons(
+            gears.table.join(
+                awful.button({}, 1, function()
+                    hidden = not hidden
+                    clock.visible = not clock.visible
+
+                    if hidden then
+                        eye_button:set_text("SHOW DASHBOARD")
+                    else
+                        eye_button:set_text("HIDE DASHBOARD")
+                    end
+                end)
+            )
+        )
+        eye_button:connect_signal("mouse::enter", function ()
+            local w = _G.mouse.current_wibox
+            if w then
+                w.cursor = "hand1"
+            end
+        end)
+        eye_button:connect_signal("mouse::leave", function ()
+            local w = _G.mouse.current_wibox
+            if w then
+                w.cursor = "left_ptr"
+            end
+        end)
+
+        local margin = dpi(16)
 
         dashboard:setup {
             nil,
@@ -276,7 +309,7 @@ awful.screen.connect_for_each_screen(
                 nil,
                 layout = wibox.layout.align.horizontal
             },
-            nil,
+            wibox.container.margin(eye_button, margin, 0, 0, margin),
             layout = wibox.layout.align.vertical
         }
 
