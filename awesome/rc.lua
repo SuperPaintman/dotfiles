@@ -264,19 +264,38 @@ awful.screen.connect_for_each_screen(
             bg = "#00000000"
         })
 
-        local hidden = false
+        local visible = true
 
-        local clock = wibox.widget.textclock("%I:%M", 60)
+        local clock = wibox.widget.textclock("%l:%M ", 60)
         clock:set_align("center")
         clock:set_font("sans bold 128")
 
+        local date = wibox.widget.textclock("%A, %e %B")
+        date:set_align("center")
+        date:set_font("sans 32")
+
+        local container = wibox.widget {
+            nil,
+            wibox.container.place(
+                wibox.widget {
+                    clock,
+                    date,
+                    layout = wibox.layout.fixed.vertical
+                }
+            ),
+            nil,
+            layout = wibox.layout.align.horizontal
+        }
+
         local eye_button = wibox.widget.textbox("HIDE DASHBOARD")
         eye_button:set_font("sans bold 8")
+        eye_button:set_opacity(0.5)
         eye_button:buttons(
             gears.table.join(
                 awful.button({}, 1, function()
-                    hidden = not hidden
-                    clock.visible = not clock.visible
+                    visible = not visible
+
+                    container.visible = visible
 
                     if hidden then
                         eye_button:set_text("SHOW DASHBOARD")
@@ -302,15 +321,13 @@ awful.screen.connect_for_each_screen(
         local margin = dpi(16)
 
         dashboard:setup {
-            nil,
-            {
-                nil,
-                clock,
-                nil,
-                layout = wibox.layout.align.horizontal
-            },
-            wibox.container.margin(eye_button, margin, 0, 0, margin),
-            layout = wibox.layout.align.vertical
+            container,
+            wibox.container.place(
+                wibox.container.margin(eye_button, margin, margin, margin, margin),
+                "left",
+                "bottom"
+            ),
+            layout = wibox.layout.stack
         }
 
         awful.placement.maximize(dashboard)
