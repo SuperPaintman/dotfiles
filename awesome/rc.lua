@@ -266,13 +266,13 @@ awful.screen.connect_for_each_screen(
 
         local visible = true
 
-        local clock = wibox.widget.textclock("%l:%M ", 60)
+        local clock = wibox.widget.textclock("%l:%M", 60)
         clock:set_align("center")
-        clock:set_font("sans bold 128")
+        clock:set_font("Helvetica Neue LT Std, sans medium 128")
 
         local date = wibox.widget.textclock("%A, %e %B")
         date:set_align("center")
-        date:set_font("sans 32")
+        date:set_font("Helvetica Neue LT Std, sans 32")
 
         local container = wibox.widget {
             nil,
@@ -440,7 +440,9 @@ awful.screen.connect_for_each_screen(
                 widget_margin_horizontal(s.myseparator, dpi(12)),
                 widget_margin(mykeyboardlayout),
                 widget_margin(s.mysystray),
+                widget_margin_horizontal(s.myseparator, dpi(12)),
                 widget_margin(mytextclock),
+                widget_margin_horizontal(s.myseparator, dpi(12)),
                 widget_margin(s.mylayoutbox)
             }
         }
