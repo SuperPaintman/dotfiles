@@ -73,7 +73,8 @@ if is_osx; then
             "iterm2" \
             "docker" \
             "alfred" \
-            "zaplin"; do
+            "zaplin" \
+            "alacritty"; do
             if ! brew cask ls --versions "$cask" > /dev/null 2>&1; then
                 brew cask install "$cask"
 
