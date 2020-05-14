@@ -34,7 +34,22 @@ if is_osx; then
     if which brew > /dev/null 2>&1; then
         title1 "Install brew formulas"
 
-        for formula in "coreutils" "zsh" "tmux" "htop" "tree" "wget" "jq" "cmake" "llvm" "node" "imagemagick" "bat" "go" "dep" "ansible"; do
+        for formula in \
+            "coreutils" \
+            "zsh" \
+            "tmux" \
+            "htop" \
+            "tree" \
+            "wget" \
+            "jq" \
+            "cmake" \
+            "llvm" \
+            "node" \
+            "imagemagick" \
+            "bat" \
+            "go" \
+            "dep" \
+            "ansible"; do
             if ! brew ls --versions "$formula" > /dev/null 2>&1; then
                 brew install "$formula"
 
@@ -51,7 +66,11 @@ if is_osx; then
     if which brew > /dev/null 2>&1; then
         title1 "Install brew casks"
 
-        for cask in "iterm2" "docker" "alfred" "zaplin"; do
+        for cask in \
+            "iterm2" \
+            "docker" \
+            "alfred" \
+            "zaplin"; do
             if ! brew cask ls --versions "$cask" > /dev/null 2>&1; then
                 brew cask install "$cask"
 
