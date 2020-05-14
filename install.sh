@@ -49,7 +49,10 @@ if is_osx; then
             "bat" \
             "go" \
             "dep" \
-            "ansible"; do
+            "ansible" \
+            "fd" \
+            "lf" \
+            "exa"; do
             if ! brew ls --versions "$formula" > /dev/null 2>&1; then
                 brew install "$formula"
 
