@@ -90,14 +90,6 @@ end)
 
 client.connect_signal("unfocus", function(c)
     is_telegram_focused = false
-
-    if not unread_count_last then
-        return
-    end
-
-    local unread_count_diff = unread_count - unread_count_last
-
-    awesome.emit_signal(signal_name, unread_count, unread_count_diff)
 end)
 
 return setmetatable(telegram, { __call = function(_, ...) return new(...) end })
