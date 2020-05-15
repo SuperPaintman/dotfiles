@@ -297,10 +297,10 @@ awful.screen.connect_for_each_screen(
 
                     container.visible = visible
 
-                    if hidden then
-                        eye_button:set_text("SHOW DASHBOARD")
-                    else
+                    if visible then
                         eye_button:set_text("HIDE DASHBOARD")
+                    else
+                        eye_button:set_text("SHOW DASHBOARD")
                     end
                 end)
             )
