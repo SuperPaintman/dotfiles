@@ -1,4 +1,5 @@
 local awful = require("awful")
+local gears = require("gears")
 local textbox = require("wibox.widget.textbox")
 local watch = require("awful.widget.watch")
 
@@ -30,6 +31,30 @@ local function new()
     end
 
     handler(0, 0)
+
+    widget:buttons(
+        gears.table.join(
+            awful.button({}, 1, function()
+                local matcher = function (c)
+                    return awful.rules.match(c, {class = "TelegramDesktop"})
+                end
+
+                local found = false
+
+                for c in awful.client.iterate(matcher) do
+                    found = true
+
+                    c:jump_to()
+
+                    break
+                end
+
+                if not found then
+                    awful.spawn("telegram-desktop")
+                end
+            end)
+        )
+    )
 
     -- setmetatable(widget, {
     --   __gc = function()
