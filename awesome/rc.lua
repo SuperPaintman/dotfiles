@@ -439,6 +439,7 @@ awful.screen.connect_for_each_screen(
                 widget_margin_horizontal(s.myvpn_status, dpi(6)),
                 widget_margin_horizontal(s.myseparator, dpi(12)),
                 widget_margin(mykeyboardlayout),
+                widget_margin_horizontal(s.myseparator, dpi(12)),
                 widget_margin(s.mysystray),
                 widget_margin_horizontal(s.myseparator, dpi(12)),
                 widget_margin(mytextclock),
