@@ -792,3 +792,20 @@ tag.connect_signal("property::layout", function(t)
         update_client_titlebar(c)
     end
 end)
+
+-- Client shape.
+if beautiful.client_radius ~= nil then
+    local function update_client_shape(c)
+        if c.maximized then
+            c.shape = nil
+        else
+            c.shape = function(cr, width, height)
+                gears.shape.rounded_rect(cr, width, height, beautiful.client_radius)
+            end
+        end
+    end
+
+    client.connect_signal("property::maximized", update_client_shape)
+
+    client.connect_signal("manage", update_client_shape)
+end
