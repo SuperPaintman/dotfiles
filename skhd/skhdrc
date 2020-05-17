@@ -1,0 +1,4 @@
+# Mod1 - shift + alt.
+
+# Open a terminal.
+shift + alt + enter : open -a "Alacritty"

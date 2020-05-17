@@ -20,6 +20,7 @@ imports [
   ./prettier
   ./rofi
   ./sbt
+  ./skhd # OSX specific.
   ./tmux
   ./vim
   ./vscode
