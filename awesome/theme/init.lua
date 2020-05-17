@@ -55,7 +55,7 @@ theme.client_radius = dpi(4)
 -- Borders.
 --------------------------------------------------------------------------------
 theme.border_width = dpi(1)
-theme.border_normal = colors.normal.white
+theme.border_normal = colors.normal.black
 theme.border_focus = color_border
 
 
