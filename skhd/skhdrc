@@ -5,3 +5,14 @@
 
 # Open a terminal.
 shift + alt - return : open -a "Alacritty"
+
+# Move window to the space.
+shift + ctrl + alt - 1 : yabai -m window --space 1
+shift + ctrl + alt - 2 : yabai -m window --space 2
+shift + ctrl + alt - 3 : yabai -m window --space 3
+shift + ctrl + alt - 4 : yabai -m window --space 4
+shift + ctrl + alt - 5 : yabai -m window --space 5
+shift + ctrl + alt - 6 : yabai -m window --space 6
+shift + ctrl + alt - 7 : yabai -m window --space 7
+shift + ctrl + alt - 8 : yabai -m window --space 8
+shift + ctrl + alt - 9 : yabai -m window --space 9
