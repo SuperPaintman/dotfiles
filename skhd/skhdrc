@@ -4,4 +4,4 @@
 # Mod2 - shift + ctrl + alt.
 
 # Open a terminal.
-shift + alt - enter : open -a "Alacritty"
+shift + alt - return : open -a "Alacritty"
