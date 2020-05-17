@@ -6,6 +6,18 @@
 # Open a terminal.
 shift + alt - return : open -a "Alacritty"
 
+# TODO(SuperPaintman):
+#     Unforteanutly OSX doesn't allow focus spaces without dirty hacks
+#     (https://github.com/koekeishiya/yabai/wiki/Disabling-System-Integrity-Protection).
+#
+#     Also I don't know how to setup shortcuts for Mission Control :(.
+#
+#     So don't forget to setup:
+#       * `shift + alt - {1..9}` to focus space.
+#       * `shift + alt - left` to focus on a left space.
+#       * `shift + alt - left` to focus on a right space.
+#       * `shift + alt - w` to show the Mission Control.
+
 # Move window to the space.
 shift + ctrl + alt - 1 : yabai -m window --space 1
 shift + ctrl + alt - 2 : yabai -m window --space 2
