@@ -1,0 +1,72 @@
+#!/usr/bin/env bash
+
+# NOTE(SuperPaintman): don't forget to setup keyboard shortcuts.
+
+# Mod1 - shift + alt.
+
+# See: https://eastmanreference.com/complete-list-of-applescript-key-codes.
+
+set -e
+
+if [ "$#" != "1" ]; then
+    echo "Usage: $0 <key>"
+
+    exit 1
+fi
+
+if ! which osascript > /dev/null 2>&1; then
+    echo "Cannot find 'osascript'"
+
+    exit 1
+fi
+
+keycode=""
+
+case "$1" in
+    "1")
+        keycode="18"
+        ;;
+
+    "2")
+        keycode="19"
+        ;;
+
+    "3")
+        keycode="20"
+        ;;
+
+    "4")
+        keycode="21"
+        ;;
+
+    "5")
+        keycode="23"
+        ;;
+
+    "6")
+        keycode="22"
+        ;;
+
+    "7")
+        keycode="26"
+        ;;
+
+    "8")
+        keycode="28"
+        ;;
+
+    "9")
+        keycode="25"
+        ;;
+
+    *)
+        echo "Unknown key '$1'"
+        exit 1
+        ;;
+esac
+
+osascript <<EOF
+tell application "System Events"
+    key code $keycode using {shift down, option down}
+end tell
+EOF
