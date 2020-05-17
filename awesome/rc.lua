@@ -424,7 +424,7 @@ awful.screen.connect_for_each_screen(
             },
             {
                 -- Middle widget
-                layout = wibox.layout.flex.horizontal,
+                layout = wibox.layout.fixed.horizontal,
                 widget_margin(s.mytasklist)
             },
             {
