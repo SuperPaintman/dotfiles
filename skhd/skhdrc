@@ -6,6 +6,24 @@
 # Open a terminal.
 shift + alt - return : open -a "Alacritty"
 
+# Open a editor.
+shift + ctrl + alt - e : open -a "Visual Studio Code"
+
+# Open a browser.
+shift + ctrl + alt - b : open -a "Firefox"
+
+# Open Calendar.
+shift + ctrl + alt - c : open -a "Calendar"
+
+# Open Calendar.
+shift + ctrl + alt - m : open -a "Mail"
+
+# Open Telegram.
+shift + ctrl + alt - t : open -a "Telegram"
+
+# Open Slack.
+shift + ctrl + alt - s : open -a "Slack"
+
 # TODO(SuperPaintman):
 #     Unforteanutly OSX doesn't allow focus spaces without dirty hacks
 #     (https://github.com/koekeishiya/yabai/wiki/Disabling-System-Integrity-Protection).
