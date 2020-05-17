@@ -1,4 +1,7 @@
+# See: https://github.com/koekeishiya/skhd#configuration.
+
 # Mod1 - shift + alt.
+# Mod2 - shift + ctrl + alt.
 
 # Open a terminal.
-shift + alt + enter : open -a "Alacritty"
+shift + alt - enter : open -a "Alacritty"
