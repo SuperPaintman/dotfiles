@@ -52,7 +52,9 @@ if is_osx; then
             "ansible" \
             "fd" \
             "lf" \
-            "exa"; do
+            "exa" \
+            "koekeishiya/formulae/skhd" \
+            "koekeishiya/formulae/yabai"; do
             if ! brew ls --versions "$formula" > /dev/null 2>&1; then
                 brew install "$formula"
 
@@ -72,6 +74,7 @@ if is_osx; then
         for cask in \
             "iterm2" \
             "docker" \
+            "telegram" \
             "alfred" \
             "zaplin" \
             "alacritty"; do
@@ -85,6 +88,23 @@ if is_osx; then
         done
 
         echo ""
+    fi
+
+    # Start brew services
+    if which brew > /dev/null 2>&1; then
+        title1 "Start brew services"
+
+        for service in \
+            "skhd" \
+            "yabai"; do
+            if [ "$(brew services list | grep '^'"$service"' ' | awk '{ print $2 }')" != "started" ]; then
+                brew services start "$service"
+
+                ok "$(blue "$service") service has started"
+            else
+                ok "$(blue "$service") service is already started"
+            fi
+        done
     fi
 fi
 
