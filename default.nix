@@ -25,6 +25,7 @@ imports [
   ./vim
   ./vscode
   ./xresources
+  ./yabai # OSX specific.
   ./yarn
   ./zsh
 ]

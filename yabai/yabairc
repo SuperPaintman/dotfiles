@@ -1,0 +1,12 @@
+# See: https://github.com/koekeishiya/yabai/wiki/Configuration#configuration-file.
+
+# Tiling options.
+yabai -m config layout bsp
+
+# padding=2
+
+# yabai -m config top_padding "$padding"
+# yabai -m config bottom_padding "$padding"
+# yabai -m config left_padding "$padding"
+# yabai -m config right_padding "$padding"
+# yabai -m config window_gap "$padding"
