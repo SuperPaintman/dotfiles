@@ -46,3 +46,39 @@ shift + ctrl + alt - 6 : yabai -m window --space 6
 shift + ctrl + alt - 7 : yabai -m window --space 7
 shift + ctrl + alt - 8 : yabai -m window --space 8
 shift + ctrl + alt - 9 : yabai -m window --space 9
+
+# Resize a window.
+# TODO(SuperPaintman): There's something wrong with resizing :| .
+shift + alt - h : yabai -m window --resize left:-100:0; yabai -m window --resize right:-100:0
+shift + alt - l : yabai -m window --resize left:100:0; yabai -m window --resize right:100:0
+shift + alt - 0 : yabai -m space --balance
+
+# Focus on a window.
+shift + alt - j : yabai -m window --focus "$( \
+    yabai -m query --windows --space \
+        | jq -re "sort_by(.frame) | map(.id) | nth(1 + index($( \
+            yabai -m query --windows --window | jq '.id'))) // first")"
+shift + alt - k : yabai -m window --focus "$( \
+    yabai -m query --windows --space \
+        | jq -re "sort_by(.frame) | map(.id) | nth(-1 + index($( \
+            yabai -m query --windows --window | jq '.id'))) // last")"
+
+# Swap windows.
+shift + ctrl + alt - j : yabai -m window --swap "$( \
+    yabai -m query --windows --space \
+        | jq -re "sort_by(.frame) | map(.id) | nth(1 + index($( \
+            yabai -m query --windows --window | jq '.id'))) // first")"
+shift + ctrl + alt - k : yabai -m window --swap "$( \
+    yabai -m query --windows --space \
+        | jq -re "sort_by(.frame) | map(.id) | nth(-1 + index($( \
+            yabai -m query --windows --window | jq '.id'))) // last")"
+
+
+# Fullscreen.
+shift + alt - f : yabai -m window --toggle zoom-fullscreen
+shift + ctrl + alt - f : yabai -m window --toggle native-fullscreen
+
+# Change layout.
+shift + alt - space : yabai -m space --layout "$( \
+    yabai -m query --spaces --space \
+        | jq -re 'if .type == "bsp" then "float" else "bsp" end')"
