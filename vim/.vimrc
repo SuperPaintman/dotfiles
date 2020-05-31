@@ -214,10 +214,16 @@ augroup checktime_on_cursor_hold
   autocmd CursorHold * :checktime
 augroup END
 
-" NERDTreeRefreshRoot
+" NERDTreeRefreshRoot.
 augroup auto_refrest_nerd_tree
   autocmd!
   autocmd BufEnter,CmdlineLeave,CursorHold,CursorHoldI * :NERDTreeRefreshRoot
+augroup END
+
+" coc.nvim autoformat.
+augroup autoformat_on_save
+  autocmd!
+  autocmd BufWritePre * call CocAction('format')
 augroup END
 
 
@@ -283,11 +289,11 @@ let mapleader = "\<Space>"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Mappings.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" TODO(SuperPaintman): `<Plug>` key cannot be used with `noremap`.
 " See: `help :map-modes`
 
 " Normal, Visual, Select, Operator-pending modes.
 "" EasyMotion.
-" TODO(SuperPaintman): `vnoremap` doesn't work here.
 map <Leader> <Plug>(easymotion-prefix)
 map <Leader>L <Plug>(easymotion-bd-jk)
 map / <Plug>(easymotion-sn)
@@ -303,11 +309,24 @@ nnoremap <C-w>N :vnew<CR>
 nnoremap <C-k> :move -2<CR>
 nnoremap <C-j> :move +1<CR>
 
+" coc.nvim.
+"" Navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+"" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+"" Symbol renaming.
+nmap <Leader>rn <Plug>(coc-rename)
+
 " NERDTree.
 nnoremap <C-n> :NERDTreeFocus<CR>
 
 " NERDCommenter.
-" TODO(SuperPaintman): `nnoremap` doesn't work here.
 nmap <C-_> <Plug>NERDCommenterToggle
 
 " undotree.
@@ -316,7 +335,6 @@ nnoremap <Leader>U :UndotreeHide<CR>
 
 " Visual mode.
 " NERDCommenter.
-" TODO(SuperPaintman): `vnoremap` doesn't work here.
 vmap <C-_> <Plug>NERDCommenterToggle<CR>gv
 
 " Insert mode.
@@ -325,5 +343,4 @@ inoremap jk <Esc>
 
 " Operator-pending mode.
 "" EasyMotion.
-" TODO(SuperPaintman): `vnoremap` doesn't work here.
 omap / <Plug>(easymotion-tn)
