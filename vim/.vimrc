@@ -43,6 +43,9 @@ set encoding=utf-8
 " Use spaces when <Tab> is inserted.
 set expandtab
 
+" Set to display all folds open.
+set nofoldenable
+
 " Number of command-lines that are remembered.
 set history=512
 
