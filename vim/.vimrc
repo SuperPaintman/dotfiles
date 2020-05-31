@@ -61,6 +61,9 @@ set list
 " Characters for displaying in list mode.
 set listchars=eol:¬,tab:>-,space:·,trail:·,extends:>,precedes:<
 
+" Enable the use of mouse clicks.
+set mouse=a
+
 " Print the line number in front of each line.
 set number
 
@@ -186,6 +189,30 @@ augroup checktime_on_cursor_hold
   autocmd CursorHold * :checktime
 augroup END
 
+" NERDTreeRefreshRoot
+augroup auto_refrest_nerd_tree
+  autocmd!
+  autocmd BufEnter,CmdlineLeave,CursorHold,CursorHoldI * :NERDTreeRefreshRoot
+augroup END
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin settings.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" NERDTree.
+" See: https://github.com/preservim/nerdtree/blob/master/doc/NERDTree.txt
+"" Manage the interpretation of mouse clicks.
+let g:NERDTreeMouseMode = 3 " Single click.
+
+"" Tells the NERDTree whether to display hidden files on startup.
+let g:NERDTreeShowHidden = 1
+
+"" Sets the window size when the NERDTree is opened.
+let g:NERDTreeWinSize = 20
+
+"" Disables display of the 'Bookmarks' label and 'Press ? for help' text.
+let g:NERDTreeMinimalUI = 1
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Leader.
@@ -207,6 +234,9 @@ nnoremap <C-w>N :vnew<CR>
 " Move lines.
 nnoremap <C-k> :move -2<CR>
 nnoremap <C-j> :move +1<CR>
+
+" NERDTree.
+nnoremap <C-n> :NERDTreeFocus<CR>
 
 " Insert mode.
 "" Escape.
