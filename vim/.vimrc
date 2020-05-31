@@ -43,5 +43,10 @@ let mapleader = "\<Space>"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Mappings.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Reload vim config.
+" Normal mode.
+"" Reload vim config.
 " nnoremap <Leader>vr :ReloadConfig<CR>
+
+" Insert mode.
+"" Escape.
+inoremap jk <Esc>
