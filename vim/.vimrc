@@ -43,6 +43,9 @@ set encoding=utf-8
 " Use spaces when <Tab> is inserted.
 set expandtab
 
+" Number of command-lines that are remembered.
+set history=512
+
 " Highlight matches with last search pattern.
 set hlsearch
 
@@ -234,6 +237,15 @@ let g:EasyMotion_smartcase = 1
 " both '1' and '!' in Find motion.
 let g:EasyMotion_use_smartsign_us = 1
 
+" undotree.
+" See: https://github.com/mbbill/undotree/blob/master/doc/undotree.txt
+" Set the undotree window layout.
+let g:undotree_WindowLayou = 3
+
+" Set to 1 to get short timestamps when |undotree_RelativeTimestamp| is also
+" enabled.
+let g:undotree_ShortIndicators = 1
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Leader.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -271,7 +283,12 @@ nnoremap <C-n> :NERDTreeFocus<CR>
 " TODO(SuperPaintman): `nnoremap` doesn't work here.
 nmap <C-_> <Plug>NERDCommenterToggle
 
+" undotree.
+nnoremap <Leader>u :UndotreeShow<CR>:UndotreeFocus<CR>
+nnoremap <Leader>U :UndotreeHide<CR>
+
 " Visual mode.
+" NERDCommenter.
 " TODO(SuperPaintman): `vnoremap` doesn't work here.
 vmap <C-_> <Plug>NERDCommenterToggle<CR>gv
 
