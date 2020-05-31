@@ -48,4 +48,6 @@ mouse_bindings:
     - { mouse: Middle, action: None } # No more paste.
 
 key_bindings:
-    - { key: V, mods: Control, action: Paste }
+    []
+    # Vim unhappy with it :( (Visual block).
+    # - { key: V, mods: Control, action: Paste }
