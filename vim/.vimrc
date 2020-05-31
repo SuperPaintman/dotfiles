@@ -28,9 +28,71 @@ set autoread
 " "dark" or "light", used for highlight colors.
 set background=dark
 
+" Keep backup file after overwriting a file.
+set nobackup
+
+" Columns to highlight.
+set colorcolumn=80,120
+
+" Highlight the screen line of the cursor.
+set cursorline
+
 " Encoding used internally.
 set encoding=utf-8
 
+" Use spaces when <Tab> is inserted.
+set expandtab
+
+" Highlight matches with last search pattern.
+set hlsearch
+
+" Ignore case in search patterns.
+set ignorecase
+
+" Tells when last window has status lines.
+set laststatus=2 " Always.
+
+" Don't redraw while executing macros.
+set lazyredraw
+
+" Show <Tab> and <EOL>.
+set list
+
+" Characters for displaying in list mode.
+set listchars=eol:¬,tab:>-,space:·,trail:·,extends:>,precedes:<
+
+" Print the line number in front of each line.
+set number
+
+" Number of spaces to use for (auto)indent step.
+set shiftwidth=2
+
+" Tells when the tab pages line is displayed.
+set showtabline=2 " Always.
+
+" No ignore case when pattern has uppercase.
+set smartcase
+
+" Use 'shiftwidth' when inserting <Tab>.
+set smarttab
+
+" Number of spaces that <Tab> uses while editing.
+set softtabstop=2
+
+" New window from split is below the current one.
+set splitbelow
+
+" New window is put right of the current one.
+set splitright
+
+" Whether to use a swapfile for a buffer.
+set noswapfile
+
+" Long lines wrap and continue on the next line.
+set nowrap
+
+" Make a backup before overwriting a file.
+set nowritebackup
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Color Schemes.
