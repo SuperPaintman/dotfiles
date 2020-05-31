@@ -320,6 +320,9 @@ nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
+"" Show documentation.
+nnoremap <silent> gh :call CocAction('doHover')<CR>
+
 "" Symbol renaming.
 nmap <Leader>rn <Plug>(coc-rename)
 
