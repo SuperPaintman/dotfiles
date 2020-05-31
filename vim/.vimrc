@@ -5,8 +5,14 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Reset.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Specify the character encoding used in the script.
+scriptencoding utf-8
+
 " Set all options to their default value.
 set all&
+
+" Reset color scheme.
+colorscheme default
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -14,8 +20,21 @@ set all&
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 syntax on
 
+filetype plugin indent on
+
 " Read file when changed outside of Vim.
 set autoread
+
+" Encoding used internally.
+set encoding=utf-8
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Color Schemes.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if filereadable(expand("~/.vim/colors/monokai/monokai.vim"))
+  colorscheme monokai/monokai
+endif
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
