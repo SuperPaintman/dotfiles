@@ -213,6 +213,17 @@ let g:NERDTreeWinSize = 20
 "" Disables display of the 'Bookmarks' label and 'Press ? for help' text.
 let g:NERDTreeMinimalUI = 1
 
+" NERD Commenter.
+" See: https://github.com/preservim/nerdcommenter/blob/master/doc/NERD_commenter.txt
+" Specifies if empty lines should be commented (useful with regions).
+let g:NERDCommentEmptyLines = 1
+
+"" Specifies whether to add extra spaces around delimiters when commenting,
+"" and whether to remove them when uncommenting.
+let g:NERDSpaceDelims = 1
+
+"" Specifies the default alignment to use, one of 'none', 'left', 'start', or 'both'.
+let g:NERDDefaultAlign = "left"
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Leader.
@@ -224,6 +235,8 @@ let mapleader = "\<Space>"
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Mappings.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" See: `help :map-modes`
+
 " Normal mode.
 "" Reload vim config.
 " nnoremap <Leader>vr :ReloadConfig<CR>
@@ -237,6 +250,14 @@ nnoremap <C-j> :move +1<CR>
 
 " NERDTree.
 nnoremap <C-n> :NERDTreeFocus<CR>
+
+" NERDCommenter.
+" TODO(SuperPaintman): `nnoremap` doesn't work here.
+nmap <C-_> <Plug>NERDCommenterToggle
+
+" Visual mode.
+" TODO(SuperPaintman): `vnoremap` doesn't work here.
+vmap <C-_> <Plug>NERDCommenterToggle<CR>gv
 
 " Insert mode.
 "" Escape.
