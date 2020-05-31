@@ -25,6 +25,9 @@ filetype plugin indent on
 " Read file when changed outside of Vim.
 set autoread
 
+" "dark" or "light", used for highlight colors.
+set background=dark
+
 " Encoding used internally.
 set encoding=utf-8
 
