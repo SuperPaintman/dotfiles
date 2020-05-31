@@ -1,284 +1,314 @@
-execute pathogen#infect()
+" See: http://vimdoc.sourceforge.net/htmldoc/options.html
+" See: https://learnvimscriptthehardway.stevelosh.com/
+" See: `:help option-list`
 
-" Langmenu
-if has("gui_running")
-  set langmenu=en_US
-  let $LANG = &langmenu
-endif
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Reset.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Specify the character encoding used in the script.
+scriptencoding utf-8
 
+" Set all options to their default value.
+set all&
+
+" Reset color scheme.
+colorscheme default
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Options.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 syntax on
+
 filetype plugin indent on
 
-" Encoding
-scriptencoding utf-8
+" Read file when changed outside of Vim.
+set autoread
+
+" "dark" or "light", used for highlight colors.
+set background=dark
+
+" Keep backup file after overwriting a file.
+set nobackup
+
+" Columns to highlight.
+set colorcolumn=80,120
+
+" Highlight the screen line of the cursor.
+set cursorline
+
+" Encoding used internally.
 set encoding=utf-8
 
-" guifont
-if has("gui_running")
-  if has("win32") || has("win64")
-    set guifont=Consolas:h14
-  endif
-endif
+" Use spaces when <Tab> is inserted.
+set expandtab
 
-" Theme
-try
-  " colorscheme vim-tomorrow-theme/Tomorrow-Night
-  colorscheme monokai/monokai
-catch
-endtry
+" Set to display all folds open.
+set nofoldenable
 
-" Custom colors
-"" Common
-""" Line cursor line
-hi CursorLine   cterm=NONE ctermbg=NONE ctermfg=NONE guibg=NONE guifg=NONE
-hi CursorLineNR cterm=bold
+" Number of command-lines that are remembered.
+set history=512
 
-"" JavaScript
-if exists('g:colors_name') && g:colors_name == 'monokai'
-  """ normal
-  hi Normal ctermbg=234 guibg=#272822
-
-  """ template string braces
-  hi jsTemplateBraces ctermbg=NONE ctermfg=179 guifg=#e69f66
-endif
-
-"" Markdown
-if exists('g:colors_name') && g:colors_name == 'monokai'
-  """ Bold
-  hi markdownBold     term=bold   cterm=bold    gui=bold    ctermfg=197 guifg=#f92772
-
-  "" Italic
-  hi markdownItalic   term=italic cterm=italic  gui=italic  ctermfg=197 guifg=#f92772
-
-  "" Bold Italic
-  hi markdownBoldItalic term=bold,italic cterm=bold,italic gui=bold,italic ctermfg=197 guifg=#f92772
-
-  """ Headings
-  hi markdownHeadingDelimiter ctermfg=208 guifg=#FD9720
-  hi markdownH1 ctermfg=208 guifg=#FD9720
-  hi markdownH2 ctermfg=208 guifg=#FD9720
-  hi markdownH3 ctermfg=208 guifg=#FD9720
-  hi markdownH4 ctermfg=208 guifg=#FD9720
-  hi markdownH5 ctermfg=208 guifg=#FD9720
-  hi markdownH6 ctermfg=208 guifg=#FD9720
-
-  """ Rule
-  hi markdownRule term=bold cterm=bold gui=bold ctermfg=243 guifg=#8F908A ctermbg=237 guibg=#575b61
-endif
-
-"" Grey whitespaces
-hi SpecialKey ctermbg=NONE ctermfg=59 guifg=#75715E
-
-" Highlight all search matches
+" Highlight matches with last search pattern.
 set hlsearch
 
-" Drawing
+" Ignore case in search patterns.
+set ignorecase
+
+" Tells when last window has status lines.
+set laststatus=2 " Always.
+
+" Don't redraw while executing macros.
 set lazyredraw
 
-" Statusline
-set laststatus=2
-
-" Line numbers
-set cursorline
-set number
-
-" Show hidden characters
-try
-  set listchars=eol:¬,tab:>-,space:·,trail:·,extends:>,precedes:<
-catch
-  set listchars=eol:¬,tab:>-,trail:·,extends:>,precedes:<
-endtry
+" Show <Tab> and <EOL>.
 set list
 
-" Cases
-set ignorecase
+" Characters for displaying in list mode.
+set listchars=eol:¬,tab:>-,space:·,trail:·,extends:>,precedes:<
+
+" Enable the use of mouse clicks.
+set mouse=a
+
+" Print the line number in front of each line.
+set number
+
+" Number of spaces to use for (auto)indent step.
+set shiftwidth=2
+
+" Tells when the tab pages line is displayed.
+set showtabline=2 " Always.
+
+" No ignore case when pattern has uppercase.
 set smartcase
 
-" Indentation settings
-set shiftwidth=2
-set softtabstop=2
-set expandtab
+" Use 'shiftwidth' when inserting <Tab>.
 set smarttab
 
-" Ruler
-set colorcolumn=80
+" Number of spaces that <Tab> uses while editing.
+set softtabstop=2
 
-" Linebreak on 80 characters
-set lbr
-set tw=80
-
-set nowrap
-
-" Tabs
-set showtabline=2
-
-" Splites
-set splitright
+" New window from split is below the current one.
 set splitbelow
 
-" Files, backups, etc
-set nobackup
-set nowb
+" New window is put right of the current one.
+set splitright
+
+" Whether to use a swapfile for a buffer.
 set noswapfile
 
-" Mappings
-"" Disable Arrows
-noremap <Left>  <Nop>
-noremap <Up>    <Nop>
-noremap <Down>  <Nop>
-noremap <Right> <Nop>
+" Long lines wrap and continue on the next line.
+set nowrap
 
-"" Escape
-imap jk <Esc>
+" Make a backup before overwriting a file.
+set nowritebackup
 
-"" Tabs
-nmap ,t :tabnew<CR>
-nmap ,T :tabclose<CR>
 
-"" Splites
-nmap <C-w>N :vnew<CR>
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugins.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call plug#begin("~/.vim/plugged")
 
-"" Swap lines
-nnoremap <C-k> :m -2<CR>
-nnoremap <C-j> :m +1<CR>
+" EditorConfig plugin for Vim.
+" See: https://github.com/editorconfig/editorconfig-vim
+Plug 'editorconfig/editorconfig-vim'
 
-"" NERDTree
-try
-  map <C-n> :NERDTreeToggle<CR>
-catch
-endtry
+" Vim plugin for intensely nerdy commenting powers.
+" See: https://github.com/preservim/nerdcommenter
+Plug 'preservim/nerdcommenter'
 
-"" NERDCommenter
-try
-  map <C-_> <plug>NERDCommenterComment
-  map <C-?> <plug>NERDCommenterToggle
-catch
-endtry
+" A tree explorer plugin for vim.
+" See: https://github.com/preservim/nerdtree
+Plug 'preservim/nerdtree'
 
-"" EasyMotion
-try
-  map <Leader> <Plug>(easymotion-prefix)
+" The undo history visualizer for VIM.
+" See: https://github.com/mbbill/undotree
+Plug 'mbbill/undotree'
 
-  map  / <Plug>(easymotion-sn)
-  omap / <Plug>(easymotion-tn)
+" Lean & mean status/tabline for vim that's light as air.
+" See: https://github.com/vim-airline/vim-airline
+Plug 'vim-airline/vim-airline'
 
-  map <Leader>L <Plug>(easymotion-bd-jk)
-  "nmap <Leader>L <Plug>(easymotion-overwin-line)
-catch
-endtry
+" Vim motions on speed!
+" See: https://github.com/easymotion/vim-easymotion
+Plug 'easymotion/vim-easymotion'
 
-"" undotree
-try
-  nmap ,u :UndotreeToggle<CR>
-catch
-endtry
+" A Vim plugin which shows git diff markers in the sign column and
+" stages/previews/undoes hunks and partial hunks.
+" See: https://github.com/airblade/vim-gitgutter
+Plug 'airblade/vim-gitgutter'
 
-"" Tagbar
-try
-  nmap ,x :TagbarToggle<CR>
-catch
-endtry
+" Plugin to toggle, display and navigate marks.
+" See: https://github.com/kshenoy/vim-signature
+Plug 'kshenoy/vim-signature'
 
-" Filetypes
-autocmd BufRead,BufNewFile *.babelrc setfiletype json
+" surround.vim: quoting/parenthesizing made simple.
+" See: https://github.com/tpope/vim-surround
+Plug 'tpope/vim-surround'
 
-" Syntax
-"" JavaScripe
-function! AutoCMDSyntaxJS()
-  " ...
-  syntax match   jsOperator       /\.\.\./
+call plug#end()
 
-  syntax keyword jsGlobalObjects  Buffer __dirname __filename console module exports global process
 
-  " async / await
-  syntax clear jsAsyncKeyword
-  syntax keyword jsAsyncKeyword   async
-  syntax keyword jsAwaitKeyword   await
-  syntax cluster jsAll            add=jsAwaitKeyword
-endfunction
-autocmd Syntax javascript call AutoCMDSyntaxJS()
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Color Schemes.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if filereadable(expand("~/.vim/colors/monokai/monokai.vim"))
+  colorscheme monokai/monokai
+endif
 
-""" TODO: сделать подсветку Noise '.', ':' красным
 
-" Highlight linking
-"" JavaScript
-hi def link jsFuncCall Function
-hi def link jsObjectKey String
-hi def link jsSwitchColon Delimiter
-hi def link jsGlobalObjects Keyword
-hi def link jsTemplateVar NONE
-"hi def link jsNoiseDot Operator
-hi! def link jsAwaitKeyword Statement
-hi! def link jsThis Special
-hi! def link jsSuper Statement
-hi! def link jsClassDefinition jsFuncName
-hi! def link jsUndefined Special
-hi! def link jsNull Special
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Highlight.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Cursor line.
+highlight CursorLineNR cterm=bold
 
-"" Markdown
-hi! def link markdownIdDeclaration Float
-hi! def link markdownUrl htmlLink
-hi! def link markdownLinkText Type
-hi! def link markdownId Float
+" Whitespaces.
+highlight SpecialKey ctermbg=NONE ctermfg=59 guifg=#75715E
 
-" Plugins Config
-"" JavaScript
-let g:javascript_plugin_jsdoc = 1
-let g:javascript_plugin_ngdoc = 1
-let g:javascript_plugin_flow = 1
+" TODO(SuperPaintman): add custom colors for JavaScript and Markdown.
+" if exists("g:colors_name") && g:colors_name == "monokai"
+"
+" endif
 
-"" Python
-let python_highlight_all = 1
 
-"" Markdown
-let g:markdown_fenced_languages = [
-  \'javascript',
-  \'js=javascript',
-  \'sh',
-  \'bash=sh',
-  \'yaml'
-  \]
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Functions.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" NOTE(SuperPaintman): `*` checks a function.
+if !exists("*s:reload_config")
+  function s:reload_config()
+    source $MYVIMRC " Or `~/.vimrc`.
+    echom "Config reloaded!"
+  endfunction
+endif
 
-"" NERDTree
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Commands.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+command! ReloadConfig call s:reload_config()
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Autocommands.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Check if an buffer was changed outside of Vim.
+augroup checktime_on_cursor_hold
+  autocmd!
+  autocmd CursorHold * :checktime
+augroup END
+
+" NERDTreeRefreshRoot
+augroup auto_refrest_nerd_tree
+  autocmd!
+  autocmd BufEnter,CmdlineLeave,CursorHold,CursorHoldI * :NERDTreeRefreshRoot
+augroup END
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugin settings.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" NERDTree.
+" See: https://github.com/preservim/nerdtree/blob/master/doc/NERDTree.txt
+"" Manage the interpretation of mouse clicks.
+let g:NERDTreeMouseMode = 3 " Single click.
+
+"" Tells the NERDTree whether to display hidden files on startup.
 let g:NERDTreeShowHidden = 1
 
-"" Tagbar
-""" see: https://github.com/ramitos/jsctags
-let g:tagbar_type_javascript = {
-  \'ctagsbin': 'jsctags'
-  \}
+"" Sets the window size when the NERDTree is opened.
+let g:NERDTreeWinSize = 20
 
-let g:tagbar_type_crystal = {
-  \'ctagstype': 'ruby',
-  \'kinds': [
-    \'m:modules',
-    \'c:classes',
-    \'d:describes',
-    \'C:contexts',
-    \'f:methods',
-    \'F:singleton methods'
-    \]
-  \}
+"" Disables display of the 'Bookmarks' label and 'Press ? for help' text.
+let g:NERDTreeMinimalUI = 1
 
-""" see: https://github.com/jszakmeister/markdown2ctags
-let g:tagbar_type_markdown = {
-  \'ctagstype': 'markdown',
-  \'ctagsbin': '/usr/local/bin/markdown2ctags',
-  \'ctagsargs': '-f - --sort=yes',
-  \'kinds': [
-    \'s:sections',
-    \'i:images'
-    \],
-  \'sro': '|',
-  \'kind2scope' : {
-    \'s' : 'section',
-    \},
-  \'sort': 0,
-  \}
+" NERD Commenter.
+" See: https://github.com/preservim/nerdcommenter/blob/master/doc/NERD_commenter.txt
+" Specifies if empty lines should be commented (useful with regions).
+let g:NERDCommentEmptyLines = 1
 
-" Presets
-"" NERDTree
-" try
-"   autocmd vimenter * NERDTree
-" catch
-" endtry
+"" Specifies whether to add extra spaces around delimiters when commenting,
+"" and whether to remove them when uncommenting.
+let g:NERDSpaceDelims = 1
+
+"" Specifies the default alignment to use, one of 'none', 'left', 'start', or 'both'.
+let g:NERDDefaultAlign = "left"
+
+" EasyMotion.
+" See: https://github.com/easymotion/vim-easymotion/blob/master/doc/easymotion.txt
+" Matching target keys by smartcase. You can type target keys more lazily.
+let g:EasyMotion_smartcase = 1
+
+" Matching signs target keys by smartcase like. E.g. type '1' and it matches
+" both '1' and '!' in Find motion.
+let g:EasyMotion_use_smartsign_us = 1
+
+" undotree.
+" See: https://github.com/mbbill/undotree/blob/master/doc/undotree.txt
+" Set the undotree window layout.
+let g:undotree_WindowLayou = 3
+
+" Set to 1 to get short timestamps when |undotree_RelativeTimestamp| is also
+" enabled.
+let g:undotree_ShortIndicators = 1
+
+" vim-airline.
+" See: https://github.com/vim-airline/vim-airline/blob/master/doc/airline.txt
+let g:airline_powerline_fonts = 1
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Leader.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Use <Space> as a <Leader>. Double quotes are required.
+let mapleader = "\<Space>"
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Mappings.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" See: `help :map-modes`
+
+" Normal, Visual, Select, Operator-pending modes.
+"" EasyMotion.
+" TODO(SuperPaintman): `vnoremap` doesn't work here.
+map <Leader> <Plug>(easymotion-prefix)
+map <Leader>L <Plug>(easymotion-bd-jk)
+map / <Plug>(easymotion-sn)
+
+" Normal mode.
+"" Reload vim config.
+" nnoremap <Leader>vr :ReloadConfig<CR>
+
+" Split window vertically.
+nnoremap <C-w>N :vnew<CR>
+
+" Move lines.
+nnoremap <C-k> :move -2<CR>
+nnoremap <C-j> :move +1<CR>
+
+" NERDTree.
+nnoremap <C-n> :NERDTreeFocus<CR>
+
+" NERDCommenter.
+" TODO(SuperPaintman): `nnoremap` doesn't work here.
+nmap <C-_> <Plug>NERDCommenterToggle
+
+" undotree.
+nnoremap <Leader>u :UndotreeShow<CR>:UndotreeFocus<CR>
+nnoremap <Leader>U :UndotreeHide<CR>
+
+" Visual mode.
+" NERDCommenter.
+" TODO(SuperPaintman): `vnoremap` doesn't work here.
+vmap <C-_> <Plug>NERDCommenterToggle<CR>gv
+
+" Insert mode.
+"" Escape.
+inoremap jk <Esc>
+
+" Operator-pending mode.
+"" EasyMotion.
+" TODO(SuperPaintman): `vnoremap` doesn't work here.
+omap / <Plug>(easymotion-tn)
