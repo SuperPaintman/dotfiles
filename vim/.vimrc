@@ -1,4 +1,5 @@
 " See: http://vimdoc.sourceforge.net/htmldoc/options.html
+" See: https://learnvimscriptthehardway.stevelosh.com/
 " See: `:help option-list`
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -20,7 +21,7 @@ syntax on
 " NOTE(SuperPaintman): `*` checks a function.
 if !exists('*s:reload_config')
   function s:reload_config()
-    source ~/.vimrc
+    source $MYVIMRC " Or `~/.vimrc`.
     echom "Config reloaded!"
   endfunction
 endif
