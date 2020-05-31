@@ -138,6 +138,10 @@ Plug 'easymotion/vim-easymotion'
 " See: https://github.com/airblade/vim-gitgutter
 Plug 'airblade/vim-gitgutter'
 
+" True Sublime Text style multiple selections for Vim.
+" See: https://github.com/terryma/vim-multiple-cursors
+" Plug 'terryma/vim-multiple-cursors'
+
 " Plugin to toggle, display and navigate marks.
 " See: https://github.com/kshenoy/vim-signature
 Plug 'kshenoy/vim-signature'
