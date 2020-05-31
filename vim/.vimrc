@@ -94,6 +94,48 @@ set nowrap
 " Make a backup before overwriting a file.
 set nowritebackup
 
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Plugins.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+call plug#begin("~/.vim/plugged")
+
+" EditorConfig plugin for Vim.
+" See: https://github.com/editorconfig/editorconfig-vim
+Plug 'editorconfig/editorconfig-vim'
+
+" Vim plugin for intensely nerdy commenting powers.
+" See: https://github.com/preservim/nerdcommenter
+Plug 'preservim/nerdcommenter'
+
+" A tree explorer plugin for vim.
+" See: https://github.com/preservim/nerdtree
+Plug 'preservim/nerdtree'
+
+" The undo history visualizer for VIM.
+" See: https://github.com/mbbill/undotree
+Plug 'mbbill/undotree'
+
+" Vim motions on speed!
+" See: https://github.com/easymotion/vim-easymotion
+Plug 'easymotion/vim-easymotion'
+
+" A Vim plugin which shows git diff markers in the sign column and
+" stages/previews/undoes hunks and partial hunks.
+" See: https://github.com/airblade/vim-gitgutter
+Plug 'airblade/vim-gitgutter'
+
+" Plugin to toggle, display and navigate marks.
+" See: https://github.com/kshenoy/vim-signature
+Plug 'kshenoy/vim-signature'
+
+" surround.vim: quoting/parenthesizing made simple.
+" See: https://github.com/tpope/vim-surround
+Plug 'tpope/vim-surround'
+
+call plug#end()
+
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Color Schemes.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
