@@ -103,10 +103,25 @@ endif
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Highlight.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Cursor line.
+highlight CursorLineNR cterm=bold
+
+" Whitespaces.
+highlight SpecialKey ctermbg=NONE ctermfg=59 guifg=#75715E
+
+" TODO(SuperPaintman): add custom colors for JavaScript and Markdown.
+" if exists("g:colors_name") && g:colors_name == "monokai"
+"
+" endif
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Functions.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " NOTE(SuperPaintman): `*` checks a function.
-if !exists('*s:reload_config')
+if !exists("*s:reload_config")
   function s:reload_config()
     source $MYVIMRC " Or `~/.vimrc`.
     echom "Config reloaded!"
@@ -143,6 +158,13 @@ let mapleader = "\<Space>"
 " Normal mode.
 "" Reload vim config.
 " nnoremap <Leader>vr :ReloadConfig<CR>
+
+" Split window vertically.
+nnoremap <C-w>N :vnew<CR>
+
+" Move lines.
+nnoremap <C-k> :move -2<CR>
+nnoremap <C-j> :move +1<CR>
 
 " Insert mode.
 "" Escape.
