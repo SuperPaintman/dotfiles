@@ -112,6 +112,14 @@ set nowritebackup
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 call plug#begin("~/.vim/plugged")
 
+" Intellisense engine for Vim8 & Neovim, full language server protocol support
+" as VSCode .
+" See: https://github.com/neoclide/coc.nvim
+" See: https://github.com/neoclide/coc.nvim/wiki/Language-servers
+if has('patch-8.1.1719') || (has('nvim') && has('nvim-0.4.3'))
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+endif
+
 " EditorConfig plugin for Vim.
 " See: https://github.com/editorconfig/editorconfig-vim
 Plug 'editorconfig/editorconfig-vim'
