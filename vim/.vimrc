@@ -40,7 +40,10 @@ command! ReloadConfig call s:reload_config()
 " Autocommands.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Check if an buffer was changed outside of Vim.
-autocmd CursorHold * :checktime
+augroup checktime_on_cursor_hold
+  autocmd!
+  autocmd CursorHold * :checktime
+augroup END
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
