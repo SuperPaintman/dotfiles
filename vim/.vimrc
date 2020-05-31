@@ -125,6 +125,10 @@ Plug 'preservim/nerdtree'
 " See: https://github.com/mbbill/undotree
 Plug 'mbbill/undotree'
 
+" Lean & mean status/tabline for vim that's light as air.
+" See: https://github.com/vim-airline/vim-airline
+Plug 'vim-airline/vim-airline'
+
 " Vim motions on speed!
 " See: https://github.com/easymotion/vim-easymotion
 Plug 'easymotion/vim-easymotion'
@@ -248,6 +252,11 @@ let g:undotree_WindowLayou = 3
 " Set to 1 to get short timestamps when |undotree_RelativeTimestamp| is also
 " enabled.
 let g:undotree_ShortIndicators = 1
+
+" vim-airline.
+" See: https://github.com/vim-airline/vim-airline/blob/master/doc/airline.txt
+let g:airline_powerline_fonts = 1
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Leader.
