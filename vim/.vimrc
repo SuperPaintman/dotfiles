@@ -28,6 +28,9 @@ set autoread
 " "dark" or "light", used for highlight colors.
 set background=dark
 
+" How backspace works at start of line.
+set backspace=indent,eol,start
+
 " Keep backup file after overwriting a file.
 set nobackup
 
