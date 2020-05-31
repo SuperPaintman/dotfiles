@@ -225,6 +225,15 @@ let g:NERDSpaceDelims = 1
 "" Specifies the default alignment to use, one of 'none', 'left', 'start', or 'both'.
 let g:NERDDefaultAlign = "left"
 
+" EasyMotion.
+" See: https://github.com/easymotion/vim-easymotion/blob/master/doc/easymotion.txt
+" Matching target keys by smartcase. You can type target keys more lazily.
+let g:EasyMotion_smartcase = 1
+
+" Matching signs target keys by smartcase like. E.g. type '1' and it matches
+" both '1' and '!' in Find motion.
+let g:EasyMotion_use_smartsign_us = 1
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Leader.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -236,6 +245,13 @@ let mapleader = "\<Space>"
 " Mappings.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " See: `help :map-modes`
+
+" Normal, Visual, Select, Operator-pending modes.
+"" EasyMotion.
+" TODO(SuperPaintman): `vnoremap` doesn't work here.
+map <Leader> <Plug>(easymotion-prefix)
+map <Leader>L <Plug>(easymotion-bd-jk)
+map / <Plug>(easymotion-sn)
 
 " Normal mode.
 "" Reload vim config.
@@ -262,3 +278,8 @@ vmap <C-_> <Plug>NERDCommenterToggle<CR>gv
 " Insert mode.
 "" Escape.
 inoremap jk <Esc>
+
+" Operator-pending mode.
+"" EasyMotion.
+" TODO(SuperPaintman): `vnoremap` doesn't work here.
+omap / <Plug>(easymotion-tn)
