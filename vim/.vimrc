@@ -198,11 +198,26 @@ if !exists("*s:reload_config")
   endfunction
 endif
 
+" check_back_space checks if the current character is a whitespace.
+function s:check_back_space()
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1] =~# '\s'
+endfunction
+
+" show_documentation shows documentation in preview window.
+function s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Commands.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-command! ReloadConfig call s:reload_config()
+command! ReloadConfig call <SID>reload_config()
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -224,6 +239,12 @@ augroup END
 augroup autoformat_on_save
   autocmd!
   autocmd BufWritePre * call CocAction('format')
+augroup END
+
+" Highlight the symbol and its references when holding the cursor.
+augroup highlight_symbol_and_references
+  autocmd!
+  autocmd CursorHold * silent call CocActionAsync('highlight')
 augroup END
 
 
@@ -326,7 +347,7 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
 "" Show documentation.
-nnoremap <silent> gh :call CocAction('doHover')<CR>
+nnoremap <silent> gh :call <SID>show_documentation()<CR>
 
 "" Symbol renaming.
 nmap <Leader>rn <Plug>(coc-rename)
@@ -348,6 +369,17 @@ vmap <C-_> <Plug>NERDCommenterToggle<CR>gv
 " Insert mode.
 "" Escape.
 inoremap jk <Esc>
+
+" coc.nvim.
+"" Use tab for trigger completion with characters ahead and navigate.
+inoremap <silent><expr> <TAB>
+  \ pumvisible() ? "\<C-n>" :
+  \ <SID>check_back_space() ? "\<TAB>" :
+  \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+"" Use <cr> to confirm completion.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Operator-pending mode.
 "" EasyMotion.
