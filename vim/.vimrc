@@ -186,6 +186,11 @@ highlight SpecialKey ctermbg=NONE ctermfg=59 guifg=#75715E
 "
 " endif
 
+" Custom colors for coc.nvim.
+if exists("g:colors_name") && g:colors_name == "monokai"
+  highlight CocHighlightText ctermbg=236 ctermfg=231 guibg=#383a3e guifg=#FFFFFF
+endif
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Functions.
