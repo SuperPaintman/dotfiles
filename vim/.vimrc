@@ -251,6 +251,13 @@ augroup END
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin settings.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" coc.nvim.
+" See: https://github.com/neoclide/coc.nvim/blob/master/doc/coc.txt
+"" Global extension names to install when they aren't installed.
+let g:coc_global_extensions = []
+""" C/C++/Objective-C.
+call add(g:coc_global_extensions, 'coc-clangd')
+
 " NERDTree.
 " See: https://github.com/preservim/nerdtree/blob/master/doc/NERDTree.txt
 "" Manage the interpretation of mouse clicks.
