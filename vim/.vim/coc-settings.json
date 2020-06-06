@@ -10,5 +10,7 @@
         "go"
       ]
     }
-  }
+  },
+
+  "clangd.semanticHighlighting": true
 }

@@ -193,8 +193,10 @@ function! s:Disable() abort
   augroup coc_nvim
     autocmd!
   augroup end
+  call coc#util#close_floats()
+  call coc#rpc#request('detach', [])
   echohl MoreMsg
-    echom '[coc.nvim] Disabled'
+    echom '[coc.nvim] Event disabled'
   echohl None
   let g:coc_enabled = 0
 endfunction
@@ -217,7 +219,7 @@ function! s:SyncAutocmd(...)
   endif
 endfunction
 
-function! s:Enable()
+function! s:Enable(initialize)
   if get(g:, 'coc_enabled', 0) == 1
     return
   endif
@@ -281,6 +283,12 @@ function! s:Enable()
     autocmd BufWriteCmd __coc_refactor__* :call coc#rpc#notify('saveRefactor', [+expand('<abuf>')])
     autocmd ColorScheme * call s:Hi()
   augroup end
+  if a:initialize == 0
+     call coc#rpc#request('attach', [])
+     echohl MoreMsg
+     echom '[coc.nvim] Event enabled'
+     echohl None
+  endif
 endfunction
 
 function! s:Hi() abort
@@ -347,16 +355,21 @@ function! s:ShowInfo()
     else
       let output = trim(system(node . ' --version'))
       let ms = matchlist(output, 'v\(\d\+\).\(\d\+\).\(\d\+\)')
-      if empty(ms) || str2nr(ms[1]) < 8 || (str2nr(ms[1]) == 8 && str2nr(ms[2]) < 10)
-        call add(lines, 'Error: Node version '.output.' < 8.10.0, please upgrade node.js')
+      if empty(ms) || str2nr(ms[1]) < 10 || (str2nr(ms[1]) == 10 && str2nr(ms[2]) < 12)
+        call add(lines, 'Error: Node version '.output.' < 10.12.0, please upgrade node.js')
       endif
     endif
     " check bundle
-    let file = s:root.'/lib/attach.js'
-    if !filereadable(file)
-      let file = s:root.'/build/index.js'
+    let file = s:root.'/bin/server.js'
+    if filereadable(file)
+      let file = s:root.'/lib/attach.js'
       if !filereadable(file)
         call add(lines, 'Error: javascript bundle not found, please compile the code of coc.nvim.')
+      endif
+    else
+      let file = s:root.'/build/index.js'
+      if !filereadable(file)
+        call add(lines, 'Error: javascript bundle not found, please remove coc.nvim folder and reinstall it.')
       endif
     endif
     if !empty(lines)
@@ -365,9 +378,9 @@ function! s:ShowInfo()
       call setline(1, lines)
     else
       if get(g:, 'coc_start_at_startup',1)
-        echohl MoreMsg | echon 'Start on startup is disabled, try :CocStart' | echohl None
-      else
         echohl MoreMsg | echon 'Service stopped for some unknown reason, try :CocStart' | echohl None
+      else
+        echohl MoreMsg | echon 'Start on startup is disabled, try :CocStart' | echohl None
       endif
     endif
   endif
@@ -379,7 +392,7 @@ command! -nargs=0 CocListResume   :call coc#rpc#notify('listResume', [])
 command! -nargs=0 CocPrev         :call coc#rpc#notify('listPrev', [])
 command! -nargs=0 CocNext         :call coc#rpc#notify('listNext', [])
 command! -nargs=0 CocDisable      :call s:Disable()
-command! -nargs=0 CocEnable       :call s:Enable()
+command! -nargs=0 CocEnable       :call s:Enable(0)
 command! -nargs=0 CocConfig       :call s:OpenConfig()
 command! -nargs=0 CocLocalConfig  :call coc#rpc#notify('openLocalConfig', [])
 command! -nargs=0 CocRestart      :call coc#rpc#restart()
@@ -395,7 +408,7 @@ command! -nargs=0 CocUpdate       :call coc#util#update_extensions(1)
 command! -nargs=0 -bar CocUpdateSync   :call coc#util#update_extensions()
 command! -nargs=* -bar -complete=custom,s:InstallOptions CocInstall   :call coc#util#install_extension([<f-args>])
 
-call s:Enable()
+call s:Enable(1)
 call s:Hi()
 
 vnoremap <Plug>(coc-range-select)          :<C-u>call       CocAction('rangeSelect',     visualmode(), v:true)<CR>

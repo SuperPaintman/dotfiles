@@ -149,6 +149,11 @@ Plug 'easymotion/vim-easymotion'
 " See: https://github.com/airblade/vim-gitgutter
 Plug 'airblade/vim-gitgutter'
 
+" Vim plugin for C/C++/ObjC semantic highlighting using cquery, ccls, or
+" clangd.
+" See: https://github.com/jackguo380/vim-lsp-cxx-highlight
+Plug 'jackguo380/vim-lsp-cxx-highlight'
+
 " True Sublime Text style multiple selections for Vim.
 " See: https://github.com/terryma/vim-multiple-cursors
 " Plug 'terryma/vim-multiple-cursors'
@@ -197,6 +202,16 @@ if exists("g:colors_name") && g:colors_name == "monokai"
   highlight CocHighlightText ctermbg=236 ctermfg=231 guibg=#383a3e guifg=#FFFFFF
 endif
 
+" Custom colors for C++ semantic highlighting.
+if exists("g:colors_name") && g:colors_name == "monokai"
+  highlight cInclude ctermfg=197 guifg=#F92772
+  highlight cDefine ctermfg=197 guifg=#F92772
+  highlight cThis ctermfg=141 guifg=#AE81FF
+  highlight LspCxxHlSymNamespace ctermfg=252 guifg=#E8E8E3
+  highlight LspCxxHlSymClass ctermfg=81 guifg=#66D9EF
+  " highlight LspCxxHlSymClass ctermfg=148 guifg=#A6E22D
+endif
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Functions.
@@ -222,6 +237,32 @@ function s:show_documentation()
   else
     call CocAction('doHover')
   endif
+endfunction
+
+function s:fix_c_syntax()
+  " Operators.
+  for token in [
+    \"+",
+    \"-",
+    \"*",
+    \"/",
+    \"%",
+    \"=",
+    \":",
+    \"?",
+    \"!",
+    \"&",
+    \"|",
+    \"\\~",
+    \"\\.",
+    \"<",
+    \">"
+    \]
+    execute 'syntax match Operator "' . token . '"'
+  endfor
+
+  " `this`.
+  syntax keyword cThis this
 endfunction
 
 
@@ -256,6 +297,11 @@ augroup END
 augroup highlight_symbol_and_references
   autocmd!
   autocmd CursorHold * silent call CocActionAsync('highlight')
+augroup END
+
+augroup fix_c_syntax_on_syntax
+  autocmd!
+  autocmd Syntax cpp call s:fix_c_syntax()
 augroup END
 
 

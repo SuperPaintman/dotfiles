@@ -93,6 +93,19 @@ function! coc#util#cursor()
   return [pos[1] - 1, strchars(content)]
 endfunction
 
+" close all float/popup window
+function! coc#util#close_floats() abort
+  if s:is_vim && exists('*popup_clear')
+    call popup_clear()
+  elseif has('nvim')
+    for id in nvim_list_wins()
+      if !empty(nvim_win_get_config(id)['relative'])
+        call nvim_win_close(id, 1)
+      endif
+    endfor
+  endif
+endfunction
+
 function! coc#util#close_win(id)
   if s:is_vim && exists('*popup_close')
     if !empty(popup_getpos(a:id))
@@ -206,6 +219,7 @@ function! coc#util#create_float_win(winid, bufnr, config) abort
     let winid = nvim_open_win(bufnr, 0, a:config)
     call setwinvar(winid, '&foldcolumn', 1)
     call setwinvar(winid, '&winhl', 'Normal:CocFloating,NormalNC:CocFloating,FoldColumn:CocFloating')
+    call setwinvar(winid, '&signcolumn', 'no')
   endif
   if winid <= 0
     return null
@@ -217,7 +231,6 @@ function! coc#util#create_float_win(winid, bufnr, config) abort
   call setwinvar(winid, '&cursorcolumn', 0)
   call setwinvar(winid, '&cursorline', 0)
   call setwinvar(winid, '&colorcolumn', 0)
-  call setwinvar(winid, '&signcolumn', 'no')
   call setwinvar(winid, 'float', 1)
   call setwinvar(winid, '&wrap', 1)
   call setwinvar(winid, '&linebreak', 1)
@@ -307,20 +320,17 @@ function! coc#util#job_command()
     echohl Error | echom '[coc.nvim] "'.node.'" is not executable, checkout https://nodejs.org/en/download/' | echohl None
     return
   endif
-  if filereadable(s:root.'/lib/attach.js') && !get(g:, 'coc_force_bundle', 0)
+  if filereadable(s:root.'/bin/server.js') && !get(g:, 'coc_force_bundle', 0)
+    if !filereadable(s:root.'/lib/attach.js')
+      echohl Error | echom '[coc.nvim] javascript bundle not found, running :call coc#util#install()' | echohl None
+      call coc#util#install()
+      return
+    endif
     "use javascript from lib
     return [node] + get(g:, 'coc_node_args', ['--no-warnings']) + [s:root.'/bin/server.js']
   else
     if !filereadable(s:root.'/build/index.js')
-      if isdirectory(s:root.'/src')
-        if get(g:, 'coc_force_bundle', 0)
-          echohl Error | echom '[coc.nvim] build/index.js not found, use webpack to create bundle' | echohl None
-        else
-          echohl Error | echom '[coc.nvim] javascript file not found, use "yarn install --frozen-lockfile" to compile' | echohl None
-        endif
-      else
-        echohl Error | echom '[coc.nvim] build/index.js not found, reinstall coc.nvim to fix.' | echohl None
-      endif
+      echohl Error | echom '[coc.nvim] build/index.js not found, reinstall coc.nvim to fix it.' | echohl None
       return
     endif
     return [node] + get(g:, 'coc_node_args', ['--no-warnings']) + [s:root.'/build/index.js']
@@ -417,11 +427,18 @@ function! coc#util#get_bufoptions(bufnr) abort
   if !bufloaded(a:bufnr) | return v:null | endif
   let bufname = bufname(a:bufnr)
   let buftype = getbufvar(a:bufnr, '&buftype')
+  let previewwindow = 0
+  let winid = bufwinid(a:bufnr)
+  if winid != -1
+    let previewwindow = getwinvar(winid, '&previewwindow', 0)
+  endif
   return {
         \ 'bufname': bufname,
         \ 'size': buftype ==# '' ? getfsize(bufname) : -1,
         \ 'eol': getbufvar(a:bufnr, '&eol'),
         \ 'buftype': buftype,
+        \ 'winid': winid,
+        \ 'previewwindow': previewwindow == 0 ? v:false : v:true,
         \ 'variables': s:variables(a:bufnr),
         \ 'fullpath': empty(bufname) ? '' : fnamemodify(bufname, ':p'),
         \ 'filetype': getbufvar(a:bufnr, '&filetype'),
@@ -811,6 +828,7 @@ function! coc#util#vim_info()
         \ 'guicursor': &guicursor,
         \ 'vimCommands': get(g:, 'coc_vim_commands', []),
         \ 'textprop': has('textprop') && has('patch-8.1.1719') && !has('nvim') ? v:true : v:false,
+        \ 'disabledSources': get(g:, 'coc_sources_disable_map', {}),
         \}
 endfunction
 
@@ -902,10 +920,12 @@ function! coc#util#open_url(url)
   endif
 endfunction
 
-function! coc#util#install(...) abort
-  echohl Error 
-  echom '[coc.nvim] You have to build coc.nvim or use release branch, install script is removed!' 
-  echohl None
+function! coc#util#install() abort
+  call coc#util#open_terminal({
+        \ 'cwd': s:root,
+        \ 'cmd': 'yarn install --frozen-lockfile',
+        \ 'autoclose': 0,
+        \ })
 endfunction
 
 function! coc#util#do_complete(name, opt, cb) abort
@@ -920,15 +940,9 @@ function! coc#util#extension_root() abort
     return s:root.'/src/__tests__/extensions'
   endif
   if !empty(get(g:, 'coc_extension_root', ''))
-    echohl WarningMsg | echon "g:coc_extension_root variable is deprecated, use g:coc_data_home as parent folder of extensions." | echohl None
-    let folder = resolve(expand(g:coc_extension_root))
-  else
-    let folder = coc#util#get_data_home().'/extensions'
+    echohl Error | echon 'g:coc_extension_root not used any more, use g:coc_data_home instead' | echohl None
   endif
-  if !isdirectory(folder)
-    echohl MoreMsg | echom '[coc.nvim] creating extensions directory: '.folder | echohl None
-    call mkdir(folder, "p", 0755)
-  endif
+  let folder = coc#util#get_data_home().'/extensions'
   return folder
 endfunction
 
