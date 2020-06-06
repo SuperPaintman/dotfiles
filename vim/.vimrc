@@ -239,7 +239,7 @@ let g:NERDTreeMouseMode = 3 " Single click.
 let g:NERDTreeShowHidden = 1
 
 "" Sets the window size when the NERDTree is opened.
-let g:NERDTreeWinSize = 20
+let g:NERDTreeWinSize = 30
 
 "" Disables display of the 'Bookmarks' label and 'Press ? for help' text.
 let g:NERDTreeMinimalUI = 1
@@ -277,6 +277,11 @@ let g:undotree_ShortIndicators = 1
 " vim-airline.
 " See: https://github.com/vim-airline/vim-airline/blob/master/doc/airline.txt
 let g:airline_powerline_fonts = 1
+
+let g:airline_theme = "dark"
+
+" Enable/disable enhanced tabline.
+let g:airline#extensions#tabline#enabled = 1
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
