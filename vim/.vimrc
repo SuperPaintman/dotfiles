@@ -388,6 +388,9 @@ vmap <C-_> <Plug>NERDCommenterToggle<CR>gv
 "" Escape.
 inoremap jk <Esc>
 
+" Close popup window on <Esc>.
+inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
+
 " coc.nvim.
 "" Use tab for trigger completion with characters ahead and navigate.
 inoremap <silent><expr> <TAB>
@@ -397,7 +400,7 @@ inoremap <silent><expr> <TAB>
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 "" Use <cr> to confirm completion.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Operator-pending mode.
 "" EasyMotion.
