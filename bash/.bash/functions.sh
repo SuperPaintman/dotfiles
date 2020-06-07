@@ -36,6 +36,10 @@ lfcd() {
     fi
 }
 
+:q() {
+  exit 0
+}
+
 # Docker.
 drmall() {
     local funcname="$(_get_funcname)"
