@@ -184,7 +184,7 @@ endif
 highlight CursorLineNR cterm=bold
 
 " Whitespaces.
-highlight SpecialKey ctermbg=NONE ctermfg=59 guifg=#75715E
+highlight SpecialKey ctermbg=NONE ctermfg=239 guifg=#75715E
 
 " TODO(SuperPaintman): add custom colors for JavaScript and Markdown.
 " if exists("g:colors_name") && g:colors_name == "monokai"
@@ -203,6 +203,8 @@ if exists("g:colors_name") && g:colors_name == "monokai"
 endif
 
 " Custom colors for C++ semantic highlighting.
+highlight default link cOperator Operator
+
 if exists("g:colors_name") && g:colors_name == "monokai"
   highlight cInclude ctermfg=197 guifg=#F92772
   highlight cDefine ctermfg=197 guifg=#F92772
@@ -241,25 +243,11 @@ endfunction
 
 function s:fix_c_syntax()
   " Operators.
-  for token in [
-    \"+",
-    \"-",
-    \"*",
-    \"/",
-    \"%",
-    \"=",
-    \":",
-    \"?",
-    \"!",
-    \"&",
-    \"|",
-    \"\\~",
-    \"\\.",
-    \"<",
-    \">"
-    \]
-    execute 'syntax match Operator "' . token . '"'
-  endfor
+  "" - + % < > ~ ! & | ^ * = ? : .
+  syntax match cOperator /[-+%<>~!&|^*=?:.]/
+
+  "" /
+  syntax match cOperator /\/\%(\ze[^/*]\)/
 
   " `this`.
   syntax keyword cThis this
