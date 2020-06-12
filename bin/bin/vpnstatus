@@ -18,7 +18,7 @@ ip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 
 # Find VPN config.
 for i in $HOME/.openvpn/*.conf; do
-    vpn_ip="$(cat ~/.openvpn/server.conf | grep remote | awk '{print $2}')"
+    vpn_ip="$(cat "$i" | grep remote | awk '{print $2}')"
     vpn_name="$(basename "$i" '.conf')"
 
     if [ "$ip" = "$vpn_ip" ]; then
