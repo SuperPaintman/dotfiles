@@ -24,6 +24,7 @@ local dpi = require("beautiful.xresources").apply_dpi
 local keys = require("keys")
 local cpu_widget = require("widgets.cpu")
 local ram_widget = require("widgets.ram")
+local wifi_status_widget = require("widgets.wifi_status")
 local vpn_status_widget = require("widgets.vpn_status")
 local telegram_widget = require("widgets.telegram")
 
@@ -410,6 +411,7 @@ awful.screen.connect_for_each_screen(
 
         s.mycpu = cpu_widget()
         s.myram = ram_widget()
+        s.mywifi_status = wifi_status_widget()
         s.myvpn_status = vpn_status_widget()
         s.mytelegram = telegram_widget()
 
@@ -435,6 +437,8 @@ awful.screen.connect_for_each_screen(
                 widget_margin_horizontal(s.myseparator, dpi(12)),
                 widget_margin_horizontal(s.mycpu, dpi(6)),
                 widget_margin_horizontal(s.myram, dpi(6)),
+                widget_margin_horizontal(s.myseparator, dpi(12)),
+                widget_margin_horizontal(s.mywifi_status, dpi(6)),
                 widget_margin_horizontal(s.myseparator, dpi(12)),
                 widget_margin_horizontal(s.myvpn_status, dpi(6)),
                 widget_margin_horizontal(s.myseparator, dpi(12)),

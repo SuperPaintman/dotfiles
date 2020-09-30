@@ -88,7 +88,8 @@ for connection in $wifi_connections; do
             ;;
     esac
 
-    safe_conn_name="$(echo "$conn_name" | tr ' ' '_' | tr -cd 'A-Za-zА-Яа-я0-9\-\_')"
+    # safe_conn_name="$(echo "$conn_name" | tr ' ' '_' | tr -cd 'A-Za-zА-Яа-я0-9\-\_')"
+    safe_conn_name="$(echo "$conn_name" | tr ' ' '_' | tr -cd 'A-Za-z0-9\-\_')"
 
     signal="$(get_signal "$conn_name")"
     echo "connected" "$safe_conn_name" "$signal"
