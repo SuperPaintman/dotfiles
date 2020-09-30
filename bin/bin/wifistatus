@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+
+# See: https://developer.gnome.org/NetworkManager/stable/nmcli.html
+
+set -e
+set -u
+set -o pipefail
+
+# List of Wifi networks
+# ```sh
+# $ nmcli device wifi list --rescan yes
+# ````
+
+# Lists all currently active connections.
+# ```sh
+# $ nmcli connection show --active
+# ```
+
+# Connect to the Wifi.
+# ```sh
+# $ sudo nmcli device wifi connect "$SSID" --ask
+#
+# $ sudo nmcli device wifi connect "$SSID"
+# ```
+
+# Helpers.
+get_signal() {
+    local name="$1"
+    if [ "$name" = "" ]; then
+        return 1
+    fi
+
+    wifi_networks=$(
+        nmcli \
+            --colors no \
+            --terse \
+            --mode tabular \
+            --fields ssid,signal \
+            device wifi list
+    )
+    if [ ! "$?" = "0" ]; then
+        return "$?"
+    fi
+
+    IFS=$'\n'
+    for net in $wifi_networks; do
+        IFS=$':' && values=($net)
+
+        net_ssid="${values[0]}"
+        net_signal="${values[1]}"
+
+        if [ "$net_ssid" = "$name" ]; then
+            echo "$net_signal"
+            return 0
+        fi
+    done
+    unset IFS
+
+    echo "0"
+    return 1
+}
+
+wifi_connections="$(
+    nmcli \
+        --colors no \
+        --terse \
+        --mode tabular \
+        --fields name,type \
+        connection show --active
+)"
+if [ ! "$?" = "0" ]; then
+    exit "$?"
+fi
+
+IFS=$'\n'
+for connection in $wifi_connections; do
+    IFS=$':' && values=($connection)
+
+    conn_name="${values[0]}"
+    conn_type="${values[1]}"
+
+    case "$conn_type" in
+        *wireless*)
+            ;;
+
+        *)
+            continue
+            ;;
+    esac
+
+    safe_conn_name="$(echo "$conn_name" | tr ' ' '_' | tr -cd 'A-Za-zА-Яа-я0-9\-\_')"
+
+    signal="$(get_signal "$conn_name")"
+    echo "connected" "$safe_conn_name" "$signal"
+    exit 0
+done
+unset IFS
+
+echo "disconnected"
+exit 0

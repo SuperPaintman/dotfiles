@@ -70,7 +70,7 @@ fi
 
 IFS=$'\n'
 for net in $wifi_networks; do
-    IFS=$':' && values=($(echo "$net"))
+    IFS=$':' && values=($net)
 
     net_active="${values[0]}"
     net_ssid="${values[1]}"
