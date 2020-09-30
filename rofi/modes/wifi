@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+
+# See: https://developer.gnome.org/NetworkManager/stable/nmcli.html
+
+source ~/.config/rofi/lib/colors.sh
+
+# Constants.
+color_connected="$color_green"
+color_disconnected="$color_red"
+color_signal_perfect="$color_green"
+color_signal_good="$color_blue"
+color_signal_ok="$color_yellow"
+color_signal_bad="$color_red"
+
+signal_perfect="90"
+signal_good="80"
+signal_ok="50"
+
+# Helpers.
+rofi_set() {
+    echo -en "\0""$1""\x1f""$2""\n"
+}
+
+color() {
+    if [ "$#" = 0 ]; then
+        return 1
+    fi
+
+    local clr="$1"
+
+    echo "<span color='$clr'>${@:2}</span>"
+}
+
+option() {
+    echo $@
+}
+
+# Main.
+rofi_set "markup-rows" "true"
+
+extract_wifi_ssid() {
+    echo "$@" | awk 'match($0, "^<span[^>]*>([^<]+?)<\\/span>", arr) { print arr[1] }'
+}
+
+if [ ! "$@" = "" ]; then
+    # net_ssid="$(extract_wifi_ssid "$@")"
+    # if [ "$net_ssid" = "" ]; then
+    #     exit 1
+    # fi
+
+    # nmcli device wifi connect name "$net_ssid"
+    # if [ ! "$?" = "0" ]; then
+    #     exit "$?"
+    # fi
+
+    exit 0
+fi
+
+wifi_networks=$(
+    nmcli \
+        --colors no \
+        --terse \
+        --mode tabular \
+        --fields active,ssid,signal,bars \
+        device wifi list
+)
+if [ ! "$?" = "0" ]; then
+    exit "$?"
+fi
+
+IFS=$'\n'
+for net in $wifi_networks; do
+    IFS=$':' && values=($(echo "$net"))
+
+    net_active="${values[0]}"
+    net_ssid="${values[1]}"
+    net_signal="${values[2]}"
+    net_bars="${values[3]}"
+
+    if [ "$net_active" = "yes" ]; then
+        net_ssid="$(color "$color_connected" "$net_ssid")"
+    else
+        net_ssid="$(color "$color_disconnected" "$net_ssid")"
+    fi
+
+    if ((net_signal >= signal_perfect)); then
+        net_bars="$(color "$color_signal_perfect" "$net_bars")"
+    elif ((net_signal >= signal_good)); then
+        net_bars="$(color "$color_signal_good" "$net_bars")"
+    elif ((net_signal >= signal_ok)); then
+        net_bars="$(color "$color_signal_ok" "$net_bars")"
+    else
+        net_bars="$(color "$color_signal_bad" "$net_bars")"
+    fi
+
+    option "${net_ssid} <span size='x-small'>(${net_bars} ${net_signal}%)</span>"
+done
+unset IFS

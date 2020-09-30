@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -e
+
+rofi -show wifi \
+     -modi wifi:~/.config/rofi/modes/wifi
