@@ -37,7 +37,7 @@ lfcd() {
 }
 
 :q() {
-  exit 0
+    exit 0
 }
 
 # Docker.

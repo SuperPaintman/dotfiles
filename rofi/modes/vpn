@@ -28,7 +28,7 @@ option() {
 
 # Main.
 res=($(~/bin/vpnstatus))
-if [ ! "$?" = 0"" ]; then
+if [ ! "$?" = "0" ]; then
     exit "$?"
 fi
 

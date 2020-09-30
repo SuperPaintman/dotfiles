@@ -4,7 +4,7 @@
 export PATH="$HOME/.cargo/bin:$PATH"
 
 # Go
-if [[ ! -z "$GOPATH" ]]; then
+if [[ -n $GOPATH ]]; then
     export PATH="$PATH:$GOPATH/bin"
 fi
 
