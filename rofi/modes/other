@@ -1,0 +1,62 @@
+#!/usr/bin/env bash
+
+# Constants.
+declare -A options
+options["VPN"]="$HOME/.config/rofi/modes/vpn"
+options["WiFi"]="$HOME/.config/rofi/modes/wifi"
+
+options_order=(
+    "VPN"
+    "WiFi"
+)
+
+rofi_context_filename="/tmp/rofi-$USER-context-other"
+
+# Helpers.
+rofi_set() {
+    echo -en "\0""$1""\x1f""$2""\n"
+}
+
+color() {
+    if [ "$#" = 0 ]; then
+        return 1
+    fi
+
+    local clr="$1"
+
+    echo "<span color='$clr'>${@:2}</span>"
+}
+
+option() {
+    echo $@
+}
+
+# Main.
+if [ ! "$@" = "" ]; then
+    executable="${options["$@"]}"
+    arg=""
+
+    # Use previous option if we have an context file.
+    if [ -f "$rofi_context_filename" ]; then
+        ctx="$(cat "$rofi_context_filename")"
+        executable="${options["$ctx"]}"
+        arg="$@"
+    else
+        echo "$@" > "$rofi_context_filename"
+    fi
+
+    if [ "$executable" = "" ]; then
+        rm -f "$rofi_context_filename"
+        exit 1
+    fi
+
+    "$executable" "$arg"
+    exit "$?"
+fi
+
+rofi_set "markup-rows" "true"
+for key in ${options_order[@]}; do
+    option "$key"
+done
+
+rm -f "$rofi_context_filename"
