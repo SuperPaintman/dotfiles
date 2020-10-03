@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+# See: https://gist.github.com/reegnz/b9e40993d410b75c2d866441add2cb55
+
+set -e
+set -u
+set -o pipefail
+
+for executable in fzf; do
+    if ! which "$executable" > /dev/null 2>&1; then
+        echo "Please install $executable" 1>&2
+        exit 1
+    fi
+done
+
+if [[ $# == 0 ]] || [[ $1 == "-" ]]; then
+    input="$(mktemp)"
+    trap "rm -f $input" EXIT
+    cat /dev/stdin > "$input"
+else
+    input="$1"
+fi
+
+if [ ! -f "$input" ]; then
+    echo "No such file: $input" 1>&2
+    exit 1
+fi
+
+awk_program="$(
+    echo '' |
+        fzf \
+            --phony \
+            --preview-window='up:90%' \
+            --print-query \
+            --query '{print}' \
+            --preview "awk {q} $input"
+)"
+if [ "$?" != "0" ]; then
+    exit "$?"
+fi
+
+echo "$awk_program" 1>&2
+awk "$awk_program" "$input"
