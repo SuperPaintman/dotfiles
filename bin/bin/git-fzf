@@ -163,6 +163,7 @@ shell() {
 
         *)
             fatal "unknown key bindings: $1"
+            ;;
     esac
 }
 
@@ -174,7 +175,7 @@ shell-zsh() {
     local command="$1"
     local key="$2"
 
-    cat <<EOF
+    cat << EOF
 fzf-git-${command}-widget() {
     local result="\$(git-fzf ${command})"
     zle reset-prompt
