@@ -80,12 +80,8 @@ for connection in $wifi_connections; do
     conn_type="${values[1]}"
 
     case "$conn_type" in
-        *wireless*)
-            ;;
-
-        *)
-            continue
-            ;;
+        *wireless*) ;;
+        *) continue ;;
     esac
 
     # safe_conn_name="$(echo "$conn_name" | tr ' ' '_' | tr -cd 'A-Za-zА-Яа-я0-9\-\_')"

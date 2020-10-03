@@ -3,4 +3,4 @@
 set -e
 
 rofi -show wifi \
-     -modi wifi:~/.config/rofi/modes/wifi
+    -modi wifi:~/.config/rofi/modes/wifi

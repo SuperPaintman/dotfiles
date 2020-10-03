@@ -65,7 +65,7 @@ case "$1" in
         ;;
 esac
 
-osascript <<EOF
+osascript << EOF
 tell application "System Events"
     key code $keycode using {shift down, option down}
 end tell

@@ -13,7 +13,7 @@ for executable in fzf jq; do
     fi
 done
 
-if [[ "$#" == 0 ]] || [[ "$1" == "-" ]]; then
+if [[ $# == 0 ]] || [[ $1 == "-" ]]; then
     input="$(mktemp)"
     trap "rm -f $input" EXIT
     cat /dev/stdin > "$input"
@@ -30,8 +30,8 @@ fi
 # echo "$posible_paths"
 
 jq_path="$(
-    echo '' \
-        | fzf \
+    echo '' |
+        fzf \
             --phony \
             --preview-window='up:90%' \
             --print-query \

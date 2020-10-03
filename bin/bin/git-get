@@ -16,19 +16,19 @@ fi
 
 # Helpers.
 help() {
-    cat <<EOF
+    cat << EOF
 usage: git get <repo>
 EOF
 }
 
 fatal() {
-  echo "${color_red}fatal${color_reset}: $@."
+    echo "${color_red}fatal${color_reset}: $@."
 
-  echo
+    echo
 
-  help
+    help
 
-  exit 1
+    exit 1
 }
 
 parse_repository() {
@@ -38,7 +38,7 @@ parse_repository() {
 
     local repository="$1"
 
-    node <<EOF
+    node << EOF
 const repository = "$repository";
 
 const HTTP_LIKE_RE = /^http(?:s)?:\\/\\/([a-z0-9_\\-.]+)\\/([a-z0-9_\\-]+)\\/([a-z0-9_\\-]+)\\/?$/i;
