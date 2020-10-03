@@ -17,3 +17,9 @@ bindkey -M viins '^ ' autosuggest-accept
 if can fzf-share && [ -f "$(fzf-share)/key-bindings.zsh" ]; then
     source "$(fzf-share)/key-bindings.zsh"
 fi
+
+if can git-fzf; then
+    eval "$(git-fzf shell zsh status '^g^s')"
+    eval "$(git-fzf shell zsh branch '^g^b')"
+    eval "$(git-fzf shell zsh log '^g^l')"
+fi

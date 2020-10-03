@@ -23,6 +23,7 @@ The commands are:
     tag
     log
     remote
+    shell
     help
 EOF
 }
@@ -149,6 +150,42 @@ remote() {
         inline
 }
 
+shell() {
+    if [ "$#" = "0" ]; then
+        fatal "shell: shell is not selected"
+    fi
+
+    case "$1" in
+        zsh)
+            shift 1
+            shell-zsh $@
+            ;;
+
+        *)
+            fatal "unknown key bindings: $1"
+    esac
+}
+
+shell-zsh() {
+    if [ ! "$#" = "2" ]; then
+        fatal "bind zsh: argument count mismatch"
+    fi
+
+    local command="$1"
+    local key="$2"
+
+    cat <<EOF
+fzf-git-${command}-widget() {
+    local result="\$(git-fzf ${command})"
+    zle reset-prompt
+    LBUFFER+="\$result"
+}
+
+zle -N fzf-git-${command}-widget
+bindkey '${key}' fzf-git-${command}-widget
+EOF
+}
+
 if [ "$#" = 0 ]; then
     fatal_help
 fi
@@ -172,6 +209,11 @@ case "$1" in
 
     remote)
         remote
+        ;;
+
+    shell)
+        shift 1
+        shell $@
         ;;
 
     help)
