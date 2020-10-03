@@ -6,10 +6,12 @@ source ~/.config/rofi/lib/colors.sh
 declare -A options
 options["VPN"]="$HOME/.config/rofi/modes/vpn"
 options["WiFi"]="$HOME/.config/rofi/modes/wifi"
+options["Screenshot"]="$HOME/.config/rofi/modes/screenshot"
 
 options_order=(
     "VPN"
     "WiFi"
+    "Screenshot"
 )
 
 rofi_context_filename="/tmp/rofi-$USER-context-other"

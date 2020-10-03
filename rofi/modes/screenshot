@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+
+# Helpers.
+rofi_set() {
+    echo -en "\0""$1""\x1f""$2""\n"
+}
+
+option() {
+    echo $@
+}
+
+notify() {
+    if ! which notify-send > /dev/null 2>&1; then
+        return 0
+    fi
+
+    notify-send \
+        --urgency=low \
+        --expire-time=5000 \
+        "$1" "$2"
+}
+
+# Main.
+option_screen="Screen"
+option_area="Area"
+option_window="Window"
+
+if [ ! "$@" = "" ]; then
+    case "$@" in
+        "$option_screen")
+            screenshot_filename="$(~/bin/screenshot all)"
+            ;;
+
+        "$option_area")
+            screenshot_filename="$(~/bin/screenshot area)"
+            ;;
+
+        "$option_window")
+            screenshot_filename="$(~/bin/screenshot window)"
+            ;;
+
+        *)
+            exit 1
+            ;;
+    esac
+
+    if [ ! "$?" = "0" ]; then
+        exit "$?"
+    fi
+
+    notify "Screenshot was taken" "$screenshot_filename"
+    exit "$?"
+fi
+
+rofi_set "markup-rows" "true"
+option "$option_screen"
+option "$option_area"
+option "$option_window"

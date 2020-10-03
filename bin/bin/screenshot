@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+set -o pipefail
+
+# Constants.
+PICTURES_DIR="$HOME/Pictures"
+SCREENSHOTS_DIR="$PICTURES_DIR/Screenshots"
+
+SCREENSHOT_FILENAME_TEMPLATE='Screenshot_%Y-%m-%d-%H-%m-%S_$wx$h.png'
+SCROT_EXEC='mv $f '"$SCREENSHOTS_DIR"' && echo '"$SCREENSHOTS_DIR"'/$f'
+
+# Checks.
+if ! which scrot > /dev/null 2>&1; then
+    echo "Please install scrot" 1>&2
+    exit 1
+fi
+
+if [ ! -d "$PICTURES_DIR" ]; then
+    echo "Pictures dir does not exists" 1>&2
+    exit 1
+fi
+
+# Main.
+mkdir -p "$SCREENSHOTS_DIR"
+
+mode="${1:-screen}"
+
+case "$mode" in
+    "window" | "focused")
+        filename="$(
+            scrot "$SCREENSHOT_FILENAME_TEMPLATE" \
+                --focused \
+                --silent \
+                --exec "$SCROT_EXEC"
+        )"
+        ;;
+
+    "area" | "select")
+        filename="$(
+            scrot "$SCREENSHOT_FILENAME_TEMPLATE" \
+                --select \
+                --silent \
+                --freeze \
+                --exec "$SCROT_EXEC"
+        )"
+        ;;
+
+    "screen" | "all")
+        filename="$(
+            scrot "$SCREENSHOT_FILENAME_TEMPLATE" \
+                --silent \
+                --exec "$SCROT_EXEC"
+        )"
+        ;;
+
+    *)
+        echo "Unknown mode: $mode" 1>&2
+        exit 1
+        ;;
+esac
+
+if [ "$?" != "0" ]; then
+    exit "$?"
+fi
+
+echo "$filename"
