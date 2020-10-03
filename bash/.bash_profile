@@ -67,10 +67,13 @@ export HISTIGNORE="&:[ ]*:history:clear"
 shopt -s histappend
 shopt -s checkwinsize
 
-# Completion
-if [ -f ~/.bash/completion.sh ]; then source ~/.bash/completion.sh; fi
+# Key bindings.
+if [ -f ~/.bash/key-bindings.sh ]; then source ~/.bash/key-bindings.sh; fi
 
-# Show system information
+# Completions.
+if [ -f ~/.bash/completions.sh ]; then source ~/.bash/completions.sh; fi
+
+# Show system information.
 if can neofetch; then
     neofetch --no_config --config ~/.config/neofetch/config.conf
 fi

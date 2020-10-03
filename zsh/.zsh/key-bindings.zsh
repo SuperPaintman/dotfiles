@@ -13,3 +13,7 @@
 
 # Accepts the current `zsh-autosuggestions` suggestion.
 bindkey -M viins '^ ' autosuggest-accept
+
+if can fzf-share && [ -f "$(fzf-share)/key-bindings.zsh" ]; then
+    source "$(fzf-share)/key-bindings.zsh"
+fi
