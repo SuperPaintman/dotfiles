@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source ~/.config/rofi/lib/colors.sh
+
 # Constants.
 declare -A options
 options["VPN"]="$HOME/.config/rofi/modes/vpn"
@@ -32,7 +34,11 @@ option() {
 }
 
 # Main.
-if [ ! "$@" = "" ]; then
+devider="$(color "$color_black" "---")"
+
+back_option="$(color "$color_black_bright" "back")"
+
+if [ ! "$@" = "" ] && [ ! "$@" = "$back_option" ] && [ ! "$@" = "$devider" ]; then
     executable="${options["$@"]}"
     arg=""
 
@@ -51,7 +57,16 @@ if [ ! "$@" = "" ]; then
     fi
 
     "$executable" "$arg"
-    exit "$?"
+    if [ ! "$?" = "0" ]; then
+        exit "$?"
+    fi
+
+    if [ "$arg" = "" ]; then
+        option "$devider"
+        option "$back_option"
+    fi
+
+    exit 0
 fi
 
 rofi_set "markup-rows" "true"
