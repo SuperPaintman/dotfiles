@@ -7,7 +7,7 @@ set -o pipefail
 # Helpers.
 filter_bash_content() {
     while read filename; do
-        if grep '#!/usr/bin/env \(bash\|zsh\|sh\)' "$filename" > /dev/null; then
+        if head -n1 "$filename" | grep 'bash\|zsh\|sh' > /dev/null; then
             echo "$filename"
         fi
     done
