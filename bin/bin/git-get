@@ -22,11 +22,11 @@ EOF
 }
 
 fatal() {
-    echo "${color_red}fatal${color_reset}: $@."
+    echo "${color_red}fatal${color_reset}: $@." 1>&2
 
-    echo
+    echo 1>&2
 
-    help
+    help 1>&2
 
     exit 1
 }

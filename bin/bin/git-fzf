@@ -1,0 +1,186 @@
+#!/usr/bin/env bash
+
+# See: https://gist.github.com/junegunn/8b572b8d4b5eddd8b85e5f4d40f17236
+
+set -e
+set -u
+set -o pipefail
+
+# Checks.
+if ! which fzf > /dev/null 2>&1; then
+    echo "Please install fzf" 1>&2
+    exit 1
+fi
+
+# Helpers.
+help() {
+    cat << EOF
+usage: git fzf <command>
+
+The commands are:
+    status
+    branch
+    tag
+    log
+    remote
+    help
+EOF
+}
+
+fatal_help() {
+    if [ ! "$#" = 0 ]; then
+        echo "fatal: $@." 1>&2
+
+        echo 1>&2
+    fi
+
+    help 1>&2
+
+    exit 1
+}
+
+fatal() {
+    echo "fatal: $@." 1>&2
+
+    exit 1
+}
+
+inline() {
+    local i=0
+
+    while read item; do
+        if [ ! "$i" = "0" ]; then
+            echo -n " "
+        fi
+
+        echo -n "$item"
+
+        i="$((i + 1))"
+    done
+
+    echo
+}
+
+check_is_in_repo() {
+    if ! git rev-parse HEAD > /dev/null 2>&1; then
+        fatal "not a git repository"
+    fi
+}
+
+# Main.
+status() {
+    check_is_in_repo
+
+    git -c color.status=always status --short |
+        fzf \
+            --height 50% \
+            --border \
+            --ansi \
+            --multi \
+            --nth 2..,.. \
+            --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1})' |
+        cut -c4- |
+        sed 's/.* -> //' |
+        inline
+}
+
+branch() {
+    check_is_in_repo
+
+    git branch -a --color=always |
+        grep -v '/HEAD\s' |
+        sort |
+        fzf \
+            --height 50% \
+            --border \
+            --ansi \
+            --multi \
+            --tac \
+            --preview-window right:70% \
+            --preview 'git log --oneline --graph --date=short --color=always --pretty="format:%C(auto)%cd %h%d %s" $(sed s/^..// <<< {} | cut -d" " -f1)' |
+        sed 's/^..//' |
+        cut -d' ' -f1 |
+        sed 's#^remotes/##' |
+        inline
+}
+
+tag() {
+    check_is_in_repo
+
+    git tag --sort -version:refname |
+        fzf \
+            --height 50% \
+            --border \
+            --multi \
+            --preview-window right:70% \
+            --preview 'git show --color=always {}' |
+        inline
+}
+
+log() {
+    check_is_in_repo
+
+    git log --date=short --format="%C(green)%C(bold)%cd %C(auto)%h%d %s (%an)" --graph --color=always |
+        fzf \
+            --height 50% \
+            --border \
+            --ansi \
+            --no-sort \
+            --reverse \
+            --multi --bind 'ctrl-s:toggle-sort' \
+            --header 'Press CTRL-S to toggle sort' \
+            --preview 'grep -o "[a-f0-9]\{7,\}" <<< {} | xargs git show --color=always' |
+        grep -o "[a-f0-9]\{7,\}" |
+        inline
+}
+
+remote() {
+    check_is_in_repo
+
+    git remote -v |
+        awk '{print $1 "\t" $2}' |
+        uniq |
+        fzf \
+            --height 50% \
+            --border \
+            --tac \
+            --preview 'git log --oneline --graph --date=short --pretty="format:%C(auto)%cd %h%d %s" {1}' |
+        cut -d$'\t' -f1 |
+        inline
+}
+
+if [ "$#" = 0 ]; then
+    fatal_help
+fi
+
+case "$1" in
+    status)
+        status
+        ;;
+
+    branch)
+        branch
+        ;;
+
+    tag)
+        tag
+        ;;
+
+    log)
+        log
+        ;;
+
+    remote)
+        remote
+        ;;
+
+    help)
+        help
+        ;;
+
+    *)
+        fatal_help "unknown command: $1"
+        ;;
+esac
+
+exit "$?"
