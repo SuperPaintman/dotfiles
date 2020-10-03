@@ -26,9 +26,13 @@ if [ ! -f "$input" ]; then
     exit 1
 fi
 
+# posible_paths="$(jq -r 'paths(.?) | "." + join(".")' $input)"
+# echo "$posible_paths"
+
 jq_path="$(
     echo '' \
-        | fzf --phony \
+        | fzf \
+            --phony \
             --preview-window='up:90%' \
             --print-query \
             --preview "jq --color-output -r {q} $input"
