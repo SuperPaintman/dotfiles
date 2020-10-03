@@ -42,4 +42,4 @@ if [ "$?" != "0" ]; then
 fi
 
 echo "$jq_path" 1>&2
-jq --color-output -re "$jq_path" "$input"
+jq -re "$jq_path" "$input"
