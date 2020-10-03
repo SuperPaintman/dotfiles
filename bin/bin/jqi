@@ -26,7 +26,7 @@ if [ ! -f "$input" ]; then
     exit 1
 fi
 
-# posible_paths="$(jq -r 'paths(.?) | "." + join(".")' $input)"
+# posible_paths="$(jq -r 'paths(.?) | map(if (. | type) == "string" then "." + . else "[" + (. | tostring) + "]" end) | join("")' $input)"
 # echo "$posible_paths"
 
 jq_path="$(
