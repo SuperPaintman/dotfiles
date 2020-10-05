@@ -16,6 +16,8 @@ bindkey -M viins '^ ' autosuggest-accept
 
 if can fzf-share && [ -f "$(fzf-share)/key-bindings.zsh" ]; then
     source "$(fzf-share)/key-bindings.zsh"
+elif can brew && brew --prefix fzf > /dev/null 2>&1 && [ -f "$(brew --prefix fzf)/shell/key-bindings.zsh" ]; then
+    source "$(brew --prefix fzf)/shell/key-bindings.zsh"
 fi
 
 if can git-fzf; then

@@ -53,6 +53,7 @@ if is_osx; then
             "fd" \
             "lf" \
             "exa" \
+            "fzf" \
             "koekeishiya/formulae/skhd" \
             "koekeishiya/formulae/yabai"; do
             if ! brew ls --versions "$formula" > /dev/null 2>&1; then
