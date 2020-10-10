@@ -32,3 +32,5 @@ shfmt -i 4 -ci -sr -s -w \
             -and -not -path './bin/bin/styles' |
             filter_bash_content
     )
+
+nixpkgs-fmt $(find -type f -name '*.nix')
