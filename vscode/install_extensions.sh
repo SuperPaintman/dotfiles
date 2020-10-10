@@ -104,6 +104,11 @@ if ! has_extension "bbenoist" "Nix"; then
     get_extension "bbenoist" "Nix" "1.0.1"
 fi
 
+# python (ms-python)
+if ! has_extension "ms-python" "python"; then
+    get_extension "ms-python" "python" "2020.9.114305"
+fi
+
 # rust (rust-lang)
 if ! has_extension "rust-lang" "rust"; then
     get_extension "rust-lang" "rust" "0.7.8"
@@ -119,9 +124,9 @@ if ! has_extension "SuperPaintman" "monokai-extended"; then
     get_extension "SuperPaintman" "monokai-extended" "0.5.1"
 fi
 
-# jsdoc (lllllllqw)
-if ! has_extension "lllllllqw" "jsdoc"; then
-    get_extension "lllllllqw" "jsdoc" "1.0.3"
+# docthis (oouo-diogo-perdigao)
+if ! has_extension "oouo-diogo-perdigao" "docthis"; then
+    get_extension "oouo-diogo-perdigao" "docthis" "0.8.2"
 fi
 
 # llvm (RReverser)
@@ -142,4 +147,19 @@ fi
 # vscode-arduino (vsciot-vscode)
 if ! has_extension "vsciot-vscode" "vscode-arduino"; then
     get_extension "vsciot-vscode" "vscode-arduino" "0.2.29"
+fi
+
+# gitignore (codezombiech)
+if ! has_extension "codezombiech" "gitignore"; then
+    get_extension "codezombiech" "gitignore" "0.6.0"
+fi
+
+# rest-client (humao)
+if ! has_extension "humao" "rest-client"; then
+    get_extension "humao" "rest-client" "0.24.3"
+fi
+
+# partial-diff (ryu1kn)
+if ! has_extension "ryu1kn" "partial-diff"; then
+    get_extension "ryu1kn" "partial-diff" "1.4.1"
 fi

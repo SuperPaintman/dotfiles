@@ -70,6 +70,12 @@
       sha256 = "0zd0n9f5z1f0ckzfjr38xw2zzmcxg1gjrava7yahg5cvdcw6l35b";
     }
     {
+      name = "python";
+      publisher = "ms-python";
+      version = "2020.9.114305";
+      sha256 = "1vh0wvfvzszc58lw7dbl60knpm5l6rrsghfchhn5dvwyadx4a33h";
+    }
+    {
       name = "rust";
       publisher = "rust-lang";
       version = "0.7.8";
@@ -88,10 +94,10 @@
       sha256 = "1iispppb8rxsrnvc9pd1f5wm2ig2dcqa9j6jpqwarhmh5yvpnqy2";
     }
     {
-      name = "jsdoc";
-      publisher = "lllllllqw";
-      version = "1.0.3";
-      sha256 = "01vbrvnbf3g2wj7hmgwd3kdi5myfyfgylsxr334slvzb2w6h2s18";
+      name = "docthis";
+      publisher = "oouo-diogo-perdigao";
+      version = "0.8.2";
+      sha256 = "1v7njs8l283k0l05rn6zbm76hmk6dg2hgbkm36bdka27kxqnxacd";
     }
     {
       name = "llvm";
@@ -116,6 +122,24 @@
       publisher = "vsciot-vscode";
       version = "0.2.29";
       sha256 = "0q727mgncrcjlrag6aaa95h65sa7x7z23c8cxnjcpmkgfb2gcmin";
+    }
+    {
+      name = "gitignore";
+      publisher = "codezombiech";
+      version = "0.6.0";
+      sha256 = "0gnc0691pwkd9s8ldqabmpfvj0236rw7bxvkf0bvmww32kv1ia0b";
+    }
+    {
+      name = "rest-client";
+      publisher = "humao";
+      version = "0.24.3";
+      sha256 = "1pb30rxg5f0s20x1s8h51kblgyv6idnm50qm21sfv9n0vw00wipk";
+    }
+    {
+      name = "partial-diff";
+      publisher = "ryu1kn";
+      version = "1.4.1";
+      sha256 = "1r4kg4slgxncdppr4fn7i5vfhvzcg26ljia2r97n6wvwn8534vs9";
     }
   ]
 )
