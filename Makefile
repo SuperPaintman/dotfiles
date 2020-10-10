@@ -29,15 +29,20 @@ NIX_FILES := $(shell find -type f -name '*.nix')
 all:
 	:
 
+.PHONY: format
 format: format-shell format-nix
 
+.PHONY: format-shell
 format-shell:
 	@shfmt -i 4 -ci -sr -s -w $(SHELL_FILES)
 
+.PHONY: format-nix
 format-nix:
 	@nixpkgs-fmt $(NIX_FILES)
 
+.PHONY: generate
 generate: generate-configs
 
+.PHONY: generate-configs
 generate-configs:
 	@./scripts/generate-configs
