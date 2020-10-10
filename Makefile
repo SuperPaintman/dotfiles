@@ -41,8 +41,12 @@ format-nix:
 	@nixpkgs-fmt $(NIX_FILES)
 
 .PHONY: generate
-generate: generate-configs
+generate: generate-configs generate-vscode-extensions
 
 .PHONY: generate-configs
 generate-configs:
 	@./scripts/generate-configs
+
+.PHONY: generate-vscode-extensions
+generate-vscode-extensions:
+	@./scripts/generate-vscode-extensions

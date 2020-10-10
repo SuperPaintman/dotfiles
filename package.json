@@ -1,6 +1,7 @@
 {
   "private": true,
   "devDependencies": {
+    "execa": "4.0.3",
     "glob": "7.1.6",
     "handlebars": "4.7.6",
     "js-yaml": "3.13.1",

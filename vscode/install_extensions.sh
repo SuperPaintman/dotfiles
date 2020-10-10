@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+
+# This file is generated; DO NOT EDIT.
+
+set -e
+set -u
+set -o pipefail
+
+# Helpers.
+get_extension_dir() {
+    local publisher="$1"
+    local name="$2"
+
+    echo "$HOME/.vscode/extensions/${publisher}.${name}"
+}
+
+has_extension() {
+    local publisher="$1"
+    local name="$2"
+
+    local ext_dir="$(get_extension_dir "$publisher" "$name")"
+
+    if [ ! -d "$ext_dir" ]; then
+        return 1
+    fi
+
+    return 0
+}
+
+get_extension() {
+    local publisher="$1"
+    local name="$2"
+    local version="$3"
+
+    local ext_dir="$(get_extension_dir "$publisher" "$name")"
+    local ext_url="https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${name}/${version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
+    local tmp_ext_zip="$(mktemp -t --dry-run "${publisher}.${name}.XXXXXXXX.zip")"
+    local tmp_ext_dir="$(mktemp -t --dry-run "${publisher}.${name}.XXXXXXXX")"
+
+    trap "rm -f $tmp_ext_zip" EXIT
+    trap "rm -rf $tmp_ext_dir" EXIT
+
+    curl "$ext_url" -o "$tmp_ext_zip"
+    unzip "$tmp_ext_zip" -d "$tmp_ext_dir"
+
+    rm -rf "$ext_dir"
+    mv "${tmp_ext_dir}/extension" "$ext_dir"
+}
+
+mkdir -p "$HOME/.vscode/extensions"
+
+# cpptools (ms-vscode)
+if ! has_extension "ms-vscode" "cpptools"; then
+    get_extension "ms-vscode" "cpptools" "0.26.3"
+fi
+
+# clang-format (xaver)
+if ! has_extension "xaver" "clang-format"; then
+    get_extension "xaver" "clang-format" "1.9.0"
+fi
+
+# cmake (twxs)
+if ! has_extension "twxs" "cmake"; then
+    get_extension "twxs" "cmake" "0.0.17"
+fi
+
+# dart-code (Dart-Code)
+if ! has_extension "Dart-Code" "dart-code"; then
+    get_extension "Dart-Code" "dart-code" "3.11.0"
+fi
+
+# flutter (Dart-Code)
+if ! has_extension "Dart-Code" "flutter"; then
+    get_extension "Dart-Code" "flutter" "3.12.2"
+fi
+
+# Go (golang)
+if ! has_extension "golang" "Go"; then
+    get_extension "golang" "Go" "0.14.1"
+fi
+
+# language-haskell (justusadam)
+if ! has_extension "justusadam" "language-haskell"; then
+    get_extension "justusadam" "language-haskell" "3.3.0"
+fi
+
+# vscode-ghc-simple (dramforever)
+if ! has_extension "dramforever" "vscode-ghc-simple"; then
+    get_extension "dramforever" "vscode-ghc-simple" "0.1.22"
+fi
+
+# brittany (MaxGabriel)
+if ! has_extension "MaxGabriel" "brittany"; then
+    get_extension "MaxGabriel" "brittany" "0.0.9"
+fi
+
+# lua (sumneko)
+if ! has_extension "sumneko" "lua"; then
+    get_extension "sumneko" "lua" "0.17.0"
+fi
+
+# Nix (bbenoist)
+if ! has_extension "bbenoist" "Nix"; then
+    get_extension "bbenoist" "Nix" "1.0.1"
+fi
+
+# rust (rust-lang)
+if ! has_extension "rust-lang" "rust"; then
+    get_extension "rust-lang" "rust" "0.7.8"
+fi
+
+# vimL (fallenwood)
+if ! has_extension "fallenwood" "vimL"; then
+    get_extension "fallenwood" "vimL" "0.0.3"
+fi
+
+# monokai-extended (SuperPaintman)
+if ! has_extension "SuperPaintman" "monokai-extended"; then
+    get_extension "SuperPaintman" "monokai-extended" "0.5.1"
+fi
+
+# jsdoc (lllllllqw)
+if ! has_extension "lllllllqw" "jsdoc"; then
+    get_extension "lllllllqw" "jsdoc" "1.0.3"
+fi
+
+# llvm (RReverser)
+if ! has_extension "RReverser" "llvm"; then
+    get_extension "RReverser" "llvm" "0.0.3"
+fi
+
+# prettier-vscode (esbenp)
+if ! has_extension "esbenp" "prettier-vscode"; then
+    get_extension "esbenp" "prettier-vscode" "4.5.0"
+fi
+
+# quokka-vscode (WallabyJs)
+if ! has_extension "WallabyJs" "quokka-vscode"; then
+    get_extension "WallabyJs" "quokka-vscode" "1.0.291"
+fi
+
+# vscode-arduino (vsciot-vscode)
+if ! has_extension "vsciot-vscode" "vscode-arduino"; then
+    get_extension "vsciot-vscode" "vscode-arduino" "0.2.29"
+fi

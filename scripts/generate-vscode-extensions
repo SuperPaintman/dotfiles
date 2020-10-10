@@ -1,0 +1,169 @@
+#!/usr/bin/env node
+
+'use strict';
+/* Imports */
+const fs = require('fs');
+const path = require('path');
+const { promisify } = require('util');
+
+const execa = require('execa');
+const yaml = require('js-yaml');
+
+/* Helpers */
+function templateNix(config) {
+  const nixPackages = [];
+  const extensionsMarketplace = [];
+
+  for (const ext of config.extensions) {
+    if (ext.nix !== undefined) {
+      nixPackages.push(ext.nix.package);
+
+      continue;
+    }
+
+    extensionsMarketplace.push(
+      `
+{
+  name = ${JSON.stringify(ext.name)};
+  publisher = ${JSON.stringify(ext.publisher)};
+  version = ${JSON.stringify(ext.version)};
+  sha256 = ${JSON.stringify(ext.sha256)};
+}
+      `.trim()
+    );
+  }
+
+  const res = `
+# This file is generated; DO NOT EDIT.
+
+# See: https://nixos.wiki/wiki/Vscode
+{ pkgs, ... }:
+
+(
+  with pkgs.vscode-extensions; [
+    ${nixPackages.join('\n')}
+  ]
+) ++ (
+  pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+    ${extensionsMarketplace.join('\n')}
+  ]
+)
+  `;
+
+  return res.trim() + '\n';
+}
+
+function templateShell(config) {
+  const packages = [];
+
+  for (const ext of config.extensions) {
+    const extDir = `$HOME/.vscode/extensions/${ext.publisher}.${ext.name}`;
+    const extURL = `https://${ext.publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${ext.publisher}/extension/${ext.name}/${ext.version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage`;
+    const tmpExtZip = `/tmp/vscode-extensions-${ext.publisher}.${ext.name}-${ext.version}.zip`;
+    const tmpExtDir = `/tmp/vscode-extensions-${ext.publisher}.${ext.name}-${ext.version}`;
+
+    packages.push(
+      `
+# ${ext.name} (${ext.publisher})
+if ! has_extension ${JSON.stringify(ext.publisher)} ${JSON.stringify(
+        ext.name
+      )} ; then
+    get_extension  ${JSON.stringify(ext.publisher)} ${JSON.stringify(
+        ext.name
+      )} ${JSON.stringify(ext.version)}
+fi
+      `.trim()
+    );
+  }
+
+  const res = `
+#!/usr/bin/env bash
+
+# This file is generated; DO NOT EDIT.
+
+set -e
+set -u
+set -o pipefail
+
+# Helpers.
+get_extension_dir() {
+    local publisher="$1"
+    local name="$2"
+
+    echo "$HOME/.vscode/extensions/\${publisher}.\${name}"
+}
+
+has_extension() {
+    local publisher="$1"
+    local name="$2"
+
+    local ext_dir="$(get_extension_dir "$publisher" "$name")"
+
+    if [ ! -d "$ext_dir" ]; then
+        return 1
+    fi
+
+    return 0
+}
+
+get_extension() {
+    local publisher="$1"
+    local name="$2"
+    local version="$3"
+
+    local ext_dir="$(get_extension_dir "$publisher" "$name")"
+    local ext_url="https://\${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/\${publisher}/extension/\${name}/\${version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage";
+    local tmp_ext_zip="$(mktemp -t --dry-run "\${publisher}.\${name}.XXXXXXXX.zip")"
+    local tmp_ext_dir="$(mktemp -t --dry-run "\${publisher}.\${name}.XXXXXXXX")"
+
+    trap "rm -f $tmp_ext_zip" EXIT
+    trap "rm -rf $tmp_ext_dir" EXIT
+
+    curl "$ext_url" -o "$tmp_ext_zip"
+    unzip "$tmp_ext_zip" -d "$tmp_ext_dir"
+
+    rm -rf "$ext_dir"
+    mv "\${tmp_ext_dir}/extension" "$ext_dir"
+}
+
+mkdir -p "$HOME/.vscode/extensions"
+
+${packages.join('\n\n')}
+  `;
+
+  return res.trim() + '\n';
+}
+
+/* Init */
+const vscodeDir = path.resolve(__dirname, '../vscode');
+const extensionsConfigFilename = path.resolve(vscodeDir, './extensions.yml');
+const nixFilename = path.resolve(vscodeDir, './extensions.nix');
+const shellFilename = path.resolve(vscodeDir, './install_extensions.sh');
+
+const readFileAsync = promisify(fs.readFile);
+const writeFileAsync = promisify(fs.writeFile);
+const chmodAsync = promisify(fs.chmod);
+
+/* Main */
+async function main() {
+  // Load config.
+  const configContent = await readFileAsync(extensionsConfigFilename, 'utf-8');
+  const config = yaml.load(configContent);
+
+  // Process Nix template.
+  const nixResult = templateNix(config);
+  await writeFileAsync(nixFilename, nixResult);
+  await execa('make', ['format-nix']);
+
+  // Process Shell template.
+  const shellResult = templateShell(config);
+  await writeFileAsync(shellFilename, shellResult);
+  await chmodAsync(shellFilename, 0o755);
+  await execa('make', ['format-shell']);
+}
+
+main().catch((err) => {
+  console.error(err);
+
+  process.exit(1);
+});
