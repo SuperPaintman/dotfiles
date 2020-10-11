@@ -163,3 +163,8 @@ fi
 if ! has_extension "ryu1kn" "partial-diff"; then
     get_extension "ryu1kn" "partial-diff" "1.4.1"
 fi
+
+# jinjahtml (samuelcolvin)
+if ! has_extension "samuelcolvin" "jinjahtml"; then
+    get_extension "samuelcolvin" "jinjahtml" "0.15.0"
+fi

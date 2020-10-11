@@ -141,5 +141,11 @@
       version = "1.4.1";
       sha256 = "1r4kg4slgxncdppr4fn7i5vfhvzcg26ljia2r97n6wvwn8534vs9";
     }
+    {
+      name = "jinjahtml";
+      publisher = "samuelcolvin";
+      version = "0.15.0";
+      sha256 = "18mjabpzldsaz5r1sp94kwk28chrmifcr4aql0fag6yh2kms1jas";
+    }
   ]
 )
