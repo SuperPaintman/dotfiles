@@ -381,6 +381,12 @@
       "source.organizeImports": true
     }
   },
+  "[c]": {
+    "editor.defaultFormatter": "xaver.clang-format"
+  },
+  "[cpp]": {
+    "editor.defaultFormatter": "xaver.clang-format"
+  },
   "[handlebars]": {
     "editor.formatOnSave": false
   }
