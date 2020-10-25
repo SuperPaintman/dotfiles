@@ -40,6 +40,11 @@ lfcd() {
     exit 0
 }
 
+# Tmux.
+tmx() {
+    tmux attach-session > /dev/null 2>&1 || tmux new-session
+}
+
 # Docker.
 drmall() {
     local funcname="$(_get_funcname)"
