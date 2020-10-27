@@ -1,7 +1,13 @@
-let
-  merge = items: builtins.foldl' (res: item: res // item) {} items;
+{ isMacOS ? false }:
 
-  imports = items: merge (builtins.map import items);
+with builtins;
+
+let
+  macOSOnly = path: if isMacOS then path else null;
+
+  merge = items: foldl' (res: item: res // item) {} items;
+
+  imports = items: merge (map import (filter (item: item != null) items));
 in
 imports [
   ./alacritty
@@ -20,12 +26,12 @@ imports [
   ./prettier
   ./rofi
   ./sbt
-  ./skhd # OSX specific.
+  (macOSOnly ./skhd) # OSX specific.
   ./tmux
   ./vim
   ./vscode
   ./xresources
-  ./yabai # OSX specific.
+  (macOSOnly ./yabai) # OSX specific.
   ./yarn
   ./zsh
 ]
