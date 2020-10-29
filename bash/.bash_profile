@@ -75,5 +75,5 @@ if [ -f ~/.bash/completions.sh ]; then source ~/.bash/completions.sh; fi
 
 # Show system information.
 if can neofetch; then
-    neofetch --no_config --config ~/.config/neofetch/config.conf
+    neofetch --no_config --config "${XDG_CONFIG_HOME:-"$HOME/.config"}/neofetch/config.conf"
 fi

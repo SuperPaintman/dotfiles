@@ -15,25 +15,33 @@ can() {
     return "$?"
 }
 
+# Global env.
+# See: http://zsh.sourceforge.net/Intro/intro_3.html
+export ZDOTDIR="${ZDOTDIR:-"$HOME"}"
+export ZSH_FILES="${ZDOTDIR:-"$ZDOTDIR/.zsh"}"
+
 # Oh My ZSH.
-if [ -f  ~/.zsh/oh-my-zsh-config.zsh ]; then source ~/.zsh/oh-my-zsh-config.zsh; fi
+if [ -f "$ZSH_FILES/oh-my-zsh-config.zsh" ]; then source "$ZSH_FILES/oh-my-zsh-config.zsh"; fi
 
 # Init default bash config.
 if [ -f ~/.bashrc ]; then source ~/.bashrc; fi
 
+# Config.
+if [ -f "$ZSH_FILES/config.zsh" ]; then source "$ZSH_FILES/config.zsh"; fi
+
 # Functions.
-if [ -f ~/.zsh/functions.zsh ]; then source ~/.zsh/functions.zsh; fi
+if [ -f "$ZSH_FILES/functions.zsh" ]; then source "$ZSH_FILES/functions.zsh"; fi
 
 # Theme.
-if [ -f ~/.zsh/theme.zsh ]; then source ~/.zsh/theme.zsh; fi
+if [ -f "$ZSH_FILES/theme.zsh" ]; then source "$ZSH_FILES/theme.zsh"; fi
 
 # Key bindings.
-if [ -f ~/.zsh/key-bindings.zsh ]; then source ~/.zsh/key-bindings.zsh; fi
+if [ -f "$ZSH_FILES/key-bindings.zsh" ]; then source "$ZSH_FILES/key-bindings.zsh"; fi
 
 # Completions.
-if [ -f ~/.zsh/completions.zsh ]; then source ~/.zsh/completions.zsh; fi
+if [ -f "$ZSH_FILES/completions.zsh" ]; then source "$ZSH_FILES/completions.zsh"; fi
 
 # Show system information.
 if can neofetch; then
-    neofetch --no_config --config ~/.config/neofetch/config.conf
+    neofetch --no_config --config "${XDG_CONFIG_HOME:-"$HOME/.config"}/neofetch/config.conf"
 fi

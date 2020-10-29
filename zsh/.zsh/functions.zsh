@@ -2,5 +2,5 @@
 
 # Common.
 reload() {
-    source ~/.zshrc
+    source "$ZDOTDIR/.zshrc"
 }

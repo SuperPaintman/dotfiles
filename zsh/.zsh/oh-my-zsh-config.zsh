@@ -1,10 +1,10 @@
 #!/usr/bin/env zsh
 
 # Init.
-ZSH="$HOME/.oh-my-zsh"
+ZSH="$ZDOTDIR/.oh-my-zsh"
 
 # Oh My ZSH custom.
-ZSH_CUSTOM="$HOME/.oh-my-zsh-custom"
+ZSH_CUSTOM="$ZDOTDIR/.oh-my-zsh-custom"
 
 # Configs.
 DISABLE_AUTO_UPDATE="true"
