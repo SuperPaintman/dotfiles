@@ -5,10 +5,7 @@
   "editor.fontSize": 12,
   "editor.fontWeight": "normal",
   "editor.fontLigatures": false,
-  "editor.rulers": [
-    80,
-    120
-  ],
+  "editor.rulers": [80, 120],
   "editor.tabSize": 2,
   "editor.multiCursorModifier": "ctrlCmd",
   "editor.insertSpaces": true,
@@ -147,149 +144,55 @@
   "vim.disableAnnoyingNeovimMessage": true,
   "vim.insertModeKeyBindings": [
     {
-      "before": [
-        "j",
-        "k"
-      ],
-      "after": [
-        "<Esc>"
-      ]
+      "before": ["j", "k"],
+      "after": ["<Esc>"]
     }
   ],
   "vim.otherModesKeyBindingsNonRecursive": [
     // Easymotion
     {
-      "before": [
-        "<leader>",
-        "s",
-        "<character>"
-      ],
-      "after": [
-        "<leader>",
-        "<leader>",
-        "s",
-        "<character>"
-      ]
+      "before": ["<leader>", "s", "<character>"],
+      "after": ["<leader>", "<leader>", "s", "<character>"]
     },
     {
-      "before": [
-        "<leader>",
-        "f",
-        "<character>"
-      ],
-      "after": [
-        "<leader>",
-        "<leader>",
-        "f",
-        "<character>"
-      ]
+      "before": ["<leader>", "f", "<character>"],
+      "after": ["<leader>", "<leader>", "f", "<character>"]
     },
     {
-      "before": [
-        "<leader>",
-        "F",
-        "<character>"
-      ],
-      "after": [
-        "<leader>",
-        "<leader>",
-        "F",
-        "<character>"
-      ]
+      "before": ["<leader>", "F", "<character>"],
+      "after": ["<leader>", "<leader>", "F", "<character>"]
     },
     {
-      "before": [
-        "<leader>",
-        "t",
-        "<character>"
-      ],
-      "after": [
-        "<leader>",
-        "<leader>",
-        "t",
-        "<character>"
-      ]
+      "before": ["<leader>", "t", "<character>"],
+      "after": ["<leader>", "<leader>", "t", "<character>"]
     },
     {
-      "before": [
-        "<leader>",
-        "T",
-        "<character>"
-      ],
-      "after": [
-        "<leader>",
-        "<leader>",
-        "T",
-        "<character>"
-      ]
+      "before": ["<leader>", "T", "<character>"],
+      "after": ["<leader>", "<leader>", "T", "<character>"]
     },
     {
-      "before": [
-        "<leader>",
-        "w"
-      ],
-      "after": [
-        "<leader>",
-        "<leader>",
-        "w"
-      ]
+      "before": ["<leader>", "w"],
+      "after": ["<leader>", "<leader>", "w"]
     },
     {
-      "before": [
-        "<leader>",
-        "e"
-      ],
-      "after": [
-        "<leader>",
-        "<leader>",
-        "e"
-      ]
+      "before": ["<leader>", "e"],
+      "after": ["<leader>", "<leader>", "e"]
     },
     {
-      "before": [
-        "<leader>",
-        "g",
-        "e"
-      ],
-      "after": [
-        "<leader>",
-        "<leader>",
-        "g",
-        "e"
-      ]
+      "before": ["<leader>", "g", "e"],
+      "after": ["<leader>", "<leader>", "g", "e"]
     },
     {
-      "before": [
-        "<leader>",
-        "b"
-      ],
-      "after": [
-        "<leader>",
-        "<leader>",
-        "b"
-      ]
+      "before": ["<leader>", "b"],
+      "after": ["<leader>", "<leader>", "b"]
     },
     {
-      "before": [
-        "<leader>",
-        "j"
-      ],
-      "after": [
-        "<leader>",
-        "<leader>",
-        "j"
-      ]
+      "before": ["<leader>", "j"],
+      "after": ["<leader>", "<leader>", "j"]
     },
     {
-      "before": [
-        "<leader>",
-        "k"
-      ],
-      "after": [
-        "<leader>",
-        "<leader>",
-        "k"
-      ]
+      "before": ["<leader>", "k"],
+      "after": ["<leader>", "<leader>", "k"]
     }
   ],
   "vim.textwidth": 0,
@@ -326,9 +229,7 @@
   "go.inferGopath": true,
   "go.formatTool": "gofmt",
   "go.lintTool": "golangci-lint",
-  "go.lintFlags": [
-    "--fast"
-  ],
+  "go.lintFlags": ["--fast"],
   "go.gopath": "~/.go",
   "go.useLanguageServer": true,
   "go.languageServerExperimentalFeatures": {

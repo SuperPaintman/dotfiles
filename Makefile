@@ -1,13 +1,15 @@
+IGNORE_PATHS := \
+	'./zsh/.oh-my-zsh/**' \
+	'./zsh/.oh-my-zsh-custom/**' \
+	'./vim/.vim/bundle/**' \
+	'./vim/.vim/plugged/**' \
+	'./tmux/.tmux/plugins/**' \
+	'**/node_modules/**'
 SHELL_FILES := \
 	$(shell \
 		find . \
 			\( -type f -name '*.sh' -or -name '*.bash' -or -name '*.zsh' \) \
-			-and -not -path './zsh/.oh-my-zsh/**' \
-			-and -not -path './zsh/.oh-my-zsh-custom/**' \
-			-and -not -path './vim/.vim/bundle/**' \
-			-and -not -path './vim/.vim/plugged/**' \
-			-and -not -path './tmux/.tmux/plugins/**' \
-			-and -not -path '**/node_modules/**' \
+			$(addprefix -and -not -path , $(IGNORE_PATHS)) \
 	) \
 	$(shell \
 		filter_bash_content() { \
@@ -24,13 +26,20 @@ SHELL_FILES := \
 			-and -not -path './bin/bin/styles' | \
 			filter_bash_content \
 	)
-NIX_FILES := $(shell find -type f -name '*.nix')
+NIX_FILES := $(shell find . \
+	-type f -name '*.nix' \
+	$(addprefix -and -not -path , $(IGNORE_PATHS)) \
+)
+PRETTIER_FILES := $(shell find . \
+	-type f \( -name '*.js' -or -name '*.json' -or -name '*.yml' -or -name '*.md' \) \
+	$(addprefix -and -not -path , $(IGNORE_PATHS)) \
+)
 
 all:
 	:
 
 .PHONY: format
-format: format-shell format-nix
+format: format-shell format-nix format-prettier
 
 .PHONY: format-shell
 format-shell:
@@ -39,6 +48,10 @@ format-shell:
 .PHONY: format-nix
 format-nix:
 	@nixpkgs-fmt $(NIX_FILES)
+
+.PHONY: format-nix
+format-prettier:
+	@npx prettier --config ./prettier/.prettierrc.js --write $(PRETTIER_FILES)
 
 .PHONY: generate
 generate: generate-configs generate-vscode-extensions
