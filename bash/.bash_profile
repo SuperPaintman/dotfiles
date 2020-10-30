@@ -12,6 +12,19 @@ can() {
     return "$?"
 }
 
+# Global env.
+if [ -d "${XDG_CONFIG_HOME:-"$HOME/.config"}/bash" ]; then
+    export BASHDOTDIR="${BASHDOTDIR:-"${XDG_CONFIG_HOME:-"$HOME/.config"}/bash"}"
+else
+    export BASHDOTDIR="${BASHDOTDIR:-"$HOME"}"
+fi
+
+if [ "$BASHDOTDIR" = "$HOME" ]; then
+    export BASH_FILES="$HOME/.bash"
+else
+    export BASH_FILES="$BASHDOTDIR"
+fi
+
 # Start tmux.
 if can tmux; then
     if [ -z "$TMUX" ] && [ "$TERM_PROGRAM" = "iTerm.app" ]; then
@@ -37,19 +50,19 @@ if [ -x /usr/bin/dircolors ]; then
 fi
 
 # Env.
-if [ -f ~/.bash/env.sh ]; then source ~/.bash/env.sh; fi
+if [ -f "$BASH_FILES/env.sh" ]; then source "$BASH_FILES/env.sh"; fi
 
 # Path.
-if [ -f ~/.bash/path.sh ]; then source ~/.bash/path.sh; fi
+if [ -f "$BASH_FILES/path.sh" ]; then source "$BASH_FILES/path.sh"; fi
 
 # Functions.
-if [ -f ~/.bash/functions.sh ]; then source ~/.bash/functions.sh; fi
+if [ -f "$BASH_FILES/functions.sh" ]; then source "$BASH_FILES/functions.sh"; fi
 
 # Aliases.
-if [ -f ~/.bash/aliases.sh ]; then source ~/.bash/aliases.sh; fi
+if [ -f "$BASH_FILES/aliases.sh" ]; then source "$BASH_FILES/aliases.sh"; fi
 
 # Theme.
-if [ -f ~/.bash/theme.sh ]; then source ~/.bash/theme.sh; fi
+if [ -f "$BASH_FILES/theme.sh" ]; then source "$BASH_FILES/theme.sh"; fi
 
 
 # === Bash only ===
@@ -58,6 +71,13 @@ if [ -n "$ZSH_VERSION" ]; then
 fi
 
 # Bash history
+if [ -n "$XDG_DATA_HOME" ] && [ -d "$XDG_DATA_HOME" ]; then
+    if [ ! -d "$XDG_DATA_HOME/bash" ]; then
+        mkdir -p "$XDG_DATA_HOME/bash"
+    fi
+
+    export HISTFILE="$XDG_DATA_HOME/bash/bash_history"
+fi
 export HISTTIMEFORMAT='[%F %T] '
 export HISTCONTROL=ignoreboth
 export HISTSIZE=2000
@@ -68,10 +88,10 @@ shopt -s histappend
 shopt -s checkwinsize
 
 # Key bindings.
-if [ -f ~/.bash/key-bindings.sh ]; then source ~/.bash/key-bindings.sh; fi
+if [ -f "$BASH_FILES/key-bindings.sh" ]; then source "$BASH_FILES/key-bindings.sh"; fi
 
 # Completions.
-if [ -f ~/.bash/completions.sh ]; then source ~/.bash/completions.sh; fi
+if [ -f "$BASH_FILES/completions.sh" ]; then source "$BASH_FILES/completions.sh"; fi
 
 # Show system information.
 if can neofetch; then

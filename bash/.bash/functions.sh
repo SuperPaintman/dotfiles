@@ -10,7 +10,11 @@ _get_funcname() {
 
 # Common.
 reload() {
-    source ~/.bashrc
+    if [ "$BASHDOTDIR" = "$HOME" ]; then
+        source "$BASHDOTDIR/.bashrc"
+    else
+        source "$BASHDOTDIR/bashrc"
+    fi
 }
 
 nicediff() {
