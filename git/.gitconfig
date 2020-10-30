@@ -81,3 +81,7 @@
 
 [include]
 	path = ~/.gitconfig.local
+
+[include]
+	# path = $XDG_CONFIG_HOME/git/config.local
+	path = ~/.config/git/config.local
