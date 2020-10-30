@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+# Kill Process
+
+set -e
+set -u
+set -o pipefail
+
+for executable in fzf; do
+    if ! which "$executable" > /dev/null 2>&1; then
+        echo "Please install $executable" 1>&2
+        exit 1
+    fi
+done
+
+signal="${1:--9}"
+query="${2:-}"
+
+if [[ "$signal" != -* ]]; then
+    if [ -n "$query" ]; then
+        echo "wrong signal: $signal" 1>&2
+        exit 1
+    fi
+
+    query="$signal"
+    signal="-9"
+fi
+
+pids="$(
+    ps -ef |
+        sed 1d |
+        fzf \
+            --multi \
+            --header='[kill:process]' \
+            --query="$query" \
+            --bind='ctrl-a:select-all' \
+            --bind='ctrl-alt-a:deselect-all' |
+        awk '{print $2}'
+)"
+
+if [ -z "$pids" ]; then
+    exit 0
+fi
+
+echo "$pids" | xargs kill "$signal"
