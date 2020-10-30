@@ -67,7 +67,7 @@ bat "\$FILE_NAME" --color=always --style=changes,numbers --highlight-line "\$LIN
 EOF
 )"
 
-filename="$(
+result="$(
     echo '' |
         fzf \
             --phony \
@@ -75,6 +75,7 @@ filename="$(
             --no-sort \
             --tac \
             --bind "change:reload:$BIND_SCRIPT" \
+            --print-query \
             --preview "$PREVIEW_SCRIPT" |
         awk 'BEGIN { FS = ":" }; { print $1 }'
 )"
@@ -82,4 +83,5 @@ if [ "$?" != "0" ]; then
     exit "$?"
 fi
 
-echo "$filename"
+echo "$result" | sed -n 1p 1>&2
+echo "$result" | sed -n 2p
