@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+set -o pipefail
+
+for executable in fzf rg bat tput; do
+    if ! which "$executable" > /dev/null 2>&1; then
+        echo "Please install $executable" 1>&2
+        exit 1
+    fi
+done
+
+RG_FLAGS_COMMON="--color=always --smart-case"
+RG_FLAGS_BIND="$RG_FLAGS_COMMON --column --line-number --no-heading"
+RG_FLAGS_PREVIEW="$RG_FLAGS_COMMON -A1000 -B1000"
+
+BIND_SCRIPT="$(
+    cat << EOF
+QUERY="\$(echo {q})"
+
+if [ -z "\$QUERY" ]; then
+    exit 0
+fi
+
+rg $RG_FLAGS_BIND "\$QUERY" || true
+EOF
+)"
+
+PREVIEW_SCRIPT="$(
+    cat << EOF
+QUERY="\$(echo {q})"
+SELECTED="\$(echo {})"
+
+if [ -z "\$QUERY" ] || [ -z "\$SELECTED" ]; then
+    exit 0
+fi
+
+FILE_NAME="\$(echo "\$SELECTED" | awk 'BEGIN { FS = ":" }; { print \$1 }')"
+LINE_NUMBER="\$(echo "\$SELECTED" | awk 'BEGIN { FS = ":" }; { print \$2 }')"
+
+TERMINAL_HEIGHT="\$(tput lines)"
+OFFSET="\$(((TERMINAL_HEIGHT - 2 - 1) / 2))"
+RANGE_START="\$((LINE_NUMBER - OFFSET))"
+if ((RANGE_START < 0)); then
+    RANGE_START=0
+fi
+RANGE_END="\$((LINE_NUMBER + OFFSET))"
+RANGE="\$RANGE_START:\$RANGE_END"
+
+bat "\$FILE_NAME" --color=always --style=changes,numbers --highlight-line "\$LINE_NUMBER" --line-range "\$RANGE" | rg $RG_FLAGS_PREVIEW "\$QUERY"
+EOF
+)"
+
+filename="$(
+    echo '' |
+        fzf \
+            --phony \
+            --ansi \
+            --no-sort \
+            --tac \
+            --bind "change:reload:$BIND_SCRIPT" \
+            --preview "$PREVIEW_SCRIPT" |
+        awk 'BEGIN { FS = ":" }; { print $1 }'
+)"
+if [ "$?" != "0" ]; then
+    exit "$?"
+fi
+
+echo "$filename"
