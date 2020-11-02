@@ -73,7 +73,7 @@ if [ -f ~/.bash/key-bindings.sh ]; then source ~/.bash/key-bindings.sh; fi
 # Completions.
 if [ -f ~/.bash/completions.sh ]; then source ~/.bash/completions.sh; fi
 
-# Show system information.
-if can neofetch; then
+# Show system information. Do not show it in tmux.
+if [ -z "$TMUX" ] && can neofetch; then
     neofetch --no_config --config ~/.config/neofetch/config.conf
 fi
