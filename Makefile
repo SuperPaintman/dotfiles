@@ -31,7 +31,7 @@ NIX_FILES := $(shell find . \
 	$(addprefix -and -not -path , $(IGNORE_PATHS)) \
 )
 PRETTIER_FILES := $(shell find . \
-	-type f \( -name '*.js' -or -name '*.json' -or -name '*.yml' -or -name '*.md' \) \
+	-type f \( -name '*.js' -or -name '*.css' -or -name '*.json' -or -name '*.yml' -or -name '*.md' \) \
 	$(addprefix -and -not -path , $(IGNORE_PATHS)) \
 )
 
