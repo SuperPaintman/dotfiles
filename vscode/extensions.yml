@@ -27,6 +27,13 @@ extensions:
       version: "3.11.0"
       sha256: 0rgszz5iw6ja2cjmg3vl1m1a4392rkykcw2n7xskf1pgc73kf1h0
 
+    # Elm
+    ## Improving your Elm experience since 2019.
+    - name: elm-ls-vscode
+      publisher: Elmtooling
+      version: "1.5.2"
+      sha256: 180si30c26jmh397ish8p1il628fgq54fgs8p2y6861pacc49kxw
+
     # Flutter
     ## Flutter support and debugger for Visual Studio Code.
     - name: flutter

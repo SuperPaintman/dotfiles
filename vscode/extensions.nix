@@ -28,6 +28,12 @@
       sha256 = "0rgszz5iw6ja2cjmg3vl1m1a4392rkykcw2n7xskf1pgc73kf1h0";
     }
     {
+      name = "elm-ls-vscode";
+      publisher = "Elmtooling";
+      version = "1.5.2";
+      sha256 = "180si30c26jmh397ish8p1il628fgq54fgs8p2y6861pacc49kxw";
+    }
+    {
       name = "flutter";
       publisher = "Dart-Code";
       version = "3.12.2";

@@ -69,6 +69,11 @@ if ! has_extension "Dart-Code" "dart-code"; then
     get_extension "Dart-Code" "dart-code" "3.11.0"
 fi
 
+# elm-ls-vscode (Elmtooling)
+if ! has_extension "Elmtooling" "elm-ls-vscode"; then
+    get_extension "Elmtooling" "elm-ls-vscode" "1.5.2"
+fi
+
 # flutter (Dart-Code)
 if ! has_extension "Dart-Code" "flutter"; then
     get_extension "Dart-Code" "flutter" "3.12.2"
