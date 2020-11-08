@@ -1,11 +1,8 @@
 local textbox = require("wibox.widget.textbox")
-local watch = require("awful.widget.watch")
 
 local colors = require("colors")
 local underline = require("widgets.underline")
-
-
-local signal_name = "widgets::ram"
+local signal_name = require("daemons.ram").signal_name
 
 local ram = {}
 
@@ -33,18 +30,5 @@ local function new()
 
     return widget
 end
-
-watch(
-    'bash -c "free | grep -z Mem.*Swap.*"',
-    1,
-    function(_, stdout)
-        local total, used, free, shared, buff_cache, available, total_swap, used_swap, free_swap =
-            stdout:match('(%d+)%s*(%d+)%s*(%d+)%s*(%d+)%s*(%d+)%s*(%d+)%s*Swap:%s*(%d+)%s*(%d+)%s*(%d+)')
-
-        local value = used / total * 100
-
-        awesome.emit_signal(signal_name, value)
-    end
-)
 
 return setmetatable(ram, { __call = function(_, ...) return new(...) end })

@@ -4,93 +4,91 @@ require("mocks.awesome")
 require("mocks.awful")
 local mock_watch = require("mocks.awful.widget.watch")
 
-local cpu = require("daemons.cpu")
+local ram = require("daemons.ram")
 
-local proc_cpu_stat = [[cpu  3000000 1000000 1000000 10000000 100000 0 900000 0 0 0
+local free = [[              total        used        free      shared  buff/cache   available
+Mem:       10000000     6000000     4000000      400000     5000000     9000000
+Swap:       8000000           0     8000000
+]]
+
+local free_broken = [[              total        used        free      shared  buff/cache   available
+Mem:       16243776     5888208     4820552      414380     5535016
 ]]
 
 describe("daemons.cpu", function()
     describe("private", function()
-        describe("parse_proc_cpu_stat", function()
-            local parse_proc_cpu_stat = cpu._private.parse_proc_cpu_stat
+        describe("parse_free", function()
+            local parse_free = ram._private.parse_free
 
             context("valid input", function()
                 it("should work", function()
                     assert.has_no.errors(function()
-                        parse_proc_cpu_stat(proc_cpu_stat)
+                        parse_free(free)
                     end)
                 end)
 
                 it("should return parsed stats", function()
-                    local total, idle, ok = parse_proc_cpu_stat(proc_cpu_stat)
+                    local total, used, ok = parse_free(free)
 
                     assert.is_true(ok)
-                    assert.is.equal(total, 16000000)
-                    assert.is.equal(idle, 10000000)
+                    assert.is.equal(total, 10000000)
+                    assert.is.equal(used, 6000000)
                 end)
             end)
 
             for i, v in ipairs({
                 {"empty", ""},
                 {"nil", nil},
-                {"broken", "cpu  4700703 386 1133175 71768322 72618"},
+                {"broken", free_broken},
             }) do
                 local name, value = v[1], v[2]
 
                 context(name.." input", function()
                     it("should work", function()
                         assert.has_no.errors(function()
-                            parse_proc_cpu_stat(value)
+                            parse_free(value)
                         end)
                     end)
 
                     it("should return zero values", function()
-                        local total, idle, ok = parse_proc_cpu_stat(value)
+                        local total, used, ok = parse_free(value)
 
                         assert.is_false(ok)
                         assert.is.equal(total, 0)
-                        assert.is.equal(idle, 0)
+                        assert.is.equal(used, 0)
                     end)
                 end)
             end
         end)
 
         describe("calculate_usage", function()
-            local calculate_usage = cpu._private.calculate_usage
+            local calculate_usage = ram._private.calculate_usage
 
             it("should work", function()
                 assert.has_no.errors(function()
-                    calculate_usage(0, 0, 0, 0)
+                    calculate_usage(0, 0)
                 end)
             end)
 
-            context("zero previous values", function()
+            context("integer usage", function()
                 it("should return valid usage", function()
-                    local usage = calculate_usage(0, 0, 100, 5)
+                    local usage = calculate_usage(100, 10)
 
-                    assert.is.equal(usage, 95)
-                end)
-            end)
-
-            context("non-zero previous values", function()
-                it("should return valid usage", function()
-                    local usage = calculate_usage(100, 5, 120, 10)
-
-                    assert.is.equal(usage, 75)
+                    assert.is.equal(usage, 10)
                 end)
             end)
 
             context("float usage", function()
                 it("should return valid usage", function()
-                    local usage = calculate_usage(1000, 51, 1600, 600)
+                    local usage = calculate_usage(200, 1)
 
-                    assert.is.equal(usage, 8.5)
+                    assert.is.equal(usage, 0.5)
                 end)
             end)
 
-            context("unchanged values", function()
+            context("zero values", function()
                 it("should return valid usage", function()
-                    local usage = calculate_usage(100, 5, 100, 5)
+                    local usage = calculate_usage(0, 0)
 
                     assert.is.equal(usage, 0)
                 end)
@@ -121,27 +119,18 @@ describe("daemons.cpu", function()
             assert.spy(awesome.emit_signal).was_not.called()
 
             -- Valid first call.
-            w.callback(nil, proc_cpu_stat)
+            w.callback(nil, free)
             assert.spy(awesome.emit_signal).was.called(1)
-            assert.spy(awesome.emit_signal).was.called_with("daemons::cpu", 37.5)
+            assert.spy(awesome.emit_signal).was.called_with("daemons::ram", 60)
             awesome.emit_signal:clear()
 
             -- Valid second call.
-            w.callback(nil, [[cpu  4000000 1000000 1000000 11000000 100000 0 900000 0 0 0
+            w.callback(nil, [[              total        used        free      shared  buff/cache   available
+            Mem:       10000000     7000000     3000000      400000     5000000     9000000
+            Swap:       8000000           0     8000000
             ]])
             assert.spy(awesome.emit_signal).was.called(1)
-            assert.spy(awesome.emit_signal).was.called_with("daemons::cpu", 50)
-            awesome.emit_signal:clear()
-
-            -- Invalid third call.
-            w.callback(nil, nil)
-            assert.spy(awesome.emit_signal).was_not.called()
-
-            -- Valid fourth call.
-            w.callback(nil, [[cpu  5000000 1000000 1000000 12500000 100000 0 900000 0 0 0
-            ]])
-            assert.spy(awesome.emit_signal).was.called(1)
-            assert.spy(awesome.emit_signal).was.called_with("daemons::cpu", 40)
+            assert.spy(awesome.emit_signal).was.called_with("daemons::ram", 70)
             awesome.emit_signal:clear()
         end)
     end)
