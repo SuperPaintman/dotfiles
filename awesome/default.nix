@@ -5,5 +5,6 @@
   ".config/awesome/apps.lua".source = ./apps.lua;
   ".config/awesome/theme".source = ./theme;
   ".config/awesome/widgets".source = ./widgets;
+  ".config/awesome/daemons".source = ./daemons;
   ".config/awesome/autostart.sh".source = ./autostart.sh;
 }

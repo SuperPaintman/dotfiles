@@ -35,6 +35,19 @@ PRETTIER_FILES := $(shell find . \
 	$(addprefix -and -not -path , $(IGNORE_PATHS)) \
 )
 
+BUSTED_FLAGS := \
+	--verbose \
+	--directory=./awesome \
+	--lpath="./?.lua;./?/?.lua;./?/init.lua" \
+	./
+
+BUSTED :=
+ifneq (, $(shell which busted > /dev/null 2>&1))
+BUSTED := busted $(BUSTED_FLAGS)
+else ifneq (, $(shell which nix-shell))
+BUSTED := nix-shell '<nixpkgs>' -p pkgs.lua52Packages.busted --run 'busted $(BUSTED_FLAGS)'
+endif
+
 all:
 	:
 
@@ -63,3 +76,14 @@ generate-configs:
 .PHONY: generate-vscode-extensions
 generate-vscode-extensions:
 	@./scripts/generate-vscode-extensions
+
+.PHONY: test
+test: test-lua
+
+.PHONY: test-lua
+test-lua:
+ifndef BUSTED
+	$(error '"busted" not found')
+endif
+
+	@$(BUSTED)

@@ -28,4 +28,5 @@ linkall \
     "apps.lua" \
     "theme" \
     "widgets" \
+    "daemons" \
     "autostart.sh"

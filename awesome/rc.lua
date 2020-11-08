@@ -21,6 +21,8 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- require("awful.hotkeys_popup.keys")
 local dpi = require("beautiful.xresources").apply_dpi
 
+local daemons = require("daemons")
+
 local keys = require("keys")
 local cpu_widget = require("widgets.cpu")
 local ram_widget = require("widgets.ram")
