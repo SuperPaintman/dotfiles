@@ -35,19 +35,6 @@ PRETTIER_FILES := $(shell find . \
 	$(addprefix -and -not -path , $(IGNORE_PATHS)) \
 )
 
-BUSTED_FLAGS := \
-	--verbose \
-	--directory=./awesome \
-	--lpath="./?.lua;./?/?.lua;./?/init.lua" \
-	./
-
-BUSTED :=
-ifneq (, $(shell which busted > /dev/null 2>&1))
-BUSTED := busted $(BUSTED_FLAGS)
-else ifneq (, $(shell which nix-shell))
-BUSTED := nix-shell '<nixpkgs>' -p pkgs.lua52Packages.busted --run 'busted $(BUSTED_FLAGS)'
-endif
-
 all:
 	:
 
@@ -56,11 +43,11 @@ format: format-shell format-nix format-prettier
 
 .PHONY: format-shell
 format-shell:
-	@shfmt -i 4 -ci -sr -s -w $(SHELL_FILES)
+	@./scripts/nix-call.sh shfmt shfmt -i 4 -ci -sr -s -w $(SHELL_FILES)
 
 .PHONY: format-nix
 format-nix:
-	@nixpkgs-fmt $(NIX_FILES)
+	@./scripts/nix-call.sh nixpkgs-fmt nixpkgs-fmt $(NIX_FILES)
 
 .PHONY: format-nix
 format-prettier:
@@ -82,8 +69,8 @@ test: test-lua
 
 .PHONY: test-lua
 test-lua:
-ifndef BUSTED
-	$(error '"busted" not found')
-endif
-
-	@$(BUSTED)
+	@./scripts/nix-call.sh busted lua52Packages.busted \
+		--verbose \
+		--directory=./awesome \
+		'--lpath="./?.lua;./?/?.lua;./?/init.lua"' \
+		./
