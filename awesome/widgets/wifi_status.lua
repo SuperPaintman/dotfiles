@@ -42,7 +42,7 @@ local function new(args)
         widget:set_color(color)
     end
 
-    handler(wifi_status_daemon.status_disconnected)
+    handler(wifi_status_daemon.status_disconnected, "", 0)
 
     -- setmetatable(widget, {
     --   __gc = function()
