@@ -1,10 +1,11 @@
 # This file is generated; DO NOT EDIT.
 
 # See: https://nixos.wiki/wiki/Vscode
-{ pkgs, ... }:
+{ pkgs, ... }@args:
 
 (
   with pkgs.vscode-extensions; [
+    (import ./theme.nix args)
     ms-vscode.cpptools
   ]
 ) ++ (

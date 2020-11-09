@@ -64,6 +64,16 @@ generate-configs:
 generate-vscode-extensions:
 	@./scripts/generate-vscode-extensions
 
+.PHONY: build-vscode-extensions
+build-vscode-extensions:
+	@nix-build \
+		-E 'with import <nixpkgs> {}; callPackage ./vscode/extensions.nix {}'
+
+.PHONY: build-vscode-theme
+build-vscode-theme:
+	@nix-build \
+		-E 'with import <nixpkgs> {}; callPackage ./vscode/theme.nix {}'
+
 .PHONY: test
 test: test-lua
 
@@ -74,3 +84,8 @@ test-lua:
 		--directory=./awesome \
 		'--lpath="./?.lua;./?/?.lua;./?/init.lua"' \
 		./
+
+.PHONY: clean
+clean:
+	@rm -f result
+	@rm -f result-*
