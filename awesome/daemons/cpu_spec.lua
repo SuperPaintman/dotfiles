@@ -1,7 +1,6 @@
 _G._TEST = true
 
 require("mocks.awesome")
-require("mocks.awful")
 local mock_watch = require("mocks.awful.widget.watch")
 
 local cpu = require("daemons.cpu")

@@ -1,7 +1,6 @@
 _G._TEST = true
 
 require("mocks.awesome")
-require("mocks.awful")
 local mock_watch = require("mocks.awful.widget.watch")
 
 local ram = require("daemons.ram")
@@ -15,7 +14,7 @@ local free_broken = [[              total        used        free      shared  b
 Mem:       16243776     5888208     4820552      414380     5535016
 ]]
 
-describe("daemons.cpu", function()
+describe("daemons.ram", function()
     describe("private", function()
         describe("parse_free", function()
             local parse_free = ram._private.parse_free

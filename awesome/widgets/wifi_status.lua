@@ -1,15 +1,10 @@
 local textbox = require("wibox.widget.textbox")
-local watch = require("awful.widget.watch")
-local gears = require("gears")
 
 local colors = require("colors")
 local underline = require("widgets.underline")
+local wifi_status_daemon = require("daemons.wifi_status")
 
-
-local signal_name = "widgets::wifi"
-
-local status_connected = "connected"
-local status_disconnected = "disconnected"
+local signal_name = wifi_status_daemon.signal_name
 
 local wifi_status = {}
 
@@ -25,30 +20,29 @@ local function new(args)
     local textbox_widget = textbox("")
     local widget = underline(textbox_widget, color_disconnected)
 
-    local function handler(status, wifi_name, wifi_signal)
+    local function handler(status, name, signal)
         local color = color_disconnected
         local markup = ""
-        local error
 
-        if status == status_connected then
+        if status == wifi_status_daemon.status_connected then
             color = color_connected
-            markup = string.format("<span foreground='%s'><b>WIFI</b></span>  <span foreground='%s'>%s</span>  %s%%", color_connected_marker, color_connected, wifi_name, wifi_signal)
-        elseif status == status_disconnected then
+            markup = string.format("<span foreground='%s'><b>WIFI</b></span>  <span foreground='%s'>%s</span>  %s%%", color_connected_marker, color_connected, name, signal)
+        elseif status == wifi_status_daemon.status_disconnected then
             color = color_disconnected
             markup = string.format("<span foreground='%s'><b>WIFI</b></span>", color_disconnected_marker)
-        else
+        elseif status == wifi_status_daemon.status_error then
             color = color_error
             markup = string.format("<span foreground='%s'><b>WIFI ERROR</b></span>", color_error_marker)
-            error = "Unknown Wifi status (" .. status .. ")"
+        else
+            color = color_error
+            markup = string.format("<span foreground='%s'><b>WIFI UNKNOWN STATUS</b></span>", color_error_marker)
         end
 
         textbox_widget:set_markup(markup)
         widget:set_color(color)
-
-        assert(error == nil, error)
     end
 
-    handler(status_disconnected)
+    handler(wifi_status_daemon.status_disconnected)
 
     -- setmetatable(widget, {
     --   __gc = function()
@@ -60,30 +54,5 @@ local function new(args)
 
     return widget
 end
-
-watch(
-    os.getenv("HOME") .. "/bin/wifistatus",
-    10,
-    function(_, stdout, _, _, exitcode)
-        if exitcode ~= 0 then
-            awesome.emit_signal(signal_name, "bad exit code (" .. tostring(exitcode) .. ")")
-            return
-        end
-
-        local status, wifi_name, wifi_signal = stdout:match('(%w+)%s+([^%s]+)%s+([0-9]+)')
-
-        if status == nil then
-            if stdout:match("disconnected") then
-                awesome.emit_signal(signal_name, status_disconnected)
-            else
-                awesome.emit_signal(signal_name, "<nil>")
-            end
-
-            return
-        end
-
-        awesome.emit_signal(signal_name, status, wifi_name, wifi_signal)
-    end
-)
 
 return setmetatable(wifi_status, { __call = function(_, ...) return new(...) end })
