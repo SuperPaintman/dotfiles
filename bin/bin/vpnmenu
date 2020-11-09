@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -e
+
+rofi -show vpn \
+    -modi vpn:~/.config/rofi/modes/vpn

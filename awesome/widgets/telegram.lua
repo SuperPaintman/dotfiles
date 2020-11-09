@@ -55,6 +55,18 @@ local function new()
             end)
         )
     )
+    widget:connect_signal("mouse::enter", function ()
+        local w = _G.mouse.current_wibox
+        if w then
+            w.cursor = "hand1"
+        end
+    end)
+    widget:connect_signal("mouse::leave", function ()
+        local w = _G.mouse.current_wibox
+        if w then
+            w.cursor = "left_ptr"
+        end
+    end)
 
     -- setmetatable(widget, {
     --   __gc = function()

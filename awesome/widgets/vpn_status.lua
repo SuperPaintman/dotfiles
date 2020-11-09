@@ -1,10 +1,11 @@
+local awful = require("awful")
 local textbox = require("wibox.widget.textbox")
 local watch = require("awful.widget.watch")
 local gears = require("gears")
 
 local colors = require("colors")
 local underline = require("widgets.underline")
-
+local apps = require("apps")
 
 local signal_name = "widgets::vpn"
 
@@ -55,6 +56,26 @@ local function new(args)
     end
 
     handler(status_disconnected)
+
+    widget:buttons(
+        gears.table.join(
+            awful.button({}, 1, function()
+                apps.vpnmenu()
+            end)
+        )
+    )
+    widget:connect_signal("mouse::enter", function ()
+        local w = _G.mouse.current_wibox
+        if w then
+            w.cursor = "hand1"
+        end
+    end)
+    widget:connect_signal("mouse::leave", function ()
+        local w = _G.mouse.current_wibox
+        if w then
+            w.cursor = "left_ptr"
+        end
+    end)
 
     -- setmetatable(widget, {
     --   __gc = function()
