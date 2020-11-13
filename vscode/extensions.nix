@@ -88,6 +88,12 @@
       sha256 = "039ns854v1k4jb9xqknrjkj8lf62nfcpfn0716ancmjc4f0xlzb3";
     }
     {
+      name = "stylus";
+      publisher = "alan";
+      version = "0.0.4";
+      sha256 = "0rlzkc6g9g44526ln5gmb4xsrn64rnmz4ddkiarpr4sf26dndpjq";
+    }
+    {
       name = "vimL";
       publisher = "fallenwood";
       version = "0.0.3";

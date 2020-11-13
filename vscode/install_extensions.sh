@@ -119,6 +119,11 @@ if ! has_extension "rust-lang" "rust"; then
     get_extension "rust-lang" "rust" "0.7.8"
 fi
 
+# stylus (alan)
+if ! has_extension "alan" "stylus"; then
+    get_extension "alan" "stylus" "0.0.4"
+fi
+
 # vimL (fallenwood)
 if ! has_extension "fallenwood" "vimL"; then
     get_extension "fallenwood" "vimL" "0.0.3"
