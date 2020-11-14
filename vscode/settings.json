@@ -16,6 +16,9 @@
   "editor.renderLineHighlight": "line",
   "editor.dragAndDrop": false,
   "editor.formatOnSave": true,
+  "editor.acceptSuggestionOnCommitCharacter": false,
+  "editor.acceptSuggestionOnEnter": "on",
+  "editor.snippetSuggestions": "bottom",
   // Workbench
   "workbench.colorTheme": "Monokai Extended",
   "workbench.welcome.enabled": false,
@@ -225,7 +228,6 @@
   "rest-client.enableTelemetry": false,
   // TypeScript
   "typescript.updateImportsOnFileMove.enabled": "never",
-  "typescript.suggest.enabled": false,
   // Go
   "go.inferGopath": true,
   "go.formatTool": "gofmt",
