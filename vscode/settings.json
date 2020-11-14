@@ -225,6 +225,7 @@
   "rest-client.enableTelemetry": false,
   // TypeScript
   "typescript.updateImportsOnFileMove.enabled": "never",
+  "typescript.suggest.enabled": false,
   // Go
   "go.inferGopath": true,
   "go.formatTool": "gofmt",
