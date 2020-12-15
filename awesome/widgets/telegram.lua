@@ -14,6 +14,7 @@ local telegram = {}
 local function new()
     local color = colors.normal.blue
     local color_diff = colors.normal.green
+    local color_error = colors.normal.red
 
     local textbox_widget = textbox("")
     local widget = underline(textbox_widget, color)
@@ -21,7 +22,9 @@ local function new()
     local function handler(unread_count, unread_count_diff)
         local markup = ""
 
-        if unread_count_diff > 0 then
+        if unread_count_diff == nil then
+            markup = string.format("<span foreground='%s'><b>TG</b></span>  <span foreground='%s'>error</span>", color, color_error)
+        elseif unread_count_diff > 0 then
             markup = string.format("<span foreground='%s'><b>TG</b></span>  %d (<span foreground='%s'>+%d</span>)", color, unread_count, color_diff, unread_count_diff)
         else
             markup = string.format("<span foreground='%s'><b>TG</b></span>  %d", color, unread_count)
