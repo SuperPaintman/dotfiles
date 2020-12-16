@@ -12,6 +12,7 @@ local apps = require("apps")
 -- Mod keys.
 --------------------------------------------------------------------------------
 local modkey = "Mod4" -- aka Super / Win.
+local altkey = "Mod1"
 local ctrlkey = "Control"
 local shiftkey = "Shift"
 
@@ -20,6 +21,8 @@ local shiftkey = "Shift"
 -- Init.
 --------------------------------------------------------------------------------
 local keys = {}
+
+local terminal = "alacritty" -- TODO(SuperPaintman): move it into the config.
 
 
 --------------------------------------------------------------------------------
@@ -242,6 +245,82 @@ keys.global =
             }
         end,
         {description = "lua execute prompt", group = "awesome"}
+    ),
+
+    -- Focus on applications.
+    ---- Browser
+    awful.key(
+        {modkey, altkey},
+        "b",
+        function()
+            local matcher = function (c)
+                return awful.rules.match(c, {class = "Firefox"})
+            end
+
+            for c in awful.client.iterate(matcher) do
+                c:jump_to()
+
+                return
+            end
+        end
+    ),
+
+    ---- Editor
+    awful.key(
+        {modkey, altkey},
+        "e",
+        function()
+            local screen = awful.screen.focused()
+
+            local matcher = function (c)
+                return awful.rules.match(c, {
+                    class = "Code",
+                    -- screen = screen,
+                })
+            end
+
+            for c in awful.client.iterate(matcher) do
+                c:jump_to()
+
+                return
+            end
+        end
+    ),
+
+    ---- Telegram
+    awful.key(
+        {modkey, altkey},
+        "t",
+        function()
+            local matcher = function (c)
+                return awful.rules.match(c, {class = "TelegramDesktop"})
+            end
+
+            for c in awful.client.iterate(matcher) do
+                c:jump_to()
+
+                return
+            end
+
+            awful.spawn("telegram-desktop")
+        end
+    ),
+
+    ---- Terminal
+    awful.key(
+        {modkey, altkey},
+        "Return",
+        function()
+            local matcher = function (c)
+                return awful.rules.match(c, {class = "Alacritty"})
+            end
+
+            for c in awful.client.iterate(matcher) do
+                c:jump_to()
+
+                return
+            end
+        end
     )
 )
 
