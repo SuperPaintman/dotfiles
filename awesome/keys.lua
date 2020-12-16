@@ -30,10 +30,30 @@ keys.global = {}
 keys.global =
     gears.table.join(
     keys.global,
-    awful.key({modkey}, "s", hotkeys_popup.show_help, {description = "show help", group = "awesome"}),
-    awful.key({modkey}, "Left", awful.tag.viewprev, {description = "view previous", group = "tag"}),
-    awful.key({modkey}, "Right", awful.tag.viewnext, {description = "view next", group = "tag"}),
-    awful.key({modkey}, "Escape", awful.tag.history.restore, {description = "go back", group = "tag"}),
+    awful.key(
+        {modkey},
+        "s",
+        hotkeys_popup.show_help,
+        {description = "show help", group = "awesome"}
+    ),
+    awful.key(
+        {modkey},
+        "Left",
+        awful.tag.viewprev,
+        {description = "view previous", group = "tag"}
+    ),
+    awful.key(
+        {modkey},
+        "Right",
+        awful.tag.viewnext,
+        {description = "view next", group = "tag"}
+    ),
+    awful.key(
+        {modkey},
+        "Escape",
+        awful.tag.history.restore,
+        {description = "go back", group = "tag"}
+    ),
     awful.key(
         {modkey},
         "j",
@@ -50,7 +70,12 @@ keys.global =
         end,
         {description = "focus previous by index", group = "client"}
     ),
-    awful.key({modkey}, "w", apps.windowmenu, {description = "show window menu", group = "launcher"}),
+    awful.key(
+        {modkey},
+        "w",
+        apps.windowmenu,
+        {description = "show window menu", group = "launcher"}
+    ),
     -- Layout manipulation
     awful.key(
         {modkey, shiftkey},
@@ -84,7 +109,12 @@ keys.global =
         end,
         {description = "focus the previous screen", group = "screen"}
     ),
-    awful.key({modkey}, "u", awful.client.urgent.jumpto, {description = "jump to urgent client", group = "client"}),
+    awful.key(
+        {modkey},
+        "u",
+        awful.client.urgent.jumpto,
+        {description = "jump to urgent client", group = "client"}
+    ),
     awful.key(
         {modkey},
         "Tab",
@@ -105,8 +135,18 @@ keys.global =
         end,
         {description = "open a terminal", group = "launcher"}
     ),
-    awful.key({modkey, ctrlkey}, "r", awesome.restart, {description = "reload awesome", group = "awesome"}),
-    awful.key({modkey, shiftkey}, "q", awesome.quit, {description = "quit awesome", group = "awesome"}),
+    awful.key(
+        {modkey, ctrlkey},
+        "r",
+        awesome.restart,
+        {description = "reload awesome", group = "awesome"}
+    ),
+    awful.key(
+        {modkey, shiftkey},
+        "q",
+        awesome.quit,
+        {description = "quit awesome", group = "awesome"}
+    ),
     awful.key(
         {modkey},
         "l",
@@ -184,7 +224,12 @@ keys.global =
         {description = "restore minimized", group = "client"}
     ),
     -- Prompt
-    awful.key({modkey}, "r", apps.appmenu, {description = "show app menu", group = "launcher"}),
+    awful.key(
+        {modkey},
+        "r",
+        apps.appmenu,
+        {description = "show app menu", group = "launcher"}
+    ),
     awful.key(
         {modkey},
         "x",
@@ -424,7 +469,11 @@ keys.taglist_buttons =
             end
         end
     ),
-    awful.button({}, 3, awful.tag.viewtoggle),
+    awful.button(
+        {},
+        3,
+        awful.tag.viewtoggle
+    ),
     awful.button(
         {modkey},
         3,
