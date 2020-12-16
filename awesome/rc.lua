@@ -755,11 +755,8 @@ client.connect_signal(
 )
 -- }}}
 
--- Startup displays.
-awful.spawn("xrandr --output DVI-D-0 --left-of DVI-I-1", {})
-
 -- Auto-start programs.
-awful.spawn.with_shell(gears.filesystem.get_configuration_dir() .. "autostart.sh")
+-- awful.spawn.with_shell(gears.filesystem.get_configuration_dir() .. "autostart.sh")
 
 -- Show titlebar only when window is floating.
 local function should_show_client_titlebar(c)
@@ -814,4 +811,15 @@ if beautiful.client_radius ~= nil then
     client.connect_signal("property::maximized", update_client_shape)
 
     client.connect_signal("manage", update_client_shape)
+end
+
+--------------------------------------------------------------------------------
+-- Host specific.
+--------------------------------------------------------------------------------
+if type(awesome.hostname) == "string" then
+    local host_config_path = gears.filesystem.get_configuration_dir() .. "hosts/" .. awesome.hostname .. "/init.lua"
+
+    if gears.filesystem.file_readable(host_config_path) then
+        dofile(host_config_path)
+    end
 end

@@ -29,4 +29,5 @@ linkall \
     "theme" \
     "widgets" \
     "daemons" \
+    "hosts" \
     "autostart.sh"
