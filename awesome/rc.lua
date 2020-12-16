@@ -30,8 +30,6 @@ local wifi_status_widget = require("widgets.wifi_status")
 local vpn_status_widget = require("widgets.vpn_status")
 local telegram_widget = require("widgets.telegram")
 
-local modkey = keys.modkey
-
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
@@ -107,23 +105,6 @@ myawesomemenu = {
     }
 }
 
-mymainmenu =
-    awful.menu(
-    {
-        items = {
-            {"awesome", myawesomemenu, beautiful.awesome_icon},
-            {"open terminal", terminal}
-        }
-    }
-)
-
-mylauncher =
-    awful.widget.launcher(
-    {
-        image = beautiful.awesome_icon,
-        menu = mymainmenu
-    }
-)
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
@@ -135,87 +116,6 @@ mykeyboardlayout = awful.widget.keyboardlayout()
 -- {{{ Wibar
 -- Create a textclock widget
 mytextclock = wibox.widget.textclock("%h %d  %I:%M:%S  %p", 1)
-
--- Create a wibox for each screen and add it
-local taglist_buttons =
-    gears.table.join(
-    awful.button(
-        {},
-        1,
-        function(t)
-            t:view_only()
-        end
-    ),
-    awful.button(
-        {modkey},
-        1,
-        function(t)
-            if client.focus then
-                client.focus:move_to_tag(t)
-            end
-        end
-    ),
-    awful.button({}, 3, awful.tag.viewtoggle),
-    awful.button(
-        {modkey},
-        3,
-        function(t)
-            if client.focus then
-                client.focus:toggle_tag(t)
-            end
-        end
-    ),
-    awful.button(
-        {},
-        4,
-        function(t)
-            awful.tag.viewnext(t.screen)
-        end
-    ),
-    awful.button(
-        {},
-        5,
-        function(t)
-            awful.tag.viewprev(t.screen)
-        end
-    )
-)
-
-local tasklist_buttons =
-    gears.table.join(
-    awful.button(
-        {},
-        1,
-        function(c)
-            if c == client.focus then
-                c.minimized = true
-            else
-                c:emit_signal("request::activate", "tasklist", {raise = true})
-            end
-        end
-    ),
-    awful.button(
-        {},
-        3,
-        function()
-            awful.menu.client_list({theme = {width = 250}})
-        end
-    ),
-    awful.button(
-        {},
-        4,
-        function()
-            awful.client.focus.byidx(1)
-        end
-    ),
-    awful.button(
-        {},
-        5,
-        function()
-            awful.client.focus.byidx(-1)
-        end
-    )
-)
 
 local function set_wallpaper(s)
     -- Wallpaper
@@ -389,7 +289,7 @@ awful.screen.connect_for_each_screen(
             awful.widget.taglist {
             screen = s,
             filter = awful.widget.taglist.filter.all,
-            buttons = taglist_buttons
+            buttons = keys.taglist_buttons
         }
 
         -- Create a tasklist widget
@@ -397,7 +297,7 @@ awful.screen.connect_for_each_screen(
             awful.widget.tasklist {
             screen = s,
             filter = awful.widget.tasklist.filter.currenttags,
-            buttons = tasklist_buttons
+            buttons = keys.tasklist_buttons
         }
 
         -- Create the wibox
@@ -458,137 +358,11 @@ awful.screen.connect_for_each_screen(
 -- }}}
 
 -- {{{ Mouse bindings
-root.buttons(
-    gears.table.join(
-        awful.button(
-            {},
-            3,
-            function()
-                mymainmenu:toggle()
-            end
-        ),
-        awful.button({}, 4, awful.tag.viewnext),
-        awful.button({}, 5, awful.tag.viewprev)
-    )
-)
+root.buttons(keys.desktop_buttons)
 -- }}}
 
 -- {{{ Key bindings
 
-clientkeys =
-    gears.table.join(
-    awful.key(
-        {modkey},
-        "f",
-        function(c)
-            c.fullscreen = not c.fullscreen
-            c:raise()
-        end,
-        {description = "toggle fullscreen", group = "client"}
-    ),
-    awful.key(
-        {modkey, "Shift"},
-        "c",
-        function(c)
-            c:kill()
-        end,
-        {description = "close", group = "client"}
-    ),
-    awful.key(
-        {modkey, "Control"},
-        "space",
-        awful.client.floating.toggle,
-        {description = "toggle floating", group = "client"}
-    ),
-    awful.key(
-        {modkey, "Control"},
-        "Return",
-        function(c)
-            c:swap(awful.client.getmaster())
-        end,
-        {description = "move to master", group = "client"}
-    ),
-    awful.key(
-        {modkey},
-        "o",
-        function(c)
-            c:move_to_screen()
-        end,
-        {description = "move to screen", group = "client"}
-    ),
-    awful.key(
-        {modkey},
-        "t",
-        function(c)
-            c.ontop = not c.ontop
-        end,
-        {description = "toggle keep on top", group = "client"}
-    ),
-    awful.key(
-        {modkey},
-        "n",
-        function(c)
-            -- The client currently has the input focus, so it cannot be
-            -- minimized, since minimized clients can't have the focus.
-            c.minimized = true
-        end,
-        {description = "minimize", group = "client"}
-    ),
-    awful.key(
-        {modkey},
-        "m",
-        function(c)
-            c.maximized = not c.maximized
-            c:raise()
-        end,
-        {description = "(un)maximize", group = "client"}
-    ),
-    awful.key(
-        {modkey, "Control"},
-        "m",
-        function(c)
-            c.maximized_vertical = not c.maximized_vertical
-            c:raise()
-        end,
-        {description = "(un)maximize vertically", group = "client"}
-    ),
-    awful.key(
-        {modkey, "Shift"},
-        "m",
-        function(c)
-            c.maximized_horizontal = not c.maximized_horizontal
-            c:raise()
-        end,
-        {description = "(un)maximize horizontally", group = "client"}
-    )
-)
-
-clientbuttons =
-    gears.table.join(
-    awful.button(
-        {},
-        1,
-        function(c)
-            c:emit_signal("request::activate", "mouse_click", {raise = true})
-        end
-    ),
-    awful.button(
-        {modkey},
-        1,
-        function(c)
-            c:emit_signal("request::activate", "mouse_click", {raise = true})
-            awful.mouse.client.move(c)
-        end
-    ),
-    awful.button(
-        {modkey},
-        3,
-        function(c)
-            c:emit_signal("request::activate", "mouse_click", {raise = true})
-            awful.mouse.client.resize(c)
-        end
-    )
-)
 
 -- Set keys
 root.keys(keys.global)
@@ -605,8 +379,8 @@ awful.rules.rules = {
             border_color = beautiful.border_normal,
             focus = awful.client.focus.filter,
             raise = true,
-            keys = clientkeys,
-            buttons = clientbuttons,
+            keys = keys.client,
+            buttons = keys.client_buttons,
             screen = awful.screen.preferred,
             placement = awful.placement.no_overlap + awful.placement.no_offscreen
         }
