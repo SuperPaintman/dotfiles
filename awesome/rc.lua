@@ -21,7 +21,7 @@ local hotkeys_popup = require("awful.hotkeys_popup")
 -- require("awful.hotkeys_popup.keys")
 local dpi = require("beautiful.xresources").apply_dpi
 
-require("daemons")
+local daemons = require("daemons")
 
 local keys = require("keys")
 local cpu_widget = require("widgets.cpu")
@@ -29,6 +29,7 @@ local ram_widget = require("widgets.ram")
 local wifi_status_widget = require("widgets.wifi_status")
 local vpn_status_widget = require("widgets.vpn_status")
 local telegram_widget = require("widgets.telegram")
+local battery_widget = require("widgets.battery")
 
 -- {{{ Error handling
 -- Check if awesome encountered an error during startup and fell back to
@@ -317,6 +318,16 @@ awful.screen.connect_for_each_screen(
         s.myvpn_status = vpn_status_widget()
         s.mytelegram = telegram_widget()
 
+
+        local mybattery = battery_widget()
+        mybattery.visible = false
+
+        -- TODO(SuperPaintman): refactor it
+        awesome.connect_signal(daemons.battery.signal_name_exists, function(exists)
+            mybattery.visible = exists
+        end)
+
+
         -- Add widgets to the wibox
         s.mywibox:setup {
             layout = wibox.layout.align.horizontal,
@@ -339,6 +350,7 @@ awful.screen.connect_for_each_screen(
                 widget_margin_horizontal(s.myseparator, dpi(12)),
                 widget_margin_horizontal(s.mycpu, dpi(6)),
                 widget_margin_horizontal(s.myram, dpi(6)),
+                mybattery,
                 widget_margin_horizontal(s.myseparator, dpi(12)),
                 widget_margin_horizontal(s.mywifi_status, dpi(6)),
                 widget_margin_horizontal(s.myseparator, dpi(12)),
