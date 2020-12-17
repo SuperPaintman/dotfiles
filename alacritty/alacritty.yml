@@ -47,6 +47,9 @@ colors:
 mouse_bindings:
     - { mouse: Middle, action: None } # No more paste.
 
+env:
+    WINIT_X11_SCALE_FACTOR: "1"
+
 key_bindings:
     []
     # Vim unhappy with it :( (Visual block).
