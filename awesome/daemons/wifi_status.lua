@@ -1,56 +1,39 @@
+--[[ Generated with https://github.com/TypeScriptToLua/TypeScriptToLua ]]
+local ____exports = {}
+local ____ = "use strict"
 local watch = require("awful.widget.watch")
-
-local signal_name = "daemons::wifi"
-
-local status_connected = "connected"
-local status_disconnected = "disconnected"
-local status_error = "error"
-
+____exports.signal_name = "daemons::wifi"
+____exports.status_connected = "connected"
+____exports.status_disconnected = "disconnected"
+____exports.status_error = "error"
+local home = os.getenv("HOME") or "~"
 local function parse_result(stdout, exitcode)
     if exitcode ~= 0 then
-        return status_error, "", 0, true
+        return ____exports.status_error, "", 0, true
     end
-
     if type(stdout) ~= "string" then
         return "", "", 0, false
     end
-
     local name, signal = stdout:match("connected%s+([^%s]+)%s+([0-9]+)")
     if signal == nil then
-        if stdout:match("disconnected") then
-            return status_disconnected, "", 0, true
+        local v = stdout:match("disconnected")
+        if v then
+            return ____exports.status_disconnected, "", 0, true
         end
-
         return "", "", 0, false
     end
-
-    return status_connected, name, tonumber(signal), true
+    return ____exports.status_connected, name, tonumber(signal) or 0, true
 end
-
 watch(
-    os.getenv("HOME") .. "/bin/wifistatus",
+    tostring(home) .. "/bin/wifistatus",
     10,
-    function(_, stdout, _, _, exitcode)
+    function(_w, stdout, _stderr, _r, exitcode)
         local status, name, signal, ok = parse_result(stdout, exitcode)
         if not ok then
             return
         end
-
-        awesome.emit_signal(signal_name, status, name, signal)
+        awesome.emit_signal(____exports.signal_name, status, name, signal)
     end
 )
-
-local mod = {
-    signal_name = signal_name,
-    status_connected = status_connected,
-    status_disconnected = status_disconnected,
-    status_error = status_error,
-}
-
-if _TEST then
-    mod._private = {
-        parse_result = parse_result,
-    }
-end
-
-return mod
+____exports._private = {parse_result = parse_result}
+return ____exports
