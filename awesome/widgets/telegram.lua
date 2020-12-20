@@ -1,9 +1,12 @@
 local awful = require("awful")
 local gears = require("gears")
+local wibox = require('wibox')
+local margin = require("wibox.container.margin")
 local textbox = require("wibox.widget.textbox")
 local watch = require("awful.widget.watch")
 
 local colors = require("colors")
+local icon = require("widgets.icon")
 local underline = require("widgets.underline")
 
 
@@ -17,17 +20,26 @@ local function new()
     local color_error = colors.normal.red
 
     local textbox_widget = textbox("")
-    local widget = underline(textbox_widget, color)
+    local icon_widget = icon {
+        name = "telegram",
+        color = colors.normal.blue
+    }
+    local content_widget = wibox.widget{
+        margin(icon_widget, 2, 2, 2, 2),
+        margin(textbox_widget, 4, 0, 0, 0),
+        widget = wibox.layout.fixed.horizontal
+    }
+    local widget = underline(content_widget, color)
 
     local function handler(unread_count, unread_count_diff)
         local markup = ""
 
         if unread_count_diff == nil then
-            markup = string.format("<span foreground='%s'><b>TG</b></span>  <span foreground='%s'>error</span>", color, color_error)
+            markup = string.format("<span foreground='%s'>error</span>", color_error)
         elseif unread_count_diff > 0 then
-            markup = string.format("<span foreground='%s'><b>TG</b></span>  %d (<span foreground='%s'>+%d</span>)", color, unread_count, color_diff, unread_count_diff)
+            markup = string.format("%d (<span foreground='%s'>+%d</span>)", unread_count, color_diff, unread_count_diff)
         else
-            markup = string.format("<span foreground='%s'><b>TG</b></span>  %d", color, unread_count)
+            markup = string.format("%d", unread_count)
         end
 
         textbox_widget:set_markup(markup)

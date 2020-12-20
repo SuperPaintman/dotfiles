@@ -27,6 +27,7 @@ linkall \
     "keys.lua" \
     "apps.lua" \
     "theme" \
+    "icons" \
     "widgets" \
     "daemons" \
     "hosts" \

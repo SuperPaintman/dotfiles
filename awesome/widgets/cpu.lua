@@ -1,7 +1,10 @@
+local wibox = require('wibox')
+local margin = require("wibox.container.margin")
 local textbox = require("wibox.widget.textbox")
 
 local colors = require("colors")
 local underline = require("widgets.underline")
+local icon = require("widgets.icon")
 local signal_name = require("daemons.cpu").signal_name
 
 local cpu = {}
@@ -10,10 +13,19 @@ local function new(args)
     local color = colors.normal.red
 
     local textbox_widget = textbox("")
-    local widget = underline(textbox_widget, color)
+    local icon_widget = icon {
+        name = "cpu",
+        color = colors.normal.red
+    }
+    local content_widget = wibox.widget{
+        margin(icon_widget, 2, 2, 2, 2),
+        margin(textbox_widget, 4, 0, 0, 0),
+        widget = wibox.layout.fixed.horizontal
+    }
+    local widget = underline(content_widget, color)
 
     local function handler(v)
-        local markup = string.format("<span foreground='%s'><b>CPU</b></span>  %0.0f%%", color, v)
+        local markup = string.format("%0.0f%%", v)
 
         textbox_widget:set_markup(markup)
     end
