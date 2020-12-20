@@ -84,40 +84,27 @@ awful.layout.layouts = {
     awful.layout.suit.tile.left,
     awful.layout.suit.floating
 }
+
+local default_layout = awful.layout.suit.tile
+
 -- }}}
 
--- {{{ Menu
--- Create a launcher widget and a main menu
-myawesomemenu = {
-    {
-        "hotkeys",
-        function()
-            hotkeys_popup.show_help(nil, awful.screen.focused())
-        end
-    },
-    {"manual", terminal .. " -e man awesome"},
-    {"edit config", editor_cmd .. " " .. awesome.conffile},
-    {"restart", awesome.restart},
-    {
-        "quit",
-        function()
-            awesome.quit()
-        end
-    }
-}
 
 
 -- Menubar configuration
 menubar.utils.terminal = terminal -- Set the terminal for applications that require it
 -- }}}
 
--- Keyboard map indicator and switcher
-mykeyboardlayout = awful.widget.keyboardlayout()
+
 
 -- {{{ Wibar
--- Create a textclock widget
-mytextclock = wibox.widget.textclock("%h %d  %I:%M:%S  %p", 1)
 
+
+
+
+--------------------------------------------------------------------------------
+-- Wallpaper.
+--------------------------------------------------------------------------------
 local function set_wallpaper(s)
     -- Wallpaper
     if beautiful.wallpaper then
@@ -130,6 +117,121 @@ local function set_wallpaper(s)
     end
 end
 
+awful.screen.connect_for_each_screen(set_wallpaper)
+
+-- Re-set wallpaper when a screen's geometry changes
+-- (e.g. different resolution).
+screen.connect_signal("property::geometry", set_wallpaper)
+
+
+--------------------------------------------------------------------------------
+-- Tags.
+--------------------------------------------------------------------------------
+local function set_tags(s)
+    -- Each screen has its own tag table.
+    local tagnames = {"1", "2", "3", "4", "5", "6", "7", "8", "9"}
+
+    awful.tag(tagnames, s, default_layout)
+end
+
+awful.screen.connect_for_each_screen(set_tags)
+
+
+--------------------------------------------------------------------------------
+-- Dashboard.
+--------------------------------------------------------------------------------
+-- TODO(SuperPaintman): add `z-index`-like thing.
+-- TODO(SuperPaintman): hide it whet we have at least one window on the screen.
+local function set_dashboard(s)
+    local dashboard = wibox({
+        screen = s,
+        visible = true,
+        ontop = false,
+        type = "dock",
+        -- input_passthrough = true,
+        bg = "#00000000"
+    })
+
+    -- Visibility of dashboard widgets.
+    local visible = true
+
+    -- Widget: Clock.
+    local clock = wibox.widget.textclock("%l:%M", 60)
+    clock:set_align("center")
+    clock:set_font("Helvetica Neue LT Std, sans medium 128")
+
+    -- Widget: Date.
+    local date = wibox.widget.textclock("%A, %e %B")
+    date:set_align("center")
+    date:set_font("Helvetica Neue LT Std, sans 32")
+
+    local container = wibox.widget {
+        nil,
+        wibox.container.place(
+            wibox.widget {
+                clock,
+                date,
+                layout = wibox.layout.fixed.vertical
+            }
+        ),
+        nil,
+        layout = wibox.layout.align.horizontal
+    }
+
+    -- Widget: Eye button.
+    local eye_button = wibox.widget.textbox("HIDE DASHBOARD")
+    eye_button:set_font("sans bold 8")
+    eye_button:set_opacity(0.5)
+    eye_button:buttons(
+        gears.table.join(
+            awful.button({}, 1, function()
+                visible = not visible
+
+                container.visible = visible
+
+                if visible then
+                    eye_button:set_text("HIDE DASHBOARD")
+                else
+                    eye_button:set_text("SHOW DASHBOARD")
+                end
+            end)
+        )
+    )
+    eye_button:connect_signal("mouse::enter", function ()
+        local w = _G.mouse.current_wibox
+        if w then
+            w.cursor = "hand1"
+        end
+    end)
+    eye_button:connect_signal("mouse::leave", function ()
+        local w = _G.mouse.current_wibox
+        if w then
+            w.cursor = "left_ptr"
+        end
+    end)
+
+    local margin = dpi(16)
+
+    -- Setup.
+    dashboard:setup {
+        container,
+        wibox.container.place(
+            wibox.container.margin(eye_button, margin, margin, margin, margin),
+            "left",
+            "bottom"
+        ),
+        layout = wibox.layout.stack
+    }
+
+    awful.placement.maximize(dashboard)
+end
+
+awful.screen.connect_for_each_screen(set_dashboard)
+
+
+--------------------------------------------------------------------------------
+-- Top bar.
+--------------------------------------------------------------------------------
 local function widget_margin(w, s)
     s = s or beautiful.wibar_widget_margin
 
@@ -152,222 +254,146 @@ local function widget_margin_horizontal(w, s)
     return wrapped
 end
 
--- Re-set wallpaper when a screen's geometry changes (e.g. different resolution)
-screen.connect_signal("property::geometry", set_wallpaper)
+local function set_top_bar(s)
+    -- Initialize widgets.
+    ---- Separator.
+    local separator = wibox.widget.textbox("<span foreground='#FFFFFF3F'>|</span>")
 
--- TODO(SuperPaintman): add `z-index`-like thing.
--- TODO(SuperPaintman): hide it whet we have at least one window on the screen.
-awful.screen.connect_for_each_screen(
-    function(s)
-        local dashboard = wibox({
-            screen = s,
-            visible = true,
-            ontop = false,
-            type = "dock",
-            -- input_passthrough = true,
-            bg = "#00000000"
-        })
+    ---- Tagline.
+    local taglist = awful.widget.taglist {
+        screen = s,
+        filter = awful.widget.taglist.filter.all,
+        buttons = keys.taglist_buttons
+    }
 
-        local visible = true
+    ---- Tasklist.
+    local tasklist = awful.widget.tasklist {
+        screen = s,
+        filter = awful.widget.tasklist.filter.currenttags,
+        buttons = keys.tasklist_buttons
+    }
 
-        local clock = wibox.widget.textclock("%l:%M", 60)
-        clock:set_align("center")
-        clock:set_font("Helvetica Neue LT Std, sans medium 128")
+    ---- Telegram.
+    local telegram = telegram_widget()
 
-        local date = wibox.widget.textclock("%A, %e %B")
-        date:set_align("center")
-        date:set_font("Helvetica Neue LT Std, sans 32")
+    ---- CPU.
+    local cpu = cpu_widget()
 
-        local container = wibox.widget {
-            nil,
-            wibox.container.place(
-                wibox.widget {
-                    clock,
-                    date,
-                    layout = wibox.layout.fixed.vertical
-                }
+    ---- RAM.
+    local ram = ram_widget()
+
+    ---- Battery.
+    local battery = battery_widget()
+
+    ---- Wifi Status.
+    local wifi_status = wifi_status_widget()
+
+    ---- VPN Status.
+    local vpn_status = vpn_status_widget()
+
+    ---- Keyboard Layout.
+    local keyboardlayout = awful.widget.keyboardlayout()
+
+    ---- Systray.
+    local systray = wibox.widget.systray()
+    systray.set_base_size(beautiful.wibar_height - beautiful.wibar_widget_margin * 2)
+
+    ---- Text Clock.
+    local textclock = wibox.widget.textclock("%h %d  %I:%M:%S  %p", 1)
+
+    ---- Layoutbox.
+    local layoutbox = awful.widget.layoutbox(s)
+    layoutbox:buttons(
+        gears.table.join(
+            awful.button(
+                {},
+                1,
+                function()
+                    awful.layout.inc(1)
+                end
             ),
-            nil,
-            layout = wibox.layout.align.horizontal
-        }
-
-        local eye_button = wibox.widget.textbox("HIDE DASHBOARD")
-        eye_button:set_font("sans bold 8")
-        eye_button:set_opacity(0.5)
-        eye_button:buttons(
-            gears.table.join(
-                awful.button({}, 1, function()
-                    visible = not visible
-
-                    container.visible = visible
-
-                    if visible then
-                        eye_button:set_text("HIDE DASHBOARD")
-                    else
-                        eye_button:set_text("SHOW DASHBOARD")
-                    end
-                end)
+            awful.button(
+                {},
+                3,
+                function()
+                    awful.layout.inc(-1)
+                end
+            ),
+            awful.button(
+                {},
+                4,
+                function()
+                    awful.layout.inc(1)
+                end
+            ),
+            awful.button(
+                {},
+                5,
+                function()
+                    awful.layout.inc(-1)
+                end
             )
         )
-        eye_button:connect_signal("mouse::enter", function ()
-            local w = _G.mouse.current_wibox
-            if w then
-                w.cursor = "hand1"
-            end
-        end)
-        eye_button:connect_signal("mouse::leave", function ()
-            local w = _G.mouse.current_wibox
-            if w then
-                w.cursor = "left_ptr"
-            end
-        end)
+    )
 
-        local margin = dpi(16)
 
-        dashboard:setup {
-            container,
-            wibox.container.place(
-                wibox.container.margin(eye_button, margin, margin, margin, margin),
-                "left",
-                "bottom"
-            ),
-            layout = wibox.layout.stack
+    -- Create the Top Bar.
+    local top_bar = awful.wibar {
+        screen = s,
+        position = beautiful.wibar_position or "top",
+        width = beautiful.wibar_width,
+        height = beautiful.wibar_height
+    }
+
+    -- Battery widget can work only on devices with battery.
+    local optional_battery = widget_margin_horizontal(battery, dpi(6))
+    optional_battery.visible = false
+
+    -- TODO(SuperPaintman): refactor it.
+    awesome.connect_signal(daemons.battery.signal_name_exists, function(exists)
+        optional_battery.visible = exists
+    end)
+
+    -- Add widgets to the Top Bar.
+    top_bar:setup {
+        layout = wibox.layout.align.horizontal,
+        {
+            -- Left widgets.
+            layout = wibox.layout.fixed.horizontal,
+            taglist,
+            widget_margin_horizontal(separator, dpi(12))
+        },
+        {
+            -- Middle widgets.
+            layout = wibox.layout.fixed.horizontal,
+            widget_margin(tasklist)
+        },
+        {
+            -- Right widgets.
+            layout = wibox.layout.fixed.horizontal,
+            widget_margin_horizontal(separator, dpi(12)),
+            widget_margin_horizontal(telegram, dpi(6)),
+            widget_margin_horizontal(separator, dpi(12)),
+            widget_margin_horizontal(cpu, dpi(6)),
+            widget_margin_horizontal(ram, dpi(6)),
+            optional_battery,
+            widget_margin_horizontal(separator, dpi(12)),
+            widget_margin_horizontal(wifi_status, dpi(6)),
+            widget_margin_horizontal(separator, dpi(12)),
+            widget_margin_horizontal(vpn_status, dpi(6)),
+            widget_margin_horizontal(separator, dpi(12)),
+            widget_margin(keyboardlayout),
+            widget_margin_horizontal(separator, dpi(12)),
+            widget_margin(systray),
+            widget_margin_horizontal(separator, dpi(12)),
+            widget_margin(textclock),
+            widget_margin_horizontal(separator, dpi(12)),
+            widget_margin(layoutbox)
         }
+    }
+end
 
-        awful.placement.maximize(dashboard)
-    end
-)
-
-awful.screen.connect_for_each_screen(
-    function(s)
-        -- Wallpaper
-        set_wallpaper(s)
-
-        -- Each screen has its own tag table.
-        awful.tag({"1", "2", "3", "4", "5", "6", "7", "8", "9"}, s, awful.layout.layouts[1])
-
-        s.myseparator = wibox.widget.textbox("<span foreground='#FFFFFF3F'>|</span>")
-
-        -- Create a promptbox for each screen
-        s.mypromptbox = awful.widget.prompt()
-        -- Create an imagebox widget which will contain an icon indicating which layout we're using.
-        -- We need one layoutbox per screen.
-        s.mylayoutbox = awful.widget.layoutbox(s)
-        s.mylayoutbox:buttons(
-            gears.table.join(
-                awful.button(
-                    {},
-                    1,
-                    function()
-                        awful.layout.inc(1)
-                    end
-                ),
-                awful.button(
-                    {},
-                    3,
-                    function()
-                        awful.layout.inc(-1)
-                    end
-                ),
-                awful.button(
-                    {},
-                    4,
-                    function()
-                        awful.layout.inc(1)
-                    end
-                ),
-                awful.button(
-                    {},
-                    5,
-                    function()
-                        awful.layout.inc(-1)
-                    end
-                )
-            )
-        )
-        -- Create a taglist widget
-        s.mytaglist =
-            awful.widget.taglist {
-            screen = s,
-            filter = awful.widget.taglist.filter.all,
-            buttons = keys.taglist_buttons
-        }
-
-        -- Create a tasklist widget
-        s.mytasklist =
-            awful.widget.tasklist {
-            screen = s,
-            filter = awful.widget.tasklist.filter.currenttags,
-            buttons = keys.tasklist_buttons
-        }
-
-        -- Create the wibox
-        s.mywibox = awful.wibar {
-            position = beautiful.wibar_position or "top",
-            screen = s,
-            width = beautiful.wibar_width,
-            height = beautiful.wibar_height
-        }
-
-        s.mysystray = wibox.widget.systray()
-        s.mysystray.set_base_size(beautiful.wibar_height - beautiful.wibar_widget_margin * 2)
-
-        s.mycpu = cpu_widget()
-        s.myram = ram_widget()
-        s.mywifi_status = wifi_status_widget()
-        s.myvpn_status = vpn_status_widget()
-        s.mytelegram = telegram_widget()
-
-
-        local mybattery = battery_widget()
-        mybattery.visible = false
-
-        -- TODO(SuperPaintman): refactor it
-        awesome.connect_signal(daemons.battery.signal_name_exists, function(exists)
-            mybattery.visible = exists
-        end)
-
-
-        -- Add widgets to the wibox
-        s.mywibox:setup {
-            layout = wibox.layout.align.horizontal,
-            {
-                -- Left widgets
-                layout = wibox.layout.fixed.horizontal,
-                s.mytaglist,
-                widget_margin_horizontal(s.myseparator, dpi(12))
-            },
-            {
-                -- Middle widget
-                layout = wibox.layout.fixed.horizontal,
-                widget_margin(s.mytasklist)
-            },
-            {
-                -- Right widgets
-                layout = wibox.layout.fixed.horizontal,
-                widget_margin_horizontal(s.myseparator, dpi(12)),
-                widget_margin_horizontal(s.mytelegram, dpi(6)),
-                widget_margin_horizontal(s.myseparator, dpi(12)),
-                widget_margin_horizontal(s.mycpu, dpi(6)),
-                widget_margin_horizontal(s.myram, dpi(6)),
-                mybattery,
-                widget_margin_horizontal(s.myseparator, dpi(12)),
-                widget_margin_horizontal(s.mywifi_status, dpi(6)),
-                widget_margin_horizontal(s.myseparator, dpi(12)),
-                widget_margin_horizontal(s.myvpn_status, dpi(6)),
-                widget_margin_horizontal(s.myseparator, dpi(12)),
-                widget_margin(mykeyboardlayout),
-                widget_margin_horizontal(s.myseparator, dpi(12)),
-                widget_margin(s.mysystray),
-                widget_margin_horizontal(s.myseparator, dpi(12)),
-                widget_margin(mytextclock),
-                widget_margin_horizontal(s.myseparator, dpi(12)),
-                widget_margin(s.mylayoutbox)
-            }
-        }
-    end
-)
--- }}}
+awful.screen.connect_for_each_screen(set_top_bar)
 
 -- {{{ Mouse bindings
 root.buttons(keys.desktop_buttons)
