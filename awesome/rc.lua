@@ -249,43 +249,6 @@ local function set_top_bar(s)
             function(t)
                 t:view_only()
             end
-        ),
-        awful.button(
-            {modkey},
-            1,
-            function(t)
-                if client.focus then
-                    client.focus:move_to_tag(t)
-                end
-            end
-        ),
-        awful.button(
-            {},
-            3,
-            awful.tag.viewtoggle
-        ),
-        awful.button(
-            {modkey},
-            3,
-            function(t)
-                if client.focus then
-                    client.focus:toggle_tag(t)
-                end
-            end
-        ),
-        awful.button(
-            {},
-            4,
-            function(t)
-                awful.tag.viewnext(t.screen)
-            end
-        ),
-        awful.button(
-            {},
-            5,
-            function(t)
-                awful.tag.viewprev(t.screen)
-            end
         )
     )
 
@@ -313,20 +276,6 @@ local function set_top_bar(s)
             3,
             function()
                 awful.menu.client_list({theme = {width = 250}})
-            end
-        ),
-        awful.button(
-            {},
-            4,
-            function()
-                awful.client.focus.byidx(1)
-            end
-        ),
-        awful.button(
-            {},
-            5,
-            function()
-                awful.client.focus.byidx(-1)
             end
         )
     )
@@ -623,7 +572,6 @@ client.connect_signal(
         c.border_color = beautiful.border_normal
     end
 )
-
 
 -- Show titlebar only when window is floating.
 local function should_show_client_titlebar(c)

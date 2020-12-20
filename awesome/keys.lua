@@ -22,6 +22,8 @@ local shiftkey = "Shift"
 --------------------------------------------------------------------------------
 local keys = {}
 
+keys.modkey = modkey
+
 local terminal = "alacritty" -- TODO(SuperPaintman): move it into the config.
 
 
