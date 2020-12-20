@@ -1,28 +1,22 @@
 -- See: https://awesomewm.org/doc/api/index.html.
 
+--------------------------------------------------------------------------------
+-- Imports.
+--------------------------------------------------------------------------------
 -- If LuaRocks is installed, make sure that packages installed through it are
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
 
--- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
 require("awful.autofocus")
--- Widget and layout library
 local wibox = require("wibox")
--- Theme handling library
 local beautiful = require("beautiful")
--- Notification library
 local naughty = require("naughty")
-local menubar = require("menubar")
 local hotkeys_popup = require("awful.hotkeys_popup")
--- Enable hotkeys help widget for VIM and other apps
--- when client with a matching name is opened:
--- require("awful.hotkeys_popup.keys")
 local dpi = require("beautiful.xresources").apply_dpi
 
 local daemons = require("daemons")
-
 local keys = require("keys")
 local cpu_widget = require("widgets.cpu")
 local ram_widget = require("widgets.ram")
@@ -31,7 +25,10 @@ local vpn_status_widget = require("widgets.vpn_status")
 local telegram_widget = require("widgets.telegram")
 local battery_widget = require("widgets.battery")
 
--- {{{ Error handling
+
+--------------------------------------------------------------------------------
+-- Error handling.
+--------------------------------------------------------------------------------
 -- Check if awesome encountered an error during startup and fell back to
 -- another config (This code will only ever execute for the fallback config)
 if awesome.startup_errors then
@@ -67,18 +64,17 @@ do
         end
     )
 end
--- }}}
 
--- {{{ Variable definitions
--- Themes define colours, icons, font and wallpapers.
+
+--------------------------------------------------------------------------------
+-- Theme.
+--------------------------------------------------------------------------------
 beautiful.init(require("theme"))
 
--- This is used later as the default terminal and editor to run.
-terminal = "alacritty"
-editor = os.getenv("EDITOR") or "vim"
-editor_cmd = terminal .. " -e " .. editor
 
--- Table of layouts to cover with awful.layout.inc, order matters.
+--------------------------------------------------------------------------------
+-- Layouts.
+--------------------------------------------------------------------------------
 awful.layout.layouts = {
     awful.layout.suit.tile,
     awful.layout.suit.tile.left,
@@ -86,20 +82,6 @@ awful.layout.layouts = {
 }
 
 local default_layout = awful.layout.suit.tile
-
--- }}}
-
-
-
--- Menubar configuration
-menubar.utils.terminal = terminal -- Set the terminal for applications that require it
--- }}}
-
-
-
--- {{{ Wibar
-
-
 
 
 --------------------------------------------------------------------------------
@@ -477,18 +459,16 @@ end
 
 awful.screen.connect_for_each_screen(set_top_bar)
 
--- {{{ Mouse bindings
-root.buttons(keys.desktop_buttons)
--- }}}
 
--- {{{ Key bindings
-
-
--- Set keys
+--------------------------------------------------------------------------------
+-- Key bindings.
+--------------------------------------------------------------------------------
 root.keys(keys.global)
--- }}}
 
--- {{{ Rules
+
+--------------------------------------------------------------------------------
+-- Riles.
+--------------------------------------------------------------------------------
 -- Rules to apply to new clients (through the "manage" signal).
 awful.rules.rules = {
     -- All clients will match this rule.
@@ -550,9 +530,11 @@ awful.rules.rules = {
     -- { rule = { class = "Firefox" },
     --   properties = { screen = 1, tag = "2" } },
 }
--- }}}
 
--- {{{ Signals
+
+--------------------------------------------------------------------------------
+-- Signals.
+--------------------------------------------------------------------------------
 -- Signal function to execute when a new client appears.
 client.connect_signal(
     "manage",
@@ -627,30 +609,21 @@ client.connect_signal(
     end
 )
 
--- Enable sloppy focus, so that focus follows mouse.
--- client.connect_signal(
---     "mouse::enter",
---     function(c)
---         c:emit_signal("request::activate", "mouse_enter", {raise = false})
---     end
--- )
-
+-- Apply border color on an active client.
 client.connect_signal(
     "focus",
     function(c)
         c.border_color = beautiful.border_focus
     end
 )
+
 client.connect_signal(
     "unfocus",
     function(c)
         c.border_color = beautiful.border_normal
     end
 )
--- }}}
 
--- Auto-start programs.
--- awful.spawn.with_shell(gears.filesystem.get_configuration_dir() .. "autostart.sh")
 
 -- Show titlebar only when window is floating.
 local function should_show_client_titlebar(c)
@@ -690,7 +663,7 @@ tag.connect_signal("property::layout", function(t)
     end
 end)
 
--- Client shape.
+-- Apply rounded corners on maximized clients.
 if beautiful.client_radius ~= nil then
     local function update_client_shape(c)
         if c.maximized then
@@ -706,6 +679,7 @@ if beautiful.client_radius ~= nil then
 
     client.connect_signal("manage", update_client_shape)
 end
+
 
 --------------------------------------------------------------------------------
 -- Host specific.
