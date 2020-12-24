@@ -34,6 +34,10 @@ PRETTIER_FILES := $(shell find . \
 	-type f \( -name '*.js' -or -name '*.css' -or -name '*.json' -or -name '*.yml' -or -name '*.md' \) \
 	$(addprefix -and -not -path , $(IGNORE_PATHS)) \
 )
+LUA_FILES := $(shell find . \
+	-type f -name '*.lua' \
+	$(addprefix -and -not -path , $(IGNORE_PATHS)) \
+)
 
 all:
 	:
@@ -52,6 +56,10 @@ format-nix:
 .PHONY: format-nix
 format-prettier:
 	@npx prettier --config ./prettier/.prettierrc.js --write $(PRETTIER_FILES)
+
+.PHONY: format-lua
+format-lua:
+	@./scripts/lua-format.sh --config=./.lua-format -i $(LUA_FILES)
 
 .PHONY: generate
 generate: generate-configs generate-vscode-extensions
