@@ -1,11 +1,10 @@
 { isMacOS ? false }:
 
 with builtins;
-
 let
   macOSOnly = path: if isMacOS then path else null;
 
-  merge = items: foldl' (res: item: res // item) {} items;
+  merge = items: foldl' (res: item: res // item) { } items;
 
   imports = items: merge (map import (filter (item: item != null) items));
 in
