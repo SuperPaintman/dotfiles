@@ -1,4 +1,5 @@
 -- See: https://awesomewm.org/doc/api/index.html.
+-- See: ls $(nix eval --raw nixos.awesome.outPath)/share/awesome/lib
 
 --------------------------------------------------------------------------------
 -- Imports.
