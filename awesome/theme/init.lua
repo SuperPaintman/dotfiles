@@ -93,4 +93,18 @@ theme.bg_systray = colors.primary.background
 theme.systray_icon_spacing = theme.wibar_widget_margin
 
 
+--------------------------------------------------------------------------------
+-- Notification.
+--------------------------------------------------------------------------------
+theme.notification_bg = colors.primary.background -- .. "DE"
+theme.notification_border_width = 0
+theme.notification_width = dpi(320)
+theme.notification_max_width = theme.notification_width
+theme.notification_shape = function(cr, w, h)
+    return gears.shape.rounded_rect(cr, w, h, dpi(4))
+end
+theme.notification_margin = dpi(8)
+theme.notification_icon_size = dpi(32)
+
+
 return theme

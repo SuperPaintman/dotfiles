@@ -2,13 +2,16 @@
 -- Imports.
 --------------------------------------------------------------------------------
 local naughty = require("naughty")
+local beautiful = require("beautiful")
 
 
 --------------------------------------------------------------------------------
 -- Test.
 --------------------------------------------------------------------------------
+package.loaded["theme"] = nil
 package.loaded["modules.notifications"] = nil
 
+beautiful.init(require("theme"))
 require("modules.notifications").init()
 
 
