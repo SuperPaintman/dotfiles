@@ -1,3 +1,29 @@
+## Logs
+
+```sh
+# Read logs.
+$ tail -f ~/.cache/awesome/stdout
+
+# Write logs.
+$ awesome-client 'require("gears").debug.dump("hello there")'
+```
+
+## Hot Module Replacement
+
+```lua
+local _, err = pcall(function()
+    package.loaded["modules.notifications"] = nil
+
+    require("modules.notifications").init()
+end)
+```
+
+## UI Tests
+
+```sh
+$ ./awesome/scripts/test-notifications.sh
+```
+
 ## Icons
 
 **Collection backup**:
