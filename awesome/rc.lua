@@ -480,7 +480,7 @@ awful.rules.rules = {
         rule_any = {
             type = {"normal", "dialog"}
         },
-        properties = {titlebars_enabled = true}
+        properties = {titlebars_enabled = false}
     }
 
     -- Set Firefox to always map on the tag named "2" on screen 1.
@@ -580,44 +580,6 @@ client.connect_signal(
         c.border_color = beautiful.border_normal
     end
 )
-
--- Show titlebar only when window is floating.
-local function should_show_client_titlebar(c)
-    if c.maximized then
-        return false
-    end
-
-    if c.floating then
-        return true
-    end
-
-    -- On startup client does not have a "first_tab".
-    if c.first_tag ~= nil and c.first_tag.layout == awful.layout.suit.floating then
-        return true
-    end
-
-    return false
-end
-
-local function update_client_titlebar(c)
-    if should_show_client_titlebar(c) then
-        awful.titlebar.show(c)
-    else
-        awful.titlebar.hide(c)
-    end
-end
-
-client.connect_signal("property::maximized", update_client_titlebar)
-
-client.connect_signal("property::floating", update_client_titlebar)
-
-client.connect_signal("manage", update_client_titlebar)
-
-tag.connect_signal("property::layout", function(t)
-    for _, c in pairs(t:clients()) do
-        update_client_titlebar(c)
-    end
-end)
 
 -- Apply rounded corners on maximized or fullscreen clients.
 if beautiful.client_radius ~= nil then

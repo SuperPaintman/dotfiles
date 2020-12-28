@@ -416,12 +416,12 @@ keys.client =
         end,
         {description = "close", group = "client"}
     ),
-    awful.key(
-        {modkey, ctrlkey},
-        "space",
-        awful.client.floating.toggle,
-        {description = "toggle floating", group = "client"}
-    ),
+    -- awful.key(
+    --     {modkey, ctrlkey},
+    --     "space",
+    --     awful.client.floating.toggle,
+    --     {description = "toggle floating", group = "client"}
+    -- ),
     awful.key(
         {modkey, ctrlkey},
         "Return",
