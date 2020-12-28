@@ -619,10 +619,10 @@ tag.connect_signal("property::layout", function(t)
     end
 end)
 
--- Apply rounded corners on maximized clients.
+-- Apply rounded corners on maximized or fullscreen clients.
 if beautiful.client_radius ~= nil then
     local function update_client_shape(c)
-        if c.maximized then
+        if c.maximized or c.fullscreen then
             c.shape = nil
         else
             c.shape = function(cr, width, height)
@@ -632,7 +632,7 @@ if beautiful.client_radius ~= nil then
     end
 
     client.connect_signal("property::maximized", update_client_shape)
-
+    client.connect_signal("property::fullscreen", update_client_shape)
     client.connect_signal("manage", update_client_shape)
 end
 
