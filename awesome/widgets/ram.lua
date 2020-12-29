@@ -5,7 +5,7 @@ local textbox = require("wibox.widget.textbox")
 local colors = require("colors")
 local underline = require("widgets.underline")
 local icon = require("widgets.icon")
-local signal_name = require("daemons.ram").signal_name
+local signals = require("daemons.monitroid").signals
 
 local ram = {}
 
@@ -24,21 +24,25 @@ local function new()
     }
     local widget = underline(content_widget, color)
 
-    local function handler(v)
-        local markup = string.format("%0.0f%%", v)
+    local function handler(success, err)
+        if err ~= nil then
+            return
+        end
+
+        local markup = string.format("%0.0f%%", success.usage * 100)
 
         textbox_widget:set_markup(markup)
     end
 
-    handler(0)
+    handler({ usage = 0 })
 
     -- setmetatable(widget, {
     --   __gc = function()
-    --     awesome.disconnect_signal(signal_name, handler)
+    --     awesome.disconnect_signal(signals.ram, handler)
     --   end
     -- })
 
-    awesome.connect_signal(signal_name, handler)
+    awesome.connect_signal(signals.ram, handler)
 
     return widget
 end
