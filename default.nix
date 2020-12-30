@@ -29,6 +29,7 @@ imports [
   ./tmux
   ./vim
   ./vscode
+  ./xdg
   ./xresources
   (macOSOnly ./yabai) # OSX specific.
   ./yarn

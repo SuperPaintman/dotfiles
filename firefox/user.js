@@ -2,6 +2,8 @@
 // See: resource:///defaults/preferences/firefox.js.
 // See: resource://gre/greprefs.js
 // See: https://github.com/mozilla/gecko-dev
+// See: http://kb.mozillazine.org/About:config_entries
+// See: about:config
 
 /* browser */
 // Show a blank tab in a new tab.
