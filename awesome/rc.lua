@@ -20,6 +20,7 @@ local dpi = require("beautiful.xresources").apply_dpi
 
 local daemons = require("daemons")
 local keys = require("keys")
+local state = require("lib.state")
 local cpu_widget = require("widgets.cpu")
 local ram_widget = require("widgets.ram")
 local wifi_status_widget = require("widgets.wifi_status")
@@ -493,6 +494,68 @@ awful.rules.rules = {
 --------------------------------------------------------------------------------
 -- Signals.
 --------------------------------------------------------------------------------
+-- Restore current state state on startup.
+awesome.connect_signal(
+    "startup",
+    function()
+        local _, err = state.restore()
+
+        if err == nil then
+            gears.debug.print_warning("signals: state was restored")
+        else
+            gears.debug.print_error(string.format("signals: failed to restore the state: %s", err))
+
+            naughty.notify(
+                {
+                    preset = naughty.config.presets.critical,
+                    title = "signals: failed to restore the state",
+                    text = err
+                }
+            )
+        end
+    end
+)
+
+-- Store current state state on a restart and remove on exit.
+awesome.connect_signal(
+    "exit",
+    function(reason_restart)
+        if reason_restart then
+            local _, err = state.store()
+
+            if err == nil then
+                gears.debug.print_warning("signals: state was stored")
+            else
+                gears.debug.print_error(string.format("signals: failed to store the state: %s", err))
+
+                naughty.notify(
+                    {
+                        preset = naughty.config.presets.critical,
+                        title = "signals: failed to store the state",
+                        text = err
+                    }
+                )
+            end
+        else
+            local _, err = state.remove()
+
+            if err == nil then
+                gears.debug.print_warning("signals: state was removed")
+            else
+                gears.debug.print_error(string.format("signals: failed to remove the state: %s", err))
+
+                naughty.notify(
+                    {
+                        preset = naughty.config.presets.critical,
+                        title = "signals: failed to remove the state",
+                        text = err
+                    }
+                )
+            end
+        end
+    end
+)
+
 -- Signal function to execute when a new client appears.
 client.connect_signal(
     "manage",

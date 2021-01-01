@@ -27,6 +27,7 @@ linkall \
     "colors.lua" \
     "keys.lua" \
     "apps.lua" \
+    "lib" \
     "modules" \
     "theme" \
     "icons" \

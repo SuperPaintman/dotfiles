@@ -4,6 +4,7 @@
   ".config/awesome/colors.lua".source = ./colors.lua;
   ".config/awesome/keys.lua".source = ./keys.lua;
   ".config/awesome/apps.lua".source = ./apps.lua;
+  ".config/awesome/lib".source = ./lib;
   ".config/awesome/modules".source = ./modules;
   ".config/awesome/theme".source = ./theme;
   ".config/awesome/icons".source = ./icons;
