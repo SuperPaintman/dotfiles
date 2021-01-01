@@ -4,6 +4,7 @@ IGNORE_PATHS := \
 	'./vim/.vim/bundle/**' \
 	'./vim/.vim/plugged/**' \
 	'./tmux/.tmux/plugins/**' \
+	'**/vendor/**' \
 	'**/node_modules/**'
 SHELL_FILES := \
 	$(shell \

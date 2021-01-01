@@ -42,7 +42,17 @@ lfcd() {
 
 # Tmux.
 tmx() {
-    tmux attach-session > /dev/null 2>&1 || tmux new-session
+    local detached_session="$(
+        tmux list-sessions -F '#{session_id} #{?session_attached,attached,}' 2> /dev/null |
+            grep -v attached |
+            head -n1
+    )"
+
+    if [ -n "$detached_session" ]; then
+        tmux attach-session -t "$detached_session"
+    else
+        tmux new-session
+    fi
 }
 
 # Docker.
