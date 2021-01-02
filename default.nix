@@ -16,6 +16,7 @@ imports [
   ./bin
   ./ctags
   ./git
+  ./gtk
   ./htop
   ./lein
   ./lf
