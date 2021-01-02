@@ -37,12 +37,6 @@ keys.global =
     keys.global,
     awful.key(
         {modkey},
-        "s",
-        hotkeys_popup.show_help,
-        {description = "show help", group = "awesome"}
-    ),
-    awful.key(
-        {modkey},
         "Left",
         awful.tag.viewprev,
         {description = "view previous", group = "tag"}
@@ -154,6 +148,18 @@ keys.global =
     ),
     awful.key(
         {modkey},
+        "s",
+        function()
+            -- TODO(SuperPaintman): replace it with callback or something.
+            awesome.emit_signal("layout::widgets::top_bar::ontop", true)
+        end,
+        function()
+            awesome.emit_signal("layout::widgets::top_bar::ontop", false)
+        end,
+        {description = "show top bar on top", group = "layout"}
+    ),
+    awful.key(
+        {modkey},
         "l",
         function()
             awful.tag.incmwfact(0.05)
@@ -234,19 +240,6 @@ keys.global =
         "r",
         apps.appmenu,
         {description = "show app menu", group = "launcher"}
-    ),
-    awful.key(
-        {modkey},
-        "x",
-        function()
-            awful.prompt.run {
-                prompt = "Run Lua code: ",
-                textbox = awful.screen.focused().mypromptbox.widget,
-                exe_callback = awful.util.eval,
-                history_path = awful.util.get_cache_dir() .. "/history_eval"
-            }
-        end,
-        {description = "lua execute prompt", group = "awesome"}
     ),
 
     -- Focus on applications.

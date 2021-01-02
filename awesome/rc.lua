@@ -359,8 +359,13 @@ local function set_top_bar(s)
         screen = s,
         position = beautiful.wibar_position or "top",
         width = beautiful.wibar_width,
-        height = beautiful.wibar_height
+        height = beautiful.wibar_height,
+        ontop = false,
     }
+
+    awesome.connect_signal("layout::widgets::top_bar::ontop", function(ontop)
+        top_bar.ontop = ontop
+    end)
 
     -- Battery widget can work only on devices with battery.
     local optional_battery = widget_margin_horizontal(battery, dpi(6))
