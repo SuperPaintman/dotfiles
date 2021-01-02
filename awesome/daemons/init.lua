@@ -3,6 +3,7 @@ local daemons = {
   battery = require("daemons.battery"),
   monitroid = require("daemons.monitroid"),
   volume = require("daemons.volume"),
+  brightness = require("daemons.brightness"),
 }
 
 return daemons
