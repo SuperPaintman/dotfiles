@@ -23,6 +23,7 @@ local keys = require("keys")
 local state = require("lib.state")
 local cpu_widget = require("widgets.cpu")
 local ram_widget = require("widgets.ram")
+local disk_widget = require("widgets.disk")
 local wifi_status_widget = require("widgets.wifi_status")
 local vpn_status_widget = require("widgets.vpn_status")
 local telegram_widget = require("widgets.telegram")
@@ -299,6 +300,9 @@ local function set_top_bar(s)
     ---- RAM.
     local ram = ram_widget()
 
+    ---- Disk.
+    local disk = disk_widget()
+
     ---- Battery.
     local battery = battery_widget()
 
@@ -398,6 +402,7 @@ local function set_top_bar(s)
             widget_margin_horizontal(separator, dpi(12)),
             widget_margin_horizontal(cpu, dpi(6)),
             widget_margin_horizontal(ram, dpi(6)),
+            widget_margin_horizontal(disk, dpi(6)),
             optional_battery,
             widget_margin_horizontal(separator, dpi(12)),
             widget_margin_horizontal(wifi_status, dpi(6)),

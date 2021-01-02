@@ -13,6 +13,7 @@ local json = require("json")
 local signals = {
     cpu = "daemons::monitroid::cpu",
     ram = "daemons::monitroid::ram",
+    disk = "daemons::monitroid::disk",
 }
 
 
@@ -60,6 +61,7 @@ local function handle(_, stdout, _, _, exitcode)
 
     update(stats, "cpu")
     update(stats, "ram")
+    update(stats, "disk")
 
     prev = stats
 end
