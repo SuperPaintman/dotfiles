@@ -261,6 +261,7 @@ local function set_top_bar(s)
 
     local taglist = awful.widget.taglist {
         screen = s,
+        widget_template = beautiful.tasklist_widget_template,
         filter = awful.widget.taglist.filter.all,
         buttons = taglist_buttons
     }

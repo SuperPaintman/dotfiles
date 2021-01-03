@@ -2,7 +2,11 @@
 -- Imports.
 --------------------------------------------------------------------------------
 local gears = require("gears")
+local naughty = require("naughty")
 local dpi = require("beautiful.xresources").apply_dpi
+local theme_assets = require("beautiful.theme_assets")
+local wibox = require("wibox")
+local tag = require("awful.tag")
 
 local colors = require("colors")
 
@@ -10,14 +14,29 @@ local colors = require("colors")
 --------------------------------------------------------------------------------
 -- Init.
 --------------------------------------------------------------------------------
-local base_theme_name = "zenburn"
+local theme = {}
 
-local base_theme = dofile(gears.filesystem.get_themes_dir() .. base_theme_name .. "/theme.lua")
+local base_theme_name = "default"
+
+local base_theme_path = gears.filesystem.get_themes_dir() .. base_theme_name .. "/theme.lua"
+
+if gears.filesystem.file_readable(base_theme_path) then
+    local base_theme = dofile(base_theme_path)
+
+    theme = gears.table.clone(base_theme)
+else
+    local err = string.format("theme: failed to find '%s' base theme", base_theme_name)
+
+    gears.debug.print_error(err)
+    naughty.notify(
+        {
+            preset = naughty.config.presets.critical,
+            title = err,
+        }
+    )
+end
 
 local theme_dir = gears.filesystem.get_configuration_dir() .. "theme"
-
--- local theme = {}
-local theme = gears.table.clone(base_theme)
 
 local color_border = colors.normal.blue -- TODO(SuperPaintman): move it into `config.yml`. It's also used in rofi.
 
@@ -43,6 +62,10 @@ end
 --------------------------------------------------------------------------------
 theme.fg_normal = colors.primary.foreground
 theme.bg_normal = colors.primary.background -- .. "98"
+theme.fg_focus = colors.normal.yellow
+theme.bg_focus = colors.bright.black
+theme.fg_urgent = theme.fg_normal
+theme.bg_urgent = colors.normal.red
 
 
 --------------------------------------------------------------------------------
@@ -78,6 +101,97 @@ theme.titlebar_bg_normal = colors.primary.background -- .. "98"
 --------------------------------------------------------------------------------
 theme.wibar_height = dpi(22)
 theme.wibar_widget_margin = dpi(2)
+
+
+--------------------------------------------------------------------------------
+-- Taglist.
+--------------------------------------------------------------------------------
+theme.taglist_font = "sans bold 10"
+
+theme.taglist_bg_focus = "#00000000"
+theme.taglist_fg_focus = colors.normal.yellow
+theme.taglist_underline_focus = colors.normal.yellow
+
+theme.taglist_bg_urgent = theme.taglist_bg_focus
+theme.taglist_fg_urgent = colors.normal.red
+theme.taglist_underline_urgent = colors.normal.red
+
+theme.taglist_bg_occupied = theme.taglist_bg_focus
+theme.taglist_fg_occupied = colors.primary.foreground
+theme.taglist_underline_occupied = colors.primary.foreground
+
+theme.taglist_bg_empty = theme.taglist_bg_focus
+theme.taglist_fg_empty = colors.bright.black
+
+theme.taglist_bg_volatile = theme.taglist_bg_focus
+theme.taglist_fg_volatile = colors.primary.foreground
+
+
+local function update_tasklist_widget(self, t)
+    local underline_role = self:get_children_by_id("underline_role")[1]
+
+    local urgent = tag.getproperty(t, "urgent")
+    local occupied = #t:clients() > 0
+
+    if underline_role ~= nil then
+        if t.selected then
+            underline_role.color = theme.taglist_underline_focus
+        elseif urgent then
+            underline_role.color = theme.taglist_underline_urgent
+        elseif occupied then
+            underline_role.color = theme.taglist_underline_occupied
+        else
+            underline_role.color = nil
+        end
+    end
+end
+
+local tasklist_widget_margin = dpi(2)
+theme.tasklist_widget_template = {
+    layout = wibox.container.margin,
+    top = tasklist_widget_margin,
+    {
+        id = "underline_role",
+        layout = wibox.container.margin,
+        bottom = tasklist_widget_margin,
+        -- color = "#000000",
+        {
+            id     = "background_role",
+            widget = wibox.container.background,
+            {
+                layout = wibox.container.place,
+                forced_width = theme.titlebar_size,
+                {
+                    layout = wibox.layout.fixed.horizontal,
+                    {
+                        id     = "index_role",
+                        widget = wibox.widget.textbox,
+                    },
+                    {
+                        id     = "icon_role",
+                        widget = wibox.widget.imagebox,
+                    },
+                    {
+                        id     = "text_role",
+                        widget = wibox.widget.textbox,
+                    },
+                },
+            },
+        },
+    },
+    create_callback = function(self, t, index, objects)
+        update_tasklist_widget(self, t)
+    end,
+    update_callback = function(self, t, index, objects)
+        update_tasklist_widget(self, t)
+    end,
+}
+
+theme.taglist_spacing = tasklist_widget_margin * 2
+
+theme.taglist_shape = nil
+theme.taglist_squares_sel = nil
+theme.taglist_squares_unsel = nil
 
 
 --------------------------------------------------------------------------------
