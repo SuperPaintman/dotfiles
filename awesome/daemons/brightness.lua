@@ -7,7 +7,7 @@ local function parse_brightness(stdout)
         return 0, false
     end
 
-    local level = stdout:match('%((%d?%d?%d)%%%)')
+    local level = stdout:match(',(%d?%d?%d)%%,')
     if level == nil then
         return 0, false
     end
@@ -15,8 +15,9 @@ local function parse_brightness(stdout)
     return tonumber(level) / 100, true
 end
 
+-- TODO(SuperPaintman): replace it with DBus.
 watch(
-    [[brightnessctl info]],
+    [[brightnessctl info --machine-readable]],
     2,
     function(_, stdout)
         local level, ok = parse_brightness(stdout)

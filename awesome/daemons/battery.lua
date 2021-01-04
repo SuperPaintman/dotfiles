@@ -30,6 +30,7 @@ local function parse_upower_info(stdout)
     return tonumber(percentage), true
 end
 
+-- TODO(SuperPaintman): replace it with DBus.
 local exists = false
 awful.spawn.easy_async(
     [[bash -c "upower -e | grep BAT | tail -1"]],

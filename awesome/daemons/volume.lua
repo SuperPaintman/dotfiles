@@ -1,4 +1,4 @@
-local watch = require("awful.widget.watch")
+local awful = require("awful")
 
 local signal_name = "daemons::volume"
 
@@ -21,22 +21,35 @@ local function parse_amixer(stdout)
     return muted, tonumber(volume) / 100, true
 end
 
-watch(
-    [[amixer sget Master]],
-    2,
-    function(_, stdout)
-        local muted, volume, ok = parse_amixer(stdout)
-        if not ok then
-            return
-        end
+local function update()
+    awful.spawn.easy_async(
+        [[amixer sget Master]],
+        function(stdout)
+            local muted, volume, ok = parse_amixer(stdout)
+            if not ok then
+                return
+            end
 
-        -- Monitroid like.
-        awesome.emit_signal(signal_name, {
-          muted = muted,
-          volume = volume,
-        }, nil)
-    end
+            -- Monitroid like.
+            awesome.emit_signal(signal_name, {
+              muted = muted,
+              volume = volume,
+            }, nil)
+        end
+    )
+end
+
+-- TODO(SuperPaintman): replace it with DBus or something else.
+awful.spawn.with_line_callback(
+    [[bash -c 'pactl subscribe | grep --line-buffered "sink"']],
+    {
+        stdout = function()
+            update()
+        end,
+    }
 )
+
+update()
 
 local mod = {
     signal_name = signal_name,
