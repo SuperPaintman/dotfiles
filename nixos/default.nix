@@ -344,6 +344,8 @@ in
         vpnConfigs
     );
 
+  services.emacs.enable = true;
+
   # Services: custom / mine.
   services.monitroid.enable = true;
 
