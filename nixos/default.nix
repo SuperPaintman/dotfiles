@@ -27,14 +27,6 @@ let
 
   unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
 
-  dotfiles = getLocalOrRemote {
-    local = /home/superpaintman/Projects/github.com/SuperPaintman/dotfiles;
-    # TODO(SuperPaintman): fetch submodules.
-    remote = builtins.fetchGit {
-      url = "https://github.com/SuperPaintman/dotfiles";
-    };
-  };
-
   monitroid = getLocalOrRemote {
     local = /home/superpaintman/Projects/github.com/SuperPaintman/monitroid;
     # TODO(SuperPaintman): fetch submodules.
@@ -106,13 +98,7 @@ in
     emacs
     (
       unstable.vscode-with-extensions.override {
-        vscodeExtensions =
-          let
-            vscodeExtensionsFile = "${dotfiles.path}/vscode/extensions.nix";
-          in
-          if builtins.pathExists vscodeExtensionsFile
-          then (import vscodeExtensionsFile args)
-          else [ ];
+        vscodeExtensions = import ../vscode/extensions.nix args;
       }
     )
     android-studio
@@ -121,13 +107,7 @@ in
     firefox
     (
       localPkgs.firefox-install-extensions {
-        extensions =
-          let
-            firefoxExtensionsFile = "${dotfiles.path}/firefox/extensions.nix";
-          in
-          if builtins.pathExists firefoxExtensionsFile
-          then (import firefoxExtensionsFile args)
-          else [ ];
+        extensions = import ../firefox/extensions.nix args;
       }
     )
     chromium
@@ -473,11 +453,11 @@ in
             # Support old dotfiles format.
             callIfFunction = f: args: if builtins.isFunction f then (f args) else f;
 
-            dotfilesFiles = callIfFunction (import dotfiles.path) {
+            dotfilesFiles = callIfFunction (import ../.) {
               isMacOS = pkgs.stdenv.hostPlatform.isMacOS;
             };
           in
-          if dotfiles.isLocal then (filesToSymlinks dotfilesFiles { }) else dotfilesFiles
+          filesToSymlinks dotfilesFiles { }
         )
       ];
 
@@ -487,29 +467,24 @@ in
           configPath = ".mozilla/firefox";
           profileName = "superpaintman";
           profilePath = "${profileName}.default";
-          optionalFile = path: lib.optionalAttrs (builtins.pathExists "${dotfiles.path}/firefox/${path}") {
-            "${configPath}/${profilePath}/${path}".source = "${dotfiles.path}/firefox/${path}";
-          };
         in
         filesToSymlinks
-          (
-            {
-              "${configPath}/profiles.ini".text = ''
-                [Profile0]
-                Name=default
-                IsRelative=1
-                Path=${profilePath}
-                Default=1
+          {
+            "${configPath}/profiles.ini".text = ''
+              [Profile0]
+              Name=default
+              IsRelative=1
+              Path=${profilePath}
+              Default=1
 
-                [General]
-                StartWithLastProfile=1
-                Version=2
-              '';
-            }
-            // optionalFile "user.js"
-            // optionalFile "chrome/userChrome.css"
-            // optionalFile "chrome/userContent.css"
-          )
+              [General]
+              StartWithLastProfile=1
+              Version=2
+            '';
+            "${configPath}/${profilePath}/user.js".source = ../firefox/user.js;
+            "${configPath}/${profilePath}/chrome/userChrome.css".source = ../firefox/chrome/userChrome.css;
+            "${configPath}/${profilePath}/chrome/userContent.css".source = ../firefox/chrome/userContent.css;
+          }
           { };
     in
     {
