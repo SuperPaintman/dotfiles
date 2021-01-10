@@ -1,3 +1,20 @@
+NIXOS_VERSION := 20.09
+
+NIX_LOCAL_PACKAGES := $(shell nix eval --raw \
+	'( \
+		with import <nixpkgs> {}; \
+		with lib; \
+		let \
+			pkgs = callPackage ./nixos/pkgs/default.nix {}; \
+		in \
+			pipe pkgs [ \
+				attrNames \
+				(filter (n: ! elem n [ "override" "overrideDerivation" ])) \
+				(concatStringsSep " ") \
+			] \
+	)' \
+)
+
 IGNORE_PATHS := \
 	'./zsh/.oh-my-zsh/**' \
 	'./zsh/.oh-my-zsh-custom/**' \
@@ -43,6 +60,57 @@ LUA_FILES := $(shell find . \
 all:
 	:
 
+.PHONY: nixos
+nixos: nixos-channels nixos-upgrade
+
+.PHONY: nixos-upgrade
+nixos-upgrade: nixos-update nixos-switch
+
+.PHONY: nixos-update
+nixos-update: channels
+	@sudo nix-channel --update
+
+.PHONY: nixos-switch
+nixos-switch:
+	@sudo nixos-rebuild switch
+
+.PHONY: nixos-build
+nixos-build:
+	nixos-rebuild build
+
+.PHONY: $(addprefix nixos-build-pkgs-, $(NIX_LOCAL_PACKAGES))
+$(addprefix nixos-build-pkgs-, $(NIX_LOCAL_PACKAGES)): nixos-build-pkgs-%:
+	@nix-build \
+		-E 'with import <nixpkgs> {}; callPackage ./nixos/pkgs/default.nix {}' \
+		-A $* \
+		--out-link "result-$*"
+
+.PHONY: $(addprefix nixos-shell-pkgs-, $(NIX_LOCAL_PACKAGES))
+$(addprefix nixos-shell-pkgs-, $(NIX_LOCAL_PACKAGES)): nixos-shell-pkgs-%:
+	@nix-shell \
+		-E 'with import <nixpkgs> {}; callPackage ./nixos/pkgs/default.nix {}' \
+		-A $*
+
+.PHONY: nixos-dry-build
+nixos-dry-build:
+	nixos-rebuild dry-build
+
+.PHONY: nixos-gc
+nixos-gc:
+	@sudo nix-collect-garbage -d
+
+# Add NixOS channels.
+# See: https://nixos.org/nixos/manual/index.html#sec-upgrading .
+.PHONY: nixos-channels
+nixos-channels:
+	@sudo nix-channel --add "https://nixos.org/channels/nixos-$(NIXOS_VERSION)" nixos
+	@sudo nix-channel --add "https://nixos.org/channels/nixos-unstable" nixos-unstable
+	@sudo nix-channel --list
+
+.PHONY: nixos-uninstall-users-packages
+nixos-uninstall-users-packages:
+	@nix-env --uninstall $$(nix-env -q)
+
 .PHONY: format
 format: format-shell format-nix format-prettier
 
@@ -83,3 +151,8 @@ test-lua:
 		--directory=./awesome \
 		'--lpath="./?.lua;./?/?.lua;./?/init.lua"' \
 		./
+
+.PHONY: clean
+clean:
+	@rm -f result
+	@rm -f result-*
