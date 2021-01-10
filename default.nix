@@ -15,6 +15,7 @@ imports [
   ./bash
   ./bin
   ./ctags
+  ./doom
   ./git
   ./gtk
   ./htop
