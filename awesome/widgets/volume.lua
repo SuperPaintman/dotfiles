@@ -1,6 +1,6 @@
+local beautiful = require("beautiful")
 local textbox = require("wibox.widget.textbox")
 
-local colors = require("colors")
 local underline = require("widgets.underline")
 local volume_daemon = require("daemons.volume")
 
@@ -9,8 +9,8 @@ local signal_name = volume_daemon.signal_name
 local volume = {}
 
 local function new(args)
-    local color_unmuted = colors.normal.green
-    local color_muted = colors.normal.red
+    local color_unmuted = beautiful.widget_volume_color or beautiful.widget_color or beautiful.fg_normal or "#FFFFFF"
+    local color_muted = beautiful.widget_volume_muted_color or beautiful.widget_color or beautiful.fg_normal or "#FFFFFF"
 
     local textbox_widget = textbox("")
     local widget = underline(textbox_widget, color_muted)

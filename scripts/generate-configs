@@ -4,17 +4,63 @@
 /* Imports */
 const fs = require('fs');
 const path = require('path');
-const { promisify } = require('util');
+const { promisify, inspect } = require('util');
 const assert = require('assert');
 
-const { mapValues, isArray, isObject, isString } = require('lodash');
+const {
+  mapValues,
+  isArray,
+  isObject,
+  isString,
+  merge,
+  set
+} = require('lodash');
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
 const glob = require('glob');
 const yaml = require('js-yaml');
 const tinycolor = require('tinycolor2');
 const Handlebars = require('handlebars');
 
 /* Helpers */
-function processConfig(cfg) {
+async function importConfig(p, ctx = { known: new Set() }) {
+  const fullPath = path.resolve(__dirname, '../', p);
+  if (ctx.known.has(fullPath)) {
+    return null;
+  }
+
+  ctx.known.add(fullPath);
+
+  const cfg = await loadConfig(fullPath);
+
+  return processConfig(cfg, ctx);
+}
+
+async function loadConfig(path) {
+  const cfg = await readFileAsync(path, 'utf-8');
+
+  return yaml.load(cfg);
+}
+
+async function processConfig(cfg, ctx) {
+  if (!cfg) {
+    return {};
+  }
+
+  // Top level.
+  if (cfg.import !== undefined) {
+    for (const p of cfg.import) {
+      const subCfg = await importConfig(p, ctx);
+      if (subCfg === null) {
+        continue;
+      }
+
+      cfg = merge(cfg, subCfg);
+    }
+
+    delete cfg.import;
+  }
+
   function walk(node) {
     if (isArray(node)) {
       return node.map(walk);
@@ -32,6 +78,14 @@ function processConfig(cfg) {
   }
 
   return walk(cfg);
+}
+
+function preprocessTemplate(template) {
+  const s = template
+    .replace(/#@@(.+?)@@/g, '$1')
+    .replace(/\"@@(.+?)@@\"/g, '$1');
+
+  return s;
 }
 
 function colorConvert(method, color, ...args) {
@@ -79,7 +133,18 @@ function makeHelperColor(method, argsLen = 0) {
   };
 }
 
+// TODO(SuperPaintman): this is very pure lua encoder.
+function toLua(value) {
+  const json = JSON.stringify(value, null, 4);
+
+  const s = json.replace(/"(.+?)":/g, '$1 =').replace(/-/g, '_');
+
+  return s;
+}
+
 /* Init */
+const { argv } = yargs(hideBin(process.argv));
+
 const readFileAsync = promisify(fs.readFile);
 const writeFileAsync = promisify(fs.writeFile);
 const globAsync = promisify(glob);
@@ -93,30 +158,52 @@ Handlebars.registerHelper({
   lighten: makeHelperColor('lighten', 1),
   alpha: makeHelper((color, value) => colorConvert('setAlpha', color, value)),
   polybar: polybarColor,
+  indent(ind, content) {
+    return content
+      .split('\n')
+      .map((line) => ind + line)
+      .join('\n');
+  },
+  set(p, value) {
+    return set({}, p, value);
+  },
+  json(value) {
+    return JSON.stringify(value, null, 2);
+  },
+  yaml(value) {
+    return yaml.dump(value, { indent: 4 });
+  },
+  lua: toLua
 });
 
 /* Main */
 async function main() {
   // Load config.
-  const configContent = await readFileAsync(configFilename, 'utf-8');
-  const config = processConfig(yaml.load(configContent));
+  const config = await importConfig(configFilename);
+
+  if (argv.showConfig) {
+    console.log(inspect(config, { depth: 32, colors: true }));
+    return;
+  }
 
   // Search all template files.
   const templates = await globAsync('**/*.hbs', {
-    dot: true,
+    dot: true
   });
 
   for (const templateFilename of templates) {
     // Read template.
-    const templateContent = await readFileAsync(templateFilename, 'utf-8');
+    const rawTemplateContent = await readFileAsync(templateFilename, 'utf-8');
+
+    const templateContent = preprocessTemplate(rawTemplateContent);
 
     const template = Handlebars.compile(templateContent, {
-      strict: true,
+      strict: true
     });
 
     const result = template({
       ...config,
-      warning: 'This file is generated; DO NOT EDIT.',
+      warning: 'This file is generated; DO NOT EDIT.'
     });
 
     // Write result.

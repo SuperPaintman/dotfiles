@@ -1,6 +1,6 @@
+local beautiful = require("beautiful")
 local textbox = require("wibox.widget.textbox")
 
-local colors = require("colors")
 local underline = require("widgets.underline")
 local brightness_daemon = require("daemons.brightness")
 
@@ -9,7 +9,7 @@ local signal_name = brightness_daemon.signal_name
 local brightness = {}
 
 local function new(args)
-    local color = colors.normal.blue
+    local color = beautiful.widget_brightness_color or beautiful.widget_color or beautiful.fg_normal or "#FFFFFF"
 
     local textbox_widget = textbox("")
     local widget = underline(textbox_widget, color)

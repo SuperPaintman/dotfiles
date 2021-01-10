@@ -4,11 +4,9 @@ colors:
     primary:
         background: "#222222"
         foreground: "#F2F2F2"
-
     cursor:
         text: "#282A2E"
         cursor: "#F2F2F2"
-
     normal:
         black: "#2B2B2B"
         red: "#E42222"
@@ -18,7 +16,6 @@ colors:
         magenta: "#AB53D6"
         cyan: "#5FC0AE"
         white: "#C1C2C2"
-
     bright:
         black: "#5E5E5E"
         red: "#FD3B3B"

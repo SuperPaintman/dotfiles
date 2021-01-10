@@ -1,26 +1,59 @@
-# Theme: Later This Evening (modificated)
+# See: https://terminal.sexy/
+# See: https://mayccoll.github.io/Gogh/
+
+import:
+    - ./theme.later-this-evening.yml
+    # - ./theme.doom-one.yml
+
 colors:
-    primary:
-        foreground: "#F2F2F2"
-        background: "#222222"
-        cursor_color: "#282A2E"
+    # Alacritty.
+    alacritty:
+        primary:
+            background: "{{ colors.primary.background }}"
+            foreground: "{{ colors.primary.foreground }}"
 
-    normal:
-        black: "#2B2B2B" # "#000000"
-        red: "#E42222"
-        green: "#AABB39"
-        yellow: "#FCAE25"
-        blue: "#6699D6"
-        magenta: "#AB53D6"
-        cyan: "#5FC0AE"
-        white: "#C1C2C2" # "#FFFFFF"
+        cursor:
+            text: "{{ colors.primary.cursor_color }}"
+            cursor: "{{ colors.primary.foreground }}"
 
-    bright:
-        black: "{{ brighten colors.normal.black 20 }}"
-        red: "{{ brighten colors.normal.red 10 }}"
-        green: "{{ brighten colors.normal.green 10 }}"
-        yellow: "{{ brighten colors.normal.yellow 10 }}"
-        blue: "{{ brighten colors.normal.blue 10 }}"
-        magenta: "{{ brighten colors.normal.magenta 10 }}"
-        cyan: "{{ brighten colors.normal.cyan 10 }}"
-        white: "{{ brighten colors.normal.white 10 }}"
+        normal:
+            black: "{{ colors.normal.black }}"
+            red: "{{ colors.normal.red }}"
+            green: "{{ colors.normal.green }}"
+            yellow: "{{ colors.normal.yellow }}"
+            blue: "{{ colors.normal.blue }}"
+            magenta: "{{ colors.normal.magenta }}"
+            cyan: "{{ colors.normal.cyan }}"
+            white: "{{ colors.normal.white }}"
+
+        bright:
+            black: "{{ colors.bright.black }}"
+            red: "{{ colors.bright.red }}"
+            green: "{{ colors.bright.green }}"
+            yellow: "{{ colors.bright.yellow }}"
+            blue: "{{ colors.bright.blue }}"
+            magenta: "{{ colors.bright.magenta }}"
+            cyan: "{{ colors.bright.cyan }}"
+            white: "{{ colors.bright.white }}"
+
+    # AwesomeWM
+    awesome:
+        widgets:
+            battery:
+                normal: "{{ colors.normal.yellow }}"
+
+            brightness:
+                normal: "{{ colors.normal.blue }}"
+
+            cpu:
+                normal: "{{ colors.normal.red }}"
+
+            disk:
+                normal: "{{ colors.normal.green }}"
+
+            ram:
+                normal: "{{ colors.normal.blue }}"
+
+            volume:
+                normal: "{{ colors.normal.green }}"
+                muted: "{{ colors.normal.red }}"

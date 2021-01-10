@@ -1,15 +1,15 @@
+local beautiful = require("beautiful")
 local wibox = require('wibox')
 local margin = require("wibox.container.margin")
 local textbox = require("wibox.widget.textbox")
 
-local colors = require("colors")
 local underline = require("widgets.underline")
 local signals = require("daemons.monitroid").signals
 
 local disk = {}
 
 local function new()
-    local color = colors.normal.green
+    local color = beautiful.widget_disk_color or beautiful.widget_color or beautiful.fg_normal or "#FFFFFF"
 
     local textbox_widget = textbox("")
     local content_widget = wibox.widget{

@@ -1,8 +1,8 @@
+local beautiful = require("beautiful")
 local wibox = require('wibox')
 local margin = require("wibox.container.margin")
 local textbox = require("wibox.widget.textbox")
 
-local colors = require("colors")
 local underline = require("widgets.underline")
 local icon = require("widgets.icon")
 local signals = require("daemons.monitroid").signals
@@ -10,12 +10,12 @@ local signals = require("daemons.monitroid").signals
 local cpu = {}
 
 local function new(args)
-    local color = colors.normal.red
+    local color = beautiful.widget_cpu_color or beautiful.widget_color or beautiful.fg_normal or "#FFFFFF"
 
     local textbox_widget = textbox("")
     local icon_widget = icon {
         name = "cpu",
-        color = colors.normal.red
+        color = color
     }
     local content_widget = wibox.widget{
         margin(icon_widget, 2, 2, 2, 2),

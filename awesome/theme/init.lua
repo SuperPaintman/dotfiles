@@ -231,4 +231,29 @@ theme.notification_title_font = "sans bold 12"
 theme.notification_action_font = "sans bold 10"
 
 
+--------------------------------------------------------------------------------
+-- Widget.
+--------------------------------------------------------------------------------
+theme.widget_color = colors.primary.foreground
+if colors.awesome ~= nil and colors.awesome.widgets ~= nil then
+    -- Battery.
+    theme.widget_battery_color = colors.awesome.widgets.battery and colors.awesome.widgets.battery.normal
+
+    -- Brightness.
+    theme.widget_brightness_color = colors.awesome.widgets.brightness and colors.awesome.widgets.brightness.normal
+
+    -- CPU.
+    theme.widget_cpu_color = colors.awesome.widgets.cpu and colors.awesome.widgets.cpu.normal
+
+    -- Disk.
+    theme.widget_disk_color = colors.awesome.widgets.disk and colors.awesome.widgets.disk.normal
+
+    -- RAM.
+    theme.widget_ram_color = colors.awesome.widgets.ram and colors.awesome.widgets.ram.normal
+
+    -- Volume.
+    theme.widget_volume_color = colors.awesome.widgets.volume and colors.awesome.widgets.volume.normal
+    theme.widget_volume_muted_color = colors.awesome.widgets.volume and colors.awesome.widgets.volume.muted
+end
+
 return theme

@@ -1,0 +1,41 @@
+# See: https://terminal.sexy/
+# See: https://mayccoll.github.io/Gogh/
+# See: https://github.com/hlissner/emacs-doom-themes/blob/master/themes/doom-one-theme.el
+
+# Theme: Doom One (modificated)
+colors:
+    primary:
+        foreground: "#DFDFDF"
+        background: "#282c34"
+        cursor_color: "#5b6268"
+
+    normal:
+        black: "#1b2229"
+        red: "#ff6c6b"
+        orange: "#da8548"
+        green: "#98be65"
+        teal: "#4db5bd"
+        yellow: "#ecbe7b"
+        blue: "#51afef"
+        dark-blue: "#2257a0"
+        magenta: "#c678dd"
+        violet: "#a9a1e1"
+        cyan: "#46d9ff"
+        white: "#dfdfdf"
+        dark-cyan: "#5699af"
+
+    bright:
+        black: "{{ brighten colors.normal.black 20 }}"
+        red: "{{ brighten colors.normal.red 10 }}"
+        green: "{{ brighten colors.normal.green 10 }}"
+        yellow: "{{ brighten colors.normal.yellow 10 }}"
+        blue: "{{ brighten colors.normal.blue 10 }}"
+        magenta: "{{ brighten colors.normal.magenta 10 }}"
+        cyan: "{{ brighten colors.normal.cyan 10 }}"
+        white: "{{ brighten colors.normal.white 10 }}"
+
+    # Alacritty.
+    alacritty:
+        cursor:
+            text: "{{ colors.primary.cursor_color }}"
+            cursor: "{{ colors.primary.foreground }}"

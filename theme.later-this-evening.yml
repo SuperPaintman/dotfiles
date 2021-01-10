@@ -1,0 +1,29 @@
+# See: https://terminal.sexy/
+# See: https://mayccoll.github.io/Gogh/
+
+# Theme: Later This Evening (modificated)
+colors:
+    primary:
+        foreground: "#F2F2F2"
+        background: "#222222"
+        cursor_color: "#282A2E"
+
+    normal:
+        black: "#2B2B2B" # "#000000"
+        red: "#E42222"
+        green: "#AABB39"
+        yellow: "#FCAE25"
+        blue: "#6699D6"
+        magenta: "#AB53D6"
+        cyan: "#5FC0AE"
+        white: "#C1C2C2" # "#FFFFFF"
+
+    bright:
+        black: "{{ brighten colors.normal.black 20 }}"
+        red: "{{ brighten colors.normal.red 10 }}"
+        green: "{{ brighten colors.normal.green 10 }}"
+        yellow: "{{ brighten colors.normal.yellow 10 }}"
+        blue: "{{ brighten colors.normal.blue 10 }}"
+        magenta: "{{ brighten colors.normal.magenta 10 }}"
+        cyan: "{{ brighten colors.normal.cyan 10 }}"
+        white: "{{ brighten colors.normal.white 10 }}"
