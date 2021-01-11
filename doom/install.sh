@@ -16,6 +16,8 @@ done
 TARGET_ROOT="$HOME/.doom.d"
 SOURCE_ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
+mkdir -p "$TARGET_ROOT"
+
 linkall \
     "$SOURCE_ROOT" \
     "$TARGET_ROOT" \

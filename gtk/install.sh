@@ -16,6 +16,8 @@ done
 TARGET_ROOT="$HOME"
 SOURCE_ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
+mkdir -p "$TARGET_ROOT/.config"
+
 linkall \
     "$SOURCE_ROOT/gtk-3.0" \
     "$TARGET_ROOT/.config/gtk-3.0" \
