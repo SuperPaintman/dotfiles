@@ -113,5 +113,4 @@ alias em='emacsclient --no-wait --create-frame'
 # Misc.
 alias e="$EDITOR"
 alias map="xargs -n1"
-# alias afk="systemctl suspend -i"
 alias sshpass='ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no'

@@ -40,6 +40,10 @@ lfcd() {
     exit 0
 }
 
+afk() {
+    systemctl suspend -i
+}
+
 # Tmux.
 tmx() {
     local detached_session="$(
