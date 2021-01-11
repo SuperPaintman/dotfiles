@@ -51,6 +51,9 @@ if [ -f ~/.bash/aliases.sh ]; then source ~/.bash/aliases.sh; fi
 # Theme.
 if [ -f ~/.bash/theme.sh ]; then source ~/.bash/theme.sh; fi
 
+# Local (If we have one).
+if [ -f ~/.bash_profile.local ]; then source ~/.bash_profile.local; fi
+
 
 # === Bash only ===
 if [ -n "$ZSH_VERSION" ]; then
