@@ -1,7 +1,8 @@
-{ isMacOS ? false }:
+{ isLinux ? false, isMacOS ? false }:
 
 with builtins;
 let
+  linuxOnly = path: if isLinux then path else null;
   macOSOnly = path: if isMacOS then path else null;
 
   merge = items: foldl' (res: item: res // item) { } items;
@@ -11,13 +12,13 @@ in
 imports [
   ./alacritty
   ./ansible
-  ./awesome
+  (linuxOnly ./awesome)
   ./bash
   ./bin
   ./ctags
   ./doom
   ./git
-  ./gtk
+  (linuxOnly ./gtk)
   ./htop
   ./lein
   ./lf
@@ -25,14 +26,14 @@ imports [
   ./npm
   ./polybar
   ./prettier
-  ./rofi
+  (linuxOnly ./rofi)
   ./sbt
   (macOSOnly ./skhd) # OSX specific.
   ./tmux
   ./vim
   ./vscode
-  ./xdg
-  ./xresources
+  (linuxOnly ./xdg)
+  (linuxOnly ./xresources)
   (macOSOnly ./yabai) # OSX specific.
   ./yarn
   ./zsh

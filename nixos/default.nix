@@ -456,6 +456,7 @@ in
             callIfFunction = f: args: if builtins.isFunction f then (f args) else f;
 
             dotfilesFiles = callIfFunction (import ../.) {
+              isLinux = pkgs.stdenv.hostPlatform.isLinux;
               isMacOS = pkgs.stdenv.hostPlatform.isMacOS;
             };
           in

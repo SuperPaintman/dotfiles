@@ -13,6 +13,10 @@ for arg in "$@"; do
     esac
 done
 
+if ! is_osx; then
+    exit
+fi
+
 TARGET_ROOT="$HOME/.config/skhd"
 SOURCE_ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
