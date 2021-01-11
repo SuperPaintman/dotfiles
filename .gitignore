@@ -7,3 +7,11 @@ tmux/.tmux/sidebar/
 
 /result
 /result-*
+
+*.local
+*.local.*
+
+# Dependencies.
+!/tmux/.tmux/plugins/
+!/zsh/.oh-my-zsh/
+!/zsh/.oh-my-zsh-custom/plugins/
