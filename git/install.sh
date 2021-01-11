@@ -21,3 +21,10 @@ linkall \
     "$TARGET_ROOT" \
     "$is_force" \
     ".gitconfig"
+
+# Local.
+linkalloptional \
+    "$SOURCE_ROOT" \
+    "$TARGET_ROOT" \
+    "$is_force" \
+    ".gitconfig.local"

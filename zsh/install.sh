@@ -21,3 +21,10 @@ linkall \
     "$TARGET_ROOT" \
     "$is_force" \
     ".zshrc" ".zsh" ".oh-my-zsh" ".oh-my-zsh-custom"
+
+# Local.
+linkalloptional \
+    "$SOURCE_ROOT" \
+    "$TARGET_ROOT" \
+    "$is_force" \
+    ".zshrc.local" ".zsh.local"

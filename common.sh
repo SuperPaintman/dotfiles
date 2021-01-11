@@ -39,6 +39,10 @@ ok() {
     echo "$(green "[ok]")" $@
 }
 
+info() {
+    echo "$(yellow "[info]")" $@
+}
+
 error() {
     echo "$(red "[error]")" $@
 }
@@ -89,7 +93,7 @@ is_ubuntu() {
     return 1
 }
 
-linkall() {
+_linkall() {
     local source_root="$1"
     local target_root="$2"
     local is_force="$3"
@@ -98,6 +102,16 @@ linkall() {
     for target in $targets; do
         ln_target="$target_root/$target"
         ln_source="$source_root/$target"
+
+        if [ ! -f $ln_source ]; then
+            if [ "$OPTIONAL" == "" ]; then
+                error "$(blue "$target") is not optional and does not exist ($(gray "$ln_source"))"
+            else
+                info "$(blue "$target") is optional and does not exist (skipped)"
+            fi
+
+            continue
+        fi
 
         if [[ -e $ln_target || -L $ln_target ]]; then
             if [[ $is_force == true ]]; then
@@ -112,4 +126,12 @@ linkall() {
 
         ok "$(blue "$target") has linked ($(gray "$ln_source") => $(gray "$ln_target"))"
     done
+}
+
+linkall() {
+    OPTIONAL="" _linkall $@
+}
+
+linkalloptional() {
+    OPTIONAL="yes" _linkall $@
 }

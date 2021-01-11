@@ -21,3 +21,10 @@ linkall \
     "$TARGET_ROOT" \
     "$is_force" \
     ".bashrc" ".bash_profile" ".bash"
+
+# Local.
+linkalloptional \
+    "$SOURCE_ROOT" \
+    "$TARGET_ROOT" \
+    "$is_force" \
+    ".bashrc.local" ".bash_profile.local" ".bash.local"
