@@ -1,6 +1,14 @@
 -- This file is generated; DO NOT EDIT.
 
 local colors = {
+    depth = {
+        first = {
+            background = "#1A1A1A"
+        },
+        second = {
+            background = "#151515"
+        }
+    },
     alacritty = {
         primary = {
             background = "#222222",
@@ -32,6 +40,9 @@ local colors = {
         }
     },
     awesome = {
+        wibar = {
+            background = "#151515"
+        },
         widgets = {
             battery = {
                 normal = "#FCAE25"
@@ -53,6 +64,10 @@ local colors = {
                 muted = "#E42222"
             }
         }
+    },
+    rofi = {
+        foreground = "#F2F2F2",
+        background = "#1A1A1A"
     },
     primary = {
         foreground = "#F2F2F2",

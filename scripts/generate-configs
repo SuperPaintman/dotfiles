@@ -23,6 +23,10 @@ const tinycolor = require('tinycolor2');
 const Handlebars = require('handlebars');
 
 /* Helpers */
+function hasTemplate(s) {
+  return /\{\{[^}]+\}\}/.test(s);
+}
+
 async function importConfig(p, ctx = { known: new Set() }) {
   const fullPath = path.resolve(__dirname, '../', p);
   if (ctx.known.has(fullPath)) {
@@ -47,6 +51,9 @@ async function processConfig(cfg, ctx) {
     return {};
   }
 
+  // Templates.
+  const templates = {};
+
   // Top level.
   if (cfg.import !== undefined) {
     for (const p of cfg.import) {
@@ -61,23 +68,42 @@ async function processConfig(cfg, ctx) {
     delete cfg.import;
   }
 
-  function walk(node) {
+  function walk(ctx, node) {
     if (isArray(node)) {
-      return node.map(walk);
+      return node.map((n, i) => walk({...ctx, path: [...ctx.path, i]}, n));
     }
 
     if (isObject(node)) {
-      return mapValues(node, (value) => walk(value));
+      return mapValues(node, (value, key) => walk({...ctx, path: [...ctx.path, key]}, value));
     }
 
-    if (isString(node)) {
-      return Handlebars.compile(node, { strict: true })(cfg);
+    if (isString(node) && hasTemplate(node)) {
+      // return Handlebars.compile(node, { strict: true })(cfg);
+      // const tmp = new StringRef(node);
+      // templates.push(tmp);
+      // return tmp;
+
+      templates[ctx.path.join('.')] = node;
+
+      return node;
     }
 
     return node;
   }
 
-  return walk(cfg);
+  const processedCfg = walk({ path: [] }, cfg);
+
+  // Post-process templates.
+  for (const [key, value] of Object.entries(templates)) {
+    let res = value;
+
+    while (hasTemplate(res)) {
+      res = Handlebars.compile(res, { strict: true })(processedCfg);
+      set(processedCfg, key, res);
+    }
+  }
+
+  return processedCfg;
 }
 
 function preprocessTemplate(template) {

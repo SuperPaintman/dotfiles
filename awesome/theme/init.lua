@@ -93,14 +93,16 @@ theme.useless_gap = dpi(2)
 --------------------------------------------------------------------------------
 theme.titlebar_size = dpi(22)
 theme.titlebar_fg_normal = colors.primary.foreground
-theme.titlebar_bg_normal = colors.primary.background -- .. "98"
-
+-- theme.titlebar_bg_normal = colors.normal.background -- "00"
 
 --------------------------------------------------------------------------------
 -- Wibars.
 --------------------------------------------------------------------------------
 theme.wibar_height = dpi(22)
 theme.wibar_widget_margin = dpi(2)
+if colors.awesome ~= nil and colors.awesome.wibar ~= nil then
+    theme.wibar_bg = colors.awesome.wibar.background
+end
 
 
 --------------------------------------------------------------------------------

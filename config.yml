@@ -6,6 +6,12 @@ import:
     # - ./theme.doom-one.yml
 
 colors:
+    depth:
+        first:
+            background: "{{ lighten colors.primary.background -3 }}"
+        second:
+            background: "{{ lighten colors.primary.background -5 }}"
+
     # Alacritty.
     alacritty:
         primary:
@@ -38,6 +44,9 @@ colors:
 
     # AwesomeWM
     awesome:
+        wibar:
+            background: "{{ colors.depth.second.background }}"
+
         widgets:
             battery:
                 normal: "{{ colors.normal.yellow }}"
@@ -57,3 +66,8 @@ colors:
             volume:
                 normal: "{{ colors.normal.green }}"
                 muted: "{{ colors.normal.red }}"
+
+    # Rofi
+    rofi:
+        foreground: "{{ colors.primary.foreground }}"
+        background: "{{ colors.depth.first.background }}"

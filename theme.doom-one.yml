@@ -33,9 +33,3 @@ colors:
         magenta: "{{ brighten colors.normal.magenta 10 }}"
         cyan: "{{ brighten colors.normal.cyan 10 }}"
         white: "{{ brighten colors.normal.white 10 }}"
-
-    # Alacritty.
-    alacritty:
-        cursor:
-            text: "{{ colors.primary.cursor_color }}"
-            cursor: "{{ colors.primary.foreground }}"
