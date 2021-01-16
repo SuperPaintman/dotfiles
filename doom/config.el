@@ -1,13 +1,15 @@
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 
+;; See: https://tecosaur.github.io/emacs-config/config.html.
+
 ;; Place your private configuration here! Remember, you do not need to run 'doom
 ;; sync' after modifying this file!
 
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets.
-(setq user-full-name "John Doe"
-      user-mail-address "john@doe.com")
+(setq user-full-name "Aleksandr Krivoshchekov"
+      user-mail-address "SuperPaintmanDeveloper@gmail.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom. Here
 ;; are the three important ones:
@@ -21,6 +23,7 @@
 ;; font string. You generally only need these two:
 ;; (setq doom-font (font-spec :family "monospace" :size 12 :weight 'semi-light)
 ;;       doom-variable-pitch-font (font-spec :family "sans" :size 13))
+(setq doom-font (font-spec :family "JetBrains Mono" :size 12))
 
 ;; There are two ways to load a theme. Both assume the theme is installed and
 ;; available. You can either set `doom-theme' or manually load a theme with the
@@ -35,10 +38,9 @@
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
 
-
 ;; Here are some additional functions/macros that could help you configure Doom:
-;
-;
+;;
+;;
 ;; - `load!' for loading external *.el files relative to this one
 ;; - `use-package!' for configuring packages
 ;; - `after!' for running code after a package has loaded
@@ -56,3 +58,9 @@
 
 ;; Enable whitespace visualization.
 (global-whitespace-mode 1)
+
+;; Set a time stamp when a task moves to the DONE state.
+(setq org-log-done 'time)
+
+;; Show which-key buffer a bit faster.
+(setq which-key-idle-delay 0.5)
