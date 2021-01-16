@@ -2,8 +2,8 @@
 # See: https://mayccoll.github.io/Gogh/
 
 import:
-    - ./theme.later-this-evening.yml
-    # - ./theme.doom-one.yml
+    # - ./theme.later-this-evening.yml
+    - ./theme.doom-one.yml
 
 colors:
     depth:

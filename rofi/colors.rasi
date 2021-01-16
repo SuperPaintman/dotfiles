@@ -1,27 +1,27 @@
 /* This file is generated; DO NOT EDIT. */
 
 * {
-    color-foreground: #F2F2F2;
-    color-background: #1A1A1A;
+    color-foreground: #DFDFDF;
+    color-background: #21252B;
 
-    color-black: #2B2B2B;
-    color-red: #E42222;
-    color-green: #AABB39;
-    color-yellow: #FCAE25;
-    color-blue: #6699D6;
-    color-magenta: #AB53D6;
-    color-cyan: #5FC0AE;
-    color-white: #C1C2C2;
+    color-black: #1b2229;
+    color-red: #ff6c6b;
+    color-green: #98be65;
+    color-yellow: #ecbe7b;
+    color-blue: #51afef;
+    color-magenta: #c678dd;
+    color-cyan: #46d9ff;
+    color-white: #dfdfdf;
 
-    color-black-bright: #5E5E5E;
-    color-red-bright: #FD3B3B;
-    color-green-bright: #C3D452;
-    color-yellow-bright: #FFC73E;
-    color-blue-bright: #7FB2EF;
-    color-magenta-bright: #C46CEF;
-    color-cyan-bright: #78D9C7;
-    color-white-bright: #DADBDB;
+    color-black-bright: #4E555C;
+    color-red-bright: #FF8584;
+    color-green-bright: #B1D77E;
+    color-yellow-bright: #FFD794;
+    color-blue-bright: #6AC8FF;
+    color-magenta-bright: #DF91F6;
+    color-cyan-bright: #5FF2FF;
+    color-white-bright: #F8F8F8;
 
-    color-foreground-light: #FFFFFF; /* TODO(SuperPaintman): move it into config. */
-    color-background-light: #2F2F2F; /* TODO(SuperPaintman): move it into config. */
+    color-foreground-light: #ECECEC; /* TODO(SuperPaintman): move it into config. */
+    color-background-light: #333842; /* TODO(SuperPaintman): move it into config. */
 }

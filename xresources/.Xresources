@@ -4,57 +4,57 @@
 ! Colors.
 !===============================================================================
 ! Special.
-*.foreground: #F2F2F2
-*.background: #222222
-*.cursorColor: #282A2E
+*.foreground: #DFDFDF
+*.background: #282c34
+*.cursorColor: #5b6268
 
 ! Black.
-*.color0: #2B2B2B
+*.color0: #1b2229
 
 ! Red.
-*.color1: #E42222
+*.color1: #ff6c6b
 
 ! Green.
-*.color2: #AABB39
+*.color2: #98be65
 
 ! Yellow.
-*.color3: #FCAE25
+*.color3: #ecbe7b
 
 ! Blue.
-*.color4: #6699D6
+*.color4: #51afef
 
 ! Magenta.
-*.color5: #AB53D6
+*.color5: #c678dd
 
 ! Cyan.
-*.color6: #5FC0AE
+*.color6: #46d9ff
 
 ! White.
-*.color7: #C1C2C2
+*.color7: #dfdfdf
 
 ! Bright Black.
-*.color8: #5E5E5E
+*.color8: #4E555C
 
 ! Bright Red.
-*.color9: #FD3B3B
+*.color9: #FF8584
 
 ! Bright Green.
-*.color10: #C3D452
+*.color10: #B1D77E
 
 ! Bright Yellow.
-*.color11: #FFC73E
+*.color11: #FFD794
 
 ! Bright Blue.
-*.color12: #7FB2EF
+*.color12: #6AC8FF
 
 ! Bright Magenta.
-*.color13: #C46CEF
+*.color13: #DF91F6
 
 ! Bright Cyan.
-*.color14: #78D9C7
+*.color14: #5FF2FF
 
 ! Bright White.
-*.color15: #DADBDB
+*.color15: #F8F8F8
 
 !===============================================================================
 ! xst

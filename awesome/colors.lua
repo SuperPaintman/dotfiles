@@ -3,96 +3,101 @@
 local colors = {
     depth = {
         first = {
-            background = "#1A1A1A"
+            background = "#21252B"
         },
         second = {
-            background = "#151515"
+            background = "#1D2026"
         }
     },
     alacritty = {
         primary = {
-            background = "#222222",
-            foreground = "#F2F2F2"
+            background = "#282c34",
+            foreground = "#DFDFDF"
         },
         cursor = {
-            text = "#282A2E",
-            cursor = "#F2F2F2"
+            text = "#5b6268",
+            cursor = "#DFDFDF"
         },
         normal = {
-            black = "#2B2B2B",
-            red = "#E42222",
-            green = "#AABB39",
-            yellow = "#FCAE25",
-            blue = "#6699D6",
-            magenta = "#AB53D6",
-            cyan = "#5FC0AE",
-            white = "#C1C2C2"
+            black = "#1b2229",
+            red = "#ff6c6b",
+            green = "#98be65",
+            yellow = "#ecbe7b",
+            blue = "#51afef",
+            magenta = "#c678dd",
+            cyan = "#46d9ff",
+            white = "#dfdfdf"
         },
         bright = {
-            black = "#5E5E5E",
-            red = "#FD3B3B",
-            green = "#C3D452",
-            yellow = "#FFC73E",
-            blue = "#7FB2EF",
-            magenta = "#C46CEF",
-            cyan = "#78D9C7",
-            white = "#DADBDB"
+            black = "#4E555C",
+            red = "#FF8584",
+            green = "#B1D77E",
+            yellow = "#FFD794",
+            blue = "#6AC8FF",
+            magenta = "#DF91F6",
+            cyan = "#5FF2FF",
+            white = "#F8F8F8"
         }
     },
     awesome = {
         wibar = {
-            background = "#151515"
+            background = "#1D2026"
         },
         widgets = {
             battery = {
-                normal = "#FCAE25"
+                normal = "#ecbe7b"
             },
             brightness = {
-                normal = "#6699D6"
+                normal = "#51afef"
             },
             cpu = {
-                normal = "#E42222"
+                normal = "#ff6c6b"
             },
             disk = {
-                normal = "#AABB39"
+                normal = "#98be65"
             },
             ram = {
-                normal = "#6699D6"
+                normal = "#51afef"
             },
             volume = {
-                normal = "#AABB39",
-                muted = "#E42222"
+                normal = "#98be65",
+                muted = "#ff6c6b"
             }
         }
     },
     rofi = {
-        foreground = "#F2F2F2",
-        background = "#1A1A1A"
+        foreground = "#DFDFDF",
+        background = "#21252B"
     },
     primary = {
-        foreground = "#F2F2F2",
-        background = "#222222",
-        cursor_color = "#282A2E"
+        foreground = "#DFDFDF",
+        background = "#282c34",
+        cursor_color = "#5b6268"
     },
     normal = {
-        black = "#2B2B2B",
-        red = "#E42222",
-        green = "#AABB39",
-        yellow = "#FCAE25",
-        blue = "#6699D6",
-        magenta = "#AB53D6",
-        cyan = "#5FC0AE",
-        white = "#C1C2C2"
+        black = "#1b2229",
+        red = "#ff6c6b",
+        orange = "#da8548",
+        green = "#98be65",
+        teal = "#4db5bd",
+        yellow = "#ecbe7b",
+        blue = "#51afef",
+        dark_blue = "#2257a0",
+        magenta = "#c678dd",
+        violet = "#a9a1e1",
+        cyan = "#46d9ff",
+        white = "#dfdfdf",
+        dark_cyan = "#5699af"
     },
     bright = {
-        black = "#5E5E5E",
-        red = "#FD3B3B",
-        green = "#C3D452",
-        yellow = "#FFC73E",
-        blue = "#7FB2EF",
-        magenta = "#C46CEF",
-        cyan = "#78D9C7",
-        white = "#DADBDB"
+        black = "#4E555C",
+        red = "#FF8584",
+        green = "#B1D77E",
+        yellow = "#FFD794",
+        blue = "#6AC8FF",
+        magenta = "#DF91F6",
+        cyan = "#5FF2FF",
+        white = "#F8F8F8"
     }
 }
 
