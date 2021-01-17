@@ -408,6 +408,10 @@ in
   # Home Manager.
   home-manager.users = (
     let
+      mkSymlink = src: pkgs.runCommand "symlink" { } ''
+        ln -s ${src} $out
+      '';
+
       mkDonfilesSymlinks = files: pkgs.runCommand "symlink-dotfiles" { } ''
         ${lib.concatStringsSep "\n"
         (
@@ -501,6 +505,10 @@ in
         home.file = lib.mkMerge [
           files
           firefoxFiles
+          {
+            ".dotfiles".source = mkSymlink "/home/superpaintman/Projects/github.com/SuperPaintman/dotfiles";
+            "Org".source = mkSymlink "/home/superpaintman/Projects/github.com/SuperPaintman/Org";
+          }
         ];
       };
 
