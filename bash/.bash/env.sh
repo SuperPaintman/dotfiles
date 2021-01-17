@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 
-export EDITOR="vim"
+if can emacs; then
+    export EDITOR="emacs"
+elif can vim; then
+    export EDITOR="vim"
+elif can vi; then
+    export EDITOR="vi"
+elif can code; then
+    export EDITOR="code"
+fi
 export CLICOLOR="yes"
 
 export GOPATH="$HOME/.go"

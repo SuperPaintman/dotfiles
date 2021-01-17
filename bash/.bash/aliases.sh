@@ -107,9 +107,6 @@ alias py3='python3'
 # `webpack-dev-server`.
 alias wds='npx webpack-dev-server'
 
-# `emacs`
-alias em='emacsclient --no-wait --create-frame'
-
 # Misc.
 alias e="$EDITOR"
 alias map="xargs -n1"

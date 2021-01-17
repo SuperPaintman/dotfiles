@@ -44,6 +44,82 @@ afk() {
     systemctl suspend -i
 }
 
+# Emacs.
+if can emacs; then
+    _emacsify() {
+        local name="$1"
+        local bin="$2"
+
+        shift
+        shift
+
+        local skip=""
+        local args=()
+
+        for a in $@; do
+            if [ "$a" = "--skip-emacs" ]; then
+                skip="yes"
+            else
+                args+=("$a")
+            fi
+        done
+
+        if [ -z "$skip" ]; then
+            echo "Use emacs instead of $name." 1>&2
+            echo "" 1>&2
+            echo "To force using $name run it with '--skip-emacs' flag." 1>&2
+
+            emacs $@
+        else
+            $bin $args
+        fi
+    }
+
+    if can code; then
+        if [ -z "$_EMACS_FORCE_CODE" ]; then
+            export _EMACS_FORCE_CODE="$(which code)"
+        fi
+
+        code() {
+            _emacsify "VS Code" "$_EMACS_FORCE_CODE" $@
+        }
+    fi
+
+    if can vim; then
+        if [ -z "$_EMACS_FORCE_VIM" ]; then
+            export _EMACS_FORCE_VIM="$(which vim)"
+        fi
+
+        vim() {
+            _emacsify "vim" "$_EMACS_FORCE_VIM" $@
+        }
+    fi
+
+    if can vi; then
+        if [ -z "$_EMACS_FORCE_VI" ]; then
+            export _EMACS_FORCE_VI="$(which vi)"
+        fi
+
+        vi() {
+            _emacsify "vi" "$_EMACS_FORCE_VI" $@
+        }
+    fi
+fi
+
+if can emacs && can emacsclient; then
+    em() {
+        # Start emacs daemon if we don't have one.
+        if ! ps -x | grep emacs | grep daemon 2>&1 > /dev/null; then
+            emacs --daemon
+            if [ "$?" != 0 ]; then
+                return "$?"
+            fi
+        fi
+
+        emacsclient --no-wait --create-frame $@
+    }
+fi
+
 # Tmux.
 tmx() {
     local detached_session="$(
