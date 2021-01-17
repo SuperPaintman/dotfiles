@@ -64,3 +64,6 @@
 
 ;; Show which-key buffer a bit faster.
 (setq which-key-idle-delay 0.5)
+
+;; Show Git-Gutter everywhere.
+(global-git-gutter-mode 1)
