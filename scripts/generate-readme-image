@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+#
+# This script generates images for the README.md file.
+#
+
+set -e
+set -u
+set -o pipefail
+
+# Constants.
+ROOT="$(realpath "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/..")"
+
+# Init.
+magick() {
+	"$ROOT/scripts/nix-call.sh" magick imagemagick7 $@
+}
+
+background="$HOME/.wallpaper"
+font="/nix/var/nix/profiles/system/sw/share/X11-fonts/JetBrainsMono-Regular.ttf"
+width="838"
+height="220"
+offset_x="0"
+offset_y="20"
+opacity="75"
+result="$ROOT/assets/banner.png"
+
+mkdir -p "$(dirname "$result")"
+
+magick "$background" \
+	-resize "${width}x" \
+	-gravity center \
+	-crop "${width}x${height}+${offset_x}+${offset_y}" \
+	-fill "\\#000000" \
+	-colorize "$opacity" \
+	-font "$font" \
+	-pointsize 42 \
+	-fill "\\#FFFFFF" \
+	-annotate +0+21 '\\~/.dotfiles' \
+	"$result"
