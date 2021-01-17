@@ -316,6 +316,34 @@ keys.global =
                 return
             end
         end
+    ),
+
+    -- Org Mode.
+    awful.key(
+        {modkey, ctrlkey, altkey},
+        "t",
+        function()
+            apps.org("t")
+        end,
+        {description = "open a new personal todo in org-capture", group = "org-capture"}
+    ),
+
+    awful.key(
+        {modkey, ctrlkey, altkey},
+        "n",
+        function()
+            apps.org("n")
+        end,
+        {description = "open a new personal note in org-capture", group = "org-capture"}
+    ),
+
+    awful.key(
+        {modkey, ctrlkey, altkey},
+        "j",
+        function()
+            apps.org("j")
+        end,
+        {description = "open a new personal journal item in org-capture", group = "org-capture"}
     )
 )
 

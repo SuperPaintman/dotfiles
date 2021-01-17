@@ -14,4 +14,8 @@ apps.vpnmenu = function()
     awful.spawn.with_shell(os.getenv("HOME") .. "/bin/vpnmenu")
 end
 
+apps.org = function(key)
+    awful.spawn.with_shell(os.getenv("HOME") .. "/bin/org" .. " " .. key)
+end
+
 return apps
