@@ -44,6 +44,30 @@ afk() {
     systemctl suspend -i
 }
 
+# Git.
+if can git-get && can git-parse && can git-path; then
+    # Git get and CD into a downloaded directory.
+    gg() {
+        local repository="$1"
+
+        local parts=($(git-parse "$repository"))
+        if [ ! "$?" = 0 ]; then
+            return "$?"
+        fi
+
+        local dir="$(git-path $parts)"
+
+        if [ ! -d "$dir" ]; then
+            git-get "$repository"
+            if [ ! "$?" = 0 ]; then
+                return "$?"
+            fi
+        fi
+
+        cd "$dir"
+    }
+fi
+
 # Emacs.
 if can emacs; then
     _emacsify() {

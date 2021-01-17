@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+set -e
+set -u
+set -o pipefail
+
 # Constants.
 color_reset=""
 color_red=""
@@ -31,51 +35,12 @@ fatal() {
     exit 1
 }
 
-parse_repository() {
-    if [ "$#" = 0 ]; then
-        return 1
-    fi
-
-    local repository="$1"
-
-    node << EOF
-const repository = "$repository";
-
-const HTTP_LIKE_RE = /^http(?:s)?:\\/\\/([a-z0-9_\\-.]+)\\/([a-z0-9_\\-]+)\\/([a-z0-9_\\-]+)\\/?$/i;
-const SSH_LIKE_RE = /^git@([a-z0-9_\\-.]+):([a-z0-9_\\-]+)\\/([a-z0-9_\\-]+)\\.git$/i;
-
-function parseRepository(repository) {
-  let match = null;
-
-  match = repository.match(HTTP_LIKE_RE);
-  if (match !== null) {
-    return match[1] + " " + match[2] + " " + match[3];
-  }
-
-  match = repository.match(SSH_LIKE_RE);
-  if (match !== null) {
-    return match[1] + " " + match[2] + " " + match[3];
-  }
-
-  return "";
-}
-
-const res = parseRepository(repository);
-
-if (res === "") {
-  process.exit(1);
-}
-
-console.log(res);
-EOF
-}
-
 repository="$1"
 if [ -z "$repository" ]; then
     fatal "You must specify a repository to get"
 fi
 
-parts=($(parse_repository "$repository"))
+parts=($(git-parse "$repository"))
 if [ ! "$?" = 0 ]; then
     fatal "Something went wrong"
 fi
@@ -84,7 +49,10 @@ host="${parts[0]}"
 user="${parts[1]}"
 repo="${parts[2]}"
 
-dir="$HOME/Projects/${host}/${user}/${repo}"
+dir="$(git-path ${parts[@]})"
+if [ ! "$?" = 0 ]; then
+    fatal "Something went wrong"
+fi
 
 echo "Getting ${color_blue}${user}/${repo}${color_reset} from ${color_blue}${host}${color_reset} into '${color_green}${dir}${color_reset}'"
 

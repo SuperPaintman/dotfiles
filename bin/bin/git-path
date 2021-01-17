@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+set -o pipefail
+
+# Constants.
+color_reset=""
+color_red=""
+color_green=""
+color_blue=""
+
+# Check if stdout is a terminal.
+if [ -t 1 ]; then
+    color_reset="$(printf "\033[0m")"
+    color_red="$(printf "\033[31;01m")"
+    color_green="$(printf "\033[0;32m")"
+    color_blue="$(printf "\033[0;34m")"
+fi
+
+# Helpers.
+help() {
+    cat << EOF
+usage: git path <parts>
+
+example: git path \$(git parse <repo>)
+EOF
+}
+
+fatal() {
+    echo "${color_red}fatal${color_reset}: $@." 1>&2
+
+    echo 1>&2
+
+    help 1>&2
+
+    exit 1
+}
+
+if [ ! "${#}" = "3" ]; then
+    fatal "You must specify parts to get a path"
+fi
+
+host="$1"
+user="$2"
+repo="$3"
+
+echo "$HOME/Projects/${host}/${user}/${repo}"
