@@ -79,5 +79,11 @@
 	## Tag
 	tags = tag -l
 
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+
+[github]
+	user = SuperPaintman
+
 [include]
 	path = ~/.gitconfig.local
