@@ -151,6 +151,13 @@
                 key = "XF86MonBrightnessUp";
                 command = "${brightnessctl}/bin/brightnessctl set +5%";
               }
+
+              # Super+Alt+Space
+              # Change keyboard language like OSX does.
+              {
+                key = "Mod4 + Alt + space";
+                command = "${xkb-switch}/bin/xkb-switch --next";
+              }
             ];
           };
 
