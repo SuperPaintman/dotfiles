@@ -56,6 +56,11 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 
+;; Disable highlighting lines which have colums beyond the
+;; ruller (`lines-tail').
+(setq whitespace-style '(face indentation tabs tab-mark spaces space-mark
+                         newline newline-mark trailing))
+
 ;; Enable whitespace visualization.
 (global-whitespace-mode 1)
 
