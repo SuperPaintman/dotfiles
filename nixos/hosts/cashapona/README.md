@@ -45,6 +45,7 @@ EOF
 ## Issues
 
 - My laptop makes the "[coil whine](https://xps-15.fandom.com/wiki/High_Pitched_Chattering/Squeal)" sound.
+- My laptop has a [stuck green pixel](https://en.wikipedia.org/wiki/Defective_pixel#Stuck_sub-pixel).
 
 ## Links
 
