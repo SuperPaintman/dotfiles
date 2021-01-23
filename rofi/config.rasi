@@ -5,6 +5,7 @@ configuration {
     modi: "window,drun,run,other:~/.config/rofi/modes/other";
 
     show-icons: true;
+    icon-theme: "Paper";
 
     font: "sans 16";
 

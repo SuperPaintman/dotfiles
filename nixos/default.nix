@@ -82,6 +82,7 @@ in
     wirelesstools
     lsof
     brightnessctl
+    upower
 
     # Replacements for basic utils.
     exa # ls
@@ -185,6 +186,9 @@ in
     libnotify # A library that sends desktop notifications to a notification daemon.
     localPkgs._1password # 1Password command-line tool.
     localPkgs.gh # GitHub CLI tool.
+
+    # Icons.
+    paper-icon-theme
 
     # Custom / mine.
     monitroidPkgs.monitroid # Machine stats.
@@ -328,6 +332,8 @@ in
   };
 
   services.blueman.enable = true;
+
+  services.upower.enable = true;
 
   services.openvpn.servers =
     # Merge servicers into one set.

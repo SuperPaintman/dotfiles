@@ -61,6 +61,8 @@
             ${xrandrCommands}
           '';
         };
+
+      libinput.enable = true;
     };
   };
 }

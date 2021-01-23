@@ -23,6 +23,12 @@ SOURCE_ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 mkdir -p "$TARGET_ROOT/.config"
 
 linkall \
+    "$SOURCE_ROOT" \
+    "$TARGET_ROOT" \
+    "$is_force" \
+    ".gtkrc-2.0"
+
+linkall \
     "$SOURCE_ROOT/gtk-3.0" \
     "$TARGET_ROOT/.config/gtk-3.0" \
     "$is_force" \
