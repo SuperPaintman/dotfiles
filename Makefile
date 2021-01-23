@@ -109,7 +109,7 @@ nixos-channels:
 
 .PHONY: nixos-uninstall-users-packages
 nixos-uninstall-users-packages:
-	@nix-env --uninstall $$(nix-env -q)
+	@nix-env --uninstall $$(nix-env -q | grep -v 'home-manager-path')
 
 .PHONY: format
 format: format-shell format-nix format-prettier
