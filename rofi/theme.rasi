@@ -41,7 +41,7 @@
 }
 
 #entry {
-    font: "sans 24";
+    font: "sans 28";
 }
 
 #prompt {

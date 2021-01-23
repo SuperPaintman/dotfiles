@@ -175,7 +175,7 @@ in
     lf # Terminal file manager.
     fzf # A command-line fuzzy finder written in Go.
     ripgrep # A utility that combines the usability of The Silver Searcher with the raw speed of grep.
-    rofi # Window switcher, application launcher and dmenu replacement.
+    unstable.rofi # Window switcher, application launcher and dmenu replacement.
     feh # Image viewer.
     arandr # Visual front end for XRandR.
     pavucontrol # PulseAudio Volume Control.
