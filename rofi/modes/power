@@ -13,6 +13,12 @@ actions[reboot]="systemctl reboot"
 actions[suspend]="systemctl suspend"
 actions[hibernate]="systemctl hibernate"
 
+declare -A icons
+icons[poweroff]="system-shutdown"
+icons[reboot]="system-reboot"
+icons[suspend]="system-suspend"
+icons[hibernate]="system-hibernate"
+
 order=(
     poweroff
     reboot
@@ -26,7 +32,16 @@ rofi_set() {
 }
 
 option() {
-    echo $@
+    local text="$1"
+    local icon="${2:-}"
+
+    echo -en "$text"
+
+    if [ -n "$icon" ]; then
+        rofi_set "icon" "$icon"
+    fi
+
+    echo
 }
 
 find_key() {
@@ -61,5 +76,5 @@ fi
 
 rofi_set "markup-rows" "true"
 for key in ${order[@]}; do
-    option "${texts["$key"]}"
+    option "${texts["$key"]}" "${icons["$key"]}"
 done

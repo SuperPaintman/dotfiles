@@ -78,6 +78,16 @@
     background-color: @color-background-light;
 }
 
+#element-icon {
+    size: 24;
+    padding: 0 6 0 0;
+}
+
+#element-text {
+    font: "sans 14";
+    vertical-align: 0.5;
+}
+
 #mode-switcher {
     margin: 6 3;
 
