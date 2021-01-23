@@ -42,7 +42,10 @@ declare -A vpn_configs
 
 for i in $HOME/.openvpn/*.conf; do
     vpn_name="$(basename "$i" '.conf')"
-    vpn_ip="$(cat ~/.openvpn/server.conf | grep remote | awk '{print $2}')"
+    vpn_ip="$(cat "$i" | grep remote | awk '{print $2}')"
+    if [ -z "$vpn_ip" ]; then
+        continue
+    fi
 
     vpn_configs["${vpn_name}"]="${vpn_name} ${vpn_ip}"
 done
