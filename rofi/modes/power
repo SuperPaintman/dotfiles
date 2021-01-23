@@ -1,15 +1,23 @@
 #!/usr/bin/env bash
 
 # Constants.
-declare -A options
-options["Power-off"]="systemctl poweroff"
-options["Reboot"]="systemctl reboot"
-options["Suspend"]="systemctl suspend"
+declare -A texts
+texts[poweroff]="Power-off"
+texts[reboot]="Reboot"
+texts[suspend]="Suspend"
+texts[hibernate]="Hibernate"
 
-options_order=(
-    "Power-off"
-    "Reboot"
-    "Suspend"
+declare -A actions
+actions[poweroff]="systemctl poweroff"
+actions[reboot]="systemctl reboot"
+actions[suspend]="systemctl suspend"
+actions[hibernate]="systemctl hibernate"
+
+order=(
+    poweroff
+    reboot
+    suspend
+    hibernate
 )
 
 # Helpers.
@@ -21,9 +29,27 @@ option() {
     echo $@
 }
 
+find_key() {
+    local name="$1"
+
+    for key in ${!options[@]}; do
+        if [ "${texts["$key"]}" = "$name" ]; then
+            echo "$key"
+            return 0
+        fi
+    done
+
+    return 1
+}
+
 # Main.
 if [ ! "$@" = "" ]; then
-    cmd="${options["$@"]}"
+    key="$(find_key "$@")"
+    if [ "$?" != 0 ]; then
+        exit "$?"
+    fi
+
+    cmd="${actions["$key"]}"
     if [ -z "$cmd" ]; then
         exit 1
     fi
@@ -34,6 +60,6 @@ if [ ! "$@" = "" ]; then
 fi
 
 rofi_set "markup-rows" "true"
-for key in ${options_order[@]}; do
-    option "$key"
+for key in ${order[@]}; do
+    option "${texts["$key"]}"
 done
