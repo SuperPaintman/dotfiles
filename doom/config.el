@@ -72,3 +72,8 @@
 
 ;; Show Git-Gutter everywhere.
 (global-git-gutter-mode 1)
+
+;; Go.
+;;
+;; Set `goimports' as default formatter.
+(setq gofmt-command "goimports")
