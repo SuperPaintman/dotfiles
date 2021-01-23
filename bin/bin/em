@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+#
+# Opens an emacs window (and starts emacs daemon if it was not
+# launched yet).
+#
+
+set -e
+set -u
+set -o pipefail
+
+# Check dependencies.
+for executable in emacs emacsclient; do
+    if ! which "$executable" > /dev/null 2>&1; then
+        echo "Please install $executable" 1>&2
+        exit 1
+    fi
+done
+
+# Start emacs daemon if we don't have one.
+if ! ps -x | grep emacs | grep daemon 2>&1 > /dev/null; then
+    emacs --daemon || {
+        exit "$?"
+    }
+fi
+
+emacsclient --no-wait --create-frame $@

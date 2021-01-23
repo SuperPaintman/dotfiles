@@ -275,7 +275,7 @@ keys.global =
 
             local matcher = function (c)
                 return awful.rules.match(c, {
-                    class = "Code",
+                    class = "Emacs",
                     -- screen = screen,
                 })
             end
@@ -322,6 +322,14 @@ keys.global =
                 return
             end
         end
+    ),
+
+    -- Editor.
+    awful.key(
+        {modkey},
+        "e",
+        apps.editor,
+        {description = "open a new editor window", group = "editor"}
     ),
 
     -- Org Mode.

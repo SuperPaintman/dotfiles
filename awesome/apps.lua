@@ -18,6 +18,10 @@ apps.powermenu = function()
     awful.spawn.with_shell(os.getenv("HOME") .. "/bin/powermenu")
 end
 
+apps.editor = function(key)
+    awful.spawn.with_shell(os.getenv("HOME") .. "/bin/em")
+end
+
 apps.org = function(key)
     awful.spawn.with_shell(os.getenv("HOME") .. "/bin/org" .. " " .. key)
 end

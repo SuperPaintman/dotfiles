@@ -130,20 +130,6 @@ if can emacs; then
     fi
 fi
 
-if can emacs && can emacsclient; then
-    em() {
-        # Start emacs daemon if we don't have one.
-        if ! ps -x | grep emacs | grep daemon 2>&1 > /dev/null; then
-            emacs --daemon
-            if [ "$?" != 0 ]; then
-                return "$?"
-            fi
-        fi
-
-        emacsclient --no-wait --create-frame $@
-    }
-fi
-
 # Tmux.
 tmx() {
     local detached_session="$(
