@@ -32,7 +32,7 @@ option() {
 find_key() {
     local name="$1"
 
-    for key in ${!options[@]}; do
+    for key in ${!texts[@]}; do
         if [ "${texts["$key"]}" = "$name" ]; then
             echo "$key"
             return 0
