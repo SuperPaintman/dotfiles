@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+set -e
+
+rofi -show power \
+    -modi power:~/.config/rofi/modes/power

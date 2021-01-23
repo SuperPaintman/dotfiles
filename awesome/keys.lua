@@ -73,7 +73,7 @@ keys.global =
         {modkey},
         "w",
         apps.windowmenu,
-        {description = "show window menu", group = "launcher"}
+        {description = "show the window menu", group = "launcher"}
     ),
     -- Layout manipulation
     awful.key(
@@ -145,6 +145,12 @@ keys.global =
         "q",
         awesome.quit,
         {description = "quit awesome", group = "awesome"}
+    ),
+    awful.key(
+        {modkey, ctrlkey},
+        "p",
+        apps.powermenu,
+        {description = "show the power menu", group = "power"}
     ),
     awful.key(
         {modkey},

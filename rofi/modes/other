@@ -7,11 +7,13 @@ declare -A options
 options["VPN"]="$HOME/.config/rofi/modes/vpn"
 options["WiFi"]="$HOME/.config/rofi/modes/wifi"
 options["Screenshot"]="$HOME/.config/rofi/modes/screenshot"
+options["Power"]="$HOME/.config/rofi/modes/power"
 
 options_order=(
     "VPN"
     "WiFi"
     "Screenshot"
+    "Power"
 )
 
 rofi_context_filename="/tmp/rofi-$USER-context-other"

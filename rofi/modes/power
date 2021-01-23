@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+# Constants.
+declare -A options
+options["Power-off"]="systemctl poweroff"
+options["Reboot"]="systemctl reboot"
+options["Suspend"]="systemctl suspend"
+
+options_order=(
+    "Power-off"
+    "Reboot"
+    "Suspend"
+)
+
+# Helpers.
+rofi_set() {
+    echo -en "\0""$1""\x1f""$2""\n"
+}
+
+option() {
+    echo $@
+}
+
+# Main.
+if [ ! "$@" = "" ]; then
+    cmd="${options["$@"]}"
+    if [ -z "$cmd" ]; then
+        exit 1
+    fi
+
+    eval "$cmd"
+
+    exit 0
+fi
+
+rofi_set "markup-rows" "true"
+for key in ${options_order[@]}; do
+    option "$key"
+done
