@@ -10,38 +10,38 @@ set -o pipefail
 
 # Check dependencies.
 for executable in emacsclient; do
-	if ! which "$executable" >/dev/null 2>&1; then
-		echo "Please install $executable" 1>&2
-		exit 1
-	fi
+    if ! which "$executable" > /dev/null 2>&1; then
+        echo "Please install $executable" 1>&2
+        exit 1
+    fi
 done
 
 case "${1:-""}" in
-"t" | "n" | "j")
-	key="\"$1\""
-	;;
+    "t" | "n" | "j")
+        key="\"$1\""
+        ;;
 
-*)
-	echo "Please specify the key: t, n or j" 1>&2
-	exit 1
-	;;
+    *)
+        echo "Please specify the key: t, n or j" 1>&2
+        exit 1
+        ;;
 esac
 
 str="nil"
 if [ ! -t 0 ]; then
-	str="$(cat)"
-	str="\"$str\""
+    str="$(cat)"
+    str="\"$str\""
 fi
 
 # Start emacs daemon if we don't have one.
-if ! ps -x | grep emacs | grep daemon 2>&1 >/dev/null; then
-	emacs --daemon
-	if [ "$?" != 0 ]; then
-		return "$?"
-	fi
+if ! ps -x | grep emacs | grep daemon 2>&1 > /dev/null; then
+    emacs --daemon
+    if [ "$?" != 0 ]; then
+        return "$?"
+    fi
 fi
 
 # Run org mode.
 emacsclient -a "" \
-	-c -F '((name . "doom-capture") (width . 70) (height . 25) (transient . t))' \
-	-e "(+org-capture/open-frame $str $key)"
+    -c -F '((name . "doom-capture") (width . 70) (height . 25) (transient . t))' \
+    -e "(+org-capture/open-frame $str $key)"
