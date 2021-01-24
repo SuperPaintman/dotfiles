@@ -1,0 +1,17 @@
+#+TITLE: Quantum Mechanical Keyboard Firmware
+#+OPTIONS: toc:nil
+
+This is my configurations for QMK keyboards.
+
+** Table of Contents :TOC_2:
+  - [[#links][Links]]
+
+** Links
+- https://docs.qmk.fm/ - QMK documentation.
+- https://github.com/zsa/qmk_firmware - ZSA repository (QMK fork).
+- https://github.com/qmk/qmk_firmware - QMK repository.
+- https://configure.ergodox-ez.com/ - Oryx (ZSA's graphical configurator).
+
+-----
+
+With 🫀 by [[https://github.com/SuperPaintman][Aleksandr Krivoshchekov (@SuperPaintman)]]
