@@ -22,7 +22,9 @@ IGNORE_PATHS := \
 	'./vim/.vim/plugged/**' \
 	'./tmux/.tmux/plugins/**' \
 	'**/vendor/**' \
-	'**/node_modules/**'
+	'**/node_modules/**' \
+	'**/.venv/**' \
+	'./qmk/.qmk_firmware/**'
 SHELL_FILES := \
 	$(shell \
 		find . \
@@ -68,11 +70,11 @@ nixos-upgrade: nixos-update nixos-switch
 
 .PHONY: nixos-update
 nixos-update: channels
-	@sudo nix-channel --update
+	sudo nix-channel --update
 
 .PHONY: nixos-switch
 nixos-switch:
-	@sudo nixos-rebuild switch
+	sudo nixos-rebuild switch
 
 .PHONY: nixos-build
 nixos-build:
@@ -80,14 +82,14 @@ nixos-build:
 
 .PHONY: $(addprefix nixos-build-pkgs-, $(NIX_LOCAL_PACKAGES))
 $(addprefix nixos-build-pkgs-, $(NIX_LOCAL_PACKAGES)): nixos-build-pkgs-%:
-	@nix-build \
+	nix-build \
 		-E 'with import <nixpkgs> {}; callPackage ./nixos/pkgs/default.nix {}' \
 		-A $* \
 		--out-link "result-$*"
 
 .PHONY: $(addprefix nixos-shell-pkgs-, $(NIX_LOCAL_PACKAGES))
 $(addprefix nixos-shell-pkgs-, $(NIX_LOCAL_PACKAGES)): nixos-shell-pkgs-%:
-	@nix-shell \
+	nix-shell \
 		-E 'with import <nixpkgs> {}; callPackage ./nixos/pkgs/default.nix {}' \
 		-A $*
 
@@ -97,56 +99,56 @@ nixos-dry-build:
 
 .PHONY: nixos-gc
 nixos-gc:
-	@sudo nix-collect-garbage -d
+	sudo nix-collect-garbage -d
 
 # Add NixOS channels.
 # See: https://nixos.org/nixos/manual/index.html#sec-upgrading .
 .PHONY: nixos-channels
 nixos-channels:
-	@sudo nix-channel --add "https://nixos.org/channels/nixos-$(NIXOS_VERSION)" nixos
-	@sudo nix-channel --add "https://nixos.org/channels/nixos-unstable" nixos-unstable
-	@sudo nix-channel --list
+	sudo nix-channel --add "https://nixos.org/channels/nixos-$(NIXOS_VERSION)" nixos
+	sudo nix-channel --add "https://nixos.org/channels/nixos-unstable" nixos-unstable
+	sudo nix-channel --list
 
 .PHONY: nixos-uninstall-users-packages
 nixos-uninstall-users-packages:
-	@nix-env --uninstall $$(nix-env -q | grep -v 'home-manager-path')
+	nix-env --uninstall $$(nix-env -q | grep -v 'home-manager-path')
 
 .PHONY: format
 format: format-shell format-nix format-prettier
 
 .PHONY: format-shell
 format-shell:
-	@./scripts/nix-call.sh shfmt shfmt -i 4 -ci -sr -s -w $(SHELL_FILES)
+	./scripts/nix-call.sh shfmt shfmt -i 4 -ci -sr -s -w $(SHELL_FILES)
 
 .PHONY: format-nix
 format-nix:
-	@./scripts/nix-call.sh nixpkgs-fmt nixpkgs-fmt $(NIX_FILES)
+	./scripts/nix-call.sh nixpkgs-fmt nixpkgs-fmt $(NIX_FILES)
 
 .PHONY: format-nix
 format-prettier:
-	@npx prettier --config ./prettier/.prettierrc.js --write $(PRETTIER_FILES)
+	npx prettier --config ./prettier/.prettierrc.js --write $(PRETTIER_FILES)
 
 .PHONY: format-lua
 format-lua:
-	@./scripts/lua-format.sh --config=./.lua-format -i $(LUA_FILES)
+	./scripts/lua-format.sh --config=./.lua-format -i $(LUA_FILES)
 
 .PHONY: generate
 generate: generate-configs generate-vscode-extensions
 
 .PHONY: generate-configs
 generate-configs:
-	@./scripts/generate-configs
+	./scripts/generate-configs
 
 .PHONY: generate-vscode-extensions
 generate-vscode-extensions:
-	@./scripts/generate-vscode-extensions
+	./scripts/generate-vscode-extensions
 
 .PHONY: test
 test: test-lua
 
 .PHONY: test-lua
 test-lua:
-	@./scripts/nix-call.sh busted lua52Packages.busted \
+	./scripts/nix-call.sh busted lua52Packages.busted \
 		--verbose \
 		--directory=./awesome \
 		'--lpath="./?.lua;./?/?.lua;./?/init.lua"' \
@@ -154,5 +156,7 @@ test-lua:
 
 .PHONY: clean
 clean:
-	@rm -f result
-	@rm -f result-*
+	rm -f result
+	rm -f result-*
+
+	$(MAKE) -C qmk clean

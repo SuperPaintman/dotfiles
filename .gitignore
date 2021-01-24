@@ -15,3 +15,7 @@ tmux/.tmux/sidebar/
 !/tmux/.tmux/plugins/
 !/zsh/.oh-my-zsh/
 !/zsh/.oh-my-zsh-custom/plugins/
+
+# Python.
+.venv
+.venv-*

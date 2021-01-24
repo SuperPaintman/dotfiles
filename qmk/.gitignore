@@ -1,0 +1,11 @@
+# Builds.
+/*.bin
+
+# NixOS ENV.
+env.sh
+
+# QMK Firmware
+.qmk.ini
+.qmk.ini-*
+.qmk_firmware
+.qmk_firmware-*
