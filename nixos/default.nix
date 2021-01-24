@@ -186,6 +186,7 @@ in
     libnotify # A library that sends desktop notifications to a notification daemon.
     localPkgs._1password # 1Password command-line tool.
     localPkgs.gh # GitHub CLI tool.
+    wally-cli # CLI flashing tool for ZSA Moonlander.
 
     # Icons.
     paper-icon-theme
@@ -352,6 +353,12 @@ in
 
   services.emacs.enable = true;
 
+  # Add rules for Moonlander.
+  # See: https://github.com/zsa/wally/wiki/Linux-install
+  services.udev.packages = [
+    localPkgs.zsa-udev-rules
+  ];
+
   # Services: custom / mine.
   services.monitroid.enable = true;
 
@@ -364,9 +371,13 @@ in
   users.users.superpaintman = {
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "wheel" "docker" ];
+    extraGroups = [ "wheel" "docker" "plugdev" ];
     shell = pkgs.zsh;
   };
+
+  # Add group for ZSA Moonlander.
+  # See: https://github.com/zsa/wally/wiki/Linux-install
+  users.groups.plugdev = { };
 
   # Security.
   security.sudo = {

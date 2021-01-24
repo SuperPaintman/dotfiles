@@ -11,4 +11,7 @@ with pkgs; rec {
 
   # Misc.
   firefox-install-extensions = callPackage ./misc/firefox-install-extensions { };
+
+  # OS Specific.
+  zsa-udev-rules = callPackage ./os-specific/linux/zsa-udev-rules { };
 }
