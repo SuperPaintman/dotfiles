@@ -1,28 +1,43 @@
 # See: https://github.com/koekeishiya/skhd#configuration.
 
-# Mod1 - shift + alt.
-# Mod2 - shift + ctrl + alt.
+# Kill current window.
+ctrl + shift - c : kill "$(yabai -m query --windows --window | jq -re '.pid')"
 
 # Open a terminal.
-shift + alt - return : open -a "Alacritty"
+ctrl - return : open -n -a "Alacritty"
 
-# Open a editor.
-shift + ctrl + alt - e : open -a "Visual Studio Code"
+# Open a new editor window.
+ctrl - e : ~/bin/em
 
-# Open a browser.
-shift + ctrl + alt - b : open -a "Firefox"
+# Show Spotlight / Alfred.
+ctrl - r : open -a "Alfred 3"
 
-# Open Calendar.
-shift + ctrl + alt - c : open -a "Calendar"
+# Open a new personal todo in org capture
+ctrl + cmd + alt - t : ~/bin/org "t"
 
-# Open Calendar.
-shift + ctrl + alt - m : open -a "Mail"
+# Open a new personal note in org capture
+ctrl + cmd + alt - n : ~/bin/org "n"
 
-# Open Telegram.
-shift + ctrl + alt - t : open -a "Telegram"
+# Open a new personal journal item in org capture
+ctrl + cmd + alt - j : ~/bin/org "j"
 
-# Open Slack.
-shift + ctrl + alt - s : open -a "Slack"
+# Focus on the browser.
+ctrl + alt - b : open -a "Yandex"
+
+# Focus on the calendar.
+ctrl + alt - c : open -a "Calendar"
+
+# Focus on the mail.
+ctrl + alt - m : open -a "Mail"
+
+# Focus on Telegram.
+ctrl + alt - t : open -a "Telegram"
+
+# Focus on Slack.
+ctrl + alt - s : open -a "Slack"
+
+# Focus on Zoom.
+ctrl + alt - z : open -a "zoom.us"
 
 # TODO(SuperPaintman):
 #     Unforteanutly OSX doesn't allow focus spaces without dirty hacks
@@ -31,54 +46,75 @@ shift + ctrl + alt - s : open -a "Slack"
 #     Also I don't know how to setup shortcuts for Mission Control :(.
 #
 #     So don't forget to setup:
-#       * `shift + alt - {1..9}` to focus space.
-#       * `shift + alt - left` to focus on a left space.
-#       * `shift + alt - left` to focus on a right space.
-#       * `shift + alt - w` to show the Mission Control.
+#       * `ctrl - {1..9}` to focus space.
+#       * `ctrl - left` to focus on a left space.
+#       * `ctrl - left` to focus on a right space.
+#       * `ctrl - w` to show the Mission Control.
+
+# Move window to the display.
+ctrl - o : display_index="$( \
+    yabai -m query --displays \
+        | jq -re "sort_by(.frame) | map(.index) | nth(1 + index($( \
+            yabai -m query --displays --window | jq '.index'))) // first")" && \
+    yabai -m window --display "$display_index" && \
+    yabai -m display --focus "$display_index"
+
+# Focus on a display.
+ctrl + cmd - j : yabai -m display --focus "$( \
+    yabai -m query --displays \
+        | jq -re "sort_by(.frame) | map(.index) | nth(1 + index($( \
+            yabai -m query --displays --window | jq '.index'))) // first")"
+ctrl + cmd - k : yabai -m display --focus "$( \
+    yabai -m query --displays \
+        | jq -re "sort_by(.frame) | map(.index) | nth(-1 + index($( \
+            yabai -m query --displays --window | jq '.index'))) // last")"
 
 # Move window to the space.
-shift + ctrl + alt - 1 : yabai -m window --space 1
-shift + ctrl + alt - 2 : yabai -m window --space 2
-shift + ctrl + alt - 3 : yabai -m window --space 3
-shift + ctrl + alt - 4 : yabai -m window --space 4
-shift + ctrl + alt - 5 : yabai -m window --space 5
-shift + ctrl + alt - 6 : yabai -m window --space 6
-shift + ctrl + alt - 7 : yabai -m window --space 7
-shift + ctrl + alt - 8 : yabai -m window --space 8
-shift + ctrl + alt - 9 : yabai -m window --space 9
+ctrl + shift - 1 : yabai -m window --space 1
+ctrl + shift - 2 : yabai -m window --space 2
+ctrl + shift - 3 : yabai -m window --space 3
+ctrl + shift - 4 : yabai -m window --space 4
+ctrl + shift - 5 : yabai -m window --space 5
+ctrl + shift - 6 : yabai -m window --space 6
+ctrl + shift - 7 : yabai -m window --space 7
+ctrl + shift - 8 : yabai -m window --space 8
+ctrl + shift - 9 : yabai -m window --space 9
 
 # Resize a window.
 # TODO(SuperPaintman): There's something wrong with resizing :| .
-shift + alt - h : yabai -m window --resize left:-100:0; yabai -m window --resize right:-100:0
-shift + alt - l : yabai -m window --resize left:100:0; yabai -m window --resize right:100:0
-shift + alt - 0 : yabai -m space --balance
+ctrl - h : yabai -m window --resize left:-100:0; yabai -m window --resize right:-100:0
+ctrl - l : yabai -m window --resize left:100:0; yabai -m window --resize right:100:0
+ctrl - 0 : yabai -m space --balance
 
 # Focus on a window.
-shift + alt - j : yabai -m window --focus "$( \
+ctrl - j : yabai -m window --focus "$( \
     yabai -m query --windows --space \
         | jq -re "sort_by(.frame) | map(.id) | nth(1 + index($( \
             yabai -m query --windows --window | jq '.id'))) // first")"
-shift + alt - k : yabai -m window --focus "$( \
+ctrl - k : yabai -m window --focus "$( \
     yabai -m query --windows --space \
         | jq -re "sort_by(.frame) | map(.id) | nth(-1 + index($( \
             yabai -m query --windows --window | jq '.id'))) // last")"
 
 # Swap windows.
-shift + ctrl + alt - j : yabai -m window --swap "$( \
+ctrl + shift - j : yabai -m window --swap "$( \
     yabai -m query --windows --space \
         | jq -re "sort_by(.frame) | map(.id) | nth(1 + index($( \
             yabai -m query --windows --window | jq '.id'))) // first")"
-shift + ctrl + alt - k : yabai -m window --swap "$( \
+ctrl + shift - k : yabai -m window --swap "$( \
     yabai -m query --windows --space \
         | jq -re "sort_by(.frame) | map(.id) | nth(-1 + index($( \
             yabai -m query --windows --window | jq '.id'))) // last")"
 
 
 # Fullscreen.
-shift + alt - f : yabai -m window --toggle zoom-fullscreen
-shift + ctrl + alt - f : yabai -m window --toggle native-fullscreen
+ctrl - m : yabai -m window --toggle zoom-fullscreen
+ctrl - f : yabai -m window --toggle native-fullscreen
 
 # Change layout.
-shift + alt - space : yabai -m space --layout "$( \
+ctrl - space : yabai -m space --layout "$( \
     yabai -m query --spaces --space \
-        | jq -re 'if .type == "bsp" then "float" else "bsp" end')"
+        | jq -re 'if .type == "bsp" then "float" else "bsp" end')"; \
+    open --background 'bitbar://refreshPlugin?name=yabai-space-layout.*?.sh'
+ctrl + shift - space : yabai -m space --layout bsp; yabai -m space --balance; \
+    open --background 'bitbar://refreshPlugin?name=yabai-space-layout.*?.sh'
