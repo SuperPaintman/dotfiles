@@ -77,3 +77,13 @@
 ;;
 ;; Set `goimports' as default formatter.
 (setq gofmt-command "goimports")
+
+;; MacOS.
+;;
+;; I use remapped modifier keys. So, my:
+;; - 'control' is 'command' (`control')
+;; - 'option' is 'control' (`super')
+;; - 'command' is 'option' (`meta')
+(setq mac-control-modifier 'super
+      mac-option-modifier 'meta
+      mac-command-modifier 'control)
