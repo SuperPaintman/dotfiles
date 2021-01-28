@@ -23,4 +23,13 @@ linkall \
     "$TARGET_ROOT" \
     "$is_force" \
     "alacritty.yml" \
+    "default.yml" \
     "colors.yml"
+
+if is_osx; then
+    linkall \
+        "$SOURCE_ROOT" \
+        "$TARGET_ROOT" \
+        "$is_force" \
+        "macos.yml"
+fi
