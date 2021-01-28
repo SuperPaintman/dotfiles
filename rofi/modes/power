@@ -20,9 +20,9 @@ icons[suspend]="system-suspend"
 icons[hibernate]="system-hibernate"
 
 order=(
+    suspend
     poweroff
     reboot
-    suspend
     hibernate
 )
 
