@@ -57,10 +57,20 @@ I think many of them should be replaced with a script.
   - [ ] Disable notification sound. `"Settings > Notifications > Play sound"`.
 
 - [ ] Install Rust toolchain.
+
   ```sh
   $ rustup default stable
   $ rustup toolchain install stable
   $ rustup component add rust-analysis
   $ rustup component add rls
   $ rustup component add rust-src
+  ```
+
+- [ ] Configure AWS Cli.
+
+  1. Create a new access key for my user in <https://console.aws.amazon.com/iam/home>.
+  2. Create the config file using **aws**.
+
+  ```sh
+  $ aws configure
   ```
