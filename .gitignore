@@ -19,3 +19,8 @@ tmux/.tmux/sidebar/
 # Python.
 .venv
 .venv-*
+
+# Auto-completion.
+.ccls-cache
+compile_commands.json
+.vscode/c_cpp_properties.json

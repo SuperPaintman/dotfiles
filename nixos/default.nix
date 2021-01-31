@@ -129,6 +129,7 @@ in
     gcc
     cmake
     llvm
+    ccls
     go
     gotools
     gopls

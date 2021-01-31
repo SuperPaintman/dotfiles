@@ -14,7 +14,7 @@ define SETUP_ENV
 PATH=$(shell pwd)/$(VENV)/bin:$$PATH
 endef
 
-all: qmk qmk_config_file qmk_firmware
+all: .vscode/c_cpp_properties.json compile_commands.json qmk qmk_config_file qmk_firmware
 
 # Firmware.
 .PHONY: moonlander
@@ -88,6 +88,65 @@ $(VENV):
 $(QMK): $(VENV)
 	$(VENV)/bin/python3 -m pip install qmk==$(QMK_VERSION) appdirs argcomplete colorama hjson milc pygments
 
+# Autocomplete.
+.PHONY: compile_commands.json
+.ONESHELL:
+compile_commands.json:
+	PWD="$(shell pwd)"
+	CLANG="$$(which clang)"
+
+	CFLAGS=()
+	CFLAGS+=("-std=gnu99")
+	CFLAGS+=("-I$$(nix eval --raw nixpkgs.arduino.outPath)/share/arduino/hardware/tools/avr/avr/include")
+	CFLAGS+=("-I$$(nix eval --raw nixpkgs.arduino.outPath)/share/arduino/hardware/tools/avr/lib/gcc/avr/7.3.0/include")
+	CFLAGS+=("-I./.qmk_firmware/keyboards/moonlander")
+	CFLAGS+=("-I./.qmk_firmware/keyboards/moonlander/keymaps/default")
+	CFLAGS+=("-I./.qmk_firmware/users/default")
+	CFLAGS+=("-I./.qmk_firmware/tmk_core")
+	CFLAGS+=("-I./.qmk_firmware/tmk_core/common")
+	CFLAGS+=("-I./.qmk_firmware/tmk_core/protocol")
+	CFLAGS+=("-I./.qmk_firmware/quantum")
+	CFLAGS+=("-I./.qmk_firmware/quantum/keymap_extras")
+	CFLAGS+=("-I./.qmk_firmware/quantum/audio")
+	CFLAGS+=("-I./.qmk_firmware/quantum/process_keycode")
+	CFLAGS+=("-I./.qmk_firmware/quantum/api")
+	CFLAGS+=("-I./.qmk_firmware/quantum/sequencer")
+	CFLAGS+=("-I./.qmk_firmware/drivers")
+	CFLAGS+=("-I./.qmk_firmware/lib/printf")
+	CFLAGS+=("-I./keyboards/moonlander/keymaps/superpaintman")
+	CFLAGS+=("-include ./.qmk_firmware/keyboards/moonlander/config.h")
+	CFLAGS+=("-include ./.qmk_firmware/keyboards/moonlander/keymaps/default/config.h")
+	CFLAGS+=("-DQMK_KEYBOARD_H=\\\\\\\"moonlander.h\\\\\\\"")
+
+	cat <<EOF | jq . > compile_commands.json
+	[
+		{
+			"directory": "$$PWD",
+			"command": "$$CLANG $${CFLAGS[@]} -c -o keyboards/moonlander/keymaps/superpaintman/keymap.o keyboards/moonlander/keymaps/superpaintman/keymap.c",
+			"file": "keyboards/moonlander/keymaps/superpaintman/keymap.c"
+		}
+	]
+	EOF
+
+.vscode:
+	mkdir -p .vscode
+
+.ONESHELL:
+.vscode/c_cpp_properties.json: .vscode
+	PWD="$(shell pwd)"
+
+	cat <<EOF | jq . > .vscode/c_cpp_properties.json
+	{
+		"configurations": [
+			{
+				"name": "Auto-generated",
+				"compileCommands": "$$PWD/compile_commands.json"
+			}
+		],
+		"version": 4
+	}
+	EOF
+
 # Clean.
 .PHONY: clean
 clean: clean-venv clean-nixos-env clean-bin clean-qmk_config_file clean-qmk_firmware
@@ -114,3 +173,6 @@ clean-qmk_firmware:
 	rm -rf $(QMK_FIRMWARE)
 	rm -rf $(QMK_FIRMWARE)-*
 	rm -f $(QMK_FIRMWARE)-*.zip
+
+	rm -f compile_commands.json
+	rm -f .vscode/c_cpp_properties.json

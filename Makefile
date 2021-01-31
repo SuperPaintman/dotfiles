@@ -59,8 +59,7 @@ LUA_FILES := $(shell find . \
 	$(addprefix -and -not -path , $(IGNORE_PATHS)) \
 )
 
-all:
-	:
+all: .vscode/c_cpp_properties.json compile_commands.json
 
 .PHONY: nixos
 nixos: nixos-channels nixos-upgrade
@@ -154,9 +153,39 @@ test-lua:
 		'--lpath="./?.lua;./?/?.lua;./?/init.lua"' \
 		./
 
+# Autocomplete.
+.PHONY: qmk/compile_commands.json
+qmk/compile_commands.json:
+	$(MAKE) -C qmk compile_commands.json
+
+compile_commands.json: qmk/compile_commands.json
+	jq -s '. | flatten' $^ > compile_commands.json
+
+.vscode:
+	mkdir -p .vscode
+
+.ONESHELL:
+.vscode/c_cpp_properties.json: .vscode
+	PWD="$(shell pwd)"
+
+	cat <<EOF | jq . > .vscode/c_cpp_properties.json
+	{
+		"configurations": [
+			{
+				"name": "Auto-generated",
+				"compileCommands": "$$PWD/compile_commands.json"
+			}
+		],
+		"version": 4
+	}
+	EOF
+
 .PHONY: clean
 clean:
 	rm -f result
 	rm -f result-*
+
+	rm -f compile_commands.json
+	rm -f .vscode/c_cpp_properties.json
 
 	$(MAKE) -C qmk clean
