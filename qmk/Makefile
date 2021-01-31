@@ -117,6 +117,21 @@ compile_commands.json:
 	CFLAGS+=("-include ./.qmk_firmware/keyboards/moonlander/config.h")
 	CFLAGS+=("-include ./.qmk_firmware/keyboards/moonlander/keymaps/default/config.h")
 	CFLAGS+=("-DQMK_KEYBOARD_H=\\\\\\\"moonlander.h\\\\\\\"")
+	CFLAGS+=("-DAUDIO_ENABLE")
+	CFLAGS+=("-DEEPROM_ENABLE")
+	CFLAGS+=("-DRGB_MATRIX_ENABLE")
+	CFLAGS+=("-DSPACE_CADET_ENABLE")
+	CFLAGS+=("-DMAGIC_KEYCODE_ENABLE")
+	CFLAGS+=("-DGRAVE_ESC_ENABLE")
+	CFLAGS+=("-DMAGIC_ENABLE")
+	CFLAGS+=("-DMOUSEKEY_ENABLE")
+	CFLAGS+=("-DMOUSE_ENABLE")
+	CFLAGS+=("-DEXTRAKEY_ENABLE")
+	CFLAGS+=("-DCONSOLE_ENABLE")
+	CFLAGS+=("-DCOMMAND_ENABLE")
+	CFLAGS+=("-DNKRO_ENABLE")
+	CFLAGS+=("-DSWAP_HANDS_ENABLE")
+	CFLAGS+=("-DSHARED_EP_ENABLE")
 
 	cat <<EOF | jq . > compile_commands.json
 	[
