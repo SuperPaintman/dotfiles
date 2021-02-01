@@ -103,11 +103,14 @@ enum layouts {
 
 enum custom_keycodes {
   _CUSTOM_KEYCODES_BEGINNING = ML_SAFE_RANGE - 1,
+  _CUSTOM_KEYCODES_EMOJI_BEGINNING = _CUSTOM_KEYCODES_BEGINNING,
   EMOJI_HEART, // ❤.
   EMOJI_UP,    // 👍.
   EMOJI_DOWN,  // 👎.
   EMOJI_MARK,  // ✅.
-  _CUSTOM_KEYCODES_END,
+  EMOJI_BEAR,  // 🐻
+  _CUSTOM_KEYCODES_EMOJI_END,
+  _CUSTOM_KEYCODES_END = _CUSTOM_KEYCODES_EMOJI_END,
 };
 
 struct emoji_t {
@@ -119,6 +122,7 @@ const struct emoji_t emojis[] = {
     [EMOJI_UP] = {.shortcode = ":thumbsup:"},
     [EMOJI_DOWN] = {.shortcode = ":thumbsdown:"},
     [EMOJI_MARK] = {.shortcode = ":white_check_mark:"},
+    [EMOJI_BEAR] = {.shortcode = ":bear:"},
 };
 
 // clang-format off
@@ -200,7 +204,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        EMOJI_UP,       XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        EMOJI_HEART,    EMOJI_MARK,     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        /**/                   XXXXXXX,        EMOJI_DOWN,     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        _______,        /**/   XXXXXXX,                        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        _______,        /**/   EMOJI_BEAR,                     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
                                                                     _______,        _______,        _______,        /**/   _______,        _______,        _______
   ),
 
@@ -261,7 +265,7 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
     CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_YELLOW,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
     CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_RED,      CLR_BLUE,     CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
     CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 /**/                 CLR_XXXXXX,   CLR_YELLOW,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
-    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 CLR_BLUE,     /**/   CLR_XXXXXX,                 CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 CLR_BLUE,     /**/   CLR_PURPLE,                 CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
                                                             CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX
   ),
 
@@ -317,11 +321,8 @@ void rgb_matrix_indicators_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
-    switch (keycode) {
-    case EMOJI_HEART:
-    case EMOJI_UP:
-    case EMOJI_DOWN:
-    case EMOJI_MARK:
+    if (keycode > _CUSTOM_KEYCODES_EMOJI_BEGINNING &&
+        keycode < _CUSTOM_KEYCODES_EMOJI_END) {
       SEND_STRING(emojis[keycode].shortcode);
       return false;
     }
