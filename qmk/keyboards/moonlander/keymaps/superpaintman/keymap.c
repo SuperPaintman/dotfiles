@@ -46,28 +46,28 @@
     k40, k41, k42, k43, k44,      k53,   kb3,      ka2, ka3, ka4, ka5, ka6,    \
                         k50, k51, k52,   kb4, kb5, kb6                         \
 )                                                                              \
-  {k00, k10, k20, k30, k40, \
-   k01, k11, k21, k31, k41, \
-   k02, k12, k22, k32, k42, \
-   k03, k13, k23, k33, k43, \
-   k04, k14, k24, k34, k44, \
-   k05, k15, k25, k35,      \
-   k06, k16, k26,           \
-   k50,                     \
-   k51,                     \
-   k52,                     \
-   k53,                     \
-                            \
-   k66, k76, k86, k96, ka6, \
-   k65, k75, k85, k95, ka5, \
-   k64, k74, k84, k94, ka4, \
-   k63, k73, k83, k93, ka3, \
-   k62, k72, k82, k92, ka2, \
-   k61, k71, k81, k91,      \
-   k60, k70, k80,           \
-   kb6,                     \
-   kb5,                     \
-   kb4,                     \
+  {k00, k10, k20, k30, k40,                                                    \
+   k01, k11, k21, k31, k41,                                                    \
+   k02, k12, k22, k32, k42,                                                    \
+   k03, k13, k23, k33, k43,                                                    \
+   k04, k14, k24, k34, k44,                                                    \
+   k05, k15, k25, k35,                                                         \
+   k06, k16, k26,                                                              \
+   k50,                                                                        \
+   k51,                                                                        \
+   k52,                                                                        \
+   k53,                                                                        \
+                                                                               \
+   k66, k76, k86, k96, ka6,                                                    \
+   k65, k75, k85, k95, ka5,                                                    \
+   k64, k74, k84, k94, ka4,                                                    \
+   k63, k73, k83, k93, ka3,                                                    \
+   k62, k72, k82, k92, ka2,                                                    \
+   k61, k71, k81, k91,                                                         \
+   k60, k70, k80,                                                              \
+   kb6,                                                                        \
+   kb5,                                                                        \
+   kb4,                                                                        \
    kb3}
 // clang-format on
 
@@ -103,7 +103,22 @@ enum layouts {
 
 enum custom_keycodes {
   _CUSTOM_KEYCODES_BEGINNING = ML_SAFE_RANGE - 1,
+  EMOJI_HEART, // ❤.
+  EMOJI_UP,    // 👍.
+  EMOJI_DOWN,  // 👎.
+  EMOJI_MARK,  // ✅.
   _CUSTOM_KEYCODES_END,
+};
+
+struct emoji_t {
+  const char *shortcode;
+};
+
+const struct emoji_t emojis[] = {
+    [EMOJI_HEART] = {.shortcode = ":heart:"},
+    [EMOJI_UP] = {.shortcode = ":thumbsup:"},
+    [EMOJI_DOWN] = {.shortcode = ":thumbsdown:"},
+    [EMOJI_MARK] = {.shortcode = ":white_check_mark:"},
 };
 
 // clang-format off
@@ -182,20 +197,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [EMOJI] = LAYOUT_moonlander(
     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        /**/                   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        EMOJI_UP,       XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        EMOJI_HEART,    EMOJI_MARK,     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        /**/                   XXXXXXX,        EMOJI_DOWN,     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        _______,        /**/   XXXXXXX,                        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-                                                                    XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX
+                                                                    _______,        _______,        _______,        /**/   _______,        _______,        _______
   ),
 
   [CLICKY] = LAYOUT_moonlander(
-    KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,                                          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          TO(0),
-    KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,                                          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,
-    KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,                                                                          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,
-    KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,                                          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,
-    KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,                                                                                                          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,          KC_NO,
-    KC_NO,          KC_NO,          KC_NO,                          KC_NO,          KC_NO,          KC_NO
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        _______,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        /**/                   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        XXXXXXX,        /**/   XXXXXXX,                        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+                                                                    XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX
   ),
 
   // Template.
@@ -243,9 +258,9 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
 
   [EMOJI] = LEDMAP_moonlander(
     CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
-    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
-    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
-    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 /**/                 CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_YELLOW,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_RED,      CLR_BLUE,     CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 /**/                 CLR_XXXXXX,   CLR_YELLOW,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
     CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 CLR_BLUE,     /**/   CLR_XXXXXX,                 CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
                                                             CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX
   ),
@@ -300,4 +315,17 @@ void rgb_matrix_indicators_user(void) {
   }
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) { return true; }
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if (record->event.pressed) {
+    switch (keycode) {
+    case EMOJI_HEART:
+    case EMOJI_UP:
+    case EMOJI_DOWN:
+    case EMOJI_MARK:
+      SEND_STRING(emojis[keycode].shortcode);
+      return false;
+    }
+  }
+
+  return true;
+}
