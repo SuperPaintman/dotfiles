@@ -84,3 +84,5 @@ I think many of them should be replaced with a script.
   $ mkdir ~/.openvpn
   $ cp "$OPENVPN_CONFIG_FILE" ~/.openvpn/
   ```
+
+  3. Run `make nixos-switch`.
