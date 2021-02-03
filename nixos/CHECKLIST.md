@@ -74,3 +74,13 @@ I think many of them should be replaced with a script.
   ```sh
   $ aws configure
   ```
+
+- [ ] Copy OpenVPN client config.
+
+  1. Download the config file.
+  2. Create `~/.openvpn` dir and copy the downloaded file.
+
+  ```sh
+  $ mkdir ~/.openvpn
+  $ cp "$OPENVPN_CONFIG_FILE" ~/.openvpn/
+  ```
