@@ -21,7 +21,7 @@ all: .vscode/c_cpp_properties.json compile_commands.json qmk qmk_config_file qmk
 moonlander: moonlander_superpaintman.bin
 	wally moonlander_superpaintman.bin
 
-moonlander_superpaintman.bin: $(QMK_FIRMWARE) $(QMK_FIRMWARE)/keyboards/moonlander/keymaps/superpaintman
+moonlander_superpaintman.bin: $(NIXOS_ENV_SH) $(QMK_FIRMWARE) $(QMK_FIRMWARE)/keyboards/moonlander/keymaps/superpaintman
 	$(SETUP_ENV)
 
 	$(MAKE) hello
@@ -51,7 +51,7 @@ $(QMK_CONFIG_FILE):
 .PHONY: qmk_firmware
 qmk_firmware: $(QMK_FIRMWARE)
 
-$(QMK_FIRMWARE): $(QMK) $(QMK_CONFIG_FILE)
+$(QMK_FIRMWARE): $(NIXOS_ENV_SH) $(QMK) $(QMK_CONFIG_FILE)
 	$(SETUP_ENV)
 	$(QMK) --config-file $(QMK_CONFIG_FILE) setup --yes
 
@@ -74,7 +74,7 @@ $(QMK_FIRMWARE)/keyboards/moonlander/keymaps/superpaintman: keyboards/moonlander
 
 # Hello.
 .PHONY: hello
-hello: $(QMK) $(QMK_FIRMWARE)
+hello: $(NIXOS_ENV_SH) $(QMK) $(QMK_FIRMWARE)
 	$(SETUP_ENV)
 	$(QMK_FIRMWARE)/bin/qmk hello
 
