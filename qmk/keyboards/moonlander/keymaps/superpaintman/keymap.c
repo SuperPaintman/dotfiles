@@ -86,6 +86,17 @@
 #define CLR_BLUE                                                               \
   { 146, 224, 255 }
 
+#define CLR_GR_1                                                               \
+  { 180, 255, 233 }
+#define CLR_GR_2                                                               \
+  { 205, 255, 255 }
+#define CLR_GR_3                                                               \
+  { 233, 218, 217 }
+#define CLR_GR_4                                                               \
+  { 255, 220, 201 }
+#define CLR_GR_5                                                               \
+  { 14, 222, 242 }
+
 enum layouts {
   _LAYOUTS_BEGINNING = -1,
   BASE,          // default layout.
@@ -164,68 +175,68 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [NUMPAD] = LAYOUT_moonlander(
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_NUMLOCK,     KC_TRANSPARENT, KC_KP_SLASH,    KC_KP_ASTERISK, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_KP_7,        KC_KP_8,        KC_KP_9,        KC_KP_MINUS,    KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                 KC_TRANSPARENT, KC_KP_0,        KC_KP_4,        KC_KP_5,        KC_KP_6,        KC_KP_PLUS,     KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_KP_1,        KC_KP_2,        KC_KP_3,        KC_KP_ENTER,    KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_KP_0,        KC_TRANSPARENT, KC_KP_DOT,      KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
+    _______,        _______,        _______,        _______,        _______,        _______,        _______,          /**/   _______,        _______,        KC_NUMLOCK,     _______,        KC_KP_SLASH,    KC_KP_ASTERISK, _______,
+    _______,        _______,        _______,        _______,        _______,        _______,        _______,          /**/   _______,        _______,        KC_KP_7,        KC_KP_8,        KC_KP_9,        KC_KP_MINUS,    _______,
+    _______,        _______,        _______,        _______,        _______,        _______,        _______,          /**/   _______,        KC_KP_0,        KC_KP_4,        KC_KP_5,        KC_KP_6,        KC_KP_PLUS,     _______,
+    _______,        _______,        _______,        _______,        _______,        _______,                          /**/                   _______,        KC_KP_1,        KC_KP_2,        KC_KP_3,        KC_KP_ENTER,    _______,
+    _______,        _______,        _______,        _______,        _______,                        _______,          /**/   _______,                        KC_KP_0,        _______,        KC_KP_DOT,      _______,        _______,
+                                                                    _______,        _______,        _______,          /**/   _______,        _______,        _______
   ),
 
   [MOUSE] = LAYOUT_moonlander(
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_MS_WH_UP,    KC_MS_WH_DOWN,  KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                 KC_TRANSPARENT, KC_MS_LEFT,     KC_MS_DOWN,     KC_MS_UP,       KC_MS_RIGHT,    KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                 KC_MS_BTN3,     KC_MS_BTN1,     KC_MS_BTN2
+    _______,        _______,        _______,        _______,        _______,        _______,        _______,          /**/   _______,        _______,        _______,        _______,        _______,        _______,        _______,
+    _______,        _______,        _______,        _______,        _______,        _______,        _______,          /**/   _______,        KC_MS_WH_UP,    KC_MS_WH_DOWN,  _______,        _______,        _______,        _______,
+    _______,        _______,        _______,        _______,        _______,        _______,        _______,          /**/   _______,        KC_MS_LEFT,     KC_MS_DOWN,     KC_MS_UP,       KC_MS_RIGHT,    _______,        _______,
+    _______,        _______,        _______,        _______,        _______,        _______,                          /**/                   _______,        _______,        _______,        _______,        _______,        _______,
+    _______,        _______,        _______,        _______,        _______,                        _______,          /**/   _______,                        _______,        _______,        _______,        _______,        _______,
+                                                                    _______,        _______,        _______,          /**/   KC_MS_BTN3,     KC_MS_BTN1,     KC_MS_BTN2
   ),
 
   [MEDIA] = LAYOUT_moonlander(
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, RESET,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_AUDIO_VOL_UP,KC_BRIGHTNESS_UP,KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_AUDIO_VOL_DOWN,KC_BRIGHTNESS_DOWN,KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_AUDIO_MUTE,  KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
+    _______,        _______,        _______,        _______,        _______,        _______,         _______,         /**/   _______,        _______,        _______,           _______,            _______,        _______,        RESET,
+    _______,        _______,        _______,        _______,        _______,        _______,         _______,         /**/   _______,        _______,        KC_AUDIO_VOL_UP,   KC_BRIGHTNESS_UP,   _______,        _______,        _______,
+    _______,        _______,        _______,        _______,        _______,        _______,         _______,         /**/   _______,        _______,        KC_AUDIO_VOL_DOWN, KC_BRIGHTNESS_DOWN, _______,        _______,        _______,
+    _______,        _______,        _______,        _______,        _______,        _______,                          /**/                   _______,        KC_AUDIO_MUTE,     _______,            _______,        _______,        _______,
+    _______,        _______,        _______,        _______,        _______,                         _______,         /**/   _______,                        _______,           _______,            _______,        _______,        _______,
+                                                                    _______,        _______,         _______,         /**/   _______,        _______,        _______
   ),
 
   [FUNCTIONAL] = LAYOUT_moonlander(
-    KC_TRANSPARENT, KC_F1,          KC_F2,          KC_F3,          KC_F4,          KC_F5,          KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_F11,
-    KC_TRANSPARENT, KC_BRIGHTNESS_DOWN,KC_BRIGHTNESS_UP,KC_AUDIO_VOL_DOWN,KC_AUDIO_VOL_UP,KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_F12,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                                                                                                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,
-    KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT,                 KC_TRANSPARENT, KC_TRANSPARENT, KC_TRANSPARENT
+    _______,        KC_F1,              KC_F2,            KC_F3,             KC_F4,           KC_F5,          _______,         /**/   _______,        KC_F6,          KC_F7,          KC_F8,          KC_F9,          KC_F10,         KC_F11,
+    _______,        KC_BRIGHTNESS_DOWN, KC_BRIGHTNESS_UP, KC_AUDIO_VOL_DOWN, KC_AUDIO_VOL_UP, _______,        _______,         /**/   _______,        _______,        _______,        _______,        _______,        _______,        KC_F12,
+    _______,        _______,            _______,          _______,           _______,         _______,        _______,         /**/   _______,        _______,        _______,        _______,        _______,        _______,        _______,
+    _______,        _______,            _______,          _______,           _______,         _______,                         /**/                   _______,        _______,        _______,        _______,        _______,        _______,
+    _______,        _______,            _______,          _______,           _______,                         _______,         /**/   _______,                        _______,        _______,        _______,        _______,        _______,
+                                                                             _______,         _______,        _______,         /**/   _______,        _______,        _______
   ),
 
   [EMOJI] = LAYOUT_moonlander(
-    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        EMOJI_UP,       XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        EMOJI_HEART,    EMOJI_MARK,     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        /**/                   XXXXXXX,        EMOJI_DOWN,     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        _______,        /**/   EMOJI_BEAR,                     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-                                                                    _______,        _______,        _______,        /**/   _______,        _______,        _______
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,          /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,          /**/   XXXXXXX,        XXXXXXX,        EMOJI_UP,       XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,          /**/   XXXXXXX,        EMOJI_HEART,    EMOJI_MARK,     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          /**/                   XXXXXXX,        EMOJI_DOWN,     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        _______,          /**/   EMOJI_BEAR,                     XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+                                                                    _______,        _______,        _______,          /**/   _______,        _______,        _______
   ),
 
   [CLICKY] = LAYOUT_moonlander(
-    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        TO(BASE),
-    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        /**/                   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        XXXXXXX,        /**/   XXXXXXX,                        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-                                                                    XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,          /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        TO(BASE),
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,          /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,          /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          /**/                   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        XXXXXXX,          /**/   XXXXXXX,                        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+                                                                    XXXXXXX,        XXXXXXX,        XXXXXXX,          /**/   XXXXXXX,        XXXXXXX,        XXXXXXX
   ),
 
   // Template.
   //
   // [NAME] = LAYOUT_moonlander(
-  //   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-  //   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-  //   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-  //   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        /**/                   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-  //   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        XXXXXXX,        /**/   XXXXXXX,                        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
-  //                                                                   XXXXXXX,        XXXXXXX,        XXXXXXX,        /**/   XXXXXXX,        XXXXXXX,        XXXXXXX
+  //   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,           /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+  //   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,           /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+  //   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,           /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+  //   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                           /**/                   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+  //   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        XXXXXXX,           /**/   XXXXXXX,                        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+  //                                                                   XXXXXXX,        XXXXXXX,        XXXXXXX,           /**/   XXXXXXX,        XXXXXXX,        XXXXXXX
   // ),
 };
 // clang-format on
@@ -318,7 +329,14 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
                                                             CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX
   ),
 
-  [CLICKY] = { {180,255,233}, {205,255,255}, {233,218,217}, {255,220,201}, {14,222,242}, {180,255,233}, {205,255,255}, {233,218,217}, {255,220,201}, {14,222,242}, {180,255,233}, {205,255,255}, {233,218,217}, {255,220,201}, {14,222,242}, {180,255,233}, {205,255,255}, {233,218,217}, {255,220,201}, {14,222,242}, {180,255,233}, {205,255,255}, {233,218,217}, {255,220,201}, {14,222,242}, {180,255,233}, {205,255,255}, {233,218,217}, {255,220,201}, {180,255,233}, {205,255,255}, {233,218,217}, {14,222,242}, {14,222,242}, {14,222,242}, {255,220,201}, CLR_RED, {205,255,255}, {233,218,217}, {255,220,201}, {14,222,242}, {180,255,233}, {205,255,255}, {233,218,217}, {255,220,201}, {14,222,242}, {180,255,233}, {205,255,255}, {233,218,217}, {255,220,201}, {14,222,242}, {180,255,233}, {205,255,255}, {233,218,217}, {255,220,201}, {14,222,242}, {180,255,233}, {205,255,255}, {233,218,217}, {255,220,201}, {14,222,242}, {180,255,233}, {205,255,255}, {233,218,217}, {255,220,201}, {180,255,233}, {205,255,255}, {233,218,217}, {14,222,242}, {14,222,242}, {14,222,242}, {255,220,201} },
+  [CLICKY] = LEDMAP_moonlander(
+    CLR_GR_1,     CLR_GR_1,     CLR_GR_1,     CLR_GR_1,     CLR_GR_1,     CLR_GR_1,     CLR_GR_1,     /**/   CLR_GR_1,     CLR_GR_1,     CLR_GR_1,     CLR_GR_1,     CLR_GR_1,     CLR_GR_1,     CLR_RED,
+    CLR_GR_2,     CLR_GR_2,     CLR_GR_2,     CLR_GR_2,     CLR_GR_2,     CLR_GR_2,     CLR_GR_2,     /**/   CLR_GR_2,     CLR_GR_2,     CLR_GR_2,     CLR_GR_2,     CLR_GR_2,     CLR_GR_2,     CLR_GR_2,
+    CLR_GR_3,     CLR_GR_3,     CLR_GR_3,     CLR_GR_3,     CLR_GR_3,     CLR_GR_3,     CLR_GR_3,     /**/   CLR_GR_3,     CLR_GR_3,     CLR_GR_3,     CLR_GR_3,     CLR_GR_3,     CLR_GR_3,     CLR_GR_3,
+    CLR_GR_4,     CLR_GR_4,     CLR_GR_4,     CLR_GR_4,     CLR_GR_4,     CLR_GR_4,                   /**/                 CLR_GR_4,     CLR_GR_4,     CLR_GR_4,     CLR_GR_4,     CLR_GR_4,     CLR_GR_4,
+    CLR_GR_5,     CLR_GR_5,     CLR_GR_5,     CLR_GR_5,     CLR_GR_5,                   CLR_GR_4,     /**/   CLR_GR_4,                   CLR_GR_5,     CLR_GR_5,     CLR_GR_5,     CLR_GR_5,     CLR_GR_5,
+                                                            CLR_GR_5,     CLR_GR_5,     CLR_GR_5,     /**/   CLR_GR_5,     CLR_GR_5,     CLR_GR_5
+  )
 
   // Template.
   //
