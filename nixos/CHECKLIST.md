@@ -66,6 +66,16 @@ I think many of them should be replaced with a script.
   $ rustup component add rust-src
   ```
 
+- [ ] Configure Cargo.
+
+  1. Create a new API token on <https://crates.io/me>.
+  2. Create the credentials file using **cargo**.
+
+  ```sh
+  $ CRATES_API_TOKEN=<token>
+  $ cargo login "$CRATES_API_TOKEN"
+  ```
+
 - [ ] Configure AWS Cli.
 
   1. Create a new access key for my user in <https://console.aws.amazon.com/iam/home>.
