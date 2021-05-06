@@ -15,6 +15,7 @@ imports [
   (linuxOnly ./awesome)
   ./bash
   ./bin
+  ./cargo
   ./ctags
   ./doom
   ./git

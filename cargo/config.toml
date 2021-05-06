@@ -1,0 +1,5 @@
+[cargo-new]
+vcs = "git"
+
+[net]
+git-fetch-with-cli = true

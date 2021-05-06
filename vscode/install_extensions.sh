@@ -134,6 +134,11 @@ if ! has_extension "SuperPaintman" "monokai-extended"; then
     get_extension "SuperPaintman" "monokai-extended" "0.5.1"
 fi
 
+# even-better-toml (tamasfe)
+if ! has_extension "tamasfe" "even-better-toml"; then
+    get_extension "tamasfe" "even-better-toml" "0.12.1"
+fi
+
 # docthis (oouo-diogo-perdigao)
 if ! has_extension "oouo-diogo-perdigao" "docthis"; then
     get_extension "oouo-diogo-perdigao" "docthis" "0.8.2"

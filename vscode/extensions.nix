@@ -106,6 +106,12 @@
       sha256 = "1iispppb8rxsrnvc9pd1f5wm2ig2dcqa9j6jpqwarhmh5yvpnqy2";
     }
     {
+      name = "even-better-toml";
+      publisher = "tamasfe";
+      version = "0.12.1";
+      sha256 = "1421ybxmz164m7g66bwl2wzkm0sgbz6n4cx9fwvas31n0xx3s6hs";
+    }
+    {
       name = "docthis";
       publisher = "oouo-diogo-perdigao";
       version = "0.8.2";
