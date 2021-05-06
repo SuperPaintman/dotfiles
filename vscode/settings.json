@@ -250,6 +250,9 @@
     "diagnostics": true,
     "documentLink": true
   },
+  // Rust
+  "rust-client.engine": "rust-analyzer",
+  "rust.rust-analyzer.path": "rust-analyzer",
   // Prettier
   "prettier.singleQuote": true,
   "prettier.arrowParens": "always",

@@ -60,10 +60,9 @@ I think many of them should be replaced with a script.
 
   ```sh
   $ rustup default stable
-  $ rustup toolchain install stable
-  $ rustup component add rust-analysis
-  $ rustup component add rls
-  $ rustup component add rust-src
+  $ rustup toolchain install stable nightly
+  $ rustup +stable component add rust-analysis rls rust-src
+  $ rustup +nightly component add rust-analysis rls rust-src
   ```
 
 - [ ] Configure Cargo.

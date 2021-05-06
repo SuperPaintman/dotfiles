@@ -148,6 +148,7 @@ in
     )
     ruby
     localPkgs.rustup-openssl
+    rust-analyzer
     ghc
     stack
     haskellPackages.brittany
