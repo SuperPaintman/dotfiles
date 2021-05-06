@@ -82,10 +82,10 @@
       sha256 = "1vh0wvfvzszc58lw7dbl60knpm5l6rrsghfchhn5dvwyadx4a33h";
     }
     {
-      name = "rust";
-      publisher = "rust-lang";
-      version = "0.7.8";
-      sha256 = "039ns854v1k4jb9xqknrjkj8lf62nfcpfn0716ancmjc4f0xlzb3";
+      name = "rust-analyzer";
+      publisher = "matklad";
+      version = "0.2.583";
+      sha256 = "0abz4hcndjr3yvacv1nr18zsblrr7vy3dhsi3dida79sqzvl29qy";
     }
     {
       name = "stylus";

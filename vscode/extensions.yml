@@ -92,10 +92,16 @@ extensions:
     # Rust
     ## Rust for Visual Studio Code (powered by Rust Language Server/Rust
     ## Analyzer).
-    - name: rust
-      publisher: rust-lang
-      version: "0.7.8"
-      sha256: 039ns854v1k4jb9xqknrjkj8lf62nfcpfn0716ancmjc4f0xlzb3
+    # - name: rust
+    #   publisher: rust-lang
+    #   version: "0.7.8"
+    #   sha256: 039ns854v1k4jb9xqknrjkj8lf62nfcpfn0716ancmjc4f0xlzb3
+
+    ## An alternative rust language server to the RLS.
+    - name: rust-analyzer
+      publisher: matklad
+      version: "0.2.583"
+      sha256: 0abz4hcndjr3yvacv1nr18zsblrr7vy3dhsi3dida79sqzvl29qy
 
     # Stylus
     ## Stylus Language Support.

@@ -67,9 +67,16 @@ nixos: nixos-channels nixos-upgrade
 .PHONY: nixos-upgrade
 nixos-upgrade: nixos-update nixos-switch
 
+.PHONY: nixos-upgrade-unstable
+nixos-upgrade-unstable: nixos-update-unstable nixos-switch
+
 .PHONY: nixos-update
-nixos-update: channels
+nixos-update: nixos-channels
 	sudo nix-channel --update
+
+.PHONY: nixos-update-unstable
+nixos-update-unstable: nixos-channels
+	sudo nix-channel --update nixos-unstable
 
 .PHONY: nixos-switch
 nixos-switch:

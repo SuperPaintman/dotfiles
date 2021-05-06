@@ -114,9 +114,9 @@ if ! has_extension "ms-python" "python"; then
     get_extension "ms-python" "python" "2020.9.114305"
 fi
 
-# rust (rust-lang)
-if ! has_extension "rust-lang" "rust"; then
-    get_extension "rust-lang" "rust" "0.7.8"
+# rust-analyzer (matklad)
+if ! has_extension "matklad" "rust-analyzer"; then
+    get_extension "matklad" "rust-analyzer" "0.2.583"
 fi
 
 # stylus (alan)
