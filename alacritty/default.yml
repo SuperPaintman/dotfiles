@@ -22,7 +22,7 @@ font:
     size: 10
 
 mouse_bindings:
-    - {mouse: Middle, action: None} # No more paste.
+    - { mouse: Middle, action: None } # No more paste.
 
 key_bindings:
     # Vim unhappy with it :( (Visual block).

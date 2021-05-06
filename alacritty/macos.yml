@@ -16,33 +16,33 @@ key_bindings:
     #  - 'control' is 'command' (`control')
     #  - 'option' is 'control' (`super')
     #  - 'command' is 'option' (`meta')
-    - {key: C, mods: Command|Shift, action: Copy}
-    - {key: V, mods: Command|Shift, action: Paste}
+    - { key: C, mods: Command|Shift, action: Copy }
+    - { key: V, mods: Command|Shift, action: Paste }
 
-    - {key: A, mods: Command, chars: "\x01"}
-    - {key: B, mods: Command, chars: "\x02"}
-    - {key: C, mods: Command, chars: "\x03"}
-    - {key: D, mods: Command, chars: "\x04"}
-    - {key: E, mods: Command, chars: "\x05"}
-    - {key: F, mods: Command, chars: "\x06"}
-    - {key: G, mods: Command, chars: "\x07"}
-    - {key: H, mods: Command, chars: "\x08"}
-    - {key: I, mods: Command, chars: "\x09"}
-    - {key: J, mods: Command, chars: "\x0a"}
-    - {key: K, mods: Command, chars: "\x0b"}
-    - {key: L, mods: Command, chars: "\x0c"}
-    - {key: M, mods: Command, chars: "\x0d"}
-    - {key: N, mods: Command, chars: "\x0e"}
-    - {key: O, mods: Command, chars: "\x0f"}
-    - {key: P, mods: Command, chars: "\x10"}
-    - {key: Q, mods: Command, chars: "\x11"}
-    - {key: R, mods: Command, chars: "\x12"}
-    - {key: S, mods: Command, chars: "\x13"}
-    - {key: T, mods: Command, chars: "\x14"}
-    - {key: U, mods: Command, chars: "\x15"}
-    - {key: V, mods: Command, chars: "\x16"}
-    - {key: W, mods: Command, chars: "\x17"}
-    - {key: Up, mods: Command, chars: "\e[1;5A"}
-    - {key: Down, mods: Command, chars: "\e[1;5B"}
-    - {key: Right, mods: Command, chars: "\e[1;5C"}
-    - {key: Left, mods: Command, chars: "\e[1;5D"}
+    - { key: A, mods: Command, chars: "\x01" }
+    - { key: B, mods: Command, chars: "\x02" }
+    - { key: C, mods: Command, chars: "\x03" }
+    - { key: D, mods: Command, chars: "\x04" }
+    - { key: E, mods: Command, chars: "\x05" }
+    - { key: F, mods: Command, chars: "\x06" }
+    - { key: G, mods: Command, chars: "\x07" }
+    - { key: H, mods: Command, chars: "\x08" }
+    - { key: I, mods: Command, chars: "\x09" }
+    - { key: J, mods: Command, chars: "\x0a" }
+    - { key: K, mods: Command, chars: "\x0b" }
+    - { key: L, mods: Command, chars: "\x0c" }
+    - { key: M, mods: Command, chars: "\x0d" }
+    - { key: N, mods: Command, chars: "\x0e" }
+    - { key: O, mods: Command, chars: "\x0f" }
+    - { key: P, mods: Command, chars: "\x10" }
+    - { key: Q, mods: Command, chars: "\x11" }
+    - { key: R, mods: Command, chars: "\x12" }
+    - { key: S, mods: Command, chars: "\x13" }
+    - { key: T, mods: Command, chars: "\x14" }
+    - { key: U, mods: Command, chars: "\x15" }
+    - { key: V, mods: Command, chars: "\x16" }
+    - { key: W, mods: Command, chars: "\x17" }
+    - { key: Up, mods: Command, chars: "\e[1;5A" }
+    - { key: Down, mods: Command, chars: "\e[1;5B" }
+    - { key: Right, mods: Command, chars: "\e[1;5C" }
+    - { key: Left, mods: Command, chars: "\e[1;5D" }
