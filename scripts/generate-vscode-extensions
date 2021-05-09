@@ -57,21 +57,12 @@ function templateShell(config) {
   const packages = [];
 
   for (const ext of config.extensions) {
-    const extDir = `$HOME/.vscode/extensions/${ext.publisher}.${ext.name}`;
-    const extURL = `https://${ext.publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${ext.publisher}/extension/${ext.name}/${ext.version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage`;
-    const tmpExtZip = `/tmp/vscode-extensions-${ext.publisher}.${ext.name}-${ext.version}.zip`;
-    const tmpExtDir = `/tmp/vscode-extensions-${ext.publisher}.${ext.name}-${ext.version}`;
-
     packages.push(
       `
 # ${ext.name} (${ext.publisher})
-if ! has_extension ${JSON.stringify(ext.publisher)} ${JSON.stringify(
-        ext.name
-      )} ; then
-    get_extension  ${JSON.stringify(ext.publisher)} ${JSON.stringify(
+extension  ${JSON.stringify(ext.publisher)} ${JSON.stringify(
         ext.name
       )} ${JSON.stringify(ext.version)}
-fi
       `.trim()
     );
   }
@@ -106,7 +97,7 @@ has_extension() {
     return 0
 }
 
-get_extension() {
+download_extension() {
     local publisher="$1"
     local name="$2"
     local version="$3"
@@ -124,6 +115,16 @@ get_extension() {
 
     rm -rf "$ext_dir"
     mv "\${tmp_ext_dir}/extension" "$ext_dir"
+}
+
+extension() {
+    local publisher="$1"
+    local name="$2"
+    local version="$3"
+
+    if ! has_extension "\${publisher}" "\${name}"; then
+        download_extension "\${publisher}" "\${name}" "\${version}"
+    fi
 }
 
 mkdir -p "$HOME/.vscode/extensions"
