@@ -163,6 +163,9 @@ in
     docker
     docker-compose
 
+    # Vagrant
+    vagrant
+
     # Server configuration utils.
     ansible
     terraform
@@ -367,6 +370,7 @@ in
 
   # Virtualisation.
   virtualisation.docker.enable = true;
+  virtualisation.libvirtd.enable = true;
 
   # Users.
   users.defaultUserShell = pkgs.zsh;
@@ -374,7 +378,7 @@ in
   users.users.superpaintman = {
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "wheel" "docker" "plugdev" ];
+    extraGroups = [ "wheel" "docker" "libvirtd" "plugdev" ];
     shell = pkgs.zsh;
   };
 
