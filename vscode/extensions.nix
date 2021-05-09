@@ -112,6 +112,12 @@
       sha256 = "1421ybxmz164m7g66bwl2wzkm0sgbz6n4cx9fwvas31n0xx3s6hs";
     }
     {
+      name = "terraform";
+      publisher = "HashiCorp";
+      version = "2.10.2";
+      sha256 = "0fkkjkybjshgzbkc933jscxyxqwmqnhq3718pnw9hsac8qv0grrz";
+    }
+    {
       name = "docthis";
       publisher = "oouo-diogo-perdigao";
       version = "0.8.2";

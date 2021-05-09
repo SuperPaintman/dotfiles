@@ -131,6 +131,13 @@ extensions:
       version: "0.12.1"
       sha256: 1421ybxmz164m7g66bwl2wzkm0sgbz6n4cx9fwvas31n0xx3s6hs
 
+    # Terraform
+    ## Syntax highlighting and autocompletion for Terraform.
+    - name: terraform
+      publisher: HashiCorp
+      version: "2.10.2"
+      sha256: 0fkkjkybjshgzbkc933jscxyxqwmqnhq3718pnw9hsac8qv0grrz
+
     # Misc
     ## Automatically generates detailed JSDoc comments in TypeScript and
     ## JavaScript files.

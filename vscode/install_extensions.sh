@@ -139,6 +139,11 @@ if ! has_extension "tamasfe" "even-better-toml"; then
     get_extension "tamasfe" "even-better-toml" "0.12.1"
 fi
 
+# terraform (HashiCorp)
+if ! has_extension "HashiCorp" "terraform"; then
+    get_extension "HashiCorp" "terraform" "2.10.2"
+fi
+
 # docthis (oouo-diogo-perdigao)
 if ! has_extension "oouo-diogo-perdigao" "docthis"; then
     get_extension "oouo-diogo-perdigao" "docthis" "0.8.2"
