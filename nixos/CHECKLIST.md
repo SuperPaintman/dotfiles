@@ -14,6 +14,8 @@ I think many of them should be replaced with a script.
 
   - [ ] Dotfiles: `(cd ~/Projects/github.com/SuperPaintman/dotfiles && git remote set-url origin git@github.com:SuperPaintman/dotfiles.git)`.
 
+- [ ] Clone secret dotfiles. `make secrets`.
+
 - [ ] Create token for **telethon** (using in `telegramstatus`).
 
   1. Login on <https://my.telegram.org/apps>.

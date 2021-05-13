@@ -187,6 +187,11 @@ compile_commands.json: qmk/compile_commands.json
 	}
 	EOF
 
+# Secrets.
+secrets:
+	git clone https://github.com/SuperPaintman/dotfiles-secrets ~/Projects/github.com/SuperPaintman/dotfiles-secrets
+	ln -s ~/Projects/github.com/SuperPaintman/dotfiles-secrets ./secrets
+
 .PHONY: clean
 clean:
 	rm -f result
