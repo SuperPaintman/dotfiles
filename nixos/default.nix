@@ -40,6 +40,7 @@ let
   # Check if config file exists.
   vpnConfigs = builtins.filter (item: builtins.pathExists item.config) [
     { name = "server"; config = "/home/superpaintman/.openvpn/server.conf"; }
+    { name = "server-only-space"; config = "/home/superpaintman/.openvpn/server-only-space.conf"; }
   ];
 in
 {

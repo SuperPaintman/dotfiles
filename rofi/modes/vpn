@@ -57,7 +57,7 @@ find_vpn_name() {
         vpn_name="${vpn[0]}"
 
         case "$@" in
-            "$vpn_name "* | *">$vpn_name"*)
+            "$vpn_name "* | *">$vpn_name<"*)
                 echo "$vpn_name"
                 return 0
                 ;;
@@ -99,12 +99,14 @@ for key in ${!vpn_configs[@]}; do
     vpn_name="${vpn[0]}"
     vpn_ip="${vpn[1]}"
 
-    if [ "$ip" = "$vpn_ip" ]; then
-        vpn_name="$(color "$color_connected" "${vpn[0]}")"
-        vpn_status="$(color "$color_connected" "CONNECTED")"
-    elif [ "$active_vpn_name" = "$vpn_name" ]; then
-        vpn_name="$(color "$color_connected" "${vpn[0]}")"
-        vpn_status="$(color "$color_connecting" "CONNECTING")"
+    if [ "$active_vpn_name" = "$vpn_name" ]; then
+        if [ "$ip" = "$vpn_ip" ]; then
+            vpn_name="$(color "$color_connected" "${vpn[0]}")"
+            vpn_status="$(color "$color_connected" "CONNECTED")"
+        else
+            vpn_name="$(color "$color_connected" "${vpn[0]}")"
+            vpn_status="$(color "$color_connecting" "CONNECTING")"
+        fi
     else
         vpn_name="$(color "$color_disconnected" "${vpn[0]}")"
         vpn_status="$(color "$color_disconnected" "DISCONNECTED")"
