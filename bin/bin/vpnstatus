@@ -30,5 +30,4 @@ for i in $HOME/.openvpn/*.conf; do
     fi
 done
 
-echo "connecting" "<unknown>" "$ip"
-exit 1
+echo "connected" "<unknown>" "$ip"

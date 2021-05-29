@@ -1,17 +1,13 @@
 local awful = require("awful")
 local textbox = require("wibox.widget.textbox")
-local watch = require("awful.widget.watch")
 local gears = require("gears")
 
 local colors = require("colors")
 local underline = require("widgets.underline")
 local apps = require("apps")
+local vpn_status_daemon = require("daemons.vpn_status")
 
-local signal_name = "widgets::vpn"
-
-local status_connected = "connected"
-local status_connecting = "connecting"
-local status_disconnected = "disconnected"
+local signal_name = vpn_status_daemon.signal_name
 
 local vpn_status = {}
 
@@ -29,18 +25,20 @@ local function new(args)
     local textbox_widget = textbox("")
     local widget = underline(textbox_widget, color_disconnected)
 
-    local function handler(status, active_vpn_name, ip)
+    local function handler(status, name, ip)
         local color = color_disconnected
         local markup = ""
         local error
 
-        if status == status_connected then
+        name = gears.string.xml_escape(name)
+
+        if status == vpn_status_daemon.status_connected then
             color = color_connected
-            markup = string.format("<span foreground='%s'><b>VPN</b></span>  %s  <span foreground='%s'>%s</span>", color_connected_marker, ip, color_connected, active_vpn_name)
-        elseif status == status_connecting then
+            markup = string.format("<span foreground='%s'><b>VPN</b></span>  %s  <span foreground='%s'>%s</span>", color_connected_marker, ip, color_connected, name)
+        elseif status == vpn_status_daemon.status_connecting then
             color = color_connecting
-            markup = string.format("<span foreground='%s'><b>VPN</b></span>  %s  <span foreground='%s'>%s</span>", color_connecting_marker, ip, color_connecting, active_vpn_name)
-        elseif status == status_disconnected then
+            markup = string.format("<span foreground='%s'><b>VPN</b></span>  %s  <span foreground='%s'>%s</span>", color_connecting_marker, ip, color_connecting, name)
+        elseif status == vpn_status_daemon.status_disconnected then
             color = color_disconnected
             markup = string.format("<span foreground='%s'><b>VPN</b></span>", color_disconnected_marker)
         else
@@ -51,11 +49,9 @@ local function new(args)
 
         textbox_widget:set_markup(markup)
         widget:set_color(color)
-
-        assert(error == nil, error)
     end
 
-    handler(status_disconnected)
+    handler(vpn_status_daemon.status_disconnected, "", "")
 
     widget:buttons(
         gears.table.join(
@@ -87,30 +83,5 @@ local function new(args)
 
     return widget
 end
-
-watch(
-    os.getenv("HOME") .. "/bin/vpnstatus",
-    1,
-    function(_, stdout, _, _, exitcode)
-        if exitcode ~= 0 then
-            awesome.emit_signal(signal_name, "bad exit code (" .. tostring(exitcode) .. ")")
-            return
-        end
-
-        local status, active_vpn_name, ip = stdout:match('(%w+)%s+([^%s]+)%s+([0-9\\.]+)')
-
-        if status == nil then
-            if stdout:match("disconnected") then
-                awesome.emit_signal(signal_name, status_disconnected)
-            else
-                awesome.emit_signal(signal_name, "<nil>")
-            end
-
-            return
-        end
-
-        awesome.emit_signal(signal_name, status, active_vpn_name, ip)
-    end
-)
 
 return setmetatable(vpn_status, { __call = function(_, ...) return new(...) end })
