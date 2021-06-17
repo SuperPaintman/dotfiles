@@ -58,6 +58,17 @@ I think many of them should be replaced with a script.
   - [ ] Use native notifications. `"Settings > Notifications > Use native notifications"`.
   - [ ] Disable notification sound. `"Settings > Notifications > Play sound"`.
 
+- [ ] Setup [1Password CLI](https://support.1password.com/command-line/).
+
+  ```
+  $ EMAIL="<email>"
+  $ op signin my.1password.com "$EMAIL"
+  # Enter the secret key from https://my.1password.com/profile .
+  # Enter the password.
+
+  $ eval $(op signin my)
+  ```
+
 - [ ] Install Rust toolchain.
 
   ```sh
