@@ -103,7 +103,7 @@ _linkall() {
         ln_target="$target_root/$target"
         ln_source="$source_root/$target"
 
-        if [ ! -f $ln_source ]; then
+        if [ ! -e $ln_source ]; then
             if [ "$OPTIONAL" == "" ]; then
                 error "$(blue "$target") is not optional and does not exist ($(gray "$ln_source"))"
             else
