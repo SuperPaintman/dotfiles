@@ -10,7 +10,6 @@ let
   existsOnly = path: if pathExists path then path else null;
   optional = existsOnly;
 
-
   imports = items: merge (map
     (item: callIfFunction (import item) { inherit linuxOnly macOSOnly optional; })
     (filter (item: item != null) items)
