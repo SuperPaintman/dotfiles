@@ -3,28 +3,30 @@
 with builtins;
 let
   callIfFunction = f: args: if isFunction f then (f args) else f;
+  merge = items: foldl' (res: item: res // item) { } items;
+
   linuxOnly = path: if isLinux then path else null;
   macOSOnly = path: if isMacOS then path else null;
   existsOnly = path: if pathExists path then path else null;
+  optional = existsOnly;
 
-  merge = items: foldl' (res: item: res // item) { } items;
 
   imports = items: merge (map
-    (item: callIfFunction (import item) args)
+    (item: callIfFunction (import item) { inherit linuxOnly macOSOnly optional; })
     (filter (item: item != null) items)
   );
 in
 imports [
   ./alacritty
   ./ansible
-  (linuxOnly ./awesome)
+  ./awesome
   ./bash
   ./bin
   ./cargo
   ./ctags
   ./doom
   ./git
-  (linuxOnly ./gtk)
+  ./gtk
   ./htop
   ./lein
   ./lf
@@ -33,15 +35,15 @@ imports [
   ./npm
   ./polybar
   ./prettier
-  (linuxOnly ./rofi)
+  ./rofi
   ./sbt
-  (macOSOnly ./skhd) # OSX specific.
+  ./skhd
   ./tmux
   ./vim
   ./vscode
-  (linuxOnly ./xdg)
-  (linuxOnly ./xresources)
-  (macOSOnly ./yabai) # OSX specific.
+  ./xdg
+  ./xresources
+  ./yabai
   ./yarn
   ./zsh
   (existsOnly ./secrets)

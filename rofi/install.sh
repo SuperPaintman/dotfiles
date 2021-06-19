@@ -1,33 +1,38 @@
 #!/usr/bin/env bash
 
+#
+# This file is generated; DO NOT EDIT.
+#
+
 set -e
 
-source "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/../common.sh"
+ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+EXIT_CODE=0
 
-is_force=false
-for arg in "$@"; do
-    case $arg in
-        -f)
-            is_force=true
-            ;;
-    esac
-done
+source "$ROOT/../common.sh"
 
-if ! is_linux; then
-    exit
+
+
+
+
+
+if is_linux; then
+  : # Linux specific files.
+  link $@ "$ROOT/colors.rasi" "$HOME/.config/rofi/colors.rasi" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/config.rasi" "$HOME/.config/rofi/config.rasi" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/lib" "$HOME/.config/rofi/lib" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/modes" "$HOME/.config/rofi/modes" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/theme.rasi" "$HOME/.config/rofi/theme.rasi" || { EXIT_CODE="$?"; }
+
+
+  
 fi
 
-TARGET_ROOT="$HOME/.config/rofi"
-SOURCE_ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+if is_osx; then
+  : # OSX specific files.
+  
 
-mkdir -p "$TARGET_ROOT"
+  
+fi
 
-linkall \
-    "$SOURCE_ROOT" \
-    "$TARGET_ROOT" \
-    "$is_force" \
-    "config.rasi" \
-    "colors.rasi" \
-    "theme.rasi" \
-    "lib" \
-    "modes"
+exit "$EXIT_CODE"

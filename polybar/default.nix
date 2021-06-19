@@ -1,6 +1,7 @@
+{ linuxOnly, ... }:
 {
-  ".config/polybar/config".source = ./config;
-  ".config/polybar/colors".source = ./colors;
-  ".config/polybar/lib".source = ./lib;
-  ".config/polybar/modules".source = ./modules;
+  ".config/polybar/config".source = linuxOnly ./config;
+  ".config/polybar/colors".source = linuxOnly ./colors;
+  ".config/polybar/lib".source = linuxOnly ./lib;
+  ".config/polybar/modules".source = linuxOnly ./modules;
 }

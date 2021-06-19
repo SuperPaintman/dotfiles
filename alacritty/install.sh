@@ -1,35 +1,37 @@
 #!/usr/bin/env bash
 
+#
+# This file is generated; DO NOT EDIT.
+#
+
 set -e
 
-source "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/../common.sh"
+ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+EXIT_CODE=0
 
-is_force=false
-for arg in "$@"; do
-    case $arg in
-        -f)
-            is_force=true
-            ;;
-    esac
-done
+source "$ROOT/../common.sh"
 
-TARGET_ROOT="$HOME/.config/alacritty"
-SOURCE_ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
-mkdir -p "$TARGET_ROOT"
+link $@ "$ROOT/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/colors.yml" "$HOME/.config/alacritty/colors.yml" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/default.yml" "$HOME/.config/alacritty/default.yml" || { EXIT_CODE="$?"; }
 
-linkall \
-    "$SOURCE_ROOT" \
-    "$TARGET_ROOT" \
-    "$is_force" \
-    "alacritty.yml" \
-    "default.yml" \
-    "colors.yml"
+
+
+
+if is_linux; then
+  : # Linux specific files.
+  
+
+  
+fi
 
 if is_osx; then
-    linkall \
-        "$SOURCE_ROOT" \
-        "$TARGET_ROOT" \
-        "$is_force" \
-        "macos.yml"
+  : # OSX specific files.
+  link $@ "$ROOT/macos.yml" "$HOME/.config/alacritty/macos.yml" || { EXIT_CODE="$?"; }
+
+
+  
 fi
+
+exit "$EXIT_CODE"

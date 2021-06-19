@@ -1,3 +1,4 @@
+{ macOSOnly, ... }:
 {
-  ".config/skhd/skhdrc".source = ./skhdrc;
+  ".config/skhd/skhdrc".source = macOSOnly ./skhdrc;
 }

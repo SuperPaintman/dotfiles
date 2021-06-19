@@ -1,23 +1,35 @@
 #!/usr/bin/env bash
 
+#
+# This file is generated; DO NOT EDIT.
+#
+
 set -e
 
-source "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/../common.sh"
+ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+EXIT_CODE=0
 
-is_force=false
-for arg in "$@"; do
-    case $arg in
-        -f)
-            is_force=true
-            ;;
-    esac
-done
+source "$ROOT/../common.sh"
 
-TARGET_ROOT="$HOME"
-SOURCE_ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
-linkall \
-    "$SOURCE_ROOT" \
-    "$TARGET_ROOT" \
-    "$is_force" \
-    ".vimrc" ".vim"
+link $@ "$ROOT/.vim" "$HOME/.vim" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/.vimrc" "$HOME/.vimrc" || { EXIT_CODE="$?"; }
+
+
+
+
+if is_linux; then
+  : # Linux specific files.
+  
+
+  
+fi
+
+if is_osx; then
+  : # OSX specific files.
+  
+
+  
+fi
+
+exit "$EXIT_CODE"

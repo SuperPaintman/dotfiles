@@ -1,35 +1,35 @@
 #!/usr/bin/env bash
 
+#
+# This file is generated; DO NOT EDIT.
+#
+
 set -e
 
-source "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/../common.sh"
+ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+EXIT_CODE=0
 
-is_force=false
-for arg in "$@"; do
-    case $arg in
-        -f)
-            is_force=true
-            ;;
-    esac
-done
+source "$ROOT/../common.sh"
 
-if ! is_linux; then
-    exit
+
+
+
+
+
+if is_linux; then
+  : # Linux specific files.
+  link $@ "$ROOT/gtk-3.0/settings.ini" "$HOME/.config/gtk-3.0/settings.ini" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/.gtkrc-2.0" "$HOME/.gtkrc-2.0" || { EXIT_CODE="$?"; }
+
+
+  
 fi
 
-TARGET_ROOT="$HOME"
-SOURCE_ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+if is_osx; then
+  : # OSX specific files.
+  
 
-mkdir -p "$TARGET_ROOT/.config"
+  
+fi
 
-linkall \
-    "$SOURCE_ROOT" \
-    "$TARGET_ROOT" \
-    "$is_force" \
-    ".gtkrc-2.0"
-
-linkall \
-    "$SOURCE_ROOT/gtk-3.0" \
-    "$TARGET_ROOT/.config/gtk-3.0" \
-    "$is_force" \
-    "settings.ini"
+exit "$EXIT_CODE"

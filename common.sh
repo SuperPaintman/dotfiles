@@ -7,6 +7,9 @@ COLOR_YELLOW="\033[33;01m"
 COLOR_BLUE="\033[0;34m"
 COLOR_GRAY="\033[90m"
 
+YES="yes"
+NO=""
+
 green() {
     echo -e "${COLOR_GREEN}$@${COLOR_RESET}"
 }
@@ -93,45 +96,113 @@ is_ubuntu() {
     return 1
 }
 
+_dry() {
+    local is_it="$1"
+
+    shift 1
+
+    if [ "$is_it" == "" ]; then
+        exec $@
+    else
+        echo " $(gray '$')" $@
+    fi
+}
+
+_link() {
+    local is_force="$NO"
+    local is_dry="$NO"
+    local is_optional="$NO"
+
+    for arg in "$@"; do
+        case "$arg" in
+            -f | --force)
+                is_force="$YES"
+                ;;
+            --dry | --dry-run | --check)
+                is_dry="$YES"
+                ;;
+            --optional)
+                is_optional="$YES"
+                ;;
+            -*)
+                error "Unknown argument $(blue "$arg")"
+                return 1
+                ;;
+            *)
+                continue
+                ;;
+        esac
+
+        shift 1
+    done
+
+    local source="$1"
+    local target="$2"
+
+    if [ ! -e "$source" ]; then
+        if [ "$is_optional" == "$YES" ]; then
+            info "$(blue "$target") is optional and does not exist (skipped)"
+            return 0
+        else
+            error "$(blue "$target") is not optional and does not exist ($(gray "$source"))"
+            return 1
+        fi
+    fi
+
+    if [[ -e $target ]]; then
+        if [[ $is_force == "$YES" ]]; then
+            _dry "$is_dry" rm -fr "$target"
+        else
+            error "$(blue "$target") already exists ($(gray "$target"))"
+            return 1
+        fi
+    fi
+
+    _dry "$is_dry" ln -s "$source" "$target"
+
+    ok "$(blue "$target") has linked ($(gray "$source") => $(gray "$target"))"
+}
+
 _linkall() {
+    local args=""
+
+    for arg in "$@"; do
+        case "$arg" in
+            -*)
+                args="$args $arg"
+                shift 1
+                ;;
+        esac
+    done
+
     local source_root="$1"
     local target_root="$2"
-    local is_force="$3"
     local targets=${@:4}
 
-    for target in $targets; do
-        ln_target="$target_root/$target"
-        ln_source="$source_root/$target"
+    local return_code=0
 
-        if [ ! -e $ln_source ]; then
-            if [ "$OPTIONAL" == "" ]; then
-                error "$(blue "$target") is not optional and does not exist ($(gray "$ln_source"))"
-            else
-                info "$(blue "$target") is optional and does not exist (skipped)"
-            fi
+    for f in $targets; do
+        local source="$source_root/$f"
+        local target="$target_root/$f"
 
-            continue
-        fi
-
-        if [[ -e $ln_target || -L $ln_target ]]; then
-            if [[ $is_force == true ]]; then
-                rm -fr "$ln_target"
-            else
-                error "$(blue "$target") already exists ($(gray "$ln_target"))"
-                continue
-            fi
-        fi
-
-        ln -s "$ln_source" "$ln_target"
-
-        ok "$(blue "$target") has linked ($(gray "$ln_source") => $(gray "$ln_target"))"
+        _link $args "$source" "$target" "$is_force" || { return_code="$?"; }
     done
+
+    return "$return_code"
+}
+
+link() {
+    _link $@
+}
+
+linkoptional() {
+    _link --optional $@
 }
 
 linkall() {
-    OPTIONAL="" _linkall $@
+    _linkall $@
 }
 
 linkalloptional() {
-    OPTIONAL="yes" _linkall $@
+    _linkall --optional $@
 }

@@ -1,25 +1,34 @@
 #!/usr/bin/env bash
 
+#
+# This file is generated; DO NOT EDIT.
+#
+
 set -e
 
-source "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/../common.sh"
+ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+EXIT_CODE=0
 
-is_force=false
-for arg in "$@"; do
-    case $arg in
-        -f)
-            is_force=true
-            ;;
-    esac
-done
+source "$ROOT/../common.sh"
 
-TARGET_ROOT="$HOME/.config/neofetch"
-SOURCE_ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
-mkdir -p "$TARGET_ROOT"
+link $@ "$ROOT/config.conf" "$HOME/.config/neofetch/config.conf" || { EXIT_CODE="$?"; }
 
-linkall \
-    "$SOURCE_ROOT" \
-    "$TARGET_ROOT" \
-    "$is_force" \
-    "config.conf"
+
+
+
+if is_linux; then
+  : # Linux specific files.
+  
+
+  
+fi
+
+if is_osx; then
+  : # OSX specific files.
+  
+
+  
+fi
+
+exit "$EXIT_CODE"
