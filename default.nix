@@ -29,6 +29,7 @@ imports [
   ./lein
   ./lf
   ./neofetch
+  ./nixpkgs
   ./npm
   ./polybar
   ./prettier
