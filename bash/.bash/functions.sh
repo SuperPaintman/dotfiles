@@ -69,7 +69,7 @@ if can git-get && can git-parse && can git-path; then
 fi
 
 # Emacs.
-if can emacs; then
+if can emacs && [ ! -z "$EMACSIFY_EDITORS" ]; then
     _emacsify() {
         local name="$1"
         local bin="$2"
