@@ -13,7 +13,7 @@ ROOT="$(realpath "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/..")"
 
 # Init.
 magick() {
-	"$ROOT/scripts/nix-call.sh" magick imagemagick7 $@
+    "$ROOT/scripts/nix-call.sh" magick imagemagick7 $@
 }
 
 background="$HOME/.wallpaper"
@@ -28,15 +28,15 @@ result="$ROOT/assets/github-social-review.png"
 mkdir -p "$(dirname "$result")"
 
 magick "$background" \
-	-resize "${width}x" \
-	-gravity center \
-	-crop "${width}x${height}+${offset_x}+${offset_y}" \
-	-fill "\\#000000" \
-	-colorize "$opacity" \
-	-font "$font" \
-	-pointsize 120 \
-	-fill "\\#FFFFFF" \
-	-annotate +0+32 '\\~/.dotfiles' \
-	-pointsize 32 \
-	-annotate +232+132 'by\\\ SuperPaintman' \
-	"$result"
+    -resize "${width}x" \
+    -gravity center \
+    -crop "${width}x${height}+${offset_x}+${offset_y}" \
+    -fill '\#000000' \
+    -colorize "$opacity" \
+    -font "$font" \
+    -pointsize 120 \
+    -fill '\#FFFFFF' \
+    -annotate +0+32 '\\~/.dotfiles' \
+    -pointsize 32 \
+    -annotate +232+132 'by\\\ SuperPaintman' \
+    "$result"
