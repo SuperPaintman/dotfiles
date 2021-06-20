@@ -155,7 +155,7 @@ in
     haskellPackages.brittany
     elmPackages.elm
     dart
-    flutter
+    unstable.flutter
     shfmt
     nixpkgs-fmt
     arduino
@@ -359,11 +359,13 @@ in
     );
 
   services.emacs.enable = true;
-
-  # Add rules for Moonlander.
-  # See: https://github.com/zsa/wally/wiki/Linux-install
   services.udev.packages = [
+    # Add rules for Moonlander.
+    # See: https://github.com/zsa/wally/wiki/Linux-install
     localPkgs.zsa-udev-rules
+
+    # Add rules for Android Devices.
+    pkgs.android-udev-rules
   ];
 
   # Services: custom / mine.
