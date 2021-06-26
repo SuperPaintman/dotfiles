@@ -83,7 +83,11 @@
       displayManager =
         let
           xrandrCommands = with pkgs; ''
-            ${xorg.xrandr}/bin/xrandr --output eDP-1 --primary --pos 0x1080 --output DP-3 --pos 0x0
+            # Primary bottom.
+            # ${xorg.xrandr}/bin/xrandr --output eDP-1 --primary --mode 1920x1080 --pos 0x1080 --output DP-3 --mode 1920x1080 --pos 0x0
+
+            # Primary left.
+            ${xorg.xrandr}/bin/xrandr --output eDP-1 --primary --mode 1920x1080 --pos 0x0 --output DP-1 --mode 1920x1080 --pos 1920x0
           '';
 
           xinputToggleTouchpadCommand = with pkgs; writeShellScript "xinput-toggle-touchpad" ''
