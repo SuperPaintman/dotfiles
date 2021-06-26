@@ -99,6 +99,14 @@
 #define CLR_GR_5                                                               \
   { 14, 222, 242 }
 
+#define EMOJI_INDEX(keycode) (keycode - _CUSTOM_KEYCODES_EMOJI_BEGINNING - 1)
+
+#define IS_LAYOUT(v) (v > _LAYOUTS_BEGINNING && v < _LAYOUTS_END)
+
+#define IS_EMOJI_KEYCODE(keycode)                                              \
+  (keycode > _CUSTOM_KEYCODES_EMOJI_BEGINNING &&                               \
+   keycode < _CUSTOM_KEYCODES_EMOJI_END)
+
 enum layouts {
   _LAYOUTS_BEGINNING = -1,
   BASE,          // default layout.
@@ -131,11 +139,11 @@ struct emoji_t {
 };
 
 const struct emoji_t emojis[] = {
-    [EMOJI_HEART] = {.shortcode = ":heart:"},
-    [EMOJI_UP] = {.shortcode = ":thumbsup:"},
-    [EMOJI_DOWN] = {.shortcode = ":thumbsdown:"},
-    [EMOJI_MARK] = {.shortcode = ":white_check_mark:"},
-    [EMOJI_BEAR] = {.shortcode = ":bear:"},
+    [EMOJI_INDEX(EMOJI_HEART)] = {.shortcode = ":heart:"},
+    [EMOJI_INDEX(EMOJI_UP)] = {.shortcode = ":thumbsup:"},
+    [EMOJI_INDEX(EMOJI_DOWN)] = {.shortcode = ":thumbsdown:"},
+    [EMOJI_INDEX(EMOJI_MARK)] = {.shortcode = ":white_check_mark:"},
+    [EMOJI_INDEX(EMOJI_BEAR)] = {.shortcode = ":bear:"},
 };
 
 // clang-format off
@@ -353,7 +361,7 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
 };
 // clang-format on
 
-void set_layer_color(int layer) {
+static void set_layer_color(int layer) {
   for (int i = 0; i < DRIVER_LED_TOTAL; i++) {
     HSV hsv = {
         .h = pgm_read_byte(&ledmap[layer][i][0]),
@@ -378,7 +386,7 @@ void rgb_matrix_indicators_user(void) {
   }
 
   const uint8_t layout = biton32(layer_state);
-  if (layout > _LAYOUTS_BEGINNING && layout < _LAYOUTS_END) {
+  if (IS_LAYOUT(layout)) {
     set_layer_color(layout);
     return;
   }
@@ -390,9 +398,8 @@ void rgb_matrix_indicators_user(void) {
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
-    if (keycode > _CUSTOM_KEYCODES_EMOJI_BEGINNING &&
-        keycode < _CUSTOM_KEYCODES_EMOJI_END) {
-      SEND_STRING(emojis[keycode].shortcode);
+    if (IS_EMOJI_KEYCODE(keycode)) {
+      SEND_STRING(emojis[EMOJI_INDEX(keycode)].shortcode);
       return false;
     }
   }
