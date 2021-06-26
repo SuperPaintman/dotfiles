@@ -86,12 +86,14 @@
             ${xorg.xrandr}/bin/xrandr --output eDP-1 --primary --pos 0x1080 --output DP-3 --pos 0x0
           '';
 
-          xinputToggleTouchpadCommand = name: with pkgs; writeShellScript "xinput-toggle-touchpad" ''
+          xinputToggleTouchpadCommand = with pkgs; writeShellScript "xinput-toggle-touchpad" ''
             set -e
             set -u
             set -o pipefail
 
-            device_id="$(${xorg.xinput}/bin/xinput list | ${gnugrep}/bin/grep '${name}' | ${gnugrep}/bin/grep -Po 'id=(\d+)' | ${gawk}/bin/awk -F '=' '{print $2}')"
+            name="$1"
+
+            device_id="$(${xorg.xinput}/bin/xinput list | ${gnugrep}/bin/grep "$name" | ${gnugrep}/bin/grep -Po 'id=(\d+)' | ${gawk}/bin/awk -F '=' '{print $2}')"
             if [[ "$device_id" == "" ]]; then
               exit 1
             fi
@@ -137,7 +139,7 @@
               # Fn+F9.
               {
                 key = "XF86Search";
-                command = "${xinputToggleTouchpadCommand "SYNA2393:00 06CB:7A13 Touchpad"}";
+                command = "${xinputToggleTouchpadCommand} 'SYNA2393:00 06CB:7A13 Touchpad'";
               }
 
               # Fn+F11.
