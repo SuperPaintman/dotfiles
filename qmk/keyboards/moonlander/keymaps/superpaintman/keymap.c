@@ -73,8 +73,6 @@
 
 #define CLR_XXXXXX                                                             \
   { 0, 0, 0 }
-#define CLR_BLACK                                                              \
-  { 0, 0, 0 }
 #define CLR_GREY                                                               \
   { 0, 0, 64 }
 #define CLR_YELLOW                                                             \
@@ -268,66 +266,66 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
   ),
 
   [GAMING] = LEDMAP_moonlander(
-    CLR_RED,      CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     /**/   CLR_BLACK,    CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_RED,
-    CLR_PURPLE,   CLR_YELLOW,   CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   /**/   CLR_BLACK,    CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,
-    CLR_PURPLE,   CLR_RED,      CLR_RED,      CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   /**/   CLR_BLACK,    CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,
-    CLR_PURPLE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,                 /**/                 CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_BLACK,
-    CLR_PURPLE,   CLR_BLACK,    CLR_RED,      CLR_PURPLE,   CLR_ORANGE,                 CLR_YELLOW,   /**/   CLR_BLACK,                  CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_BLACK,
-                                                            CLR_ORANGE,   CLR_ORANGE,   CLR_YELLOW,   /**/   CLR_BLUE,     CLR_BLACK,    CLR_BLACK
+    CLR_RED,      CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     /**/   CLR_XXXXXX,   CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_RED,
+    CLR_PURPLE,   CLR_YELLOW,   CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   /**/   CLR_XXXXXX,   CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,
+    CLR_PURPLE,   CLR_RED,      CLR_RED,      CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   /**/   CLR_XXXXXX,   CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,
+    CLR_PURPLE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,                 /**/                 CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_XXXXXX,
+    CLR_PURPLE,   CLR_XXXXXX,   CLR_RED,      CLR_PURPLE,   CLR_ORANGE,                 CLR_YELLOW,   /**/   CLR_XXXXXX,                 CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_XXXXXX,
+                                                            CLR_ORANGE,   CLR_ORANGE,   CLR_YELLOW,   /**/   CLR_BLUE,     CLR_XXXXXX,   CLR_XXXXXX
   ),
 
   [GAMING_NUMPAD] = LEDMAP_moonlander(
-    CLR_BLACK,    CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE,   CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-    CLR_PURPLE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_BLUE,     CLR_BLUE,     CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-    CLR_PURPLE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_BLUE,     CLR_BLUE,     CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-    CLR_PURPLE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_BLUE,     CLR_BLUE,                   /**/                 CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-    CLR_PURPLE,   CLR_YELLOW,   CLR_BLUE,     CLR_PURPLE,   CLR_ORANGE,                 CLR_PURPLE,   /**/   CLR_BLACK,                  CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-                                                            CLR_ORANGE,   CLR_ORANGE,   CLR_BLACK,    /**/   CLR_BLUE,     CLR_BLACK,    CLR_BLACK
+    CLR_XXXXXX,   CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_PURPLE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_BLUE,     CLR_BLUE,     CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_PURPLE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_BLUE,     CLR_BLUE,     CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_PURPLE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_BLUE,     CLR_BLUE,                   /**/                 CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_PURPLE,   CLR_YELLOW,   CLR_BLUE,     CLR_PURPLE,   CLR_ORANGE,                 CLR_PURPLE,   /**/   CLR_XXXXXX,                 CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+                                                            CLR_ORANGE,   CLR_ORANGE,   CLR_XXXXXX,   /**/   CLR_BLUE,     CLR_XXXXXX,   CLR_XXXXXX
   ),
 
   [SYMBOLS] = LEDMAP_moonlander(
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_PURPLE,   CLR_YELLOW,   CLR_YELLOW,   CLR_PURPLE,   CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_BLUE,     CLR_ORANGE,   CLR_ORANGE,   CLR_BLUE,     CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_PURPLE,   CLR_PURPLE,   CLR_PURPLE,   CLR_PURPLE,                 /**/                 CLR_BLACK,    CLR_PURPLE,   CLR_RED,      CLR_RED,      CLR_PURPLE,   CLR_BLACK,
-    CLR_BLACK,    CLR_BLUE,     CLR_BLACK,    CLR_BLACK,    CLR_BLACK,                  CLR_BLACK,    /**/   CLR_BLACK,                  CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-                                                            CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_BLACK
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_PURPLE,   CLR_YELLOW,   CLR_YELLOW,   CLR_PURPLE,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_BLUE,     CLR_ORANGE,   CLR_ORANGE,   CLR_BLUE,     CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_PURPLE,   CLR_PURPLE,   CLR_PURPLE,   CLR_PURPLE,                 /**/                 CLR_XXXXXX,   CLR_PURPLE,   CLR_RED,      CLR_RED,      CLR_PURPLE,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_BLUE,     CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 CLR_XXXXXX,   /**/   CLR_XXXXXX,                 CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+                                                            CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX
   ),
 
   [NUMPAD] = LEDMAP_moonlander(
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_PURPLE,   CLR_BLACK,    CLR_RED,      CLR_RED,      CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_ORANGE,   CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLUE,     CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_ORANGE,   CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,                  /**/                 CLR_BLACK,    CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_RED,      CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLUE,                   CLR_BLACK,    /**/   CLR_BLACK,                  CLR_YELLOW,   CLR_BLACK,    CLR_RED,      CLR_BLACK,    CLR_BLACK,
-                                                            CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_BLACK
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_PURPLE,   CLR_XXXXXX,   CLR_RED,      CLR_RED,      CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_ORANGE,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_BLUE,     CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_ORANGE,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 /**/                 CLR_XXXXXX,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_RED,      CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_BLUE,                   CLR_XXXXXX,   /**/   CLR_XXXXXX,                 CLR_YELLOW,   CLR_XXXXXX,   CLR_RED,      CLR_XXXXXX,   CLR_XXXXXX,
+                                                            CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX
   ),
 
   [MOUSE] = LEDMAP_moonlander(
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLUE,     /**/   CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_RED,      CLR_RED,      CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_BLACK,    CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,                  /**/                 CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,                  CLR_BLACK,    /**/   CLR_BLACK,                  CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-                                                            CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_BLUE,     /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_RED,      CLR_RED,      CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 /**/                 CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 CLR_XXXXXX,   /**/   CLR_XXXXXX,                 CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+                                                            CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE
   ),
 
   [MEDIA] = LEDMAP_moonlander(
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_RED,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_YELLOW,   CLR_ORANGE,   CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_YELLOW,   CLR_ORANGE,   CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,                  /**/                 CLR_BLACK,    CLR_YELLOW,   CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,                  CLR_BLACK,    /**/   CLR_BLACK,                  CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLUE,
-                                                            CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_BLACK
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_RED,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_YELLOW,   CLR_ORANGE,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_YELLOW,   CLR_ORANGE,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 /**/                 CLR_XXXXXX,   CLR_YELLOW,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 CLR_XXXXXX,   /**/   CLR_XXXXXX,                 CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_BLUE,
+                                                            CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX
   ),
 
   [FUNCTIONAL] = LEDMAP_moonlander(
-    CLR_BLUE,     CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_BLACK,    /**/   CLR_BLACK,    CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,
-    CLR_BLACK,    CLR_RED,      CLR_RED,      CLR_ORANGE,   CLR_ORANGE,   CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_YELLOW,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,                  /**/                 CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,                  CLR_BLACK,    /**/   CLR_BLACK,                  CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    CLR_BLACK,
-                                                            CLR_BLACK,    CLR_BLACK,    CLR_BLACK,    /**/   CLR_BLACK,    CLR_BLACK,    CLR_BLACK
+    CLR_BLUE,     CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,
+    CLR_XXXXXX,   CLR_RED,      CLR_RED,      CLR_ORANGE,   CLR_ORANGE,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_YELLOW,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 /**/                 CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 CLR_XXXXXX,   /**/   CLR_XXXXXX,                 CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
+                                                            CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX
   ),
 
   [EMOJI] = LEDMAP_moonlander(
