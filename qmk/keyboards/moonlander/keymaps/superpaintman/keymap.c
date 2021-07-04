@@ -148,12 +148,12 @@ const struct emoji_t emojis[] = {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE] = LAYOUT_moonlander(
-    MO(FUNCTIONAL), KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           KC_DELETE,        /**/   TO(CLICKY),     KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           KC_BSPACE,
+    MO(FUNCTIONAL), KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           _______,          /**/   TO(CLICKY),     KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           KC_DELETE,
     KC_TAB,         KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           _______,          /**/   _______,        KC_Y,           KC_U,           KC_I,           KC_O,           KC_P,           KC_BSLASH,
     KC_ESCAPE,      KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           _______,          /**/   _______,        KC_H,           KC_J,           KC_K,           KC_L,           KC_SCOLON,      KC_QUOTE,
     KC_LCTRL,       KC_Z,           KC_X,           KC_C,           KC_V,           KC_B,                             /**/                   KC_N,           KC_M,           KC_COMMA,       KC_DOT,         KC_SLASH,       _______,
     _______,        _______,        KC_TGL_LANG,    KC_LALT,        MO(NUMPAD),                     MO(EMOJI),        /**/   TO(GAMING),                     KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       MO(MEDIA),
-                                                                    KC_SPACE,       MO(SYMBOLS),    KC_LGUI,          /**/   _______,        KC_ENTER,       KC_RSHIFT
+                                                                    KC_SPACE,       MO(SYMBOLS),    KC_LGUI,          /**/   KC_BSPACE,      KC_ENTER,       KC_RSHIFT
   ),
 
   [GAMING] = LAYOUT_moonlander(
@@ -249,12 +249,12 @@ void keyboard_post_init_user(void) { rgb_matrix_enable(); }
 // clang-format off
 const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
   [BASE] = LEDMAP_moonlander(
-    CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_ORANGE,   /**/   CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_ORANGE,
+    CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_______,   /**/   CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_ORANGE,
     CLR_ORANGE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_______,   /**/   CLR_______,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,
     CLR_ORANGE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_______,   /**/   CLR_______,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,
     CLR_PURPLE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,                 /**/                 CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_______,
     CLR_______,   CLR_______,   CLR_BLUE,     CLR_PURPLE,   CLR_RED,                    CLR_RED,      /**/   CLR_RED,                    CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE,   CLR_RED,
-                                                            CLR_ORANGE,   CLR_RED,      CLR_PURPLE,   /**/   CLR_______,   CLR_ORANGE,   CLR_PURPLE
+                                                            CLR_ORANGE,   CLR_RED,      CLR_PURPLE,   /**/   CLR_ORANGE,   CLR_ORANGE,   CLR_PURPLE
   ),
 
   [GAMING] = LEDMAP_moonlander(
