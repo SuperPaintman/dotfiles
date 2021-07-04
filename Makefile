@@ -119,6 +119,10 @@ nixos-channels:
 nixos-uninstall-users-packages:
 	nix-env --uninstall $(shell nix-env -q | grep -v 'home-manager-path')
 
+.PHONY: qmk-moonlander
+qmk-moonlander:
+	$(MAKE) -C qmk moonlander
+
 .PHONY: format
 format: format-shell format-nix format-prettier
 
