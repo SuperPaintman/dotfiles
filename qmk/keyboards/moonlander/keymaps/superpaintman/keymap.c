@@ -112,7 +112,6 @@ enum layouts {
   GAMING_NUMPAD, // gaming NumPad.
   SYMBOLS,       // symbols.
   NUMPAD,        // NumPad.
-  MOUSE,         // mouse.
   MEDIA,         // media.
   FUNCTIONAL,    // functional.
   EMOJI,         // emoji.
