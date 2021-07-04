@@ -147,7 +147,7 @@ const struct emoji_t emojis[] = {
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [BASE] = LAYOUT_moonlander(
-    MO(FUNCTIONAL), KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           MO(MOUSE),        /**/   TO(CLICKY),     KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           XXXXXXX,
+    MO(FUNCTIONAL), KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           _______,          /**/   TO(CLICKY),     KC_6,           KC_7,           KC_8,           KC_9,           KC_0,           XXXXXXX,
     KC_TAB,         KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           _______,          /**/   _______,        KC_Y,           KC_U,           KC_I,           KC_O,           KC_P,           KC_BSLASH,
     KC_ESCAPE,      KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           _______,          /**/   _______,        KC_H,           KC_J,           KC_K,           KC_L,           KC_SCOLON,      KC_QUOTE,
     KC_LSHIFT,      KC_Z,           KC_X,           KC_C,           KC_V,           KC_B,                             /**/                   KC_N,           KC_M,           KC_COMMA,       KC_DOT,         KC_SLASH,       KC_RSHIFT,
@@ -189,15 +189,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,        _______,        _______,        _______,        _______,        _______,                          /**/                   _______,        KC_KP_1,        KC_KP_2,        KC_KP_3,        KC_KP_ENTER,    _______,
     _______,        _______,        _______,        _______,        _______,                        _______,          /**/   _______,                        KC_KP_0,        _______,        KC_KP_DOT,      _______,        _______,
                                                                     _______,        _______,        _______,          /**/   _______,        _______,        _______
-  ),
-
-  [MOUSE] = LAYOUT_moonlander(
-    _______,        _______,        _______,        _______,        _______,        _______,        _______,          /**/   _______,        _______,        _______,        _______,        _______,        _______,        _______,
-    _______,        _______,        _______,        _______,        _______,        _______,        _______,          /**/   _______,        KC_MS_WH_UP,    KC_MS_WH_DOWN,  _______,        _______,        _______,        _______,
-    _______,        _______,        _______,        _______,        _______,        _______,        _______,          /**/   _______,        KC_MS_LEFT,     KC_MS_DOWN,     KC_MS_UP,       KC_MS_RIGHT,    _______,        _______,
-    _______,        _______,        _______,        _______,        _______,        _______,                          /**/                   _______,        _______,        _______,        _______,        _______,        _______,
-    _______,        _______,        _______,        _______,        _______,                        _______,          /**/   _______,                        _______,        _______,        _______,        _______,        _______,
-                                                                    _______,        _______,        _______,          /**/   KC_MS_BTN3,     KC_MS_BTN1,     KC_MS_BTN2
   ),
 
   [MEDIA] = LAYOUT_moonlander(
@@ -257,7 +248,7 @@ void keyboard_post_init_user(void) { rgb_matrix_enable(); }
 // clang-format off
 const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
   [BASE] = LEDMAP_moonlander(
-    CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_RED,      /**/   CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_XXXXXX,
+    CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_XXXXXX,   /**/   CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_XXXXXX,
     CLR_ORANGE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,
     CLR_ORANGE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,
     CLR_PURPLE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,                 /**/                 CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_PURPLE,
@@ -299,15 +290,6 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
     CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 /**/                 CLR_XXXXXX,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_RED,      CLR_XXXXXX,
     CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_BLUE,                   CLR_XXXXXX,   /**/   CLR_XXXXXX,                 CLR_YELLOW,   CLR_XXXXXX,   CLR_RED,      CLR_XXXXXX,   CLR_XXXXXX,
                                                             CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX
-  ),
-
-  [MOUSE] = LEDMAP_moonlander(
-    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_BLUE,     /**/   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
-    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_RED,      CLR_RED,      CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
-    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_XXXXXX,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_XXXXXX,   CLR_XXXXXX,
-    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 /**/                 CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
-    CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,                 CLR_XXXXXX,   /**/   CLR_XXXXXX,                 CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,
-                                                            CLR_XXXXXX,   CLR_XXXXXX,   CLR_XXXXXX,   /**/   CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE
   ),
 
   [MEDIA] = LEDMAP_moonlander(
