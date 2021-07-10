@@ -13,7 +13,5 @@ source "$ROOT/../common.sh"
 
 link $@ "$ROOT/.gitconfig" "$HOME/.gitconfig" || { EXIT_CODE="$?"; }
 
-
 link --optional $@ "$ROOT/.gitconfig.local" "$HOME/.gitconfig.local" || { EXIT_CODE="$?"; }
-
 exit "$EXIT_CODE"

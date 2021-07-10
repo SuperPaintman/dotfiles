@@ -14,5 +14,4 @@ source "$ROOT/../common.sh"
 link $@ "$ROOT/bin" "$HOME/bin" || { EXIT_CODE="$?"; }
 
 
-
 exit "$EXIT_CODE"

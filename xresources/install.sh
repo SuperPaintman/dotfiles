@@ -17,7 +17,6 @@ source "$ROOT/../common.sh"
 if is_linux; then
   link $@ "$ROOT/.Xresources" "$HOME/.Xresources" || { EXIT_CODE="$?"; }
 
-
   
 fi
 exit "$EXIT_CODE"

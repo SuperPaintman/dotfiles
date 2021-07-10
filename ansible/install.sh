@@ -14,5 +14,4 @@ source "$ROOT/../common.sh"
 link $@ "$ROOT/.ansible.cfg" "$HOME/.ansible.cfg" || { EXIT_CODE="$?"; }
 
 
-
 exit "$EXIT_CODE"

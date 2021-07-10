@@ -14,5 +14,4 @@ source "$ROOT/../common.sh"
 link $@ "$ROOT/config.toml" "$HOME/.cargo/config.toml" || { EXIT_CODE="$?"; }
 
 
-
 exit "$EXIT_CODE"

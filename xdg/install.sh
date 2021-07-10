@@ -17,7 +17,6 @@ source "$ROOT/../common.sh"
 if is_linux; then
   link $@ "$ROOT/mimeapps.list" "$HOME/.config/mimeapps.list" || { EXIT_CODE="$?"; }
 
-
   
 fi
 exit "$EXIT_CODE"

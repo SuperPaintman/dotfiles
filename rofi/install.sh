@@ -16,11 +16,10 @@ source "$ROOT/../common.sh"
 
 if is_linux; then
   link $@ "$ROOT/colors.rasi" "$HOME/.config/rofi/colors.rasi" || { EXIT_CODE="$?"; }
-link $@ "$ROOT/config.rasi" "$HOME/.config/rofi/config.rasi" || { EXIT_CODE="$?"; }
-link $@ "$ROOT/lib" "$HOME/.config/rofi/lib" || { EXIT_CODE="$?"; }
-link $@ "$ROOT/modes" "$HOME/.config/rofi/modes" || { EXIT_CODE="$?"; }
-link $@ "$ROOT/theme.rasi" "$HOME/.config/rofi/theme.rasi" || { EXIT_CODE="$?"; }
-
+  link $@ "$ROOT/config.rasi" "$HOME/.config/rofi/config.rasi" || { EXIT_CODE="$?"; }
+  link $@ "$ROOT/lib" "$HOME/.config/rofi/lib" || { EXIT_CODE="$?"; }
+  link $@ "$ROOT/modes" "$HOME/.config/rofi/modes" || { EXIT_CODE="$?"; }
+  link $@ "$ROOT/theme.rasi" "$HOME/.config/rofi/theme.rasi" || { EXIT_CODE="$?"; }
 
   
 fi

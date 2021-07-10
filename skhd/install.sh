@@ -18,7 +18,6 @@ if is_osx; then
   : # OSX specific files.
   link $@ "$ROOT/skhdrc" "$HOME/.config/skhd/skhdrc" || { EXIT_CODE="$?"; }
 
-
   
 fi
 exit "$EXIT_CODE"

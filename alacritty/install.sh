@@ -16,11 +16,9 @@ link $@ "$ROOT/colors.yml" "$HOME/.config/alacritty/colors.yml" || { EXIT_CODE="
 link $@ "$ROOT/default.yml" "$HOME/.config/alacritty/default.yml" || { EXIT_CODE="$?"; }
 
 
-
 if is_osx; then
   : # OSX specific files.
   link $@ "$ROOT/macos.yml" "$HOME/.config/alacritty/macos.yml" || { EXIT_CODE="$?"; }
-
 
   
 fi

@@ -25,8 +25,11 @@ let
   isOptional = marked "optional";
   filterFiles = pred: files:
     lib.filterAttrs (n: f: (hasAttr "source" f) && (pred f.source)) files;
-  toLink = f: files:
-    lib.concatStringsSep "" (lib.mapAttrsToList f files);
+  toSourcePath = v: if isPath v then v else v.path;
+  toLink = { optional ? false }: n: f:
+    ''link ${lib.optionalString optional "--optional "}$@ "$ROOT/${toRelativePath name (toSourcePath f.source)}" "$HOME/${n}" || { EXIT_CODE="$?"; }'';
+  concatFiles = sep: f: files:
+    lib.concatStringsSep sep (lib.mapAttrsToList f files);
 in
 ''
   #!/usr/bin/env bash
@@ -42,17 +45,13 @@ in
 
   source "$ROOT/../common.sh"
 
-  ${toLink
-    (n: f: ''
-      link $@ "$ROOT/${toRelativePath name f.source}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-    '')
+  ${concatFiles "\n"
+    (toLink { })
     (filterFiles isPath files)
   }
 
-  ${toLink
-    (n: f: ''
-      link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-    '')
+  ${concatFiles "\n"
+    (toLink { optional = true; })
     (filterFiles isOptional files)
   }
 '' + (
@@ -62,17 +61,13 @@ in
   in
   lib.optionalString (!(isEmpty linuxFiles) || !(isEmpty linuxOptionalFiles)) ''
     if is_linux; then
-      ${toLink
-        (n: f: ''
-          link $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-        '')
+      ${concatFiles "\n  "
+        (toLink { })
         linuxFiles
       }
 
-      ${toLink
-        (n: f: ''
-          link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-        '')
+      ${concatFiles "\n  "
+        (toLink { optional = true; })
         linuxOptionalFiles
       }
     fi
@@ -85,17 +80,13 @@ in
   lib.optionalString (!(isEmpty macOSFiles) || !(isEmpty macOSOptionalFiles)) ''
     if is_osx; then
       : # OSX specific files.
-      ${toLink
-        (n: f: ''
-          link $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-        '')
+      ${concatFiles "\n  "
+        (toLink { })
         macOSFiles
       }
 
-      ${toLink
-        (n: f: ''
-          link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-        '')
+      ${concatFiles "\n  "
+        (toLink { optional = true; })
         macOSOptionalFiles
       }
     fi

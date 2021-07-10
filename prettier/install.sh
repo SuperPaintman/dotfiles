@@ -14,5 +14,4 @@ source "$ROOT/../common.sh"
 link $@ "$ROOT/.prettierrc.js" "$HOME/.prettierrc.js" || { EXIT_CODE="$?"; }
 
 
-
 exit "$EXIT_CODE"

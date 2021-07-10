@@ -18,7 +18,6 @@ if is_osx; then
   : # OSX specific files.
   link $@ "$ROOT/yabairc" "$HOME/.config/yabai/yabairc" || { EXIT_CODE="$?"; }
 
-
   
 fi
 exit "$EXIT_CODE"
