@@ -11,7 +11,6 @@ EXIT_CODE=0
 
 source "$ROOT/../common.sh"
 
-
 link $@ "$ROOT/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml" || { EXIT_CODE="$?"; }
 link $@ "$ROOT/colors.yml" "$HOME/.config/alacritty/colors.yml" || { EXIT_CODE="$?"; }
 link $@ "$ROOT/default.yml" "$HOME/.config/alacritty/default.yml" || { EXIT_CODE="$?"; }

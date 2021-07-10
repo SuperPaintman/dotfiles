@@ -15,7 +15,6 @@ source "$ROOT/../common.sh"
 
 
 
-
 if is_linux; then
   : # Linux specific files.
   link $@ "$ROOT/colors" "$HOME/.config/polybar/colors" || { EXIT_CODE="$?"; }

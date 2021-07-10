@@ -12,6 +12,8 @@ let
     else if (hasAttr "_${tag}" path) && path."_${tag}" then true
     else false
   );
+  size = set: length (attrValues set);
+  isEmpty = set: (size set) == 0;
   files = callIfFunction (import path) {
     linuxOnly = mark "linuxOnly";
     macOSOnly = mark "macOSOnly";
@@ -23,6 +25,8 @@ let
   isOptional = marked "optional";
   filterFiles = pred: files:
     lib.filterAttrs (n: f: (hasAttr "source" f) && (pred f.source)) files;
+  toLink = f: files:
+    lib.concatStringsSep "" (lib.mapAttrsToList f files);
 in
 ''
   #!/usr/bin/env bash
@@ -38,77 +42,52 @@ in
 
   source "$ROOT/../common.sh"
 
-
-  ${lib.concatStringsSep ""
-  (
-    lib.mapAttrsToList
-    (
-      n: f: ''
-        link $@ "$ROOT/${toRelativePath name f.source}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-      ''
-    )
+  ${toLink
+    (n: f: ''
+      link $@ "$ROOT/${toRelativePath name f.source}" "$HOME/${n}" || { EXIT_CODE="$?"; }
+    '')
     (filterFiles isPath files)
-  )}
+  }
 
-  ${lib.concatStringsSep ""
-  (
-    lib.mapAttrsToList
-    (
-      n: f: ''
-        link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-      ''
-    )
+  ${toLink
+    (n: f: ''
+      link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
+    '')
     (filterFiles isOptional files)
-  )}
+  }
 
   if is_linux; then
     : # Linux specific files.
-    ${lib.concatStringsSep ""
-    (
-      lib.mapAttrsToList
-      (
-        n: f: ''
-          link $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-        ''
-      )
+    ${toLink
+      (n: f: ''
+        link $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
+      '')
       (filterFiles (f: (isLinuxOnly f) && !(isOptional f)) files)
-    )}
+    }
 
-    ${lib.concatStringsSep ""
-    (
-      lib.mapAttrsToList
-      (
-        n: f: ''
-          link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-        ''
-      )
+    ${toLink
+      (n: f: ''
+        link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
+      '')
       (filterFiles (f: (isLinuxOnly f) && (isOptional f)) files)
-    )}
+    }
   fi
 
   if is_osx; then
     : # OSX specific files.
-    ${lib.concatStringsSep ""
-    (
-      lib.mapAttrsToList
-      (
-        n: f: ''
-          link $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-        ''
-      )
+    ${toLink
+      (n: f: ''
+        link $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
+      '')
       (filterFiles (f: (isMacOSOnly f) && !(isOptional f)) files)
-    )}
+    }
 
-    ${lib.concatStringsSep ""
-    (
-      lib.mapAttrsToList
-      (
-        n: f: ''
-          link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-        ''
-      )
+    ${toLink
+      (n: f: ''
+        link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
+      '')
       (filterFiles (f: (isMacOSOnly f) && (isOptional f)) files)
-    )}
+    }
   fi
 
   exit "$EXIT_CODE"

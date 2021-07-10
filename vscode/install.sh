@@ -11,7 +11,6 @@ EXIT_CODE=0
 
 source "$ROOT/../common.sh"
 
-
 link $@ "$ROOT/settings.json" "$HOME/.config/Code/User/settings.json" || { EXIT_CODE="$?"; }
 link $@ "$ROOT/snippets" "$HOME/.config/Code/User/snippets" || { EXIT_CODE="$?"; }
 

@@ -11,7 +11,6 @@ EXIT_CODE=0
 
 source "$ROOT/../common.sh"
 
-
 link $@ "$ROOT/.bash" "$HOME/.bash" || { EXIT_CODE="$?"; }
 link $@ "$ROOT/.bash_profile" "$HOME/.bash_profile" || { EXIT_CODE="$?"; }
 link $@ "$ROOT/.bashrc" "$HOME/.bashrc" || { EXIT_CODE="$?"; }

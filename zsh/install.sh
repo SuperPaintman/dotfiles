@@ -11,7 +11,6 @@ EXIT_CODE=0
 
 source "$ROOT/../common.sh"
 
-
 link $@ "$ROOT/.oh-my-zsh" "$HOME/.oh-my-zsh" || { EXIT_CODE="$?"; }
 link $@ "$ROOT/.oh-my-zsh-custom" "$HOME/.oh-my-zsh-custom" || { EXIT_CODE="$?"; }
 link $@ "$ROOT/.zsh" "$HOME/.zsh" || { EXIT_CODE="$?"; }

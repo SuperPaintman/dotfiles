@@ -15,7 +15,6 @@ source "$ROOT/../common.sh"
 
 
 
-
 if is_linux; then
   : # Linux specific files.
   link $@ "$ROOT/apps.lua" "$HOME/.config/awesome/apps.lua" || { EXIT_CODE="$?"; }

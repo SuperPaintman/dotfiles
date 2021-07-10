@@ -15,7 +15,6 @@ source "$ROOT/../common.sh"
 
 
 
-
 if is_linux; then
   : # Linux specific files.
   link $@ "$ROOT/colors.rasi" "$HOME/.config/rofi/colors.rasi" || { EXIT_CODE="$?"; }

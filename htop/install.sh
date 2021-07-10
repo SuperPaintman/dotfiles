@@ -11,7 +11,6 @@ EXIT_CODE=0
 
 source "$ROOT/../common.sh"
 
-
 link $@ "$ROOT/htoprc" "$HOME/.config/htop/htoprc" || { EXIT_CODE="$?"; }
 
 
