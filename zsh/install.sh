@@ -18,4 +18,5 @@ link $@ "$ROOT/.zshrc" "$HOME/.zshrc" || { EXIT_CODE="$?"; }
 
 link --optional $@ "$ROOT/.zsh.local" "$HOME/.zsh.local" || { EXIT_CODE="$?"; }
 link --optional $@ "$ROOT/.zshrc.local" "$HOME/.zshrc.local" || { EXIT_CODE="$?"; }
+
 exit "$EXIT_CODE"

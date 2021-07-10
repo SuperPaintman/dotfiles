@@ -13,5 +13,4 @@ source "$ROOT/../common.sh"
 
 link $@ "$ROOT/lfrc" "$HOME/.config/lf/lfrc" || { EXIT_CODE="$?"; }
 
-
 exit "$EXIT_CODE"

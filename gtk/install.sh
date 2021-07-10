@@ -11,13 +11,9 @@ EXIT_CODE=0
 
 source "$ROOT/../common.sh"
 
-
-
-
 if is_linux; then
-  link $@ "$ROOT/gtk-3.0/settings.ini" "$HOME/.config/gtk-3.0/settings.ini" || { EXIT_CODE="$?"; }
-  link $@ "$ROOT/.gtkrc-2.0" "$HOME/.gtkrc-2.0" || { EXIT_CODE="$?"; }
-
-  
+    link $@ "$ROOT/gtk-3.0/settings.ini" "$HOME/.config/gtk-3.0/settings.ini" || { EXIT_CODE="$?"; }
+    link $@ "$ROOT/.gtkrc-2.0" "$HOME/.gtkrc-2.0" || { EXIT_CODE="$?"; }
 fi
+
 exit "$EXIT_CODE"

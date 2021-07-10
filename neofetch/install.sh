@@ -13,5 +13,4 @@ source "$ROOT/../common.sh"
 
 link $@ "$ROOT/config.conf" "$HOME/.config/neofetch/config.conf" || { EXIT_CODE="$?"; }
 
-
 exit "$EXIT_CODE"

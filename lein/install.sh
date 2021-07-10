@@ -13,5 +13,4 @@ source "$ROOT/../common.sh"
 
 link $@ "$ROOT/profiles.clj" "$HOME/.lein/profiles.clj" || { EXIT_CODE="$?"; }
 
-
 exit "$EXIT_CODE"

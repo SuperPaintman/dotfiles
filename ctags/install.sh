@@ -13,5 +13,4 @@ source "$ROOT/../common.sh"
 
 link $@ "$ROOT/.ctags" "$HOME/.ctags" || { EXIT_CODE="$?"; }
 
-
 exit "$EXIT_CODE"

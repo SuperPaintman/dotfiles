@@ -14,5 +14,4 @@ source "$ROOT/../common.sh"
 link $@ "$ROOT/.vim" "$HOME/.vim" || { EXIT_CODE="$?"; }
 link $@ "$ROOT/.vimrc" "$HOME/.vimrc" || { EXIT_CODE="$?"; }
 
-
 exit "$EXIT_CODE"

@@ -13,5 +13,4 @@ source "$ROOT/../common.sh"
 
 link $@ "$ROOT/.yarnrc" "$HOME/.yarnrc" || { EXIT_CODE="$?"; }
 
-
 exit "$EXIT_CODE"

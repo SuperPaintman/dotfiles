@@ -11,13 +11,8 @@ EXIT_CODE=0
 
 source "$ROOT/../common.sh"
 
-
-
-
 if is_osx; then
-  : # OSX specific files.
-  link $@ "$ROOT/yabairc" "$HOME/.config/yabai/yabairc" || { EXIT_CODE="$?"; }
-
-  
+    link $@ "$ROOT/yabairc" "$HOME/.config/yabai/yabairc" || { EXIT_CODE="$?"; }
 fi
+
 exit "$EXIT_CODE"

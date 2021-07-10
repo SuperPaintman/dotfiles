@@ -13,5 +13,4 @@ source "$ROOT/../common.sh"
 
 link $@ "$ROOT/config.nix" "$HOME/.config/nixpkgs/config.nix" || { EXIT_CODE="$?"; }
 
-
 exit "$EXIT_CODE"

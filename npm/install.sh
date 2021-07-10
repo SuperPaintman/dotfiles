@@ -13,5 +13,4 @@ source "$ROOT/../common.sh"
 
 link $@ "$ROOT/.npmrc" "$HOME/.npmrc" || { EXIT_CODE="$?"; }
 
-
 exit "$EXIT_CODE"

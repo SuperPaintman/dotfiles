@@ -13,5 +13,4 @@ source "$ROOT/../common.sh"
 
 link $@ "$ROOT/.sbt" "$HOME/.sbt" || { EXIT_CODE="$?"; }
 
-
 exit "$EXIT_CODE"

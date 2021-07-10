@@ -61,12 +61,12 @@ in
   in
   lib.optionalString (!(isEmpty linuxFiles) || !(isEmpty linuxOptionalFiles)) ''
     if is_linux; then
-      ${concatFiles "\n  "
+        ${concatFiles "\n    "
         (toLink { })
         linuxFiles
-      }
-
-      ${concatFiles "\n  "
+      }${
+        lib.optionalString (!(isEmpty linuxOptionalFiles)) "\n\n    "
+      }${concatFiles "\n    "
         (toLink { optional = true; })
         linuxOptionalFiles
       }
@@ -79,18 +79,18 @@ in
   in
   lib.optionalString (!(isEmpty macOSFiles) || !(isEmpty macOSOptionalFiles)) ''
     if is_osx; then
-      : # OSX specific files.
-      ${concatFiles "\n  "
+        ${concatFiles "\n    "
         (toLink { })
         macOSFiles
-      }
-
-      ${concatFiles "\n  "
+      }${
+        lib.optionalString (!(isEmpty macOSOptionalFiles)) "\n\n    "
+      }${concatFiles "\n    "
         (toLink { optional = true; })
         macOSOptionalFiles
       }
     fi
   ''
 ) + ''
+
   exit "$EXIT_CODE"
 ''

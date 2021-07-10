@@ -14,5 +14,4 @@ source "$ROOT/../common.sh"
 link $@ "$ROOT/.tmux" "$HOME/.tmux" || { EXIT_CODE="$?"; }
 link $@ "$ROOT/.tmux.conf" "$HOME/.tmux.conf" || { EXIT_CODE="$?"; }
 
-
 exit "$EXIT_CODE"
