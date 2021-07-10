@@ -21,6 +21,8 @@ let
   isLinuxOnly = marked "linuxOnly";
   isMacOSOnly = marked "macOSOnly";
   isOptional = marked "optional";
+  filterFiles = pred: files:
+    lib.filterAttrs (n: f: (hasAttr "source" f) && (pred f.source)) files;
 in
 ''
   #!/usr/bin/env bash
@@ -45,7 +47,7 @@ in
         link $@ "$ROOT/${toRelativePath name f.source}" "$HOME/${n}" || { EXIT_CODE="$?"; }
       ''
     )
-    (lib.filterAttrs (n: f: (hasAttr "source" f) && (isPath f.source)) files)
+    (filterFiles isPath files)
   )}
 
   ${lib.concatStringsSep ""
@@ -56,7 +58,7 @@ in
         link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
       ''
     )
-    (lib.filterAttrs (n: f: (hasAttr "source" f) && (isOptional f.source)) files)
+    (filterFiles isOptional files)
   )}
 
   if is_linux; then
@@ -69,7 +71,7 @@ in
           link $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
         ''
       )
-      (lib.filterAttrs (n: f: (hasAttr "source" f) && (isLinuxOnly f.source) && !(isOptional f.source)) files)
+      (filterFiles (f: (isLinuxOnly f) && !(isOptional f)) files)
     )}
 
     ${lib.concatStringsSep ""
@@ -80,7 +82,7 @@ in
           link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
         ''
       )
-      (lib.filterAttrs (n: f: (hasAttr "source" f) && (isLinuxOnly f.source) && (isOptional f.source)) files)
+      (filterFiles (f: (isLinuxOnly f) && (isOptional f)) files)
     )}
   fi
 
@@ -94,7 +96,7 @@ in
           link $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
         ''
       )
-      (lib.filterAttrs (n: f: (hasAttr "source" f) && (isMacOSOnly f.source) && !(isOptional f.source)) files)
+      (filterFiles (f: (isMacOSOnly f) && !(isOptional f)) files)
     )}
 
     ${lib.concatStringsSep ""
@@ -105,10 +107,9 @@ in
           link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
         ''
       )
-      (lib.filterAttrs (n: f: (hasAttr "source" f) && (isMacOSOnly f.source) && (isOptional f.source)) files)
+      (filterFiles (f: (isMacOSOnly f) && (isOptional f)) files)
     )}
   fi
 
   exit "$EXIT_CODE"
 ''
-
