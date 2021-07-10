@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+set -o pipefail
+
+nix eval --raw '(import ./scripts/generate-install-sh.nix "'"$1"'" ./'"$1"')' \
+    > "./$1/install.sh"

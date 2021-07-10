@@ -1,30 +1,22 @@
 #!/usr/bin/env bash
 
+#
+# This file is generated; DO NOT EDIT.
+#
+
 set -e
 
-source "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/../common.sh"
+ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+EXIT_CODE=0
 
-is_force=false
-for arg in "$@"; do
-    case $arg in
-        -f)
-            is_force=true
-            ;;
-    esac
-done
+source "$ROOT/../common.sh"
 
-TARGET_ROOT="$HOME"
-SOURCE_ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+link $@ "$ROOT/.oh-my-zsh" "$HOME/.oh-my-zsh" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/.oh-my-zsh-custom" "$HOME/.oh-my-zsh-custom" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/.zsh" "$HOME/.zsh" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/.zshrc" "$HOME/.zshrc" || { EXIT_CODE="$?"; }
 
-linkall \
-    "$SOURCE_ROOT" \
-    "$TARGET_ROOT" \
-    "$is_force" \
-    ".zshrc" ".zsh" ".oh-my-zsh" ".oh-my-zsh-custom"
+link --optional $@ "$ROOT/.zsh.local" "$HOME/.zsh.local" || { EXIT_CODE="$?"; }
+link --optional $@ "$ROOT/.zshrc.local" "$HOME/.zshrc.local" || { EXIT_CODE="$?"; }
 
-# Local.
-linkalloptional \
-    "$SOURCE_ROOT" \
-    "$TARGET_ROOT" \
-    "$is_force" \
-    ".zshrc.local" ".zsh.local"
+exit "$EXIT_CODE"

@@ -58,6 +58,13 @@ LUA_FILES := $(shell find . \
 	-type f -name '*.lua' \
 	$(addprefix -and -not -path , $(IGNORE_PATHS)) \
 )
+DEFAULT_NIX_FILES := $(shell find . \
+	-mindepth 2 -maxdepth 2 \
+	-type f -name 'default.nix' \
+	-and -not -path './nixos/default.nix' \
+	-and -not -path './secrets/**/*.nix' \
+	$(addprefix -and -not -path , $(IGNORE_PATHS)) \
+)
 
 all: .vscode/c_cpp_properties.json compile_commands.json
 
@@ -152,6 +159,10 @@ generate-configs:
 .PHONY: generate-vscode-extensions
 generate-vscode-extensions:
 	./scripts/generate-vscode-extensions
+
+.PHONY: generate-install-sh
+generate-install-sh:
+	$(foreach name,$(DEFAULT_NIX_FILES:./%/default.nix=%),./scripts/generate-install-sh $(name) ; )
 
 .PHONY: test
 test: test-lua

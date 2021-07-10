@@ -1,3 +1,3 @@
 {
-  "profiles.clj".source = ./profiles.clj;
+  ".lein/profiles.clj".source = ./profiles.clj;
 }

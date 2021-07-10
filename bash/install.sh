@@ -1,30 +1,22 @@
 #!/usr/bin/env bash
 
+#
+# This file is generated; DO NOT EDIT.
+#
+
 set -e
 
-source "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/../common.sh"
+ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+EXIT_CODE=0
 
-is_force=false
-for arg in "$@"; do
-    case $arg in
-        -f)
-            is_force=true
-            ;;
-    esac
-done
+source "$ROOT/../common.sh"
 
-TARGET_ROOT="$HOME"
-SOURCE_ROOT="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
+link $@ "$ROOT/.bash" "$HOME/.bash" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/.bash_profile" "$HOME/.bash_profile" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/.bashrc" "$HOME/.bashrc" || { EXIT_CODE="$?"; }
 
-linkall \
-    "$SOURCE_ROOT" \
-    "$TARGET_ROOT" \
-    "$is_force" \
-    ".bashrc" ".bash_profile" ".bash"
+link --optional $@ "$ROOT/.bash.local" "$HOME/.bash.local" || { EXIT_CODE="$?"; }
+link --optional $@ "$ROOT/.bash_profile.local" "$HOME/.bash_profile.local" || { EXIT_CODE="$?"; }
+link --optional $@ "$ROOT/.bashrc.local" "$HOME/.bashrc.local" || { EXIT_CODE="$?"; }
 
-# Local.
-linkalloptional \
-    "$SOURCE_ROOT" \
-    "$TARGET_ROOT" \
-    "$is_force" \
-    ".bashrc.local" ".bash_profile.local" ".bash.local"
+exit "$EXIT_CODE"

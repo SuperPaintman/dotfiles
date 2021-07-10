@@ -1,3 +1,4 @@
+{ linuxOnly, ... }:
 {
-  ".config/mimeapps.list".source = ./mimeapps.list;
+  ".config/mimeapps.list".source = linuxOnly ./mimeapps.list;
 }

@@ -1,3 +1,4 @@
+{ linuxOnly, ... }:
 {
-  ".Xresources".source = ./.Xresources;
+  ".Xresources".source = linuxOnly ./.Xresources;
 }
