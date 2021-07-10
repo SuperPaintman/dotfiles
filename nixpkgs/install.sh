@@ -15,19 +15,4 @@ link $@ "$ROOT/config.nix" "$HOME/.config/nixpkgs/config.nix" || { EXIT_CODE="$?
 
 
 
-
-if is_linux; then
-  : # Linux specific files.
-  
-
-  
-fi
-
-if is_osx; then
-  : # OSX specific files.
-  
-
-  
-fi
-
 exit "$EXIT_CODE"

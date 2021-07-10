@@ -55,40 +55,51 @@ in
     '')
     (filterFiles isOptional files)
   }
+'' + (
+  let
+    linuxFiles = filterFiles (f: (isLinuxOnly f) && !(isOptional f)) files;
+    linuxOptionalFiles = filterFiles (f: (isLinuxOnly f) && (isOptional f)) files;
+  in
+  lib.optionalString (!(isEmpty linuxFiles) || !(isEmpty linuxOptionalFiles)) ''
+    if is_linux; then
+      ${toLink
+        (n: f: ''
+          link $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
+        '')
+        linuxFiles
+      }
 
-  if is_linux; then
-    : # Linux specific files.
-    ${toLink
-      (n: f: ''
-        link $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-      '')
-      (filterFiles (f: (isLinuxOnly f) && !(isOptional f)) files)
-    }
+      ${toLink
+        (n: f: ''
+          link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
+        '')
+        linuxOptionalFiles
+      }
+    fi
+  ''
+) + (
+  let
+    macOSFiles = filterFiles (f: (isMacOSOnly f) && !(isOptional f)) files;
+    macOSOptionalFiles = filterFiles (f: (isMacOSOnly f) && (isOptional f)) files;
+  in
+  lib.optionalString (!(isEmpty macOSFiles) || !(isEmpty macOSOptionalFiles)) ''
+    if is_osx; then
+      : # OSX specific files.
+      ${toLink
+        (n: f: ''
+          link $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
+        '')
+        macOSFiles
+      }
 
-    ${toLink
-      (n: f: ''
-        link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-      '')
-      (filterFiles (f: (isLinuxOnly f) && (isOptional f)) files)
-    }
-  fi
-
-  if is_osx; then
-    : # OSX specific files.
-    ${toLink
-      (n: f: ''
-        link $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-      '')
-      (filterFiles (f: (isMacOSOnly f) && !(isOptional f)) files)
-    }
-
-    ${toLink
-      (n: f: ''
-        link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
-      '')
-      (filterFiles (f: (isMacOSOnly f) && (isOptional f)) files)
-    }
-  fi
-
+      ${toLink
+        (n: f: ''
+          link --optional $@ "$ROOT/${toRelativePath name f.source.path}" "$HOME/${n}" || { EXIT_CODE="$?"; }
+        '')
+        macOSOptionalFiles
+      }
+    fi
+  ''
+) + ''
   exit "$EXIT_CODE"
 ''

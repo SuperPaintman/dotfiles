@@ -15,19 +15,4 @@ link $@ "$ROOT/profiles.clj" "$HOME/.lein/profiles.clj" || { EXIT_CODE="$?"; }
 
 
 
-
-if is_linux; then
-  : # Linux specific files.
-  
-
-  
-fi
-
-if is_osx; then
-  : # OSX specific files.
-  
-
-  
-fi
-
 exit "$EXIT_CODE"

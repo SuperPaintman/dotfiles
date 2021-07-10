@@ -14,14 +14,6 @@ source "$ROOT/../common.sh"
 
 
 
-
-if is_linux; then
-  : # Linux specific files.
-  
-
-  
-fi
-
 if is_osx; then
   : # OSX specific files.
   link $@ "$ROOT/yabairc" "$HOME/.config/yabai/yabairc" || { EXIT_CODE="$?"; }
@@ -29,5 +21,4 @@ if is_osx; then
 
   
 fi
-
 exit "$EXIT_CODE"

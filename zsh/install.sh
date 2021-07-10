@@ -20,19 +20,4 @@ link $@ "$ROOT/.zshrc" "$HOME/.zshrc" || { EXIT_CODE="$?"; }
 link --optional $@ "$ROOT/.zsh.local" "$HOME/.zsh.local" || { EXIT_CODE="$?"; }
 link --optional $@ "$ROOT/.zshrc.local" "$HOME/.zshrc.local" || { EXIT_CODE="$?"; }
 
-
-if is_linux; then
-  : # Linux specific files.
-  
-
-  
-fi
-
-if is_osx; then
-  : # OSX specific files.
-  
-
-  
-fi
-
 exit "$EXIT_CODE"

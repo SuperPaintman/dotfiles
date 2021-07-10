@@ -16,19 +16,4 @@ link $@ "$ROOT/snippets" "$HOME/.config/Code/User/snippets" || { EXIT_CODE="$?";
 
 
 
-
-if is_linux; then
-  : # Linux specific files.
-  
-
-  
-fi
-
-if is_osx; then
-  : # OSX specific files.
-  
-
-  
-fi
-
 exit "$EXIT_CODE"

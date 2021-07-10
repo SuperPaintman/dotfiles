@@ -16,19 +16,4 @@ link $@ "$ROOT/.tmux.conf" "$HOME/.tmux.conf" || { EXIT_CODE="$?"; }
 
 
 
-
-if is_linux; then
-  : # Linux specific files.
-  
-
-  
-fi
-
-if is_osx; then
-  : # OSX specific files.
-  
-
-  
-fi
-
 exit "$EXIT_CODE"

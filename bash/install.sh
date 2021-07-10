@@ -20,19 +20,4 @@ link --optional $@ "$ROOT/.bash.local" "$HOME/.bash.local" || { EXIT_CODE="$?"; 
 link --optional $@ "$ROOT/.bash_profile.local" "$HOME/.bash_profile.local" || { EXIT_CODE="$?"; }
 link --optional $@ "$ROOT/.bashrc.local" "$HOME/.bashrc.local" || { EXIT_CODE="$?"; }
 
-
-if is_linux; then
-  : # Linux specific files.
-  
-
-  
-fi
-
-if is_osx; then
-  : # OSX specific files.
-  
-
-  
-fi
-
 exit "$EXIT_CODE"

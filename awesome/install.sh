@@ -14,9 +14,7 @@ source "$ROOT/../common.sh"
 
 
 
-
 if is_linux; then
-  : # Linux specific files.
   link $@ "$ROOT/apps.lua" "$HOME/.config/awesome/apps.lua" || { EXIT_CODE="$?"; }
 link $@ "$ROOT/autostart.sh" "$HOME/.config/awesome/autostart.sh" || { EXIT_CODE="$?"; }
 link $@ "$ROOT/colors.lua" "$HOME/.config/awesome/colors.lua" || { EXIT_CODE="$?"; }
@@ -35,12 +33,4 @@ link $@ "$ROOT/widgets" "$HOME/.config/awesome/widgets" || { EXIT_CODE="$?"; }
 
   
 fi
-
-if is_osx; then
-  : # OSX specific files.
-  
-
-  
-fi
-
 exit "$EXIT_CODE"

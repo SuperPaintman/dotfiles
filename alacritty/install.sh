@@ -17,14 +17,6 @@ link $@ "$ROOT/default.yml" "$HOME/.config/alacritty/default.yml" || { EXIT_CODE
 
 
 
-
-if is_linux; then
-  : # Linux specific files.
-  
-
-  
-fi
-
 if is_osx; then
   : # OSX specific files.
   link $@ "$ROOT/macos.yml" "$HOME/.config/alacritty/macos.yml" || { EXIT_CODE="$?"; }
@@ -32,5 +24,4 @@ if is_osx; then
 
   
 fi
-
 exit "$EXIT_CODE"

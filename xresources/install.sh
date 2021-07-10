@@ -14,20 +14,10 @@ source "$ROOT/../common.sh"
 
 
 
-
 if is_linux; then
-  : # Linux specific files.
   link $@ "$ROOT/.Xresources" "$HOME/.Xresources" || { EXIT_CODE="$?"; }
 
 
   
 fi
-
-if is_osx; then
-  : # OSX specific files.
-  
-
-  
-fi
-
 exit "$EXIT_CODE"
