@@ -62,6 +62,7 @@ DEFAULT_NIX_FILES := $(shell find . \
 	-mindepth 2 -maxdepth 2 \
 	-type f -name 'default.nix' \
 	-and -not -path './nixos/default.nix' \
+	-and -not -path './secrets/**/*.nix' \
 	$(addprefix -and -not -path , $(IGNORE_PATHS)) \
 )
 

@@ -7,15 +7,14 @@ let
 
   linuxOnly = path: if isLinux then path else null;
   macOSOnly = path: if isMacOS then path else null;
-  existsOnly = path: if pathExists path then path else null;
-  optional = existsOnly;
+  optional = path: if pathExists path then path else null;
 
   imports = items: merge (map
     (item: callIfFunction (import item) { inherit linuxOnly macOSOnly optional; })
     (filter (item: item != null) items)
   );
 in
-imports [
+imports ([
   ./alacritty
   ./ansible
   ./awesome
@@ -45,5 +44,8 @@ imports [
   ./yabai
   ./yarn
   ./zsh
-  (existsOnly ./secrets)
-]
+] ++ (
+  if pathExists ./secrets
+  then import ./secrets (args // { inherit linuxOnly macOSOnly optional; })
+  else []
+))
