@@ -4,7 +4,7 @@ set -e
 set -u
 set -o pipefail
 
-connection="$(pgrep -a openvpn$ || true | head -n 1 | awk '{ print $NF }' | cut -d '.' -f 1)"
+connection="$(pgrep -a openvpn$ | grep -v 'sandbox' || true | head -n 1 | awk '{ print $NF }' | cut -d '.' -f 1)"
 
 if [ ! -n "$connection" ]; then
     echo "disconnected"

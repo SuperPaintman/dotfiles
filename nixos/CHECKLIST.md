@@ -108,3 +108,16 @@ I think many of them should be replaced with a script.
   ```
 
   3. Run `make nixos-switch`.
+
+- [ ] Copy sandbox OpenVPN client config.
+
+  1. Clone the ifrastructure repo.
+  2. Create `~/.openvpn` dir and run Makefile target.
+
+  ```sh
+  $ mkdir ~/.openvpn
+  $ cd "$INCFASTRUCTURE_DIR"
+  $ make install-openvpn-config
+  ```
+
+  3. Run `make nixos-switch`.

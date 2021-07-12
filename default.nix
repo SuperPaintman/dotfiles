@@ -47,5 +47,5 @@ imports ([
 ] ++ (
   if pathExists ./secrets
   then import ./secrets (args // { inherit linuxOnly macOSOnly optional; })
-  else []
+  else [ ]
 ))

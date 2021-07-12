@@ -43,6 +43,11 @@ declare -A vpn_configs
 for i in $HOME/.openvpn/*.conf; do
     vpn_name="$(basename "$i" '.conf')"
     vpn_ip="$(cat "$i" | grep remote | awk '{print $2}')"
+
+    if echo "$vpn_name" | grep '^sandbox' > /dev/null 2>&1; then
+        continue
+    fi
+
     if [ -z "$vpn_ip" ]; then
         continue
     fi

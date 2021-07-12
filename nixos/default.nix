@@ -40,14 +40,15 @@ let
   # Check if config file exists.
   vpnConfigs = builtins.filter (item: builtins.pathExists item.config) [
     { name = "server"; config = "/home/superpaintman/.openvpn/server.conf"; }
-    { name = "server-only-space"; config = "/home/superpaintman/.openvpn/server-only-space.conf"; }
+    { name = "sandbox1"; config = "/home/superpaintman/.openvpn/sandbox1.conf"; autoStart = true; }
   ];
 in
 {
   # Imports.
-  imports = [
+  imports = lib.lists.flatten [
     (import "${home-manager}/nixos")
     (import "${monitroid.path}/nixos")
+    (if builtins.pathExists ../secrets then ../secrets/nixos else [ ])
   ];
 
   # Boot.
@@ -348,10 +349,10 @@ in
     lib.mkMerge (
       builtins.map
         (
-          item: {
-            "${item.name}" = {
-              config = "config ${item.config}";
-              autoStart = false;
+          { name, config, autoStart ? false, up ? "", down ? "", ... }: {
+            "${name}" = {
+              inherit autoStart up down;
+              config = "config ${config}";
             };
           }
         )
