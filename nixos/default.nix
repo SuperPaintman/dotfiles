@@ -134,7 +134,7 @@ in
     ccls
     go
     gotools
-    gopls
+    unstable.gopls
     godef
     go-outline
     gomodifytags
@@ -170,12 +170,11 @@ in
 
     # Server configuration utils.
     ansible
-    terraform
+    unstable.terraform
     awscli2 # Unified tool to manage your AWS services.
 
     # Games.
     steam
-    unstable.minecraft
 
     # Misc.
     (polybar.override { pulseSupport = true; })
