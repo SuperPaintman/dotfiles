@@ -84,7 +84,8 @@
     "*.conf.hbs": "NGINX",
     // Other
     "iptables": "shellscript",
-    "ip6tables": "shellscript"
+    "ip6tables": "shellscript",
+    "*.j2": "shellscript"
   },
   "files.eol": "\n",
   "files.trimTrailingWhitespace": true,
@@ -94,7 +95,6 @@
   "extensions.autoUpdate": false,
   "extensions.ignoreRecommendations": true,
   // Diff editor
-  "diffEditor.renderSideBySide": false,
   "diffEditor.ignoreTrimWhitespace": false,
   // Search
   "search.usePCRE2": true,
@@ -250,6 +250,8 @@
     "diagnostics": true,
     "documentLink": true
   },
+  // Nix
+  "nix.enableLanguageServer": true,
   // Prettier
   "prettier.singleQuote": true,
   "prettier.arrowParens": "always",
@@ -292,6 +294,9 @@
     "editor.defaultFormatter": "xaver.clang-format"
   },
   "[handlebars]": {
+    "editor.formatOnSave": false
+  },
+  "[nix]": {
     "editor.formatOnSave": false
   }
 }
