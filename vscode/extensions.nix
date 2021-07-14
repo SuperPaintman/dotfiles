@@ -70,10 +70,10 @@
       sha256 = "1s639aw3x8j9wz8rffivvpid8bbd7d77zb75y3vb9259ndxppy7q";
     }
     {
-      name = "Nix";
-      publisher = "bbenoist";
-      version = "1.0.1";
-      sha256 = "0zd0n9f5z1f0ckzfjr38xw2zzmcxg1gjrava7yahg5cvdcw6l35b";
+      name = "nix-ide";
+      publisher = "jnoortheen";
+      version = "0.1.12";
+      sha256 = "1wkc5mvxv7snrpd0py6x83aci05b9fb9v4w9pl9d1hyaszqbfnif";
     }
     {
       name = "python";

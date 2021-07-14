@@ -92,8 +92,8 @@ extension "MaxGabriel" "brittany" "0.0.9"
 # lua (sumneko)
 extension "sumneko" "lua" "0.17.0"
 
-# Nix (bbenoist)
-extension "bbenoist" "Nix" "1.0.1"
+# nix-ide (jnoortheen)
+extension "jnoortheen" "nix-ide" "0.1.12"
 
 # python (ms-python)
 extension "ms-python" "python" "2020.9.114305"
