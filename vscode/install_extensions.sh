@@ -104,6 +104,9 @@ extension "matklad" "rust-analyzer" "0.2.583"
 # stylus (alan)
 extension "alan" "stylus" "0.0.4"
 
+# svelte-vscode (svelte)
+extension "svelte" "svelte-vscode" "105.3.0"
+
 # vimL (fallenwood)
 extension "fallenwood" "vimL" "0.0.3"
 

@@ -94,6 +94,12 @@
       sha256 = "0rlzkc6g9g44526ln5gmb4xsrn64rnmz4ddkiarpr4sf26dndpjq";
     }
     {
+      name = "svelte-vscode";
+      publisher = "svelte";
+      version = "105.3.0";
+      sha256 = "11plqsj3c4dv0xg2d76pxrcn382qr9wbh1lhln2x8mzv840icvwr";
+    }
+    {
       name = "vimL";
       publisher = "fallenwood";
       version = "0.0.3";
