@@ -1,0 +1,57 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p pkgs.curl -p pkgs.unzip -p pkgs.jq -p pkgs.yaml2json
+
+set -e
+set -u
+set -o pipefail
+
+# Constants.
+ROOT="$(realpath "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/..")"
+
+# Helpers.
+get_vsixpkg() {
+    local publisher="$1"
+    local name="$2"
+
+    local ext_url="https://${publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${publisher}/extension/${name}/latest/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage"
+    local tmp_ext_zip="$(mktemp -t --dry-run "${publisher}.${name}.XXXXXXXX.zip")"
+
+    trap "rm -f $tmp_ext_zip" EXIT
+
+    curl -s "$ext_url" -o "$tmp_ext_zip"
+
+    local version="$(unzip -qc "$tmp_ext_zip" "extension/package.json" | jq -r '.version')"
+    local sha256="$(nix-hash --flat --base32 --type sha256 "$tmp_ext_zip")"
+
+    cat << EOF | jq -c .
+        {
+            "version": "$version",
+            "sha256": "$sha256"
+        }
+EOF
+}
+
+for ext in $(cat "$ROOT/vscode/extensions.yml" | yaml2json | jq -c '.extensions[]'); do
+    # Skip native nix extensions.
+    if ! echo "$ext" | jq -e '.nix == null' > /dev/null 2>&1; then
+        continue
+    fi
+
+    publisher="$(echo "$ext" | jq -r .publisher)"
+    name="$(echo "$ext" | jq -r .name)"
+    # version="$(echo "$ext" | jq -r .version)"
+    # sha256="$(echo "$ext" | jq -r .sha256)"
+
+    echo "Update ${publisher}.${name} extension"
+
+    info="$(get_vsixpkg "$publisher" "$name")"
+    version="$(echo "$info" | jq -r .version)"
+    sha256="$(echo "$info" | jq -r .sha256)"
+
+    line="$(cat "$ROOT/vscode/extensions.yml" | grep -E "name:\s+$name" -n | awk -F ":" '{print $1}')"
+
+    sed -i "$line,$((line + 3))s/version:.*/version: \"$version\"/" "$ROOT/vscode/extensions.yml"
+    sed -i "$line,$((line + 3))s/sha256:.*/sha256: $sha256/" "$ROOT/vscode/extensions.yml"
+done
+
+exec "$ROOT/scripts/generate-vscode-extensions"
