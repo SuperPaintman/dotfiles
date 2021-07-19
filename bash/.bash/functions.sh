@@ -68,6 +68,18 @@ if can git-get && can git-parse && can git-path; then
     }
 fi
 
+# Projects.
+if can find-project; then
+    pcd() {
+        local dir="$(find-project $@)"
+        if [ "$?" != 0 ] || [ "$dir" = "" ]; then
+            return "$?"
+        fi
+
+        cd "$dir"
+    }
+fi
+
 # Emacs.
 if can emacs && [ ! -z "$EMACSIFY_EDITORS" ]; then
     _emacsify() {

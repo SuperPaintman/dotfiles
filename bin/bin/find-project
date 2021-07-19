@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+set -o pipefail
+
+for executable in fzf fd; do
+    if ! which "$executable" > /dev/null 2>&1; then
+        echo "Please install $executable" 1>&2
+        exit 1
+    fi
+done
+
+PROJECTS="$HOME/Projects"
+LS="ls"
+if can exa; then
+    # Replace `ls` with `exa`.
+    LS='exa'
+elif can gls; then
+    LS='gls'
+fi
+
+query="${1:-}"
+if [ "$query" != "" ]; then
+    query="'$query"
+fi
+
+project="$(
+    fd --max-depth 5 -H '^\.git$' "$PROJECTS" |
+        sed 's|^'"$PROJECTS/"'||' |
+        sed 's|/\.git$||' |
+        fzf \
+            --ansi \
+            --query="$query" \
+            --preview "$LS -la --color=always $PROJECTS/{-1}"
+)"
+if [ "$?" != 0 ]; then
+    exit "$?"
+fi
+
+echo "$PROJECTS/$project"

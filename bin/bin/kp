@@ -25,6 +25,10 @@ if [[ $signal != -* ]]; then
     signal="-9"
 fi
 
+if [ "$query" != "" ]; then
+    query="'$query"
+fi
+
 pids="$(
     ps -ef |
         sed 1d |

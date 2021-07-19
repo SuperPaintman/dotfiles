@@ -25,3 +25,30 @@ if can git-fzf; then
     eval "$(git-fzf shell zsh branch '^g^b')"
     eval "$(git-fzf shell zsh log '^g^l')"
 fi
+
+if can find-project; then
+    find-project-widget() {
+        local dir="$(find-project)"
+        if [ "$dir" = "" ]; then
+            return
+        fi
+
+        zle reset-prompt
+        LBUFFER+="$dir"
+    }
+
+    find-project-cd-widget() {
+        local dir="$(find-project)"
+        if [ "$dir" = "" ]; then
+            return
+        fi
+
+        cd "$dir"
+        local ret="$?"
+        zle fzf-redraw-prompt
+        return "$ret"
+    }
+
+    zle -N find-project-cd-widget
+    bindkey '\ep' find-project-cd-widget
+fi
