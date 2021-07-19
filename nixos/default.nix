@@ -182,7 +182,13 @@ in
     lf # Terminal file manager.
     fzf # A command-line fuzzy finder written in Go.
     ripgrep # A utility that combines the usability of The Silver Searcher with the raw speed of grep.
-    unstable.rofi # Window switcher, application launcher and dmenu replacement.
+    # Window switcher, application launcher and dmenu replacement.
+    (unstable.rofi.override {
+      plugins = [
+        pkgs.rofi-emoji
+        localPkgs.rofi-blocks
+      ];
+    })
     feh # Image viewer.
     arandr # Visual front end for XRandR.
     pavucontrol # PulseAudio Volume Control.

@@ -2,7 +2,7 @@
 /* See: https://github.com/davatorium/rofi/blob/next/doc/rofi-theme.5.markdown */
 
 configuration {
-    modi: "window,drun,run,other:~/.config/rofi/modes/other";
+    modi: "window,drun,emoji,other:~/.config/rofi/modes/other";
 
     show-icons: true;
     icon-theme: "Paper";

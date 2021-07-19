@@ -4,6 +4,8 @@ with pkgs; rec {
   # Applications.
   _1password = callPackage ./applications/misc/1password/default.nix { };
 
+  rofi-blocks = callPackage ./applications/misc/rofi-blocks { };
+
   gh = callPackage ./applications/version-management/git-and-tools/gh/default.nix { };
 
   # Development.
