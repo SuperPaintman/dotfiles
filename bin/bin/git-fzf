@@ -19,6 +19,9 @@ usage: git fzf <command>
 
 The commands are:
     status
+    staged
+    add
+    restore-staged
     branch
     tag
     log
@@ -72,17 +75,62 @@ check_is_in_repo() {
 status() {
     check_is_in_repo
 
-    git -c color.status=always status --short |
+    local cmd='git -c color.status=always status --short'
+    eval "$cmd" |
         fzf \
             --height 50% \
             --border \
             --ansi \
             --multi \
             --nth 2..,.. \
-            --preview '(git diff --color=always -- {-1} | sed 1,4d; cat {-1})' |
+            --header 'CTRL-R:reload   CTRL-S:stage   CTRL-U:unstage' \
+            --bind='ctrl-r:reload:'"$cmd" \
+            --bind='ctrl-s:execute-silent(git add {-1})+reload:'"$cmd" \
+            --bind='ctrl-u:execute-silent(git restore --staged {-1})+reload:'"$cmd" \
+            --preview '(git diff --color=always -- {-1} | sed 1,4d)' |
         cut -c4- |
         sed 's/.* -> //' |
         inline
+}
+
+staged() {
+    check_is_in_repo
+
+    local cmd='git -c color.status=always diff --name-only --cached'
+    eval "$cmd" |
+        fzf \
+            --height 50% \
+            --border \
+            --ansi \
+            --multi \
+            --nth 2..,.. \
+            --header 'CTRL-R:reload   CTRL-U:unstage' \
+            --bind='ctrl-r:reload:'"$cmd" \
+            --bind='ctrl-u:execute-silent(git restore --staged {-1})+reload:'"$cmd" \
+            --preview '(git diff --cached --color=always -- {-1} | sed 1,4d)' |
+        inline
+}
+
+add() {
+    check_is_in_repo
+
+    local files="$(status)"
+    if [ "$?" != 0 ] || [ "$files" = "" ]; then
+        return "$?"
+    fi
+
+    git add $files
+}
+
+restore-staged() {
+    check_is_in_repo
+
+    local files="$(staged)"
+    if [ "$?" != 0 ] || [ "$files" = "" ]; then
+        return "$?"
+    fi
+
+    git restore --staged $files
 }
 
 branch() {
@@ -194,6 +242,18 @@ fi
 case "$1" in
     status)
         status
+        ;;
+
+    staged)
+        staged
+        ;;
+
+    add)
+        add
+        ;;
+
+    restore-staged)
+        restore-staged
         ;;
 
     branch)
