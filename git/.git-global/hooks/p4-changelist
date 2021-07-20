@@ -1,14 +1,7 @@
 #!/usr/bin/env bash
 
-GIT_DIR="${GIT_DIR:-"$(git rev-parse --show-toplevel)"}"
-if [ "$?" != 0 ]; then
-    exit "$?"
-fi
+HOOKS="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
-# Run local git hook if it exists.
-if [ -e "$GIT_DIR/.git/hooks/p4-changelist" ]; then
-    eval "$GIT_DIR/.git/hooks/p4-changelist" $@
-    exit "$?"
-fi
+HOOK_NAME="p4-changelist" eval "$HOOKS/common/before.sh" $@ || { exit "$?"; }
 
 exit 0
