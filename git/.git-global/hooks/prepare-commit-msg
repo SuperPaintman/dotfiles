@@ -4,4 +4,35 @@ HOOKS="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
 HOOK_NAME="prepare-commit-msg" eval "$HOOKS/common/before.sh" $@ || { exit "$?"; }
 
-exit 0
+remove-leading-empty-lines() {
+    local found_non_empty
+
+    while read line; do
+        if [ "$found_non_empty" != "" ]; then
+            echo "$line"
+            continue
+        fi
+
+        if [ "$(echo "$line" | sed 's/^#\s*$//')" != "" ]; then
+            echo "$line"
+
+            found_non_empty=yes
+        fi
+    done
+}
+
+ORIGINAL_COMMIT_MSG="$(
+    cat "$1" |
+        sed 's/# Please enter the commit message for your changes. Lines starting/#/' |
+        sed 's/# with .#. will be ignored, and an empty message aborts the commit\./#/' |
+        remove-leading-empty-lines
+)"
+
+{
+    echo ""
+    echo ""
+    echo "#"
+    echo "# feat(<scope>): <message>"
+    echo "#"
+    echo "$ORIGINAL_COMMIT_MSG"
+} > "$1"
