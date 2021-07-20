@@ -2,6 +2,6 @@
 
 HOOKS="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
-HOOK_NAME="post-rewrite" eval "$HOOKS/common/before.sh" $@ || { exit "$?"; }
+. "$HOOKS/common/before.sh"
 
 exit 0

@@ -39,7 +39,7 @@ define GIT_HOOK_TEMPLATE_TEXT
 
 HOOKS="$$(dirname "$$(realpath "$${BASH_SOURCE[0]}")")"
 
-HOOK_NAME="<name>" eval "$$HOOKS/common/before.sh" $$@ || { exit "$$?"; }
+. "$$HOOKS/common/before.sh"
 
 exit 0
 endef

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-if [ -z "$HOOK_NAME" ]; then
-    echo "Usage: HOOK_NAME=\"<name>\" $0 \$@" 1>&2
+HOOK_NAME="${HOOK_NAME:-"$(basename "$(basename "$0")")"}"
+if [ "$HOOK_NAME" = "" ]; then
     exit 1
 fi
 
@@ -15,5 +15,3 @@ if [ -e "$GIT_DIR/.git/hooks/$HOOK_NAME" ]; then
     eval "$GIT_DIR/.git/hooks/$HOOK_NAME" $@
     exit "$?"
 fi
-
-exit 0
