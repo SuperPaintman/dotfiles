@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+GIT_DIR="${GIT_DIR:-"$(git rev-parse --show-toplevel)"}"
+if [ "$?" != 0 ]; then
+    exit "$?"
+fi
+
+# Run local git hook if it exists.
+if [ -e "$GIT_DIR/.git/hooks/post-merge" ]; then
+    eval "$GIT_DIR/.git/hooks/post-merge" $@
+    exit "$?"
+fi
+
+exit 0
