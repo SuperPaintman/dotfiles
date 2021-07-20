@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+set -o pipefail
+
+for executable in fzf; do
+    if ! which "$executable" > /dev/null 2>&1; then
+        echo "Please install $executable" 1>&2
+        exit 1
+    fi
+done
+
+if [ "$#" = 0 ]; then
+    echo "Usage: $0 <destinations>" 1>&2
+    exit 1
+fi
+destinations="$@"
+
+tmp_script="$(mktemp -t "ssh-systemctl.XXXXXXXX.sh")"
+trap "rm -f $tmp_script" EXIT
+
+cat << EOF > "$tmp_script"
+COLOR_RESET="\$(printf '\033[0m')"
+COLOR_GREEN="\$(printf '\033[0;32m')"
+COLOR_RED="\$(printf '\033[31;01m')"
+COLOR_YELLOW="\$(printf '\033[33;01m')"
+COLOR_BLUE="\$(printf '\033[0;34m')"
+COLOR_GRAY="\$(printf '\033[90m')"
+
+for dst in \$@; do
+    ssh "\$dst" "systemctl -la | grep '\.service\s' | sed 's/^[^a-zA-Z]*//'" |
+        awk "{printf \"\${COLOR_YELLOW}%s\${COLOR_RESET} \${COLOR_BLUE}%s\${COLOR_RESET} %s %s %s\n\", \"\$dst\", \\\$1, \\\$2, \\\$3, \\\$4 , \\\$5}"
+done
+EOF
+
+sh "$tmp_script" "$destinations" |
+    fzf \
+        --ansi \
+        --header 'CTRL-R:reload   CTRL-ALT-R:restart service   CTRL-ALT-U:start service   CTRL-ALT-D:stop service' \
+        --bind="ctrl-r:reload(sh $tmp_script $destinations)" \
+        --bind="ctrl-alt-r:execute-silent(ssh '{1}' systemctl restart '{2}')+reload(sh $tmp_script $destinations)" \
+        --bind="ctrl-alt-u:execute-silent(ssh '{1}' systemctl start '{2}')+reload(sh $tmp_script $destinations)" \
+        --bind="ctrl-alt-d:execute-silent(ssh '{1}' systemctl stop '{2}')+reload(sh $tmp_script $destinations)" \
+        --preview "ssh '{1}' SYSTEMD_COLORS=true systemctl status '{2}'"

@@ -41,6 +41,6 @@ sh "$tmp_script" "$destinations" |
         --header 'CTRL-R:reload   CTRL-L:toggle logs   CTRL-ALT-R:restart container' \
         --bind="ctrl-r:reload(sh $tmp_script $destinations)" \
         --bind="ctrl-l:toggle-preview" \
-        --bind="ctrl-alt-r:execute-silent(ssh '{1}' docker restart '{2}')+refresh-preview+reload(sh $tmp_script $destinations)" \
+        --bind="ctrl-alt-r:execute-silent(ssh '{1}' docker restart '{2}')+reload(sh $tmp_script $destinations)" \
         --preview-window "hidden:+$TAIL" \
         --preview "ssh '{1}' docker logs --tail=$TAIL '{2}'"
