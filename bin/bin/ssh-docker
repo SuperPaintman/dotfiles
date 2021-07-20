@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+set -o pipefail
+
+for executable in fzf; do
+    if ! which "$executable" > /dev/null 2>&1; then
+        echo "Please install $executable" 1>&2
+        exit 1
+    fi
+done
+
+TAIL=100
+
+if [ "$#" = 0 ]; then
+    echo "Usage: $0 <destinations>" 1>&2
+    exit 1
+fi
+destinations="$@"
+
+tmp_script="$(mktemp -t "ssh-docker.XXXXXXXX.sh")"
+trap "rm -f $tmp_script" EXIT
+
+cat << EOF > "$tmp_script"
+COLOR_RESET="\$(printf '\033[0m')"
+COLOR_GREEN="\$(printf '\033[0;32m')"
+COLOR_RED="\$(printf '\033[31;01m')"
+COLOR_YELLOW="\$(printf '\033[33;01m')"
+COLOR_BLUE="\$(printf '\033[0;34m')"
+COLOR_GRAY="\$(printf '\033[90m')"
+
+for dst in \$@; do
+    ssh "\$dst" "docker ps -a --format '\${COLOR_YELLOW}\${dst}\${COLOR_RESET} \${COLOR_BLUE}{{ .ID }}\${COLOR_RESET} \${COLOR_GREEN}{{ .Names }}\${COLOR_RESET} {{ .Status }}'"
+done
+EOF
+
+sh "$tmp_script" "$destinations" |
+    fzf \
+        --ansi \
+        --header 'CTRL-R:reload   CTRL-L:toggle logs   CTRL-ALT-R:restart container' \
+        --bind="ctrl-r:reload(sh $tmp_script $destinations)" \
+        --bind="ctrl-l:toggle-preview" \
+        --bind="ctrl-alt-r:execute-silent(ssh '{1}' docker restart '{2}')+refresh-preview+reload(sh $tmp_script $destinations)" \
+        --preview-window "hidden:+$TAIL" \
+        --preview "ssh '{1}' docker logs --tail=$TAIL '{2}'"
