@@ -54,7 +54,7 @@ init_stats() {
 sort_projects() {
     while read line; do
         echo "${STATS[$line]:-0} $line"
-    done | sort -r | awk '{print $2}'
+    done | sort -rn | awk '{print $2}'
 }
 
 # Main.
