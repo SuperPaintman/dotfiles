@@ -66,7 +66,10 @@ DEFAULT_NIX_FILES := $(shell find . \
 	$(addprefix -and -not -path , $(IGNORE_PATHS)) \
 )
 
-all: .vscode/c_cpp_properties.json compile_commands.json
+all: init .vscode/c_cpp_properties.json compile_commands.json
+
+init:
+  # git config core.hooksPath .githooks
 
 .PHONY: nixos
 nixos: nixos-channels nixos-upgrade
@@ -176,7 +179,6 @@ test-lua:
 		./
 
 # Autocomplete.
-.PHONY: qmk/compile_commands.json
 qmk/compile_commands.json:
 	$(MAKE) -C qmk compile_commands.json
 
