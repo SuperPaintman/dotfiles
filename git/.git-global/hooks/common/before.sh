@@ -15,3 +15,9 @@ if [ -e "$GIT_DIR/.git/hooks/$HOOK_NAME" ]; then
     eval "$GIT_DIR/.git/hooks/$HOOK_NAME" $@
     exit "$?"
 fi
+
+# Run git hook from `.githooks` if it exists.
+if [ -e "$GIT_DIR/.githooks/$HOOK_NAME" ]; then
+    eval "$GIT_DIR/.githooks/$HOOK_NAME" $@
+    exit "$?"
+fi
