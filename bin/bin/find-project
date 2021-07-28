@@ -4,14 +4,17 @@ set -e
 set -u
 set -o pipefail
 
-for executable in fzf fd; do
+for executable in fzf fd jq; do
     if ! which "$executable" > /dev/null 2>&1; then
         echo "Please install $executable" 1>&2
         exit 1
     fi
 done
 
+DEBUG="${DEBUG:-}"
 PROJECTS="$HOME/Projects"
+HISTORY="$HOME/.find_project_history"
+HISTORY_SIZE="100"
 LS="ls"
 if can exa; then
     # Replace `ls` with `exa`.
@@ -20,22 +23,63 @@ elif can gls; then
     LS='gls'
 fi
 
+# Helpers.
+add_history() {
+    if [ -f "$HISTORY" ]; then
+        (umask 066 && tail "-$HISTORY_SIZE" "$HISTORY" > "$HISTORY.tail" && mv "$HISTORY.tail" "$HISTORY")
+    fi
+
+    (umask 066 && echo $@ >> "$HISTORY")
+}
+
+STATS_INITIALIZED=""
+declare -A STATS
+init_stats() {
+    local key
+    local value
+    if [ -z "$STATS_INITIALIZED" ] && [ -f "$HISTORY" ]; then
+        STATS_INITIALIZED=true
+        while read line; do
+            key="$(echo "$line" | awk '{print $2}')"
+            value="$(echo "$line" | awk '{print $1}')"
+            STATS+=(["$key"]="$value")
+
+            if [ "$DEBUG" != "" ]; then
+                echo "Stats for $key: $value" 1>&2
+            fi
+        done < <(sort "$HISTORY" | uniq -c)
+    fi
+}
+
+sort_projects() {
+    while read line; do
+        echo "${STATS[$line]:-0} $line"
+    done | sort -r | awk '{print $2}'
+}
+
+# Main.
 query="${1:-}"
 if [ "$query" != "" ]; then
     query="'$query"
 fi
 
+init_stats
+
 project="$(
     fd --max-depth 5 -H '^\.git$' "$PROJECTS" |
         sed 's|^'"$PROJECTS/"'||' |
         sed 's|/\.git$||' |
+        sort_projects |
         fzf \
             --ansi \
+            --no-sort \
             --query="$query" \
             --preview "$LS -la --color=always $PROJECTS/{-1}"
 )"
 if [ "$?" != 0 ]; then
     exit "$?"
 fi
+
+add_history "$project" || true
 
 echo "$PROJECTS/$project"
