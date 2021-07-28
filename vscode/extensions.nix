@@ -112,6 +112,18 @@
       sha256 = "1iispppb8rxsrnvc9pd1f5wm2ig2dcqa9j6jpqwarhmh5yvpnqy2";
     }
     {
+      name = "vscode-theme-onelight";
+      publisher = "akamud";
+      version = "2.2.3";
+      sha256 = "1mzd77sv6lb6kfv5fvdvzggs488q553cf752byrml981ys9r7khz";
+    }
+    {
+      name = "vscode-theme-onedark";
+      publisher = "akamud";
+      version = "2.2.3";
+      sha256 = "1m6f6p7x8vshhb03ml7sra3v01a7i2p3064mvza800af7cyj3w5m";
+    }
+    {
       name = "even-better-toml";
       publisher = "tamasfe";
       version = "0.12.1";
@@ -122,6 +134,12 @@
       publisher = "HashiCorp";
       version = "2.10.2";
       sha256 = "0fkkjkybjshgzbkc933jscxyxqwmqnhq3718pnw9hsac8qv0grrz";
+    }
+    {
+      name = "vscode-nginx";
+      publisher = "william-voyek";
+      version = "0.7.2";
+      sha256 = "0s4akrhdmrf8qwn6vp8kc31k5hx2k2wml5mcashfc09hxiqsf2cq";
     }
     {
       name = "docthis";

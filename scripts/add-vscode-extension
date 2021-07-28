@@ -7,6 +7,7 @@ set -o pipefail
 
 # Constants.
 ROOT="$(realpath "$(dirname "$(realpath "${BASH_SOURCE[0]}")")/..")"
+TAB="$(printf '\t')"
 
 # Helpers.
 get_vsixpkg() {
@@ -34,8 +35,25 @@ get_vsixpkg() {
 EOF
 }
 
-PUBLISHER="$1"
-NAME="$2"
+PUBLISHER="${1:-}"
+NAME="${2:-}"
+
+if [ "$NAME" = "" ]; then
+    NAME="${PUBLISHER#*.}"
+    PUBLISHER="${PUBLISHER%.*}"
+fi
+
+if [ "$PUBLISHER" = "" ] || [ "$NAME" = "" ]; then
+    {
+        echo "Usage:"
+        echo "${TAB}$0 <publisher>.<name>"
+        echo "${TAB}$0 <publisher> <name>"
+        echo ""
+        echo "Example:"
+        echo "${TAB}$0 SuperPaintman.monokai-extended"
+    } 1>&2
+    exit 1
+fi
 
 info="$(get_vsixpkg "$PUBLISHER" "$NAME")"
 version="$(echo "$info" | jq -r .version)"
@@ -51,3 +69,5 @@ cat << EOF >> "$ROOT/vscode/extensions.yml"
 EOF
 
 exec "$ROOT/scripts/generate-vscode-extensions"
+
+echo 'Run: `make nixos-switch` to install the extension'

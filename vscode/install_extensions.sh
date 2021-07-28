@@ -113,11 +113,20 @@ extension "fallenwood" "vimL" "0.0.3"
 # monokai-extended (SuperPaintman)
 extension "SuperPaintman" "monokai-extended" "0.5.1"
 
+# vscode-theme-onelight (akamud)
+extension "akamud" "vscode-theme-onelight" "2.2.3"
+
+# vscode-theme-onedark (akamud)
+extension "akamud" "vscode-theme-onedark" "2.2.3"
+
 # even-better-toml (tamasfe)
 extension "tamasfe" "even-better-toml" "0.12.1"
 
 # terraform (HashiCorp)
 extension "HashiCorp" "terraform" "2.10.2"
+
+# vscode-nginx (william-voyek)
+extension "william-voyek" "vscode-nginx" "0.7.2"
 
 # docthis (oouo-diogo-perdigao)
 extension "oouo-diogo-perdigao" "docthis" "0.8.2"
