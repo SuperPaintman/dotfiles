@@ -107,9 +107,10 @@ in
     android-studio
 
     # Browsers.
-    firefox
+    unstable.firefox
     (
       localPkgs.firefox-install-extensions {
+        package = unstable.firefox;
         extensions = import ../firefox/extensions.nix args;
       }
     )

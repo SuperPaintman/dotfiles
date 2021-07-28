@@ -1,4 +1,4 @@
-{ lib, writeShellScriptBin, stdenv, which, unzip, ... }:
+{ lib, writeShellScriptBin, stdenv, unzip, ... }:
 let
   toExtensionPath' = out: x: "${out}/${x.pname}-${x.version}.xpi";
   toExtensionPath = x: toExtensionPath' x.out x;
@@ -31,21 +31,16 @@ let
       '';
     };
 
-  firefox-install-extensions = { extensions ? [ ] }: writeShellScriptBin "firefox-install-extensions" ''
+  firefox-install-extensions = { package, extensions ? [ ] }: writeShellScriptBin "firefox-install-extensions" ''
     set -e
     set -u
     set -o pipefail
 
-    if ! ${which}/bin/which firefox > /dev/null 2>&1; then
-      echo "Please install firefox" 1>&2
-      exit 1
-    fi
-
 
     ${lib.concatMapStringsSep
-    "\n"
+    ""
       (extension: ''
-        firefox ${toExtensionPath (toExtension extension)}
+        ${package}/bin/firefox ${toExtensionPath (toExtension extension)}
       '')
     extensions}
   '';
