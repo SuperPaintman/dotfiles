@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+# Note: List of all key bindings: `bindkey -l; bindkey -M main`.
+
 # Note: ^ - Ctrl .
 
 # Use vim key bindings.
@@ -52,3 +54,6 @@ if can find-project; then
     zle -N find-project-cd-widget
     bindkey '\ep' find-project-cd-widget
 fi
+
+# Unbindings.
+bindkey -r '^s' # history-incremental-search-forward.
