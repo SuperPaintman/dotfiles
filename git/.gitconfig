@@ -25,7 +25,6 @@
 
 	## Commit
 	c = commit
-	cm = commit -m
 
 	## Contributors
 	contributors = shortlog --summary --numbered --email
@@ -42,7 +41,7 @@
 	## Diff
 	d = diff
 	di = diff --color-words
-	#di = difftool -y -x "diff -W `tput cols` -y" | colordiff | less # TODO
+	# ds = !git difftool -y -x '"diff -W $(tput cols) -y"' | colordiff | less
 
 	# F
 	## Fetch
