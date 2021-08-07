@@ -4,6 +4,16 @@ HOOKS="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 
 . "$HOOKS/common/before.sh"
 
+is-only-comments() {
+    while read line; do
+        if [ "$(echo "$line" | sed 's/^#.*$//')" != "" ]; then
+            return 1
+        fi
+    done
+
+    return 0
+}
+
 remove-leading-empty-lines() {
     local found_non_empty
 
@@ -20,6 +30,11 @@ remove-leading-empty-lines() {
         fi
     done
 }
+
+# Do not modify commit message if we have non-comment lines.
+if ! cat "$1" | is-only-comments; then
+    exit 0
+fi
 
 ORIGINAL_COMMIT_MSG="$(
     cat "$1" |
