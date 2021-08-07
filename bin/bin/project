@@ -1,0 +1,399 @@
+#!/usr/bin/env bash
+
+# set -e
+set -u
+set -o pipefail
+
+# Constants.
+#region constants
+readonly TAB="$(printf "\t")"
+readonly DEBUG="${DEBUG:-}"
+readonly PROJECTS="$HOME/Projects"
+readonly DEFAULT_LICENSE="MIT"
+
+# Check if stdout is a terminal.
+if [ -t 1 ]; then
+    __clr() {
+        printf "\033[${1}m"
+    }
+else
+    __clr() {
+        printf ""
+    }
+fi
+
+declare -r -A COLORS=(
+    ["reset"]="$(__clr 0)"
+    ["red"]="$(__clr 31)"
+    ["green"]="$(__clr 32)"
+    ["yellow"]="$(__clr 33)"
+    ["blue"]="$(__clr 34)"
+    ["magenta"]="$(__clr 35)"
+    ["gray"]="$(__clr 90)"
+)
+
+unset __clr
+
+# Init.
+exit_code=0
+
+declare -A flags
+arguments=()
+
+while [ $# != 0 ]; do
+    case "$1" in
+        -h | --help)
+            flags["help"]=1
+            ;;
+
+        -l | --lang)
+            shift
+            flags["language"]="$1"
+            ;;
+
+        --no-readme)
+            flags["no_readme"]=1
+            ;;
+
+        --license)
+            shift
+            flags["license"]="$1"
+            ;;
+
+        --no-license)
+            flags["no_license"]=1
+            ;;
+
+        --no-git)
+            flags["no_git"]=1
+            ;;
+
+        --dry | --dry-run)
+            flags["dry_run"]=1
+            ;;
+
+        # Rust flags.
+        --lib | --bin)
+            flags["${1:2}"]=1
+            ;;
+
+        -*)
+            echo "Unknown flag: ${COLORS[magenta]}$1${COLORS[reset]}" >&2
+            exit 2
+            ;;
+
+        *)
+            arguments+=("$1")
+            ;;
+    esac
+
+    shift
+done
+#endregion
+
+# Helpers.
+dry() {
+    local exit_code=0
+    if [ "${flags[dry_run]:-}" = "" ]; then
+        eval $@ || { exit_code="$?"; }
+
+        if [ "$exit_code" = 0 ]; then
+            echo " ${COLORS[green]}\$${COLORS[reset]}" $@ >&2
+        else
+            echo " ${COLORS[red]}\$${COLORS[reset]} [${COLORS[red]}$exit_code${COLORS[reset]}] " $@ >&2
+        fi
+    else
+        echo " ${COLORS[gray]}\$${COLORS[reset]}" $@
+    fi
+    return "$exit_code"
+}
+
+create_readme_file() {
+    local filename
+    local license
+    filename="$1"
+    license="${2:-}"
+
+    {
+        cat << EOF
+# TODO
+EOF
+
+        if [ "$license" != "" ]; then
+            cat << EOF
+
+---
+
+#### License
+
+[$license](./LICENSE)
+EOF
+        fi
+
+        cat << EOF
+
+---
+
+With 🫀 by [Aleksandr Krivoshchekov (@SuperPaintman)](https://github.com/SuperPaintman)
+EOF
+    } > "$filename"
+}
+
+create_license_file() {
+    local filename
+    local license
+    local year
+    filename="$1"
+    license="$(echo "$2" | tr '[:upper:]' '[:lower:]')"
+    year="$(date +'%Y')"
+
+    case "$license" in
+        mit)
+            cat << EOF > "$filename"
+The MIT License (MIT)
+
+Copyright (c) $year Aleksandr Krivoshchekov <SuperPaintmanDeveloper@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+EOF
+            ;;
+
+        *)
+            echo "Unknown flag: ${COLORS[magenta]}$license${COLORS[reset]}" >&2
+            return 1
+            ;;
+    esac
+}
+
+# Help.
+#region help
+help_debug() {
+    cat << EOF
+Debug information:
+EOF
+
+    cat << EOF
+${TAB}Flags:
+EOF
+    for f in ${!flags[@]}; do
+        cat << EOF
+${TAB}${TAB}\${${COLORS[yellow]}flags${COLORS[reset]}[${COLORS[blue]}$f${COLORS[reset]}]}${TAB}${COLORS[blue]}${flags[$f]}${COLORS[reset]}
+EOF
+    done
+
+    echo
+
+    cat << EOF
+${TAB}Arguments:
+EOF
+    for a in ${arguments[@]}; do
+        cat << EOF
+${TAB}${TAB}${COLORS[blue]}$a${COLORS[reset]}
+EOF
+    done
+
+    echo
+
+    cat << EOF
+${TAB}Constants:
+EOF
+    for v in PROJECTS DEFAULT_LICENSE; do
+        cat << EOF
+${TAB}${TAB}${COLORS[yellow]}\$${v}${COLORS[reset]}${TAB}${COLORS[blue]}${!v}${COLORS[reset]}
+EOF
+    done
+
+    echo
+
+    cat << EOF
+${TAB}Colors:
+EOF
+    for c in red green yellow blue magenta; do
+        cat << EOF
+${TAB}${TAB}\${${COLORS[yellow]}COLORS${COLORS[reset]}[${COLORS[$c]}$c${COLORS[reset]}]}
+EOF
+    done
+}
+
+help_new() {
+    cat << EOF
+Usage: ${COLORS[blue]}project${COLORS[reset]} ${COLORS[yellow]}new${COLORS[reset]} ${COLORS[magenta]}[options]${COLORS[reset]}
+
+Create a new project
+
+Options:
+${TAB}${COLORS[magenta]}-l${COLORS[reset]}, ${COLORS[magenta]}--lang${COLORS[reset]} ${COLORS[blue]}<lang>${COLORS[reset]}         project language
+${TAB}${COLORS[magenta]}${COLORS[reset]}    ${COLORS[magenta]}--license${COLORS[reset]} ${COLORS[blue]}<license>${COLORS[reset]}   project license (default $DEFAULT_LICENSE)
+${TAB}${COLORS[magenta]}${COLORS[reset]}    ${COLORS[magenta]}--no-readme${COLORS[reset]} ${COLORS[blue]}${COLORS[reset]}          do not create a README.md file
+${TAB}${COLORS[magenta]}${COLORS[reset]}    ${COLORS[magenta]}--no-license${COLORS[reset]} ${COLORS[blue]}${COLORS[reset]}         do not create a LICENSE file
+${TAB}${COLORS[magenta]}${COLORS[reset]}    ${COLORS[magenta]}--no-git${COLORS[reset]} ${COLORS[blue]}${COLORS[reset]}             do not create a Git repository
+${TAB}${COLORS[magenta]}${COLORS[reset]}    ${COLORS[magenta]}--dry-run${COLORS[reset]} ${COLORS[blue]}${COLORS[reset]}            print the commands that would be executed, but do not execute them
+EOF
+}
+
+help() {
+    local exit_code=0
+
+    if [ "${1:-}" != "" ]; then
+        if [ "$(type -t "help_${1}" 2>&1)" = "function" ]; then
+            "help_${1}" || { exit_code="$?"; }
+
+            if [ "$DEBUG" != "" ]; then
+                echo
+                help_debug
+            fi
+
+            return "$exit_code"
+        else
+            exit_code=2
+        fi
+    fi
+
+    cat << EOF
+Usage:
+${TAB}${COLORS[blue]}project${COLORS[reset]} ${COLORS[yellow]}<command>${COLORS[reset]} ${COLORS[magenta]}[arguments]${COLORS[reset]}
+
+The commands are:
+${TAB}${COLORS[yellow]}new${COLORS[reset]}         create a new project
+${TAB}${COLORS[yellow]}find${COLORS[reset]}        find a project (in FZF)
+EOF
+
+    if [ "$DEBUG" != "" ]; then
+        echo
+        help_debug
+    fi
+
+    return "$exit_code"
+}
+#endregion
+
+# Commands.
+#region commands
+new() {
+    if [ "${1:-}" = "" ]; then
+        help_new >&2
+        return 2
+    fi
+
+    # Check if this project already exits.
+    if [ -d "$PROJECTS/$1" ]; then
+        {
+            echo "Project already exits: ${COLORS[blue]}$PROJECTS/$1${COLORS[reset]}"
+        } >&2
+        return 1
+    fi
+
+    # Initialize a project.
+    local no_git
+    case "${flags[language]:-}" in
+        "")
+            dry mkdir -p "$PROJECTS/$1"
+            ;;
+
+        go)
+            dry mkdir -p "$PROJECTS/$1"
+
+            (dry cd "$PROJECTS/$1" && dry go mod init "$1") || { return "$?"; }
+            ;;
+
+        rust)
+            local cargo_flags=()
+            for f in lib bin; do
+                if [ "${flags[$f]:-}" != "" ]; then
+                    cargo_flags+=("--$f")
+                fi
+            done
+
+            if [ "${flags[no_git]:-}" != "" ]; then
+                cargo_flags+=("--vcs none")
+            fi
+
+            dry cargo new ${cargo_flags[@]} "$PROJECTS/$1" || { return "$?"; }
+
+            no_git=1
+            ;;
+
+        *)
+            echo "Unknown language: ${COLORS[magenta]}${flags[language]}${COLORS[reset]}" >&2
+            return 1
+            ;;
+    esac
+
+    # Initialize a git repository.
+    if [ "${no_git:-}" = "" ] && [ "${flags[no_git]:-}" = "" ]; then
+        dry git init "$PROJECTS/$1" >&2 || { return "$?"; }
+    fi
+
+    # Create a README.md file.
+    if [ "${flags[no_readme]:-}" = "" ]; then
+        dry create_readme_file "$PROJECTS/$1/README.md" "${flags[license]:-$DEFAULT_LICENSE}" || { return "$?"; }
+    fi
+
+    # Crete a LICENSE file.
+    if [ "${flags[no_license]:-}" = "" ]; then
+        dry create_license_file "$PROJECTS/$1/LICENSE" "${flags[license]:-$DEFAULT_LICENSE}" || { return "$?"; }
+    fi
+
+    echo "$PROJECTS/$1"
+}
+#endregion
+
+# Main.
+#region main
+if [ "${#arguments[@]}" = 0 ]; then
+    help >&2
+    exit 2
+fi
+
+case "${arguments[0]}" in
+    new | help)
+        # Show help for a command.
+        if [ "${flags[help]:-}" != "" ]; then
+            if [ "$(type -t "help_${arguments[0]}" 2>&1)" = "function" ]; then
+                "help_${arguments[0]}" || { exit_code="$?"; }
+                if [ "$DEBUG" != "" ]; then
+                    echo
+                    help_debug
+                fi
+            else
+                help >&2
+                exit_code=2
+            fi
+        else
+            "${arguments[0]}" ${arguments[@]:1} ${flags[@]} || { exit_code="$?"; }
+        fi
+        ;;
+
+    *)
+        # Find a project-* command.
+        if which "project-${arguments[0]}" > /dev/null 2>&1; then
+            "project-${arguments[0]}" ${arguments[@]:1} ${flags[@]} || { exit_code="$?"; }
+        else
+            {
+                echo "Unknown command: ${COLORS[yellow]}${arguments[0]}${COLORS[reset]}"
+                echo
+                help
+            } >&2
+            exit_code=2
+        fi
+        ;;
+esac
+
+exit "$exit_code"
+#endregion

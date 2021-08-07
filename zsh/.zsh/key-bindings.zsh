@@ -28,9 +28,9 @@ if can git-fzf; then
     eval "$(git-fzf shell zsh log '^g^l')"
 fi
 
-if can find-project; then
-    find-project-widget() {
-        local dir="$(find-project)"
+if can project-find; then
+    project-find-widget() {
+        local dir="$(project-find)"
         if [ "$dir" = "" ]; then
             return
         fi
@@ -39,8 +39,8 @@ if can find-project; then
         LBUFFER+="$dir"
     }
 
-    find-project-cd-widget() {
-        local dir="$(find-project)"
+    project-find-cd-widget() {
+        local dir="$(project-find)"
         if [ "$dir" = "" ]; then
             return
         fi
@@ -51,8 +51,8 @@ if can find-project; then
         return "$ret"
     }
 
-    zle -N find-project-cd-widget
-    bindkey '\ep' find-project-cd-widget
+    zle -N project-find-cd-widget
+    bindkey '\ep' project-find-cd-widget
 fi
 
 # Unbindings.
