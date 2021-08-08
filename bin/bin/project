@@ -68,6 +68,10 @@ while [ $# != 0 ]; do
             flags["no_git"]=1
             ;;
 
+        --github)
+            flags["github"]=1
+            ;;
+
         --dry | --dry-run)
             flags["dry_run"]=1
             ;;
@@ -243,6 +247,7 @@ ${TAB}${COLORS[magenta]}${COLORS[reset]}    ${COLORS[magenta]}--license${COLORS[
 ${TAB}${COLORS[magenta]}${COLORS[reset]}    ${COLORS[magenta]}--no-readme${COLORS[reset]} ${COLORS[blue]}${COLORS[reset]}          do not create a README.md file
 ${TAB}${COLORS[magenta]}${COLORS[reset]}    ${COLORS[magenta]}--no-license${COLORS[reset]} ${COLORS[blue]}${COLORS[reset]}         do not create a LICENSE file
 ${TAB}${COLORS[magenta]}${COLORS[reset]}    ${COLORS[magenta]}--no-git${COLORS[reset]} ${COLORS[blue]}${COLORS[reset]}             do not create a Git repository
+${TAB}${COLORS[magenta]}${COLORS[reset]}    ${COLORS[magenta]}--github${COLORS[reset]} ${COLORS[blue]}${COLORS[reset]}             create a private GitHub repository
 ${TAB}${COLORS[magenta]}${COLORS[reset]}    ${COLORS[magenta]}--dry-run${COLORS[reset]} ${COLORS[blue]}${COLORS[reset]}            print the commands that would be executed, but do not execute them
 EOF
 }
@@ -348,6 +353,11 @@ new() {
     # Crete a LICENSE file.
     if [ "${flags[no_license]:-}" = "" ]; then
         dry create_license_file "$PROJECTS/$1/LICENSE" "${flags[license]:-$DEFAULT_LICENSE}" || { return "$?"; }
+    fi
+
+    # Create a GitHub repo.
+    if [ "${flags[github]:-}" != "" ]; then
+        (dry cd "$PROJECTS/$1" && dry gh repo create "$1" --private --confirm) || { return "$?"; }
     fi
 
     echo "$PROJECTS/$1"
