@@ -69,9 +69,9 @@ if can git-get && can git-parse && can git-path; then
 fi
 
 # Projects.
-if can find-project; then
+if can project-find; then
     pcd() {
-        local dir="$(find-project $@)"
+        local dir="$(project-find $@)"
         if [ "$?" != 0 ] || [ "$dir" = "" ]; then
             return "$?"
         fi
