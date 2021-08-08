@@ -29,9 +29,14 @@ _theme_fish_pwd() {
 }
 
 # Parts.
-local _theme_username="%{$fg_bold[green]%}%n%{$reset_color%}"
-local _theme_hostname="@%{$fg_bold[green]%}%m%{$reset_color%}"
-local _theme_ret_status="%(?::[%{$fg_bold[red]%}%?%{$reset_color%}] )%(?:%{$fg[$_theme_user_color]%}:%{$fg[red]%})$_theme_user_caret%{$reset_color%}"
+_theme_username="%{$fg_bold[green]%}%n%{$reset_color%}"
+_theme_hostname="@%{$fg_bold[green]%}%m%{$reset_color%}"
+_theme_ret_status="%(?::[%{$fg_bold[red]%}%?%{$reset_color%}] )%(?:%{$fg[$_theme_user_color]%}:%{$fg[red]%})$_theme_user_caret%{$reset_color%}"
+
+# Nix Shell.
+if [ "$IN_NIX_SHELL" != "" ]; then
+    _theme_username="%{$fg_bold[blue]%}nix-shell%{$reset_color%}"
+fi
 
 # Left prompt.
 _theme_prompt_left() {

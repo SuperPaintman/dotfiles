@@ -21,6 +21,9 @@ if [ -f  ~/.zsh/oh-my-zsh-config.zsh ]; then source ~/.zsh/oh-my-zsh-config.zsh;
 # Init default bash config.
 if [ -f ~/.bashrc ]; then source ~/.bashrc; fi
 
+# Env.
+if [ -f ~/.zsh/env.sh ]; then source ~/.zsh/env.sh; fi
+
 # Functions.
 if [ -f ~/.zsh/functions.zsh ]; then source ~/.zsh/functions.zsh; fi
 
@@ -37,6 +40,6 @@ if [ -f ~/.zsh/completions.zsh ]; then source ~/.zsh/completions.zsh; fi
 if [ -f ~/.zshrc.local ]; then source ~/.zshrc.local; fi
 
 # Show system information. Do not show it in tmux.
-if [ -z "$TMUX" ] && can neofetch; then
+if [ -z "$IN_NIX_SHELL" ] && [ -z "$TMUX" ] && can neofetch; then
     neofetch --no_config --config ~/.config/neofetch/config.conf
 fi

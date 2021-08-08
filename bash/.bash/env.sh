@@ -19,3 +19,6 @@ export HOMEBREW_NO_ANALYTICS=1
 if can fd; then
     export FZF_DEFAULT_COMMAND='fd --type f'
 fi
+
+# Nix.
+export NIX_BUILD_SHELL=bash
