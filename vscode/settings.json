@@ -20,7 +20,7 @@
   "editor.acceptSuggestionOnEnter": "on",
   "editor.snippetSuggestions": "bottom",
   // Workbench
-  "workbench.colorTheme": "Monokai Extended",
+  "workbench.colorTheme": "Atom One Dark",
   "workbench.welcome.enabled": false,
   "workbench.colorCustomizations": {
     "statusBar.background": "#23241F",
