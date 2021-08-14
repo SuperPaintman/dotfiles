@@ -175,7 +175,7 @@ in
     awscli2 # Unified tool to manage your AWS services.
 
     # Games.
-    steam
+    unstable.steam
 
     # Misc.
     (polybar.override { pulseSupport = true; })
