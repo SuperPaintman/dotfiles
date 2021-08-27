@@ -140,6 +140,7 @@ in
     go-outline
     gomodifytags
     impl
+    unstable.delve
     nodejs
     python
     (
