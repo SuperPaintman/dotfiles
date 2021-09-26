@@ -1,4 +1,4 @@
-{ lib, writeShellScriptBin, stdenv, unzip, ... }:
+{ lib, writeShellScriptBin, stdenv, unzip, firefox, extensions ? [ ] }:
 let
   toExtensionPath' = out: x: "${out}/${x.pname}-${x.version}.xpi";
   toExtensionPath = x: toExtensionPath' x.out x;
@@ -30,19 +30,17 @@ let
         install -v -m644 "$src" "$dst"
       '';
     };
-
-  firefox-install-extensions = { package, extensions ? [ ] }: writeShellScriptBin "firefox-install-extensions" ''
-    set -e
-    set -u
-    set -o pipefail
-
-
-    ${lib.concatMapStringsSep
-    ""
-      (extension: ''
-        ${package}/bin/firefox ${toExtensionPath (toExtension extension)}
-      '')
-    extensions}
-  '';
 in
-firefox-install-extensions
+writeShellScriptBin "firefox-install-extensions" ''
+  set -e
+  set -u
+  set -o pipefail
+
+
+  ${lib.concatMapStringsSep
+  ""
+    (extension: ''
+      ${firefox}/bin/firefox ${toExtensionPath (toExtension extension)}
+    '')
+  extensions}
+''

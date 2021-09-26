@@ -108,9 +108,10 @@ in
 
     # Browsers.
     unstable.firefox
+    (localPkgs.firefox-private.override { firefox = unstable.firefox; })
     (
-      localPkgs.firefox-install-extensions {
-        package = unstable.firefox;
+      localPkgs.firefox-install-extensions.override {
+        firefox = unstable.firefox;
         extensions = import ../firefox/extensions.nix args;
       }
     )

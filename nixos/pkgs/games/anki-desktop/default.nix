@@ -1,4 +1,4 @@
-{ anki-bin ? null, stdenv, lib, makeDesktopItem }:
+{ anki-bin ? null, lib, makeDesktopItem }:
 
 makeDesktopItem {
   name = "anki";

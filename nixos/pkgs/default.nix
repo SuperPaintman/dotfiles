@@ -6,6 +6,8 @@ with pkgs; rec {
 
   rofi-blocks = callPackage ./applications/misc/rofi-blocks { };
 
+  firefox-private = callPackage ./applications/networking/browsers/firefox { };
+
   gh = callPackage ./applications/version-management/git-and-tools/gh/default.nix { };
 
   # Development.
