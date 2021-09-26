@@ -11,6 +11,9 @@ with pkgs; rec {
   # Development.
   rustup-openssl = callPackage ./development/tools/rust/rustup-openssl { };
 
+  # Games.
+  anki-desktop = callPackage ./games/anki-desktop { };
+
   # Misc.
   firefox-install-extensions = callPackage ./misc/firefox-install-extensions { };
 

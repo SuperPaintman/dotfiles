@@ -201,6 +201,8 @@ in
     libnotify # A library that sends desktop notifications to a notification daemon.
     localPkgs._1password # 1Password command-line tool.
     localPkgs.gh # GitHub CLI tool.
+    unstable.anki-bin # Spaced repetition flashcard program
+    (localPkgs.anki-desktop.override { anki-bin = unstable.anki-bin; }) # Spaced repetition flashcard program.
     wally-cli # CLI flashing tool for ZSA Moonlander.
 
     # Icons.
