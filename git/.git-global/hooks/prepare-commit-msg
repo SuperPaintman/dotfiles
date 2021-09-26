@@ -48,7 +48,7 @@ ORIGINAL_COMMIT_MSG="$(
     echo ""
     echo "#"
     echo "$ORIGINAL_COMMIT_MSG"
-    cat <<EOF
+    cat << EOF
 # <type>(<scope>): <message>
 #
 # Types:
