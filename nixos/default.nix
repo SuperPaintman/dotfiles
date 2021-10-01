@@ -44,6 +44,11 @@ let
   ];
 in
 {
+  # Lib.
+  lib = lib.extend (self: super: {
+    x = pkgs.callPackage ./lib { lib = self; };
+  });
+
   # Imports.
   imports = lib.lists.flatten [
     (import "${home-manager}/nixos")

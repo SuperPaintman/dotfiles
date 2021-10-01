@@ -168,7 +168,7 @@ generate-install-sh:
 	$(foreach name,$(DEFAULT_NIX_FILES:./%/default.nix=%),./scripts/generate-install-sh $(name) ; )
 
 .PHONY: test
-test: test-lua
+test: test-lua test-nix
 
 .PHONY: test-lua
 test-lua:
@@ -177,6 +177,10 @@ test-lua:
 		--directory=./awesome \
 		'--lpath="./?.lua;./?/?.lua;./?/init.lua"' \
 		./
+
+.PHONY: test-nix
+test-nix:
+	./nixos/test/run.sh
 
 # Autocomplete.
 qmk/compile_commands.json:
@@ -209,11 +213,13 @@ secrets:
 	git clone https://github.com/SuperPaintman/dotfiles-secrets ~/Projects/github.com/SuperPaintman/dotfiles-secrets
 	ln -s ~/Projects/github.com/SuperPaintman/dotfiles-secrets ./secrets
 
-.PHONY: clean
-clean:
+.PHONY: clean-nixos-builds
+clean-nixos-builds:
 	rm -f result
 	rm -f result-*
 
+.PHONY: clean
+clean: clean-nixos-builds
 	rm -f compile_commands.json
 	rm -f .vscode/c_cpp_properties.json
 
