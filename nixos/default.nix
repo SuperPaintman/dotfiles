@@ -112,11 +112,11 @@ in
     android-studio
 
     # Browsers.
-    unstable.firefox
-    (localPkgs.firefox-private.override { firefox = unstable.firefox; })
+    firefox
+    (localPkgs.firefox-private.override { firefox = firefox; })
     (
       localPkgs.firefox-install-extensions.override {
-        firefox = unstable.firefox;
+        firefox = firefox;
         extensions = import ../firefox/extensions.nix args;
       }
     )
