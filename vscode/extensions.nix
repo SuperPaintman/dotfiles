@@ -156,8 +156,8 @@
     {
       name = "prettier-vscode";
       publisher = "esbenp";
-      version = "4.5.0";
-      sha256 = "0s6bjl8ndp1dbacanphvc27dkxnrv46vwl68wrj8gq8vj86dwqmj";
+      version = "9.0.0";
+      sha256 = "1nak1hg46wxkl0kb0zhc343kq2f4nd5q1fqscb29jybd4qdb8lgn";
     }
     {
       name = "quokka-vscode";

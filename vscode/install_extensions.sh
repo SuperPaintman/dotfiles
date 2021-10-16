@@ -135,7 +135,7 @@ extension "oouo-diogo-perdigao" "docthis" "0.8.2"
 extension "RReverser" "llvm" "0.0.3"
 
 # prettier-vscode (esbenp)
-extension "esbenp" "prettier-vscode" "4.5.0"
+extension "esbenp" "prettier-vscode" "9.0.0"
 
 # quokka-vscode (WallabyJs)
 extension "WallabyJs" "quokka-vscode" "1.0.291"
