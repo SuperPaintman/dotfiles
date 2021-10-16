@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+# See: https://zsh.sourceforge.io/Doc/Release/Completion-System.html#Standard-Styles
+
 # Recompile completions.
 #
 #   $ rm ~/.zcompdump; compinit
