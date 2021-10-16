@@ -1,0 +1,19 @@
+.x-timer-container {
+  display: flex;
+
+  margin-right: 20px;
+
+  color: #607d8b;
+}
+
+.x-timer {
+  font-family: monospace, sans-serif;
+  font-weight: 700;
+}
+
+.x-timer-stop,
+.x-timer-reset {
+  margin-left: 8px;
+
+  cursor: pointer;
+}
