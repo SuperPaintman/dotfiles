@@ -1,0 +1,16 @@
+.x-code-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 100%;
+
+  background: #ffffff;
+
+  font-size: 32px;
+  text-align: center;
+  line-height: 400px;
+
+  z-index: 100;
+}
