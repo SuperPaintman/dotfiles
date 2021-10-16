@@ -387,6 +387,26 @@ in
   # Services: custom / mine.
   services.monitroid.enable = true;
 
+  # Systemd.
+  systemd.services = {
+    # $ systemctl status greasemonkey-scripts.service.
+    greasemonkey-scripts =
+      let
+        bind = "127.0.0.1";
+        port = 29999;
+        directory = "/home/superpaintman/Projects/github.com/SuperPaintman/dotfiles/greasemonkey/scripts";
+      in
+      {
+        description = "Grease Monkey scrupts";
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          ExecStart = "${pkgs.python3}/bin/python3 -m http.server --bind '${bind}' ${toString port} --directory ${directory}";
+          Restart = "always";
+          RestartSec = "10s";
+        };
+      };
+  };
+
   # Virtualisation.
   virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;
