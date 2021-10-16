@@ -191,7 +191,7 @@ in
     fzf # A command-line fuzzy finder written in Go.
     ripgrep # A utility that combines the usability of The Silver Searcher with the raw speed of grep.
     # Window switcher, application launcher and dmenu replacement.
-    (unstable.rofi.override {
+    (rofi.override {
       plugins = [
         pkgs.rofi-emoji
         localPkgs.rofi-blocks

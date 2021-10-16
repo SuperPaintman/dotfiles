@@ -16,6 +16,7 @@ configuration {
     lines: 10;
 
     // Vim mode.
+    kb-mode-complete: "";
     kb-mode-next: "Shift+Right,Control+Tab,Control+l";
     kb-mode-previous: "Shift+Left,Control+Shift+Tab,Control+h";
     kb-row-up: "Up,Control+p,Control+k";
