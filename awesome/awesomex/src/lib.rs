@@ -12,6 +12,13 @@ use std::time::Duration;
 #[macro_use]
 extern crate lazy_static;
 
+#[repr(C)]
+pub enum AwesomexExitCode {
+    Ok = 0,
+    Error = 1,
+    Already = 2,
+}
+
 lazy_static! {
     static ref WORK_DONE: (channel::Sender<()>, channel::Receiver<()>) = channel::unbounded();
     static ref WORK_THREAD_MU: Mutex<Option<thread::JoinHandle<()>>> = Default::default();
@@ -40,7 +47,7 @@ fn work_main() {
 }
 
 #[no_mangle]
-pub extern "C" fn awesomex_start() -> i32 {
+pub extern "C" fn awesomex_start() -> AwesomexExitCode {
     let mut guard = match WORK_THREAD_MU.lock() {
         Ok(guard) => guard,
         Err(poisoned) => poisoned.into_inner(),
@@ -48,17 +55,17 @@ pub extern "C" fn awesomex_start() -> i32 {
 
     if guard.is_some() {
         eprintln!("awesomex: the work thread is already started");
-        return 2;
+        return AwesomexExitCode::Already;
     }
 
     let handler = thread::spawn(work_main);
     guard.replace(handler);
 
-    0
+    AwesomexExitCode::Ok
 }
 
 #[no_mangle]
-pub extern "C" fn awesomex_stop() -> i32 {
+pub extern "C" fn awesomex_stop() -> AwesomexExitCode {
     let mut guard = match WORK_THREAD_MU.lock() {
         Ok(guard) => guard,
         Err(poisoned) => poisoned.into_inner(),
@@ -66,19 +73,19 @@ pub extern "C" fn awesomex_stop() -> i32 {
 
     if guard.is_none() {
         eprintln!("awesomex: the work thread is already stopped");
-        return 1;
+        return AwesomexExitCode::Already;
     }
 
     let thread = match guard.take() {
         Some(t) => t,
-        None => return 2,
+        None => return AwesomexExitCode::Error,
     };
 
     let exit_code = match task::block_on(WORK_DONE.0.send(())) {
-        Ok(_) => 0,
+        Ok(_) => AwesomexExitCode::Ok,
         Err(err) => {
             eprintln!("awesomex: failed to close the done channel: {}", err);
-            1
+            AwesomexExitCode::Error
         }
     };
 
@@ -86,7 +93,7 @@ pub extern "C" fn awesomex_stop() -> i32 {
         Ok(_) => exit_code,
         Err(err) => {
             eprintln!("awesomex: failed to join the work thread: {:?}", err);
-            1
+            AwesomexExitCode::Error
         }
     }
 }
