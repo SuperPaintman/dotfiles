@@ -8,5 +8,6 @@ local gears = require("gears")
 local cfgd = gears.filesystem.get_configuration_dir()
 
 package.path = package.path
-    .. ";" .. cfgd ..  "vendor/?/?.lua"
-    .. ";" .. cfgd ..  "vendor/?/init.lua"
+    .. ";" .. cfgd .. "awesomex/?.lua"
+    .. ";" .. cfgd .. "vendor/?/?.lua"
+    .. ";" .. cfgd .. "vendor/?/init.lua"

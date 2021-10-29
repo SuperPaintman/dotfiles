@@ -1,0 +1,14 @@
+[package]
+name = "awesomex"
+version = "0.1.0"
+authors = ["SuperPaintman <SuperPaintmanDeveloper@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+lazy_static = "*"
+async-std = "*"
+futures = "*"
+
+[lib]
+name = "awesomex"
+crate-type = ["dylib"]

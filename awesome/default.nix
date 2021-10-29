@@ -12,6 +12,7 @@
   ".config/awesome/widgets".source = linuxOnly ./widgets;
   ".config/awesome/daemons".source = linuxOnly ./daemons;
   ".config/awesome/hosts".source = linuxOnly ./hosts;
+  ".config/awesome/awesomex".source = linuxOnly ./awesomex;
   ".config/awesome/vendor".source = linuxOnly ./vendor;
   ".config/awesome/autostart.sh".source = linuxOnly ./autostart.sh;
 }
