@@ -17,7 +17,7 @@ end)
 
 if err ~= nil then
   gears.debug.print_error(string.format("awesomex: failed to load libawesomex.so: %s", err))
-  gears.debug.print_error(string.format("awesomex: try to run and then restart the WM:\n\n\t(cd %sawesomex && cargo build --release)\n", gears.filesystem.get_configuration_dir()))
+  gears.debug.print_error(string.format("awesomex: try to run and then restart the WM:\n\n\t(cd %sawesomex && cargo build --release)\n", cfgd))
   return
 end
 
