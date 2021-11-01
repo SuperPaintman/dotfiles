@@ -123,80 +123,82 @@ set nowritebackup
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugins.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-call plug#begin("~/.vim/plugged")
+if filereadable(expand("~/.vim/autoload/plug.vim"))
+  call plug#begin("~/.vim/plugged")
 
-" Intellisense engine for Vim8 & Neovim, full language server protocol support
-" as VSCode .
-if (has('patch-8.1.1719') || (has('nvim') && has('nvim-0.4.3'))) && !exists("g:vscode")
-  " See: https://github.com/neoclide/coc.nvim
-  " See: https://github.com/neoclide/coc.nvim/wiki/Language-servers
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  " Intellisense engine for Vim8 & Neovim, full language server protocol support
+  " as VSCode .
+  if (has("patch-8.1.1719") || (has("nvim") && has("nvim-0.4.3"))) && !exists("g:vscode")
+    " See: https://github.com/neoclide/coc.nvim
+    " See: https://github.com/neoclide/coc.nvim/wiki/Language-servers
+    Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+  endif
+
+  " EditorConfig plugin for Vim.
+  " See: https://github.com/editorconfig/editorconfig-vim
+  Plug 'editorconfig/editorconfig-vim'
+
+  " Vim plugin for intensely nerdy commenting powers.
+  " See: https://github.com/preservim/nerdcommenter
+  Plug 'preservim/nerdcommenter'
+
+  " A tree explorer plugin for vim.
+  if !exists("g:vscode")
+    " See: https://github.com/preservim/nerdtree
+    Plug 'preservim/nerdtree'
+  endif
+
+  " The undo history visualizer for VIM.
+  if !exists("g:vscode")
+    " See: https://github.com/mbbill/undotree
+    Plug 'mbbill/undotree'
+  endif
+
+  " Lean & mean status/tabline for vim that's light as air.
+  if !exists("g:vscode")
+    " See: https://github.com/vim-airline/vim-airline
+    Plug 'vim-airline/vim-airline'
+  endif
+
+  " Vim motions on speed!
+  if !exists("g:vscode")
+    " See: https://github.com/easymotion/vim-easymotion
+    Plug 'easymotion/vim-easymotion'
+  else
+    " See: http://github.com/asvetliakov/vim-easymotion
+    Plug 'asvetliakov/vim-easymotion', { 'as': 'vsc-easymotion' }
+  endif
+
+  " A Vim plugin which shows git diff markers in the sign column and
+  " stages/previews/undoes hunks and partial hunks.
+  if !exists("g:vscode")
+    " See: https://github.com/airblade/vim-gitgutter
+    Plug 'airblade/vim-gitgutter'
+  endif
+
+  " Vim plugin for C/C++/ObjC semantic highlighting using cquery, ccls, or
+  " clangd.
+  if !exists("g:vscode")
+    " See: https://github.com/jackguo380/vim-lsp-cxx-highlight
+    Plug 'jackguo380/vim-lsp-cxx-highlight'
+  endif
+
+  " True Sublime Text style multiple selections for Vim.
+  " See: https://github.com/terryma/vim-multiple-cursors
+  " Plug 'terryma/vim-multiple-cursors'
+
+  " Plugin to toggle, display and navigate marks.
+  if !exists("g:vscode")
+    " See: https://github.com/kshenoy/vim-signature
+    Plug 'kshenoy/vim-signature'
+  endif
+
+  " surround.vim: quoting/parenthesizing made simple.
+  " See: https://github.com/tpope/vim-surround
+  Plug 'tpope/vim-surround'
+
+  call plug#end()
 endif
-
-" EditorConfig plugin for Vim.
-" See: https://github.com/editorconfig/editorconfig-vim
-Plug 'editorconfig/editorconfig-vim'
-
-" Vim plugin for intensely nerdy commenting powers.
-" See: https://github.com/preservim/nerdcommenter
-Plug 'preservim/nerdcommenter'
-
-" A tree explorer plugin for vim.
-if !exists("g:vscode")
-  " See: https://github.com/preservim/nerdtree
-  Plug 'preservim/nerdtree'
-endif
-
-" The undo history visualizer for VIM.
-if !exists("g:vscode")
-  " See: https://github.com/mbbill/undotree
-  Plug 'mbbill/undotree'
-endif
-
-" Lean & mean status/tabline for vim that's light as air.
-if !exists("g:vscode")
-  " See: https://github.com/vim-airline/vim-airline
-  Plug 'vim-airline/vim-airline'
-endif
-
-" Vim motions on speed!
-if !exists("g:vscode")
-  " See: https://github.com/easymotion/vim-easymotion
-  Plug 'easymotion/vim-easymotion'
-else
-  " See: http://github.com/asvetliakov/vim-easymotion
-  Plug 'asvetliakov/vim-easymotion', { 'as': 'vsc-easymotion' }
-endif
-
-" A Vim plugin which shows git diff markers in the sign column and
-" stages/previews/undoes hunks and partial hunks.
-if !exists("g:vscode")
-  " See: https://github.com/airblade/vim-gitgutter
-  Plug 'airblade/vim-gitgutter'
-endif
-
-" Vim plugin for C/C++/ObjC semantic highlighting using cquery, ccls, or
-" clangd.
-if !exists("g:vscode")
-  " See: https://github.com/jackguo380/vim-lsp-cxx-highlight
-  Plug 'jackguo380/vim-lsp-cxx-highlight'
-endif
-
-" True Sublime Text style multiple selections for Vim.
-" See: https://github.com/terryma/vim-multiple-cursors
-" Plug 'terryma/vim-multiple-cursors'
-
-" Plugin to toggle, display and navigate marks.
-if !exists("g:vscode")
-  " See: https://github.com/kshenoy/vim-signature
-  Plug 'kshenoy/vim-signature'
-endif
-
-" surround.vim: quoting/parenthesizing made simple.
-" See: https://github.com/tpope/vim-surround
-Plug 'tpope/vim-surround'
-
-call plug#end()
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -266,16 +268,16 @@ endfunction
 
 " check_back_space checks if the current character is a whitespace.
 function s:check_back_space()
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1] =~# '\s'
+  let col = col(".") - 1
+  return !col || getline(".")[col - 1] =~# "\s"
 endfunction
 
 " show_documentation shows documentation in preview window.
 function s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
+  if (index(["vim", "help"], &filetype) >= 0)
+    execute "h ".expand("<cword>")
   else
-    call CocAction('doHover')
+    call CocAction("doHover")
   endif
 endfunction
 
@@ -319,7 +321,7 @@ endif
 if s:plug_has_plugin("coc.nvim")
   augroup autoformat_on_save
     autocmd!
-    autocmd BufWritePre * call CocAction('format')
+    autocmd BufWritePre * call CocAction("format")
   augroup END
 endif
 
@@ -327,7 +329,7 @@ endif
 if s:plug_has_plugin("coc.nvim")
   augroup highlight_symbol_and_references
     autocmd!
-    autocmd CursorHold * silent call CocActionAsync('highlight')
+    autocmd CursorHold * silent call CocActionAsync("highlight")
   augroup END
 endif
 
@@ -345,7 +347,7 @@ augroup END
 "" Global extension names to install when they aren't installed.
 let g:coc_global_extensions = []
 """ C/C++/Objective-C.
-call add(g:coc_global_extensions, 'coc-clangd')
+call add(g:coc_global_extensions, "coc-clangd")
 
 " NERDTree.
 " See: https://github.com/preservim/nerdtree/blob/master/doc/NERDTree.txt
