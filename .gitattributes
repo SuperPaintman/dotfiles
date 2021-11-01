@@ -1,12 +1,12 @@
 # Vim.
-/vim/.vim/autoload/ linguist-vendored
-/vim/.vim/colors/ linguist-vendored
-/vim/.vim/plugged/ linguist-vendored
-/vim/.vim/spell/ linguist-vendored
+/vim/.vim/autoload/** linguist-vendored
+/vim/.vim/colors/** linguist-vendored
+/vim/.vim/plugged/** linguist-vendored
+/vim/.vim/spell/** linguist-vendored
 
 # Tmux.
-/tmux/.tmux/plugins/ linguist-vendored
+/tmux/.tmux/plugins/** linguist-vendored
 
 # ZSH.
-/zsh/.oh-my-zsh/ linguist-vendored
-/zsh/.oh-my-zsh-custom/ linguist-vendored
+/zsh/.oh-my-zsh/** linguist-vendored
+/zsh/.oh-my-zsh-custom/** linguist-vendored
