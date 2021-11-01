@@ -1,4 +1,4 @@
-" MIT License. Copyright (c) 2016-2019 Kevin Sapper et al.
+" MIT License. Copyright (c) 2016-2021 Kevin Sapper et al.
 " Plugin: https://github.com/szw/vim-ctrlspace
 " vim: et ts=2 sts=2 sw=2
 
@@ -24,13 +24,24 @@ function! airline#extensions#tabline#ctrlspace#on()
 endfunction
 
 function! airline#extensions#tabline#ctrlspace#invalidate()
+  if !exists('#airline')
+    return
+  endif
   let s:current_bufnr = -1
   let s:current_tabnr = -1
 endfunction
 
 function! airline#extensions#tabline#ctrlspace#add_buffer_section(builder, cur_tab, cur_buf, pull_right)
   let pos_extension = (a:pull_right ? '_right' : '')
-  let buffer_list = ctrlspace#api#BufferList(a:cur_tab)
+  
+  let buffer_list = []
+  for bufferindex in sort(keys(ctrlspace#api#Buffers(a:cur_tab)), 'N')
+    for buffer in ctrlspace#api#BufferList(a:cur_tab)
+      if buffer['index'] == bufferindex
+        call add(buffer_list, buffer)
+      endif
+    endfor
+  endfor
 
   " add by tenfy(tenfyzhong@qq.com)
   " if the current buffer no in the buffer list

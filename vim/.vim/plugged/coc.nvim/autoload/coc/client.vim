@@ -1,3 +1,4 @@
+scriptencoding utf-8
 let s:root = expand('<sfile>:h:h:h')
 let s:is_vim = !has('nvim')
 let s:is_win = has("win32") || has("win64")
@@ -36,6 +37,13 @@ endfunction
 
 function! s:start() dict
   if self.running | return | endif
+  if !isdirectory(getcwd())
+    echohl Error | echon '[coc.nvim] Current cwd is not a valid directory.' | echohl None
+    return
+  endif
+  let timeout = string(get(g:, 'coc_channel_timeout', 30))
+  let disable_warning = string(get(g:, 'coc_disable_startup_warning', 0))
+  let tmpdir = fnamemodify(tempname(), ':p:h')
   if s:is_vim
     let options = {
           \ 'in_mode': 'json',
@@ -43,23 +51,16 @@ function! s:start() dict
           \ 'err_mode': 'nl',
           \ 'err_cb': {channel, message -> s:on_stderr(self.name, split(message, "\n"))},
           \ 'exit_cb': {channel, code -> s:on_exit(self.name, code)},
-          \}
-    if has("patch-8.1.350")
-      let options['noblock'] = 1
-    endif
-    if has("patch-8.0.0902")
-      let options['env'] = {
+          \ 'env': {
             \ 'NODE_NO_WARNINGS': '1',
             \ 'VIM_NODE_RPC': '1',
             \ 'COC_NVIM': '1',
-            \ 'COC_CHANNEL_TIMEOUT': get(g:, 'coc_channel_timeout', 30),
-            \ 'COC_NO_WARNINGS': get(g:, 'coc_disable_startup_warning', 0)
-            \ }
-    else
-      let $VIM_NODE_RPC = 1
-      let $COC_NVIM = 1
-      let $COC_NO_WARNINGS = get(g:, 'coc_disable_startup_warning', 0)
-      let $COC_CHANNEL_TIMEOUT = get(g:, 'coc_channel_timeout', 30)
+            \ 'COC_CHANNEL_TIMEOUT': timeout,
+            \ 'TMPDIR': tmpdir,
+          \ }
+          \}
+    if has("patch-8.1.350")
+      let options['noblock'] = 1
     endif
     let job = job_start(self.command, options)
     let status = job_status(job)
@@ -71,23 +72,43 @@ function! s:start() dict
     let self['running'] = 1
     let self['channel'] = job_getchannel(job)
   else
-    let env = {}
-    if has('nvim-0.5.0')
-      let env = {
-            \ 'NODE_NO_WARNINGS': '1',
-            \ 'COC_CHANNEL_TIMEOUT': get(g:, 'coc_channel_timeout', 30),
-            \ 'COC_NO_WARNINGS': get(g:, 'coc_disable_startup_warning', 0),
-            \ }
-    else
-      let $COC_NO_WARNINGS = get(g:, 'coc_disable_startup_warning', 0)
-      let $COC_CHANNEL_TIMEOUT = get(g:, 'coc_channel_timeout', 30)
-    endif
-    let chan_id = jobstart(self.command, {
+    let original = {}
+    let opts = {
           \ 'rpc': 1,
           \ 'on_stderr': {channel, msgs -> s:on_stderr(self.name, msgs)},
           \ 'on_exit': {channel, code -> s:on_exit(self.name, code)},
-          \ 'env': env
-          \})
+          \ }
+    if has('nvim-0.5.0')
+      " could use env option
+      let opts['env'] = {
+          \ 'NODE_NO_WARNINGS': '1',
+          \ 'COC_CHANNEL_TIMEOUT': timeout,
+          \ 'TMPDIR': tmpdir
+          \ }
+    else
+      let original = {
+            \ 'NODE_NO_WARNINGS': getenv('NODE_NO_WARNINGS'),
+            \ 'TMPDIR': getenv('TMPDIR'),
+            \ }
+      if exists('*setenv')
+        call setenv('NODE_NO_WARNINGS', '1')
+        call setenv('COC_CHANNEL_TIMEOUT', timeout)
+        call setenv('TMPDIR', tmpdir)
+      else
+        let $NODE_NO_WARNINGS = 1
+        let $TMPDIR = tmpdir
+      endif
+    endif
+    let chan_id = jobstart(self.command, opts)
+    if !empty(original)
+      if exists('*setenv')
+        for key in keys(original)
+          call setenv(key, original[key])
+        endfor
+      else
+        let $TMPDIR = original['TMPDIR']
+      endif
+    endif
     if chan_id <= 0
       echohl Error | echom 'Failed to start '.self.name.' service' | echohl None
       return
@@ -99,10 +120,11 @@ endfunction
 
 function! s:on_stderr(name, msgs)
   if get(g:, 'coc_vim_leaving', 0) | return | endif
+  if get(g:, 'coc_disable_uncaught_error', 0) | return | endif
   let data = filter(copy(a:msgs), '!empty(v:val)')
   if empty(data) | return | endif
-  let client = a:name ==# 'coc' ? '' : ' client '.a:name
-  let data[0] = '[coc.nvim]'.client.' error: ' . data[0]
+  let client = a:name ==# 'coc' ? '[coc.nvim]' : '['.a:name.']'
+  let data[0] = client.': '.data[0]
   call coc#util#echo_messages('Error', data)
 endfunction
 

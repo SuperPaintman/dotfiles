@@ -114,6 +114,11 @@ if !exists('g:undotree_TreeNodeShape')
     let g:undotree_TreeNodeShape = '*'
 endif
 
+" tree vertical shape.
+if !exists('g:undotree_TreeVertShape')
+    let g:undotree_TreeVertShape = '|'
+endif
+
 if !exists('g:undotree_DiffCommand')
     let g:undotree_DiffCommand = "diff"
 endif
@@ -154,6 +159,11 @@ endif
 " Show help line
 if !exists('g:undotree_HelpLine')
     let g:undotree_HelpLine = 1
+endif
+
+" Show cursorline
+if !exists('g:undotree_CursorLine')
+    let g:undotree_CursorLine = 1
 endif
 
 "=================================================

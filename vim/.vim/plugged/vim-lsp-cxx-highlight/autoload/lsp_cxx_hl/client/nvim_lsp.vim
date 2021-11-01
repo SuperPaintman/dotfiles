@@ -15,20 +15,44 @@ endfunction
 
 function! s:doinit() abort
 lua <<EOF
-vim.lsp.callbacks['$cquery/publishSemanticHighlighting'] = function(err, method, params, client_id) 
-    vim.api.nvim_call_function('lsp_cxx_hl#client#nvim_lsp#cquery_hl', {params})
+handlers = vim.lsp.handlers
+
+--[ backwards compatibility with neovim<0.5 --]
+if (handlers == nil)
+then
+  handlers = vim.lsp.callbacks
 end
 
-vim.lsp.callbacks['$cquery/setInactiveRegions'] = function(err, method, params, client_id)
-    vim.api.nvim_call_function('lsp_cxx_hl#client#nvim_lsp#cquery_regions', {params})
+handlers['$cquery/publishSemanticHighlighting'] = function(err, method, params, client_id)
+    local data = method
+    if data['uri'] == nil then
+      data = params -- NOTE see change https://github.com/neovim/neovim/pull/15504
+    end
+    vim.api.nvim_call_function('lsp_cxx_hl#client#nvim_lsp#cquery_hl', {data})
 end
 
-vim.lsp.callbacks['$ccls/publishSemanticHighlight'] = function(err, method, params, client_id)
-    vim.api.nvim_call_function('lsp_cxx_hl#client#nvim_lsp#ccls_hl', {params})
+handlers['$cquery/setInactiveRegions'] = function(err, method, params, client_id)
+    local data = method
+    if data['uri'] == nil then
+      data = params -- NOTE see change https://github.com/neovim/neovim/pull/15504
+    end
+    vim.api.nvim_call_function('lsp_cxx_hl#client#nvim_lsp#cquery_regions', {data})
 end
 
-vim.lsp.callbacks['$ccls/publishSkippedRanges'] = function(err, method, params, client_id)
-    vim.api.nvim_call_function('lsp_cxx_hl#client#nvim_lsp#ccls_regions', {params})
+handlers['$ccls/publishSemanticHighlight'] = function(err, method, params, client_id)
+    local data = method
+    if data['uri'] == nil then
+      data = params -- NOTE see change https://github.com/neovim/neovim/pull/15504
+    end
+    vim.api.nvim_call_function('lsp_cxx_hl#client#nvim_lsp#ccls_hl', {data})
+end
+
+handlers['$ccls/publishSkippedRanges'] = function(err, method, params, client_id)
+    local data = method
+    if data['uri'] == nil then
+      data = params -- NOTE see change https://github.com/neovim/neovim/pull/15504
+    end
+    vim.api.nvim_call_function('lsp_cxx_hl#client#nvim_lsp#ccls_regions', {data})
 end
 EOF
 endfunction

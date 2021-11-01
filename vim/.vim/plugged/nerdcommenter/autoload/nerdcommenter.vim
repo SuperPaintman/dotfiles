@@ -1,72 +1,9 @@
-" ============================================================================
-" File:        NERD_commenter.vim
-" Description: vim global plugin that provides easy code commenting
-" Author:      Martin Grenfell <martin.grenfell at gmail dot com>
-" Maintainer:  Caleb Maclennan <caleb@alerque.com>
-" Version:     2.5.1
-" Last Change: Tue Nov  7 10:45:53 +03 2017
-" License:     This program is free software. It comes without any warranty,
-"              to the extent permitted by applicable law. You can redistribute
-"              it and/or modify it under the terms of the Do What The Fuck You
-"              Want To Public License, Version 2, as published by Sam Hocevar.
-"              See http://sam.zoy.org/wtfpl/COPYING for more details.
-"
-" ============================================================================
-
-" Section: script init stuff {{{1
-if exists('loaded_nerd_comments')
-    finish
-endif
-if v:version < 700
-    echoerr "NERDCommenter: this plugin requires vim >= 7. DOWNLOAD IT! You'll thank me later!"
-    finish
-endif
-let loaded_nerd_comments = 1
-
-" Function: s:InitVariable() function {{{2
-" This function is used to initialise a given variable to a given value. The
-" variable is only initialised if it does not exist prior
-"
-" Args:
-"   -var: the name of the var to be initialised
-"   -value: the value to initialise var to
-"
-" Returns:
-"   1 if the var is set, 0 otherwise
-function s:InitVariable(var, value)
-    if !exists(a:var)
-        execute 'let ' . a:var . ' = ' . "'" . a:value . "'"
-        return 1
-    endif
-    return 0
-endfunction
-
-" Section: space string init{{{2
+" Section: space string init
 " When putting spaces after the left delimiter and before the right we use
 " s:spaceStr for the space char. This way we can make it add anything after
 " the left and before the right by modifying this variable
 let s:spaceStr = ' '
 let s:lenSpaceStr = strlen(s:spaceStr)
-
-" Section: variable initialization {{{2
-call s:InitVariable('g:NERDAllowAnyVisualDelims', 1)
-call s:InitVariable('g:NERDBlockComIgnoreEmpty', 0)
-call s:InitVariable('g:NERDCommentWholeLinesInVMode', 0)
-call s:InitVariable('g:NERDCommentEmptyLines', 0)
-call s:InitVariable('g:NERDCompactSexyComs', 0)
-call s:InitVariable('g:NERDCreateDefaultMappings', 1)
-call s:InitVariable('g:NERDDefaultNesting', 1)
-call s:InitVariable('g:NERDMenuMode', 3)
-call s:InitVariable('g:NERDLPlace', '[>')
-call s:InitVariable('g:NERDUsePlaceHolders', 1)
-call s:InitVariable('g:NERDRemoveAltComs', 1)
-call s:InitVariable('g:NERDRemoveExtraSpaces', 0)
-call s:InitVariable('g:NERDRPlace', '<]')
-call s:InitVariable('g:NERDSpaceDelims', 0)
-call s:InitVariable('g:NERDDefaultAlign', 'none')
-call s:InitVariable('g:NERDTrimTrailingWhitespace', 0)
-call s:InitVariable('g:NERDToggleCheckAllLines', 0)
-call s:InitVariable('g:NERDDisableTabsInBlockComm', 0)
 
 let s:NERDFileNameEscape="[]#*$%'\" ?`!&();<>\\"
 
@@ -106,6 +43,7 @@ let s:delimiterMap = {
     \ 'bc': { 'left': '#' },
     \ 'bib': { 'left': '//' },
     \ 'bindzone': { 'left': ';' },
+    \ 'bind-named': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'blade': { 'left': '{{--', 'right': '--}}' },
     \ 'bst': { 'left': '%' },
     \ 'btm': { 'left': '::' },
@@ -136,6 +74,7 @@ let s:delimiterMap = {
     \ 'cucumber': { 'left': '#' },
     \ 'cuda': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'cvs': { 'left': 'CVS:' },
+    \ 'cypher': { 'left': '//' },
     \ 'cython': { 'left': '# ', 'leftAlt': '#' },
     \ 'd': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'dakota': { 'left': '#' },
@@ -170,6 +109,7 @@ let s:delimiterMap = {
     \ 'erlang': { 'left': '%', 'leftAlt': '%%' },
     \ 'eruby': { 'left': '<%#', 'right': '%>', 'leftAlt': '<!--', 'rightAlt': '-->' },
     \ 'esmtprc': { 'left': '#' },
+    \ 'exim': { 'left': '#' },
     \ 'expect': { 'left': '#' },
     \ 'exports': { 'left': '#' },
     \ 'factor': { 'left': '! ', 'leftAlt': '!# ' },
@@ -218,6 +158,7 @@ let s:delimiterMap = {
     \ 'hbs': { 'left': '{{!-- ', 'right': ' --}}' },
     \ 'hercules': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'hive': { 'left': '-- ' },
+    \ 'hocon': { 'left': '//', 'leftAlt': '#' },
     \ 'hog': { 'left': '#' },
     \ 'hostsaccess': { 'left': '#' },
     \ 'htmlcheetah': { 'left': '##' },
@@ -246,6 +187,8 @@ let s:delimiterMap = {
     \ 'jgraph': { 'left': '(*', 'right': '*)' },
     \ 'jinja': { 'left': '{#', 'right': '#}', 'leftAlt': '<!--', 'rightAlt': '-->' },
     \ 'jproperties': { 'left': '#' },
+    \ 'jsonc': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
+    \ 'jsonnet': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'jsp': { 'left': '<%--', 'right': '--%>' },
     \ 'julia': { 'left': '# ', 'leftAlt': '#=', 'rightAlt': '=#' },
     \ 'kivy': { 'left': '#' },
@@ -307,6 +250,7 @@ let s:delimiterMap = {
     \ 'newlisp': { 'left': ';' },
     \ 'nginx': { 'left': '#' },
     \ 'nimrod': { 'left': '#' },
+    \ 'nix': { 'left': '#' },
     \ 'nroff': { 'left': '\"' },
     \ 'nsis': { 'left': '#' },
     \ 'ntp': { 'left': '#' },
@@ -365,12 +309,13 @@ let s:delimiterMap = {
     \ 'rc': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'rebol': { 'left': ';' },
     \ 'registry': { 'left': ';' },
+    \ 'rego': { 'left': '#' },
     \ 'remind': { 'left': '#' },
     \ 'renpy': { 'left': '# ' },
     \ 'resolv': { 'left': '#' },
     \ 'rgb': { 'left': '!' },
     \ 'rib': { 'left': '#' },
-    \ 'rmd': { 'left': '<!--', 'right': '-->', 'leftalt': '#' },
+    \ 'rmd': { 'left': '<!--', 'right': '-->', 'leftAlt': '#' },
     \ 'robot': { 'left': '#' },
     \ 'robots': { 'left': '#' },
     \ 'rspec': { 'left': '#' },
@@ -461,6 +406,7 @@ let s:delimiterMap = {
     \ 'typescript': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
     \ 'typescriptreact': { 'left': '//', 'leftAlt': '{/*', 'rightAlt': '*/}' },
     \ 'uc': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
+    \ 'uc4': { 'left': '!' },
     \ 'uil': { 'left': '!' },
     \ 'upstart': { 'left': '#' },
     \ 'vala': { 'left': '//', 'leftAlt': '/*', 'rightAlt': '*/' },
@@ -492,44 +438,29 @@ let s:delimiterMap = {
     \ }
 
 let g:NERDDelimiterMap = s:delimiterMap
+let nerdcommenter#delimiterMap = s:delimiterMap
 
 if exists('g:NERDCustomDelimiters')
     call extend(s:delimiterMap, g:NERDCustomDelimiters)
 endif
 
-" Section: Comment mapping functions, autocommands and commands {{{1
-" ============================================================================
-" Section: Comment enabler autocommands {{{2
+" Section: Comment mapping functions, autocommands and commands
 " ============================================================================
 
-augroup NERDCommenter
-
-    "if the user enters a buffer or reads a buffer then we gotta set up
-    "the comment delimiters for that new filetype
-    autocmd BufEnter,BufRead * :call s:SetUpForNewFiletype(&filetype, 0)
-
-    "if the filetype of a buffer changes, force the script to reset the
-    "delimiters for the buffer
-    autocmd Filetype * :call s:SetUpForNewFiletype(&filetype, 1)
-augroup END
-
-
-" Function: s:SetUpForNewFiletype(filetype) function {{{2
+" Function: nerdcommenter#SetUp() function
 " This function is responsible for setting up buffer scoped variables for the
-" given filetype.
-"
-" Args:
-"   -filetype: the filetype to set delimiters for
-"   -forceReset: 1 if the delimiters should be reset if they have already be
-"    set for this buffer.
-"
-function s:SetUpForNewFiletype(filetype, forceReset)
-    let filetype = a:filetype
+" current buffer.
+function! nerdcommenter#SetUp() abort
+    if exists('b:NERDCommenterDelims')
+        return
+    endif
+
+    let filetype = &filetype
 
     "for compound filetypes, if we don't know how to handle the full filetype
     "then break it down and use the first part that we know how to handle
     if filetype =~# '\.' && !has_key(s:delimiterMap, filetype)
-        let filetypes = split(a:filetype, '\.')
+        let filetypes = split(filetype, '\.')
         for i in filetypes
             if has_key(s:delimiterMap, i)
                 let filetype = i
@@ -555,7 +486,7 @@ function s:SetUpForNewFiletype(filetype, forceReset)
         " if g:NERD_<filetype>_alt_style is defined, use the alternate style
         let b:NERDCommenterFirstInit = getbufvar(1,'NERDCommenterFirstInit')
         if exists('g:NERDAltDelims_'.filetype) && eval('g:NERDAltDelims_'.filetype) && !b:NERDCommenterFirstInit
-            call s:SwitchToAlternativeDelimiters(0)
+            call nerdcommenter#SwitchToAlternativeDelimiters(0)
             let b:NERDCommenterFirstInit = 1
         endif
     else
@@ -564,7 +495,7 @@ function s:SetUpForNewFiletype(filetype, forceReset)
 
 endfunction
 
-function s:CreateDelimMapFromCms()
+function! s:CreateDelimMapFromCms() abort
     if &filetype ==# '' && exists('g:NERDDefaultDelims')
         let delims = g:NERDDefaultDelims
         for i in ['left', 'leftAlt', 'right', 'rightAlt']
@@ -575,15 +506,15 @@ function s:CreateDelimMapFromCms()
         return delims
     endif
     return {
-        \ 'left': substitute(&commentstring, '\([^ \t]*\)\s*%s.*', '\1', ''),
-        \ 'right': substitute(&commentstring, '.*%s\s*\(.*\)', '\1', 'g'),
+        \ 'left': matchstr(&commentstring, '^\S*\ze\s*%s'),
+        \ 'right': matchstr(&commentstring, '%s\s*\zs.*$'),
         \ 'nested': 0,
         \ 'leftAlt': '',
         \ 'rightAlt': '',
         \ 'nestedAlt': 0}
 endfunction
 
-" Function: s:SwitchToAlternativeDelimiters(printMsgs) function {{{2
+" Function: nerdcommenter#SwitchToAlternativeDelimiters(printMsgs) function
 " This function is used to swap the delimiters that are being used to the
 " alternative delimiters for that filetype. For example, if a c++ file is
 " being edited and // comments are being used, after this function is called
@@ -592,7 +523,9 @@ endfunction
 " Args:
 "   -printMsgs: if this is 1 then a message is echoed to the user telling them
 "    if this function changed the delimiters or not
-function s:SwitchToAlternativeDelimiters(printMsgs)
+" function nerdcommenter#SwitchToAlternativeDelimiters(printMsgs)
+function! nerdcommenter#SwitchToAlternativeDelimiters(printMsgs) abort
+    call nerdcommenter#SetUp()
     if exists('*NERDCommenter_before')
         exe 'call NERDCommenter_before()'
     endif
@@ -633,12 +566,12 @@ function s:SwitchToAlternativeDelimiters(printMsgs)
     return 1
 endfunction
 
-" Section: Comment delimiter add/removal functions {{{1
+" Section: Comment delimiter add/removal functions
 " ============================================================================
-" Function: s:AppendCommentToLine(){{{2
+" Function: s:AppendCommentToLine()
 " This function appends comment delimiters at the EOL and places the cursor in
 " position to start typing the comment
-function s:AppendCommentToLine()
+function! s:AppendCommentToLine() abort
     let left = s:Left({'space': 1})
     let right = s:Right({'space': 1})
 
@@ -663,7 +596,7 @@ function s:AppendCommentToLine()
     endif
 endfunction
 
-" Function: s:CommentBlock(top, bottom, lSide, rSide, forceNested ) {{{2
+" Function: s:CommentBlock(top, bottom, lSide, rSide, forceNested )
 " This function is used to comment out a region of code. This region is
 " specified as a bounding box by arguments to the function.
 "
@@ -673,7 +606,7 @@ endfunction
 "   -lSide: the column number for the left most column in the region
 "   -rSide: the column number for the right most column in the region
 "   -forceNested: a flag indicating whether comments should be nested
-function s:CommentBlock(top, bottom, lSide, rSide, forceNested )
+function! s:CommentBlock(top, bottom, lSide, rSide, forceNested) abort
     " we need to create local copies of these arguments so we can modify them
     let top = a:top
     let bottom = a:bottom
@@ -720,7 +653,7 @@ function s:CommentBlock(top, bottom, lSide, rSide, forceNested )
     let switchedDelims = 0
     if !s:Multipart() && g:NERDAllowAnyVisualDelims && s:AltMultipart()
         let switchedDelims = 1
-        call s:SwitchToAlternativeDelimiters(0)
+        call nerdcommenter#SwitchToAlternativeDelimiters(0)
     endif
 
     "start the commenting from the top and keep commenting till we reach the
@@ -756,7 +689,9 @@ function s:CommentBlock(top, bottom, lSide, rSide, forceNested )
 
                     if s:Multipart()
                         "stick the right delimiter down
-                        let theLine = strpart(theLine, 0, rSide+strlen(leftSpaced)) . rightSpaced . strpart(theLine, rSide+strlen(leftSpaced))
+                        "byte idx of the char next to the last char = (byte idx of last char + 1) + (last char byte len) - 1
+                        let rIndex = (rSide+strlen(leftSpaced)) + strlen(strcharpart(strpart(theLine, rSide+strlen(leftSpaced)-1), 0, 1)) - 1
+                        let theLine = strpart(theLine, 0, rIndex) . rightSpaced . strpart(theLine, rIndex)
 
                         let firstLeftDelim = s:FindDelimiterIndex(s:Left(), theLine)
                         let lastRightDelim = s:LastIndexOfDelim(s:Right(), theLine)
@@ -793,11 +728,11 @@ function s:CommentBlock(top, bottom, lSide, rSide, forceNested )
 
     "if we switched delimiterss then we gotta go back to what they were before
     if switchedDelims ==# 1
-        call s:SwitchToAlternativeDelimiters(0)
+        call nerdcommenter#SwitchToAlternativeDelimiters(0)
     endif
 endfunction
 
-" Function: s:CommentLines(forceNested, alignLeft, alignRight, firstLine, lastLine) {{{2
+" Function: s:CommentLines(forceNested, alignLeft, alignRight, firstLine, lastLine)
 " This function comments a range of lines.
 "
 " Args:
@@ -805,7 +740,7 @@ endfunction
 "    to be nested if need be
 "   -align: should be "left", "start", "both" or "none"
 "   -firstLine/lastLine: the top and bottom lines to comment
-function s:CommentLines(forceNested, align, firstLine, lastLine)
+function! s:CommentLines(forceNested, align, firstLine, lastLine) abort
     " we need to get the left and right indexes of the leftmost char in the
     " block of of lines and the right most char so that we can do alignment of
     " the delimiters if the user has specified
@@ -866,12 +801,12 @@ function s:CommentLines(forceNested, align, firstLine, lastLine)
 
 endfunction
 
-" Function: s:CommentLinesMinimal(firstLine, lastLine) {{{2
+" Function: s:CommentLinesMinimal(firstLine, lastLine)
 " This function comments a range of lines in a minimal style. I
 "
 " Args:
 "   -firstLine/lastLine: the top and bottom lines to comment
-function s:CommentLinesMinimal(firstLine, lastLine)
+function! s:CommentLinesMinimal(firstLine, lastLine) abort
     "check that minimal comments can be done on this filetype
     if !s:HasMultipartDelims()
         throw 'NERDCommenter.Delimiters exception: Minimal comments can only be used for filetypes that have multipart delimiters'
@@ -927,7 +862,7 @@ function s:CommentLinesMinimal(firstLine, lastLine)
     call setline(a:lastLine, theLine)
 endfunction
 
-" Function: s:CommentLinesSexy(topline, bottomline) function {{{2
+" Function: s:CommentLinesSexy(topline, bottomline) function
 " This function is used to comment lines in the 'Sexy' style. E.g., in c:
 " /*
 "  * This is a sexy comment
@@ -935,7 +870,7 @@ endfunction
 " Args:
 "   -topline: the line number of the top line in the sexy comment
 "   -bottomline: the line number of the bottom line in the sexy comment
-function s:CommentLinesSexy(topline, bottomline)
+function! s:CommentLinesSexy(topline, bottomline) abort
     let left = s:GetSexyComLeft(0, 0)
     let right = s:GetSexyComRight(0, 0)
 
@@ -1062,14 +997,14 @@ function s:CommentLinesSexy(topline, bottomline)
 
 endfunction
 
-" Function: s:CommentLinesToggle(forceNested, firstLine, lastLine) {{{2
+" Function: s:CommentLinesToggle(forceNested, firstLine, lastLine)
 " Applies "toggle" commenting to the given range of lines
 "
 " Args:
 "   -forceNested: a flag indicating whether the called is requesting the comment
 "    to be nested if need be
 "   -firstLine/lastLine: the top and bottom lines to comment
-function s:CommentLinesToggle(forceNested, firstLine, lastLine)
+function! s:CommentLinesToggle(forceNested, firstLine, lastLine) abort
     let currentLine = a:firstLine
 
     let align = g:NERDDefaultAlign
@@ -1119,7 +1054,7 @@ function s:CommentLinesToggle(forceNested, firstLine, lastLine)
 
 endfunction
 
-" Function: s:CommentRegion(topline, topCol, bottomLine, bottomCol) function {{{2
+" Function: s:CommentRegion(topline, topCol, bottomLine, bottomCol) function
 " This function comments chunks of text selected in visual mode.
 " It will comment exactly the text that they have selected.
 " Args:
@@ -1129,13 +1064,13 @@ endfunction
 "   -bottomCol: the bottom right column for this comment
 "   -forceNested: whether the caller wants comments to be nested if the
 "    line(s) are already commented
-function s:CommentRegion(topLine, topCol, bottomLine, bottomCol, forceNested)
+function! s:CommentRegion(topLine, topCol, bottomLine, bottomCol, forceNested) abort
 
     "switch delimiters (if we can) if the current set isn't multipart
     let switchedDelims = 0
-    if !s:Multipart() && s:AltMultipart() && !g:NERDAllowAnyVisualDelims
+    if !s:Multipart() && s:AltMultipart() && g:NERDAllowAnyVisualDelims
         let switchedDelims = 1
-        call s:SwitchToAlternativeDelimiters(0)
+        call nerdcommenter#SwitchToAlternativeDelimiters(0)
     endif
 
     "if there is only one line in the comment then just do it
@@ -1156,7 +1091,7 @@ function s:CommentRegion(topLine, topCol, bottomLine, bottomCol, forceNested)
 
         "comment the bottom line
         let bottom = getline(a:bottomLine)
-        let numLeadingSpacesTabs = strlen(substitute(bottom, '^\([ \t]*\).*$', '\1', ''))
+        let numLeadingSpacesTabs = strlen(matchstr(bottom, '^\s*'))
         call s:CommentBlock(a:bottomLine, a:bottomLine, numLeadingSpacesTabs+1, a:bottomCol, a:forceNested)
 
     endif
@@ -1166,18 +1101,18 @@ function s:CommentRegion(topLine, topCol, bottomLine, bottomCol, forceNested)
 
     "if we switched delimiters then we gotta go back to what they were before
     if switchedDelims ==# 1
-        call s:SwitchToAlternativeDelimiters(0)
+        call nerdcommenter#SwitchToAlternativeDelimiters(0)
     endif
 
 endfunction
 
-" Function: s:InvertComment(firstLine, lastLine) function {{{2
+" Function: s:InvertComment(firstLine, lastLine) function
 " Inverts the comments on the lines between and including the given line
 " numbers i.e all commented lines are uncommented and vice versa
 " Args:
 "   -firstLine: the top of the range of lines to be inverted
 "   -lastLine: the bottom of the range of lines to be inverted
-function s:InvertComment(firstLine, lastLine)
+function! s:InvertComment(firstLine, lastLine) abort
 
     " go thru all lines in the given range
     let currentLine = a:firstLine
@@ -1209,18 +1144,18 @@ function s:InvertComment(firstLine, lastLine)
     endwhile
 endfunction
 
-" Function: NERDCommentIsLineCommented(lineNo)
+" Function: nerdcommenter#IsLineCommented(lineNo)
 " Check if the line is a comment
 " Note this function checks if the line is **completely** a comment
 " Args:
 "   -lineNo:    the line number of the line to check
 " Return: Number, 1 if the line is a comment, 0 else
-function! NERDCommentIsLineCommented(lineNo)
+function! nerdcommenter#IsLineCommented(lineNo) abort
     let theLine = getline(a:lineNo)
     return s:IsInSexyComment(a:lineNo) || s:IsCommentedFromStartOfLine(s:Left(), theLine) || s:IsCommentedFromStartOfLine(s:Left({'alt': 1}), theLine)
 endfunction
 
-" Function: NERDComment(mode, type) function {{{2
+" Function: nerdcommenter#Comment(mode, type) function
 " This function is a Wrapper for the main commenting functions
 "
 " Args:
@@ -1229,7 +1164,8 @@ endfunction
 "   -type: the type of commenting requested. Can be 'Sexy', 'Invert',
 "    'Minimal', 'Toggle', 'AlignLeft', 'AlignBoth', 'Comment',
 "    'Nested', 'ToEOL', 'Append', 'Insert', 'Uncomment', 'Yank'
-function! NERDComment(mode, type) range
+function! nerdcommenter#Comment(mode, type) range abort
+    call nerdcommenter#SetUp()
     if exists('*NERDCommenter_before')
         exe 'call NERDCommenter_before()'
     endif
@@ -1300,7 +1236,7 @@ function! NERDComment(mode, type) range
           for i in range(firstLine, lastLine)
             let theLine = getline(i)
             " if have one line no comment(not include blank/whitespace-only lines), then comment all lines
-            if theLine =~# '[^ \t]\+' && !s:IsInSexyComment(firstLine) && !s:IsCommentedFromStartOfLine(s:Left(), theLine) && !s:IsCommentedFromStartOfLine(s:Left({'alt': 1}), theLine)
+            if theLine =~# '\S\+' && !s:IsInSexyComment(firstLine) && !s:IsCommentedFromStartOfLine(s:Left(), theLine) && !s:IsCommentedFromStartOfLine(s:Left({'alt': 1}), theLine)
               let l:commentAllLines = 1
               break
             else
@@ -1323,9 +1259,9 @@ function! NERDComment(mode, type) range
         endtry
 
     elseif a:type ==? 'ToEOL'
-        call s:SaveScreenState()
+        let view = winsaveview()
         call s:CommentBlock(firstLine, firstLine, col('.'), col('$')-1, 1)
-        call s:RestoreScreenState()
+        call winrestview(view)
 
     elseif a:type ==? 'Append'
         call s:AppendCommentToLine()
@@ -1344,7 +1280,7 @@ function! NERDComment(mode, type) range
         else
             normal! yy
         endif
-        execute firstLine .','. lastLine .'call NERDComment("'. a:mode .'", "Comment")'
+        execute firstLine .','. lastLine .'call nerdcommenter#Comment("'. a:mode .'", "Comment")'
     endif
 
     call s:RecoverStateAfterLineComment(state)
@@ -1362,7 +1298,7 @@ function! NERDComment(mode, type) range
 
 endfunction
 
-" Function: NERDCommentIsCharCommented(line, col) abort
+" Function: nerdcommenter#IsCharCommented(line, col) abort
 " Check if the character at [line, col] is inside a comment
 " Note the Comment delimeter it self is considered as part of the comment
 " 
@@ -1370,7 +1306,7 @@ endfunction
 "   -line       the line number of the character
 "   -col        the column number of the character
 " Return: Number, 1 if the character is inside a comment, 0 if is not
-function! NERDCommentIsCharCommented(line, col) abort
+function! nerdcommenter#IsCharCommented(line, col) abort
   " Function: s:searchfor(str, line, col, direction, [maxline])
   " search str in the buffer, including the character at [line, col]
   " Args: 
@@ -1473,10 +1409,10 @@ function! NERDCommentIsCharCommented(line, col) abort
           \ a:col)
 endfunction
 
-" Function: s:PlaceDelimitersAndInsBetween() function {{{2
+" Function: s:PlaceDelimitersAndInsBetween() function
 " This is function is called to place comment delimiters down and place the
 " cursor between them
-function s:PlaceDelimitersAndInsBetween()
+function! s:PlaceDelimitersAndInsBetween() abort
     " get the left and right delimiters without any escape chars in them
     let left = s:Left({'space': 1})
     let right = s:Right({'space': 1})
@@ -1523,7 +1459,7 @@ function s:PlaceDelimitersAndInsBetween()
     endif
 endfunction
 
-" Function: s:RemoveDelimiters(left, right, line) {{{2
+" Function: s:RemoveDelimiters(left, right, line)
 " this function is called to remove the first left comment delimiter and the
 " last right delimiter of the given line.
 "
@@ -1534,7 +1470,7 @@ endfunction
 "   -left: the left comment delimiter
 "   -right: the right comment delimiter
 "   -line: the line to remove the delimiters from
-function s:RemoveDelimiters(left, right, line)
+function! s:RemoveDelimiters(left, right, line) abort
 
     let l:left = a:left
     let l:right = a:right
@@ -1572,7 +1508,7 @@ function s:RemoveDelimiters(left, right, line)
     return line
 endfunction
 
-" Function: s:SetupStateBeforeLineComment(topLine, bottomLine) {{{2
+" Function: s:SetupStateBeforeLineComment(topLine, bottomLine)
 " Changes ignorecase and foldmethod options before commenting lines and saves
 " their original values in a dict, which is returned as a result
 "
@@ -1582,7 +1518,7 @@ endfunction
 "
 " Return: a dict with the state prior to configuration changes
 "
-function s:SetupStateBeforeLineComment(topLine, bottomLine)
+function! s:SetupStateBeforeLineComment(topLine, bottomLine) abort
     let state = {'foldmethod' : &foldmethod,
                 \'ignorecase' : &ignorecase}
 
@@ -1601,14 +1537,14 @@ function s:SetupStateBeforeLineComment(topLine, bottomLine)
     return state
 endfunction
 
-" Function: s:RecoverStateAfterLineComment(state) {{{2
+" Function: s:RecoverStateAfterLineComment(state)
 " Receives the state returned by s:SetupStateBeforeLineComment and restores
 " the state accordingly
 "
 " Args:
 " state: the top line of the visual selection to uncomment
 " bottomLine: the bottom line of the visual selection to uncomment
-function s:RecoverStateAfterLineComment(state)
+function! s:RecoverStateAfterLineComment(state) abort
     if a:state['foldmethod'] !=# &foldmethod
         let &foldmethod = a:state['foldmethod']
     endif
@@ -1617,22 +1553,22 @@ function s:RecoverStateAfterLineComment(state)
     endif
 endfunction
 
-" Function: s:TrimTrailingWhitespace(line) {{{2
+" Function: s:TrimTrailingWhitespace(line)
 " This function removes all the trailing whitespace
 " Args:
 "   -line: the target line
-function s:TrimTrailingWhitespace(line)
+function! s:TrimTrailingWhitespace(line) abort
     let toReturn = substitute(a:line, '\s\+$', '', 'g')
     return toReturn
 endfunction
 
-" Function: s:UncommentLines(topLine, bottomLine) {{{2
+" Function: s:UncommentLines(topLine, bottomLine)
 " This function uncomments the given lines
 "
 " Args:
 " topLine: the top line of the visual selection to uncomment
 " bottomLine: the bottom line of the visual selection to uncomment
-function s:UncommentLines(topLine, bottomLine)
+function! s:UncommentLines(topLine, bottomLine) abort
     "make local copies of a:firstline and a:lastline and, if need be, swap
     "them around if the top line is below the bottom
     let l:firstline = a:topLine
@@ -1672,12 +1608,12 @@ function s:UncommentLines(topLine, bottomLine)
 
 endfunction
 
-" Function: s:UncommentLinesSexy(topline, bottomline) {{{2
+" Function: s:UncommentLinesSexy(topline, bottomline)
 " This function removes all the comment characters associated with the sexy
 " comment spanning the given lines
 " Args:
 "   -topline/bottomline: the top/bottom lines of the sexy comment
-function s:UncommentLinesSexy(topline, bottomline)
+function! s:UncommentLinesSexy(topline, bottomline) abort
     let left = s:GetSexyComLeft(0,1)
     let right = s:GetSexyComRight(0,1)
 
@@ -1735,7 +1671,7 @@ function s:UncommentLinesSexy(topline, bottomline)
     let theLine = getline(a:topline)
 
     " if the first line contains only the left delimiter then just delete it
-    if theLine =~# '^[ \t]*' . left . '[ \t]*$' && !g:NERDCompactSexyComs
+    if theLine =~# '^\s*' . left . '\s*$' && !g:NERDCompactSexyComs
         call cursor(a:topline, 1)
         normal! dd
         let bottomline = bottomline - 1
@@ -1759,7 +1695,7 @@ function s:UncommentLinesSexy(topline, bottomline)
     let theLine = getline(bottomline)
 
     " if the bottomline contains only the right delimiter then just delete it
-    if theLine =~# '^[ \t]*' . right . '[ \t]*$'
+    if theLine =~# '^\s*' . right . '\s*$'
         call cursor(bottomline, 1)
         normal! dd
 
@@ -1776,7 +1712,7 @@ function s:UncommentLinesSexy(topline, bottomline)
 
         " if the last line also starts with a sexy comment marker then we
         " remove this as well
-        if theLine =~# '^[ \t]*' . sexyComMarker
+        if theLine =~# '^\s*' . sexyComMarker
 
             " remove the sexyComMarker. If there is a space after it then
             " remove that too
@@ -1803,11 +1739,11 @@ function s:UncommentLinesSexy(topline, bottomline)
     endif
 endfunction
 
-" Function: s:UncommentLineNormal(line) {{{2
+" Function: s:UncommentLineNormal(line)
 " uncomments the given line and returns the result
 " Args:
 "   -line: the line to uncomment
-function s:UncommentLineNormal(line)
+function! s:UncommentLineNormal(line) abort
     let line = a:line
 
     "get the positions of all delimiter types on the line
@@ -1880,11 +1816,11 @@ function s:UncommentLineNormal(line)
     return line
 endfunction
 
-" Function: s:UncommentLinesNormal(topline, bottomline) {{{2
+" Function: s:UncommentLinesNormal(topline, bottomline)
 " This function is called to uncomment lines that aren't a sexy comment
 " Args:
 "   -topline/bottomline: the top/bottom line numbers of the comment
-function s:UncommentLinesNormal(topline, bottomline)
+function! s:UncommentLinesNormal(topline, bottomline) abort
     let currentLine = a:topline
     while currentLine <= a:bottomline
         let line = getline(currentLine)
@@ -1894,18 +1830,18 @@ function s:UncommentLinesNormal(topline, bottomline)
 endfunction
 
 
-" Section: Other helper functions {{{1
+" Section: Other helper functions
 " ============================================================================
 
-" Function: s:AddLeftDelim(delim, theLine) {{{2
+" Function: s:AddLeftDelim(delim, theLine)
 " Args:
-function s:AddLeftDelim(delim, theLine)
-    return substitute(a:theLine, '^\([ \t]*\)', '\1' . a:delim, '')
+function! s:AddLeftDelim(delim, theLine) abort
+    return substitute(a:theLine, '^\(\s*\)', '\1' . a:delim, '')
 endfunction
 
-" Function: s:AddLeftDelimAligned(delim, theLine) {{{2
+" Function: s:AddLeftDelimAligned(delim, theLine)
 " Args:
-function s:AddLeftDelimAligned(delim, theLine, alignIndx)
+function! s:AddLeftDelimAligned(delim, theLine, alignIndx) abort
 
     "if the line is not long enough then bung some extra spaces on the front
     "so we can align the delimiter properly
@@ -1917,9 +1853,9 @@ function s:AddLeftDelimAligned(delim, theLine, alignIndx)
     return strpart(theLine, 0, a:alignIndx) . a:delim . strpart(theLine, a:alignIndx)
 endfunction
 
-" Function: s:AddRightDelim(delim, theLine) {{{2
+" Function: s:AddRightDelim(delim, theLine)
 " Args:
-function s:AddRightDelim(delim, theLine)
+function! s:AddRightDelim(delim, theLine) abort
     if a:delim ==# ''
         return a:theLine
     else
@@ -1927,9 +1863,9 @@ function s:AddRightDelim(delim, theLine)
     endif
 endfunction
 
-" Function: s:AddRightDelimAligned(delim, theLine, alignIndx) {{{2
+" Function: s:AddRightDelimAligned(delim, theLine, alignIndx)
 " Args:
-function s:AddRightDelimAligned(delim, theLine, alignIndx)
+function! s:AddRightDelimAligned(delim, theLine, alignIndx) abort
     if a:delim ==# ''
         return a:theLine
     else
@@ -1945,19 +1881,19 @@ function s:AddRightDelimAligned(delim, theLine, alignIndx)
     endif
 endfunction
 
-" Function: s:AltMultipart() {{{2
+" Function: s:AltMultipart()
 " returns 1 if the alternative delimiters are multipart
-function s:AltMultipart()
+function! s:AltMultipart() abort
     return b:NERDCommenterDelims['rightAlt'] !=# ''
 endfunction
 
-" Function: s:AltNested() {{{2
+" Function: s:AltNested()
 " returns 1 if the alternate multipart (if any) delimiters allow nesting
-function s:AltNested()
+function! s:AltNested() abort
     return b:NERDCommenterDelims['nestedAlt']
 endfunction
 
-" Function: s:CanCommentLine(forceNested, line) {{{2
+" Function: s:CanCommentLine(forceNested, line)
 "This function is used to determine whether the given line can be commented.
 "It returns 1 if it can be and 0 otherwise
 "
@@ -1965,12 +1901,12 @@ endfunction
 "   -forceNested: a flag indicating whether the caller wants comments to be nested
 "    if the current line is already commented
 "   -lineNum: the line number of the line to check for commentability
-function s:CanCommentLine(forceNested, lineNum)
+function! s:CanCommentLine(forceNested, lineNum) abort
     let theLine = getline(a:lineNum)
 
     " make sure we don't comment lines that are just spaces or tabs or empty,
     " unless configured otherwise
-    if g:NERDCommentEmptyLines ==# 0 && theLine =~# "^[ \t]*$"
+    if g:NERDCommentEmptyLines ==# 0 && theLine =~# '^\s*$'
         return 0
     endif
 
@@ -1994,9 +1930,9 @@ function s:CanCommentLine(forceNested, lineNum)
     return 0
 endfunction
 
-" Function: s:CanPlaceCursor(line, col) {{{2
+" Function: s:CanPlaceCursor(line, col)
 " returns 1 if the cursor can be placed exactly in the given position
-function s:CanPlaceCursor(line, col)
+function! s:CanPlaceCursor(line, col) abort
     let c = col('.')
     let l = line('.')
     call cursor(a:line, a:col)
@@ -2005,9 +1941,9 @@ function s:CanPlaceCursor(line, col)
     return success
 endfunction
 
-" Function: s:CanSexyCommentLines(topline, bottomline) {{{2
+" Function: s:CanSexyCommentLines(topline, bottomline)
 " Return: 1 if the given lines can be commented sexually, 0 otherwise
-function s:CanSexyCommentLines(topline, bottomline)
+function! s:CanSexyCommentLines(topline, bottomline) abort
     " see if the selected regions have any sexy comments
     " however, if the language allows nested comments,
     " we allow nested sexy comments
@@ -2023,13 +1959,13 @@ function s:CanSexyCommentLines(topline, bottomline)
     endwhile
     return 1
 endfunction
-" Function: s:CanToggleCommentLine(forceNested, line) {{{2
+" Function: s:CanToggleCommentLine(forceNested, line)
 "This function is used to determine whether the given line can be toggle commented.
 "It returns 1 if it can be and 0 otherwise
 "
 " Args:
 "   -lineNum: the line number of the line to check for commentability
-function s:CanToggleCommentLine(forceNested, lineNum)
+function! s:CanToggleCommentLine(forceNested, lineNum) abort
     let theLine = getline(a:lineNum)
     if (s:IsCommentedFromStartOfLine(s:Left(), theLine) || s:IsCommentedFromStartOfLine(s:Left({'alt': 1}), theLine)) && !a:forceNested
         return 0
@@ -2037,7 +1973,7 @@ function s:CanToggleCommentLine(forceNested, lineNum)
 
     " make sure we don't comment lines that are just spaces or tabs or empty,
     " unless configured otherwise
-    if g:NERDCommentEmptyLines ==# 0 && theLine =~# "^[ \t]*$"
+    if g:NERDCommentEmptyLines ==# 0 && theLine =~# '^\s*$'
         return 0
     endif
 
@@ -2049,13 +1985,13 @@ function s:CanToggleCommentLine(forceNested, lineNum)
     return 1
 endfunction
 
-" Function: s:ConvertLeadingSpacesToTabs(line) {{{2
+" Function: s:ConvertLeadingSpacesToTabs(line)
 " This function takes a line and converts all leading tabs on that line into
 " spaces
 "
 " Args:
 "   -line: the line whose leading tabs will be converted
-function s:ConvertLeadingSpacesToTabs(line)
+function! s:ConvertLeadingSpacesToTabs(line) abort
     let toReturn  = a:line
     while toReturn =~# '^\t*' . s:TabSpace() . '\(.*\)$'
         let toReturn = substitute(toReturn, '^\(\t*\)' . s:TabSpace() . '\(.*\)$'  ,  '\1\t\2' , '')
@@ -2065,13 +2001,13 @@ function s:ConvertLeadingSpacesToTabs(line)
 endfunction
 
 
-" Function: s:ConvertLeadingTabsToSpaces(line) {{{2
+" Function: s:ConvertLeadingTabsToSpaces(line)
 " This function takes a line and converts all leading spaces on that line into
 " tabs
 "
 " Args:
 "   -line: the line whose leading spaces will be converted
-function s:ConvertLeadingTabsToSpaces(line)
+function! s:ConvertLeadingTabsToSpaces(line) abort
     let toReturn  = a:line
     while toReturn =~# '^\( *\)\t'
         let toReturn = substitute(toReturn, '^\( *\)\t',  '\1' . s:TabSpace() , '')
@@ -2080,12 +2016,12 @@ function s:ConvertLeadingTabsToSpaces(line)
     return toReturn
 endfunction
 
-" Function: s:ConvertLeadingWhiteSpace(line) {{{2
+" Function: s:ConvertLeadingWhiteSpace(line)
 " Converts the leading white space to tabs/spaces depending on &tabstop
 "
 " Args:
 "   -line: the line to convert
-function s:ConvertLeadingWhiteSpace(line)
+function! s:ConvertLeadingWhiteSpace(line) abort
     let toReturn = a:line
     while toReturn =~# '^ *\t'
         let toReturn = substitute(toReturn, '^ *\zs\t\ze', s:TabSpace(), 'g')
@@ -2099,7 +2035,7 @@ function s:ConvertLeadingWhiteSpace(line)
 endfunction
 
 
-" Function: s:CountNonESCedOccurances(str, searchstr, escChar) {{{2
+" Function: s:CountNonESCedOccurances(str, searchstr, escChar)
 " This function counts the number of substrings contained in another string.
 " These substrings are only counted if they are not escaped with escChar
 " Args:
@@ -2107,7 +2043,7 @@ endfunction
 "   -searchstr: the substring to search for in str
 "   -escChar: the escape character which, when preceding an instance of
 "    searchstr, will cause it not to be counted
-function s:CountNonESCedOccurances(str, searchstr, escChar)
+function! s:CountNonESCedOccurances(str, searchstr, escChar) abort
     "get the index of the first occurrence of searchstr
     let indx = stridx(a:str, a:searchstr)
 
@@ -2126,13 +2062,13 @@ function s:CountNonESCedOccurances(str, searchstr, escChar)
         endif
     endif
 endfunction
-" Function: s:DoesBlockHaveDelim(delim, top, bottom) {{{2
+" Function: s:DoesBlockHaveDelim(delim, top, bottom)
 " Returns 1 if the given block of lines has a delimiter (a:delim) in it
 " Args:
 "   -delim: the comment delimiter to check the block for
 "   -top: the top line number of the block
 "   -bottom: the bottom line number of the block
-function s:DoesBlockHaveDelim(delim, top, bottom)
+function! s:DoesBlockHaveDelim(delim, top, bottom) abort
     let currentLine = a:top
     while currentLine < a:bottom
         let theline = getline(currentLine)
@@ -2144,12 +2080,12 @@ function s:DoesBlockHaveDelim(delim, top, bottom)
     return 0
 endfunction
 
-" Function: s:DoesBlockHaveMultipartDelim(top, bottom) {{{2
+" Function: s:DoesBlockHaveMultipartDelim(top, bottom)
 " Returns 1 if the given block has a >= 1 multipart delimiter in it
 " Args:
 "   -top: the top line number of the block
 "   -bottom: the bottom line number of the block
-function s:DoesBlockHaveMultipartDelim(top, bottom)
+function! s:DoesBlockHaveMultipartDelim(top, bottom) abort
     if s:HasMultipartDelims()
         if s:Multipart()
             return s:DoesBlockHaveDelim(s:Left(), a:top, a:bottom) || s:DoesBlockHaveDelim(s:Right(), a:top, a:bottom)
@@ -2161,21 +2097,21 @@ function s:DoesBlockHaveMultipartDelim(top, bottom)
 endfunction
 
 
-" Function: s:Esc(str) {{{2
+" Function: s:Esc(str)
 " Escapes all the tricky chars in the given string
-function s:Esc(str)
-    let charsToEsc = '*/\."&$+'
+function! s:Esc(str) abort
+    let charsToEsc = '*/\."&$+[]'
     return escape(a:str, charsToEsc)
 endfunction
 
-" Function: s:FindDelimiterIndex(delimiter, line) {{{2
+" Function: s:FindDelimiterIndex(delimiter, line)
 " This function is used to get the string index of the input comment delimiter
 " on the input line. If no valid comment delimiter is found in the line then
 " -1 is returned
 " Args:
 "   -delimiter: the delimiter we are looking to find the index of
 "   -line: the line we are looking for delimiter on
-function s:FindDelimiterIndex(delimiter, line)
+function! s:FindDelimiterIndex(delimiter, line) abort
 
     "make sure the delimiter isn't empty otherwise we go into an infinite loop.
     if a:delimiter ==# ''
@@ -2221,7 +2157,7 @@ function s:FindDelimiterIndex(delimiter, line)
     return -1
 endfunction
 
-" Function: s:FindBoundingLinesOfSexyCom(lineNum) {{{2
+" Function: s:FindBoundingLinesOfSexyCom(lineNum)
 " This function takes in a line number and tests whether this line number is
 " the top/bottom/middle line of a sexy comment. If it is then the top/bottom
 " lines of the sexy comment are returned
@@ -2232,7 +2168,7 @@ endfunction
 "   A string that has the top/bottom lines of the sexy comment encoded in it.
 "   The format is 'topline,bottomline'. If a:lineNum turns out not to be the
 "   top/bottom/middle of a sexy comment then -1 is returned
-function s:FindBoundingLinesOfSexyCom(lineNum)
+function! s:FindBoundingLinesOfSexyCom(lineNum) abort
 
     "find which delimiters to look for as the start/end delimiters of the comment
     let left = ''
@@ -2258,16 +2194,16 @@ function s:FindBoundingLinesOfSexyCom(lineNum)
         let theLine = getline(currentLine)
 
         "check if the current line is the top of the sexy comment
-        if currentLine <= a:lineNum && theLine =~# '^[ \t]*' . left && theLine !~# '.*' . right && currentLine < s:NumLinesInBuf()
+        if currentLine <= a:lineNum && theLine =~# '^\s*' . left && theLine !~# '.*' . right && currentLine < s:NumLinesInBuf()
             let top = currentLine
             let currentLine = a:lineNum
 
         "check if the current line is the bottom of the sexy comment
-        elseif theLine =~# '^[ \t]*' . right && theLine !~# '.*' . left && currentLine > 1
+        elseif theLine =~# '^\s*' . right && theLine !~# '.*' . left && currentLine > 1
             let bottom = currentLine
 
         "the right delimiter is on the same line as the last sexyComMarker
-        elseif theLine =~# '^[ \t]*' . sexyComMarker . '.*' . right
+        elseif theLine =~# '^\s*' . sexyComMarker . '.*' . right
             let bottom = currentLine
 
         "we have not found the top or bottom line so we assume currentLine is an
@@ -2276,7 +2212,7 @@ function s:FindBoundingLinesOfSexyCom(lineNum)
 
             "if the line doesn't start with a sexyComMarker then it is not a sexy
             "comment
-            if theLine !~# '^[ \t]*' . sexyComMarker
+            if theLine !~# '^\s*' . sexyComMarker
                 return []
             endif
 
@@ -2296,7 +2232,7 @@ function s:FindBoundingLinesOfSexyCom(lineNum)
 endfunction
 
 
-" Function: s:GetSexyComMarker() {{{2
+" Function: s:GetSexyComMarker()
 " Returns the sexy comment marker for the current filetype.
 "
 " C style sexy comments are assumed if possible. If not then the sexy comment
@@ -2307,7 +2243,7 @@ endfunction
 "   -space: specifies whether the marker is to have a space string after it
 "    (the space string will only be added if NERDSpaceDelims is set)
 "   -esc: specifies whether the tricky chars in the marker are to be ESCed
-function s:GetSexyComMarker(space, esc)
+function! s:GetSexyComMarker(space, esc) abort
     let sexyComMarker = b:NERDSexyComMarker
 
     "if there is no hardcoded marker then we find one
@@ -2348,11 +2284,11 @@ function s:GetSexyComMarker(space, esc)
     return sexyComMarker
 endfunction
 
-" Function: s:SexyNested() {{{2
+" Function: s:SexyNested()
 " Returns 1 if the sexy delimeters allow nesting
 " TODO this is ugly copy&paste from the GetSexyComLeft/Right functions,
 " these could all be cleaned up
-function s:SexyNested()
+function! s:SexyNested() abort
     let lenLeft = strlen(s:Left())
     let lenLeftAlt = strlen(s:Left({'alt': 1}))
 
@@ -2371,14 +2307,14 @@ function s:SexyNested()
     endif
 endfunction
 
-" Function: s:GetSexyComLeft(space, esc) {{{2
+" Function: s:GetSexyComLeft(space, esc)
 " Returns the left delimiter for sexy comments for this filetype or -1 if
 " there is none. C style sexy comments are used if possible
 " Args:
 "   -space: specifies if the delimiter has a space string on the end
 "   (the space string will only be added if NERDSpaceDelims is set)
 "   -esc: specifies whether the tricky chars in the string are ESCed
-function s:GetSexyComLeft(space, esc)
+function! s:GetSexyComLeft(space, esc) abort
     let lenLeft = strlen(s:Left())
     let lenLeftAlt = strlen(s:Left({'alt': 1}))
     let left = ''
@@ -2408,7 +2344,7 @@ function s:GetSexyComLeft(space, esc)
     return left
 endfunction
 
-" Function: s:GetSexyComRight(space, esc) {{{2
+" Function: s:GetSexyComRight(space, esc)
 " Returns the right delimiter for sexy comments for this filetype or -1 if
 " there is none. C style sexy comments are used if possible.
 " Args:
@@ -2416,7 +2352,7 @@ endfunction
 "   (the space string will only be added if NERDSpaceDelims
 "   is specified for the current filetype)
 "   -esc: specifies whether the tricky chars in the string are ESCed
-function s:GetSexyComRight(space, esc)
+function! s:GetSexyComRight(space, esc) abort
     let lenLeft = strlen(s:Left())
     let lenLeftAlt = strlen(s:Left({'alt': 1}))
     let right = ''
@@ -2446,15 +2382,15 @@ function s:GetSexyComRight(space, esc)
     return right
 endfunction
 
-" Function: s:HasMultipartDelims() {{{2
+" Function: s:HasMultipartDelims()
 " Returns 1 if the current filetype has at least one set of multipart delimiters
-function s:HasMultipartDelims()
+function! s:HasMultipartDelims() abort
     return s:Multipart() || s:AltMultipart()
 endfunction
 
-" Function: s:HasLeadingTabs(...) {{{2
+" Function: s:HasLeadingTabs(...)
 " Returns 1 if any of the given strings have leading tabs
-function s:HasLeadingTabs(...)
+function! s:HasLeadingTabs(...) abort
     for s in a:000
         if s =~# '^\t.*'
             return 1
@@ -2462,19 +2398,19 @@ function s:HasLeadingTabs(...)
     endfor
     return 0
 endfunction
-" Function: s:HasCStyleComments() {{{2
+" Function: s:HasCStyleComments()
 " Returns 1 if the current filetype has c style comment delimiters
-function s:HasCStyleComments()
+function! s:HasCStyleComments() abort
     return (s:Left() ==# '/*' && s:Right() ==# '*/') || (s:Left({'alt': 1}) ==# '/*' && s:Right({'alt': 1}) ==# '*/')
 endfunction
 
-" Function: s:IsCommentedNormOrSexy(lineNum) {{{2
+" Function: s:IsCommentedNormOrSexy(lineNum)
 "This function is used to determine whether the given line is commented with
 "either set of delimiters or if it is part of a sexy comment
 "
 " Args:
 "   -lineNum: the line number of the line to check
-function s:IsCommentedNormOrSexy(lineNum)
+function! s:IsCommentedNormOrSexy(lineNum) abort
     let theLine = getline(a:lineNum)
 
     "if the line is commented normally return 1
@@ -2489,14 +2425,14 @@ function s:IsCommentedNormOrSexy(lineNum)
     return 0
 endfunction
 
-" Function: s:IsCommented(left, right, line) {{{2
+" Function: s:IsCommented(left, right, line)
 "This function is used to determine whether the given line is commented with
 "the given delimiters
 "
 " Args:
 "   -line: the line that to check if commented
 "   -left/right: the left and right delimiters to check for
-function s:IsCommented(left, right, line)
+function! s:IsCommented(left, right, line) abort
     "if the line isn't commented return true
     if s:FindDelimiterIndex(a:left, a:line) !=# -1 && (s:LastIndexOfDelim(a:right, a:line) !=# -1 || !s:Multipart())
         return 1
@@ -2504,7 +2440,7 @@ function s:IsCommented(left, right, line)
     return 0
 endfunction
 
-" Function: s:IsCommentedFromStartOfLine(left, line) {{{2
+" Function: s:IsCommentedFromStartOfLine(left, line)
 "This function is used to determine whether the given line is commented with
 "the given delimiters at the start of the line i.e the left delimiter is the
 "first thing on the line (apart from spaces\tabs)
@@ -2512,14 +2448,14 @@ endfunction
 " Args:
 "   -line: the line that to check if commented
 "   -left: the left delimiter to check for
-function s:IsCommentedFromStartOfLine(left, line)
+function! s:IsCommentedFromStartOfLine(left, line) abort
     let theLine = s:ConvertLeadingTabsToSpaces(a:line)
-    let numSpaces = strlen(substitute(theLine, '^\( *\).*$', '\1', ''))
+    let numSpaces = strlen(matchstr(theLine, '^ *'))
     let delimIndx = s:FindDelimiterIndex(a:left, theLine)
     return delimIndx ==# numSpaces
 endfunction
 
-" Function: s:IsCommentedOutermost(left, right, leftAlt, rightAlt, line) {{{2
+" Function: s:IsCommentedOutermost(left, right, leftAlt, rightAlt, line)
 " Finds the type of the outermost delimiters on the line
 "
 " Args:
@@ -2532,7 +2468,7 @@ endfunction
 "   0 if the line is not commented with either set of delimiters
 "   1 if the line is commented with the left/right delimiter set
 "   2 if the line is commented with the leftAlt/rightAlt delim set
-function s:IsCommentedOutermost(left, right, leftAlt, rightAlt, line)
+function! s:IsCommentedOutermost(left, right, leftAlt, rightAlt, line) abort
     "get the first positions of the left delimiters and the last positions of the
     "right delimiters
     let indxLeft = s:FindDelimiterIndex(a:left, a:line)
@@ -2562,7 +2498,7 @@ function s:IsCommentedOutermost(left, right, leftAlt, rightAlt, line)
 endfunction
 
 
-" Function: s:IsDelimValid(delimiter, delIndx, line) {{{2
+" Function: s:IsDelimValid(delimiter, delIndx, line)
 " This function is responsible for determining whether a given instance of a
 " comment delimiter is a real delimiter or not. For example, in java the
 " // string is a comment delimiter but in the line:
@@ -2579,7 +2515,7 @@ endfunction
 " Returns:
 " 0 if the given delimiter is not a real delimiter (as far as we can tell) ,
 " 1 otherwise
-function s:IsDelimValid(delimiter, delIndx, line)
+function! s:IsDelimValid(delimiter, delIndx, line) abort
     "get the delimiter without the escchars
     let l:delimiter = a:delimiter
 
@@ -2616,7 +2552,7 @@ function s:IsDelimValid(delimiter, delIndx, line)
 
         "if the delimiter is on the very first char of the line or is the
         "first non-tab/space char on the line then it is a valid comment delimiter
-        if a:delIndx ==# 0 || a:line =~# "^[ \t]\\{" . a:delIndx . "\\}\".*$"
+        if a:delIndx ==# 0 || a:line =~# "^\s\\{" . a:delIndx . "\\}\".*$"
             return 1
         endif
 
@@ -2639,15 +2575,15 @@ function s:IsDelimValid(delimiter, delIndx, line)
 
 endfunction
 
-" Function: s:IsNumEven(num) {{{2
+" Function: s:IsNumEven(num)
 " A small function the returns 1 if the input number is even and 0 otherwise
 " Args:
 "   -num: the number to check
-function s:IsNumEven(num)
+function! s:IsNumEven(num) abort
     return (a:num % 2) ==# 0
 endfunction
 
-" Function: s:IsEscaped(str, indx, escChar) {{{2
+" Function: s:IsEscaped(str, indx, escChar)
 " This function takes a string, an index into that string and an esc char and
 " returns 1 if the char at the index is escaped (i.e if it is preceded by an
 " odd number of esc chars)
@@ -2655,7 +2591,7 @@ endfunction
 "   -str: the string to check
 "   -indx: the index into str that we want to check
 "   -escChar: the escape char the char at indx may be ESCed with
-function s:IsEscaped(str, indx, escChar)
+function! s:IsEscaped(str, indx, escChar) abort
     "initialise numEscChars to 0 and look at the char before indx
     let numEscChars = 0
     let curIndx = a:indx-1
@@ -2676,19 +2612,19 @@ function s:IsEscaped(str, indx, escChar)
     return !s:IsNumEven(numEscChars)
 endfunction
 
-" Function: s:IsInSexyComment(line) {{{2
+" Function: s:IsInSexyComment(line)
 " returns 1 if the given line number is part of a sexy comment
-function s:IsInSexyComment(line)
+function! s:IsInSexyComment(line) abort
     return !empty(s:FindBoundingLinesOfSexyCom(a:line))
 endfunction
 
-" Function: s:IsSexyComment(topline, bottomline) {{{2
+" Function: s:IsSexyComment(topline, bottomline)
 " This function takes in 2 line numbers and returns 1 if the lines between and
 " including the given line numbers are a sexy comment. It returns 0 otherwise.
 " Args:
 "   -topline: the line that the possible sexy comment starts on
 "   -bottomline: the line that the possible sexy comment stops on
-function s:IsSexyComment(topline, bottomline)
+function! s:IsSexyComment(topline, bottomline) abort
 
     "get the delimiter set that would be used for a sexy comment
     let left = ''
@@ -2717,7 +2653,7 @@ function s:IsSexyComment(topline, bottomline)
     endif
 
     "if the top line doesn't begin with a left delimiter then the comment isn't sexy
-    if getline(a:topline) !~# '^[ \t]*' . left
+    if getline(a:topline) !~# '^\s*' . left
         return 0
     endif
 
@@ -2745,7 +2681,7 @@ function s:IsSexyComment(topline, bottomline)
     while currentLine < a:bottomline
         let theLine = getline(currentLine)
 
-        if theLine !~# '^[ \t]*' . sexyComMarker
+        if theLine !~# '^\s*' . sexyComMarker
             return 0
         endif
 
@@ -2763,13 +2699,13 @@ function s:IsSexyComment(topline, bottomline)
 
 endfunction
 
-" Function: s:LastIndexOfDelim(delim, str) {{{2
+" Function: s:LastIndexOfDelim(delim, str)
 " This function takes a string and a delimiter and returns the last index of
 " that delimiter in string
 " Args:
 "   -delim: the delimiter to look for
 "   -str: the string to look for delimiter in
-function s:LastIndexOfDelim(delim, str)
+function! s:LastIndexOfDelim(delim, str) abort
     let delim = a:delim
     let lenDelim = strlen(delim)
 
@@ -2801,9 +2737,9 @@ function s:LastIndexOfDelim(delim, str)
 
 endfunction
 
-" Function: s:Left(...) {{{2
+" Function: s:Left(...)
 " returns left delimiter data
-function s:Left(...)
+function! s:Left(...) abort
     let params = a:0 ? a:1 : {}
 
     let delim = has_key(params, 'alt') ? b:NERDCommenterDelims['leftAlt'] : b:NERDCommenterDelims['left']
@@ -2823,7 +2759,7 @@ function s:Left(...)
     return delim
 endfunction
 
-" Function: s:LeftMostIndx(countCommentedLines, countEmptyLines, topline, bottomline) {{{2
+" Function: s:LeftMostIndx(countCommentedLines, countEmptyLines, topline, bottomline)
 " This function takes in 2 line numbers and returns the index of the left most
 " char (that is not a space or a tab) on all of these lines.
 " Args:
@@ -2832,7 +2768,7 @@ endfunction
 "   -countEmptyLines: 1 if empty lines are to be counted in the search
 "   -topline: the top line to be checked
 "   -bottomline: the bottom line to be checked
-function s:LeftMostIndx(countCommentedLines, countEmptyLines, topline, bottomline)
+function! s:LeftMostIndx(countCommentedLines, countEmptyLines, topline, bottomline) abort
 
     " declare the left most index as an extreme value
     let leftMostIndx = 1000
@@ -2844,12 +2780,12 @@ function s:LeftMostIndx(countCommentedLines, countEmptyLines, topline, bottomlin
         " get the next line and if it is allowed to be commented, or is not
         " commented, check it
         let theLine = getline(currentLine)
-        if a:countEmptyLines || theLine !~# '^[ \t]*$'
+        if a:countEmptyLines || theLine !~# '^\s*$'
             if a:countCommentedLines || (!s:IsCommented(s:Left(), s:Right(), theLine) && !s:IsCommented(s:Left({'alt': 1}), s:Right({'alt': 1}), theLine))
                 " convert spaces to tabs and get the number of leading spaces for
                 " this line and update leftMostIndx if need be
                 let theLine = s:ConvertLeadingTabsToSpaces(theLine)
-                let leadSpaceOfLine = strlen( substitute(theLine, '\(^[ \t]*\).*$','\1','') )
+                let leadSpaceOfLine = strlen(matchstr(theLine, '^\s*'))
                 if leadSpaceOfLine < leftMostIndx
                     let leftMostIndx = leadSpaceOfLine
                 endif
@@ -2867,18 +2803,18 @@ function s:LeftMostIndx(countCommentedLines, countEmptyLines, topline, bottomlin
     endif
 endfunction
 
-" Function: s:Multipart() {{{2
+" Function: s:Multipart()
 " returns 1 if the current delimiters are multipart
-function s:Multipart()
+function! s:Multipart() abort
     return s:Right() !=# ''
 endfunction
 
-" Function: s:NerdEcho(msg, typeOfMsg) {{{2
+" Function: s:NerdEcho(msg, typeOfMsg)
 " Args:
 "   -msg: the message to echo
 "   -typeOfMsg: 0 = warning message
 "               1 = normal message
-function s:NerdEcho(msg, typeOfMsg)
+function! s:NerdEcho(msg, typeOfMsg) abort
     if a:typeOfMsg ==# 0
         echohl WarningMsg
         echom 'NERDCommenter:' . a:msg
@@ -2888,25 +2824,25 @@ function s:NerdEcho(msg, typeOfMsg)
     endif
 endfunction
 
-" Function: s:Nested() {{{2
+" Function: s:Nested()
 " returns 1 if the current multipart (if any) delimiters allow nesting
-function s:Nested()
+function! s:Nested() abort
     return b:NERDCommenterDelims['nested']
 endfunction
 
-" Function: s:NumberOfLeadingTabs(s) {{{2
+" Function: s:NumberOfLeadingTabs(s)
 " returns the number of leading tabs in the given string
-function s:NumberOfLeadingTabs(s)
-    return strlen(substitute(a:s, '^\(\t*\).*$', '\1', ''))
+function! s:NumberOfLeadingTabs(s) abort
+    return strlen(matchstr(a:s, '^\t*'))
 endfunction
 
-" Function: s:NumLinesInBuf() {{{2
+" Function: s:NumLinesInBuf()
 " Returns the number of lines in the current buffer
-function s:NumLinesInBuf()
+function! s:NumLinesInBuf() abort
     return line('$')
 endfunction
 
-" Function: s:ReplaceDelims(toReplace1, toReplace2, replacor1, replacor2, str) {{{2
+" Function: s:ReplaceDelims(toReplace1, toReplace2, replacor1, replacor2, str)
 " This function takes in a string, 2 delimiters in that string and 2 strings
 " to replace these delimiters with.
 "
@@ -2916,13 +2852,13 @@ endfunction
 "   -replacor1: the string to replace toReplace1 with
 "   -replacor2: the string to replace toReplace2 with
 "   -str: the string that the delimiters to be replaced are in
-function s:ReplaceDelims(toReplace1, toReplace2, replacor1, replacor2, str)
+function! s:ReplaceDelims(toReplace1, toReplace2, replacor1, replacor2, str) abort
     let line = s:ReplaceLeftMostDelim(a:toReplace1, a:replacor1, a:str)
     let line = s:ReplaceRightMostDelim(a:toReplace2, a:replacor2, line)
     return line
 endfunction
 
-" Function: s:ReplaceLeftMostDelim(toReplace, replacor, str) {{{2
+" Function: s:ReplaceLeftMostDelim(toReplace, replacor, str)
 " This function takes a string and a delimiter and replaces the left most
 " occurrence of this delimiter in the string with a given string
 "
@@ -2930,7 +2866,7 @@ endfunction
 "   -toReplace: the delimiter in str that is to be replaced
 "   -replacor: the string to replace toReplace with
 "   -str: the string that contains toReplace
-function s:ReplaceLeftMostDelim(toReplace, replacor, str)
+function! s:ReplaceLeftMostDelim(toReplace, replacor, str) abort
     let toReplace = a:toReplace
     let replacor = a:replacor
     "get the left most occurrence of toReplace
@@ -2946,7 +2882,7 @@ function s:ReplaceLeftMostDelim(toReplace, replacor, str)
     return a:str
 endfunction
 
-" Function: s:ReplaceRightMostDelim(toReplace, replacor, str) {{{2
+" Function: s:ReplaceRightMostDelim(toReplace, replacor, str)
 " This function takes a string and a delimiter and replaces the right most
 " occurrence of this delimiter in the string with a given string
 "
@@ -2955,7 +2891,7 @@ endfunction
 "   -replacor: the string to replace toReplace with
 "   -str: the string that contains toReplace
 "
-function s:ReplaceRightMostDelim(toReplace, replacor, str)
+function! s:ReplaceRightMostDelim(toReplace, replacor, str) abort
     let toReplace = a:toReplace
     let replacor = a:replacor
     let lenToReplace = strlen(toReplace)
@@ -2971,24 +2907,9 @@ function s:ReplaceRightMostDelim(toReplace, replacor, str)
     return line
 endfunction
 
-"FUNCTION: s:RestoreScreenState() {{{2
-"
-"Sets the screen state back to what it was when s:SaveScreenState was last
-"called.
-"
-function s:RestoreScreenState()
-    if !exists('t:NERDComOldTopLine') || !exists('t:NERDComOldPos')
-        throw 'NERDCommenter exception: cannot restore screen'
-    endif
-
-    call cursor(t:NERDComOldTopLine, 0)
-    normal! zt
-    call setpos('.', t:NERDComOldPos)
-endfunction
-
-" Function: s:Right(...) {{{2
+" Function: s:Right(...)
 " returns right delimiter data
-function s:Right(...)
+function! s:Right(...) abort
     let params = a:0 ? a:1 : {}
 
     let delim = has_key(params, 'alt') ? b:NERDCommenterDelims['rightAlt'] : b:NERDCommenterDelims['right']
@@ -3008,7 +2929,7 @@ function s:Right(...)
     return delim
 endfunction
 
-" Function: s:RightMostIndx(countCommentedLines, countEmptyLines, topline, bottomline) {{{2
+" Function: s:RightMostIndx(countCommentedLines, countEmptyLines, topline, bottomline)
 " This function takes in 2 line numbers and returns the index of the right most
 " char on all of these lines.
 " Args:
@@ -3017,7 +2938,7 @@ endfunction
 "   -countEmptyLines: 1 if empty lines are to be counted in the search
 "   -topline: the top line to be checked
 "   -bottomline: the bottom line to be checked
-function s:RightMostIndx(countCommentedLines, countEmptyLines, topline, bottomline)
+function! s:RightMostIndx(countCommentedLines, countEmptyLines, topline, bottomline) abort
     let rightMostIndx = -1
 
     " go thru the block line by line updating rightMostIndx
@@ -3027,7 +2948,7 @@ function s:RightMostIndx(countCommentedLines, countEmptyLines, topline, bottomli
         " get the next line and see if it is commentable, otherwise it doesn't
         " count
         let theLine = getline(currentLine)
-        if a:countEmptyLines || theLine !~# '^[ \t]*$'
+        if a:countEmptyLines || theLine !~# '^\s*$'
 
             if a:countCommentedLines || (!s:IsCommented(s:Left(), s:Right(), theLine) && !s:IsCommented(s:Left({'alt': 1}), s:Right({'alt': 1}), theLine))
 
@@ -3047,21 +2968,13 @@ function s:RightMostIndx(countCommentedLines, countEmptyLines, topline, bottomli
     return rightMostIndx
 endfunction
 
-"FUNCTION: s:SaveScreenState() {{{2
-"Saves the current cursor position in the current buffer and the window
-"scroll position
-function s:SaveScreenState()
-    let t:NERDComOldPos = getpos('.')
-    let t:NERDComOldTopLine = line('w0')
-endfunction
-
-" Function: s:SwapOuterMultiPartDelimsForPlaceHolders(line) {{{2
+" Function: s:SwapOuterMultiPartDelimsForPlaceHolders(line)
 " This function takes a line and swaps the outer most multi-part delimiters for
 " place holders
 " Args:
 "   -line: the line to swap the delimiters in
 "
-function s:SwapOuterMultiPartDelimsForPlaceHolders(line)
+function! s:SwapOuterMultiPartDelimsForPlaceHolders(line) abort
     " find out if the line is commented using normal delimiters and/or
     " alternate ones
     let isCommented = s:IsCommented(s:Left(), s:Right(), a:line)
@@ -3083,13 +2996,13 @@ function s:SwapOuterMultiPartDelimsForPlaceHolders(line)
     return line2
 endfunction
 
-" Function: s:SwapOuterPlaceHoldersForMultiPartDelims(line) {{{2
+" Function: s:SwapOuterPlaceHoldersForMultiPartDelims(line)
 " This function takes a line and swaps the outermost place holders for
 " multi-part delimiters
 " Args:
 "   -line: the line to swap the delimiters in
 "
-function s:SwapOuterPlaceHoldersForMultiPartDelims(line)
+function! s:SwapOuterPlaceHoldersForMultiPartDelims(line) abort
     let left = ''
     let right = ''
     if s:Multipart()
@@ -3103,20 +3016,22 @@ function s:SwapOuterPlaceHoldersForMultiPartDelims(line)
     let line = s:ReplaceDelims(g:NERDLPlace, g:NERDRPlace, left, right, a:line)
     return line
 endfunction
-" Function: s:TabbedCol(line, col) {{{2
+
+" Function: s:TabbedCol(line, col)
 " Gets the col number for given line and existing col number. The new col
 " number is the col number when all leading spaces are converted to tabs
 " Args:
 "   -line:the line to get the rel col for
 "   -col: the abs col
-function s:TabbedCol(line, col)
+function! s:TabbedCol(line, col) abort
     let lineTruncated = strpart(a:line, 0, a:col)
     let lineSpacesToTabs = substitute(lineTruncated, s:TabSpace(), '\t', 'g')
     return strlen(lineSpacesToTabs)
 endfunction
-"FUNCTION: s:TabSpace() {{{2
+
+"FUNCTION: s:TabSpace()
 "returns a string of spaces equal in length to &tabstop
-function s:TabSpace()
+function! s:TabSpace() abort
     let tabSpace = ''
     let spacesPerTab = &tabstop
     while spacesPerTab > 0
@@ -3126,87 +3041,23 @@ function s:TabSpace()
     return tabSpace
 endfunction
 
-" Function: s:UnEsc(str, escChar) {{{2
+" Function: s:UnEsc(str, escChar)
 " This function removes all the escape chars from a string
 " Args:
 "   -str: the string to remove esc chars from
 "   -escChar: the escape char to be removed
-function s:UnEsc(str, escChar)
+function! s:UnEsc(str, escChar) abort
     return substitute(a:str, a:escChar, '', 'g')
 endfunction
 
-" Function: s:UntabbedCol(line, col) {{{2
+" Function: s:UntabbedCol(line, col)
 " Takes a line and a col and returns the absolute column of col taking into
 " account that a tab is worth 3 or 4 (or whatever) spaces.
 " Args:
 "   -line:the line to get the abs col for
 "   -col: the col that doesn't take into account tabs
-function s:UntabbedCol(line, col)
+function! s:UntabbedCol(line, col) abort
     let lineTruncated = strpart(a:line, 0, a:col)
     let lineTabsToSpaces = substitute(lineTruncated, '\t', s:TabSpace(), 'g')
     return strlen(lineTabsToSpaces)
 endfunction
-" Section: Comment mapping and menu item setup {{{1
-" ===========================================================================
-
-" Create menu items for the specified modes.  If a:combo is not empty, then
-" also define mappings and show a:combo in the menu items.
-function! s:CreateMaps(modes, target, desc, combo)
-    " Build up a map command like
-    " 'noremap <silent> <plug>NERDCommenterComment :call NERDComment("n", "Comment")'
-    let plug = '<plug>NERDCommenter' . a:target
-    let plug_start = 'noremap <silent> ' . plug . ' :call NERDComment("'
-    let plug_end = '", "' . a:target . '")<cr>'
-    " Build up a menu command like
-    " 'menu <silent> comment.Comment<Tab>\\cc <plug>NERDCommenterComment'
-    let menuRoot = get(['', 'comment', '&comment', '&Plugin.&comment'],
-                \ g:NERDMenuMode, '')
-    let menu_command = 'menu <silent> ' . menuRoot . '.' . escape(a:desc, ' ')
-    if strlen(a:combo)
-        let leader = exists('g:mapleader') ? g:mapleader : '\'
-        let menu_command .= '<Tab>' . escape(leader, '\') . a:combo
-    endif
-    let menu_command .= ' ' . (strlen(a:combo) ? plug : a:target)
-    " Execute the commands built above for each requested mode.
-    for mode in (a:modes ==# '') ? [''] : split(a:modes, '\zs')
-        if strlen(a:combo)
-            execute mode . plug_start . mode . plug_end
-            if g:NERDCreateDefaultMappings && !hasmapto(plug, mode)
-                execute mode . 'map <leader>' . a:combo . ' ' . plug
-            endif
-        endif
-        " Check if the user wants the menu to be displayed.
-        if g:NERDMenuMode !=# 0
-            execute mode . menu_command
-        endif
-    endfor
-endfunction
-call s:CreateMaps('nx', 'Comment',    'Comment', 'cc')
-call s:CreateMaps('nx', 'Toggle',     'Toggle', 'c<space>')
-call s:CreateMaps('nx', 'Minimal',    'Minimal', 'cm')
-call s:CreateMaps('nx', 'Nested',     'Nested', 'cn')
-call s:CreateMaps('n',  'ToEOL',      'To EOL', 'c$')
-call s:CreateMaps('nx', 'Invert',     'Invert', 'ci')
-call s:CreateMaps('nx', 'Sexy',       'Sexy', 'cs')
-call s:CreateMaps('nx', 'Yank',       'Yank then comment', 'cy')
-call s:CreateMaps('n',  'Append',     'Append', 'cA')
-call s:CreateMaps('',   ':',          '-Sep-', '')
-call s:CreateMaps('nx', 'AlignLeft',  'Left aligned', 'cl')
-call s:CreateMaps('nx', 'AlignBoth',  'Left and right aligned', 'cb')
-call s:CreateMaps('',   ':',          '-Sep2-', '')
-call s:CreateMaps('nx', 'Uncomment',  'Uncomment', 'cu')
-call s:CreateMaps('n',  'AltDelims',  'Switch Delimiters', 'ca')
-call s:CreateMaps('i',  'Insert',     'Insert Comment Here', '')
-call s:CreateMaps('',   ':',          '-Sep3-', '')
-call s:CreateMaps('',   ':help NERDCommenterContents<CR>', 'Help', '')
-
-inoremap <silent> <plug>NERDCommenterInsert <SPACE><BS><ESC>:call NERDComment('i', 'insert')<CR>
-
-" switch to/from alternative delimiters (does not use wrapper function)
-nnoremap <plug>NERDCommenterAltDelims :call <SID>SwitchToAlternativeDelimiters(1)<cr>
-
-" This is a workaround to enable lazy-loading from supported plugin managers:
-" See https://github.com/preservim/nerdcommenter/issues/176
-call s:SetUpForNewFiletype(&filetype, 1)
-
-" vim: set foldmethod=marker :

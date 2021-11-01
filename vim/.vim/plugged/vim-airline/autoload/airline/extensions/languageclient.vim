@@ -1,4 +1,4 @@
-" MIT License. Copyright (c) 2013-2019 Bjorn Neergaard, hallettj et al.
+" MIT License. Copyright (c) 2013-2021 Bjorn Neergaard, hallettj et al.
 " Plugin: https://github.com/autozimu/LanguageClient-neovim
 " vim: et ts=2 sts=2 sw=2
 
@@ -35,6 +35,10 @@ function! s:record_diagnostics(state)
 endfunction
 
 function! s:get_diagnostics()
+  if !exists('#airline')
+    " airline disabled
+    return
+  endif
   call LanguageClient#getState(function("s:record_diagnostics"))
 endfunction
 
@@ -66,6 +70,10 @@ function! s:airline_languageclient_get_line_number(type) abort
 endfunction
 
 function! airline#extensions#languageclient#get(type)
+  if get(b:, 'LanguageClient_isServerRunning', 0) ==# 0
+    return ''
+  endif
+
   let is_err = a:type == s:severity_error
   let symbol = is_err ? s:error_symbol : s:warning_symbol
 

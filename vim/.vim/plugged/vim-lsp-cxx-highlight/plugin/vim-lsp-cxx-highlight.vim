@@ -12,7 +12,7 @@ let g:lsp_cxx_hl_loaded = 1
 let g:lsp_cxx_hl_log_file = get(g:, 'lsp_cxx_hl_log_file', '')
 let g:lsp_cxx_hl_verbose_log = get(g:, 'lsp_cxx_hl_verbose_log', 0)
 let g:lsp_cxx_hl_ft_whitelist = get(g:, 'lsp_cxx_hl_ft_whitelist',
-            \ ['c', 'cpp', 'objc', 'objcpp', 'cc'])
+            \ ['c', 'cpp', 'objc', 'objcpp', 'cc', 'cuda'])
 let g:lsp_cxx_hl_inactive_region_priority = get(g:,
             \ 'lsp_cxx_hl_inactive_region_priority', -99)
 let g:lsp_cxx_hl_syntax_priority = get(g:, 'lsp_cxx_hl_syntax_priority', -100)
@@ -22,6 +22,8 @@ let g:lsp_cxx_hl_use_nvim_text_props = get(g:,
             \ 'lsp_cxx_hl_use_nvim_text_props', has('nvim-0.3.0'))
 let g:lsp_cxx_hl_text_prop_refresh_count = get(g:,
             \ 'lsp_cxx_hl_text_prop_refresh_count', 10)
+let g:lsp_cxx_hl_light_bg = get(g:, 'lsp_cxx_hl_light_bg', 0)
+let g:lsp_cxx_hl_clear_delay_ms = get(g:, 'lsp_cxx_hl_clear_delay_ms', 30000)
 
 function s:initialize() abort
     let l:ok = 0

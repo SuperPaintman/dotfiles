@@ -1,6 +1,6 @@
 # vim-lsp-cxx-highlight
 
-vim-lsp-cxx-highlight is a vim plugin that provides C/C++/ObjC semantic highlighting
+vim-lsp-cxx-highlight is a vim plugin that provides C/C++/Cuda/ObjC semantic highlighting
 using the language server protocol.
 
 ## Introduction
@@ -25,7 +25,7 @@ Left: No Plugin, Right: vim-lsp-cxx-highlight + ccls
 The plugin requires `vim` or `neovim`. For `vim` `+timers` and `+byte_offset` are
 recommended but not required.
 
-Additionally a compatible language server and language server client is required.
+Additionally, a compatible language server and language server client is required.
 
 The following language servers and protocol extensions are supported:
 
@@ -39,7 +39,10 @@ The following language servers and protocol extensions are supported:
 
 - **[clangd](https://clangd.llvm.org)**
   - **Requires** [coc.nvim](https://github.com/neoclide/coc.nvim) and [coc-clangd](https://github.com/clangd/coc-clangd)
-  - Using the proposed [Semantic Highlighting Protocol](microsoft/language-server-protocol#18)
+  - Using the proposed [Semantic Highlighting Protocol](https://github.com/microsoft/language-server-protocol/issues/18)
+  - **IMPORTANT:** coc-clangd supports 2 implementaions: "semantic highlighting" (old, non-standard)
+  and "semantic tokens" (new, LSP standard). The latest versions of clangd (12+) require disabling
+  coc's semantic tokens to work; see below.
 
 The following language server clients are supported:
 
@@ -63,6 +66,11 @@ Plug 'neovim/nvim-lsp' " nvim-lsp
 
 Plug 'jackguo380/vim-lsp-cxx-highlight'
 ```
+Using vim8's native package manager (Run this command in a terminal)
+
+```bash
+git clone https://github.com/jackguo380/vim-lsp-cxx-highlight.git ~/.vim/pack/vendor/start/vim-lsp-cxx-highlight
+```
 
 For `cquery` the following initializationOptions are needed:
 ```json
@@ -82,7 +90,8 @@ For `ccls` the following initializationOptions are needed:
 For `clangd` `coc-settings.json` must have:
 ```json
 {
-    "clangd.semanticHighlighting": true
+    "clangd.semanticHighlighting": true,
+    "coc.preferences.semanticTokensHighlights": false
 }
 ```
 
@@ -118,7 +127,7 @@ let g:lsp_cxx_hl_use_text_props = 1
 
 **Note:** This is now automatically enabled for vim version 8.2 or greater
 
-This is a experimental feature so it may be quite buggy, please file bug reports!
+This is a experimental feature, so it may be quite buggy. Please file bug reports!
 
 
 ## License
