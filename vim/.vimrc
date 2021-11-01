@@ -281,7 +281,11 @@ function! s:plug_has_plugin(name)
     return 0
   endif
 
-  return has_key(g:plugs, a:name)
+  if !has_key(g:plugs, a:name)
+    return 0
+  endif
+
+  return isdirectory(g:plugs[a:name].dir)
 endfunction
 
 " check_back_space checks if the current character is a whitespace.
