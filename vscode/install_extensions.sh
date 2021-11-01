@@ -154,3 +154,6 @@ extension "ryu1kn" "partial-diff" "1.4.1"
 
 # jinjahtml (samuelcolvin)
 extension "samuelcolvin" "jinjahtml" "0.15.0"
+
+# vscode-neovim (asvetliakov)
+extension "asvetliakov" "vscode-neovim" "0.0.82"

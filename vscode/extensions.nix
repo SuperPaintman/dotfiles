@@ -195,5 +195,11 @@
       version = "0.15.0";
       sha256 = "18mjabpzldsaz5r1sp94kwk28chrmifcr4aql0fag6yh2kms1jas";
     }
+    {
+      name = "vscode-neovim";
+      publisher = "asvetliakov";
+      version = "0.0.82";
+      sha256 = "17f0jzg9vdbqdjnnc5i1q28ij2kckvvxi7fw9szmyy754f074jb1";
+    }
   ]
 )

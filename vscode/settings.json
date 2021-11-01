@@ -27,6 +27,8 @@
     "statusBar.noFolderBackground": "#23241F",
     "statusBar.debuggingBackground": "#23241F"
   },
+  // Disable to allow Neovim navigation.
+  "workbench.list.automaticKeyboardNavigation": false,
   // Breadcrumbs
   "breadcrumbs.enabled": true,
   // Explorer
@@ -256,6 +258,8 @@
   "prettier.singleQuote": true,
   "prettier.arrowParens": "always",
   "prettier.semi": true,
+  // VSCode Neovim
+  "vscode-neovim.neovimExecutablePaths.linux": "nvim",
   /** Language specific settings */
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"

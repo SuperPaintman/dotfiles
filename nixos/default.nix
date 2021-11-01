@@ -103,7 +103,7 @@ in
 
     # Editors.
     vim
-    neovim
+    unstable.neovim
     emacs
     (
       unstable.vscode-with-extensions.override {

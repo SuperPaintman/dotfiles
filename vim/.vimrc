@@ -127,9 +127,9 @@ call plug#begin("~/.vim/plugged")
 
 " Intellisense engine for Vim8 & Neovim, full language server protocol support
 " as VSCode .
-" See: https://github.com/neoclide/coc.nvim
-" See: https://github.com/neoclide/coc.nvim/wiki/Language-servers
-if has('patch-8.1.1719') || (has('nvim') && has('nvim-0.4.3'))
+if (has('patch-8.1.1719') || (has('nvim') && has('nvim-0.4.3'))) && !exists("g:vscode")
+  " See: https://github.com/neoclide/coc.nvim
+  " See: https://github.com/neoclide/coc.nvim/wiki/Language-servers
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
 endif
 
@@ -142,38 +142,55 @@ Plug 'editorconfig/editorconfig-vim'
 Plug 'preservim/nerdcommenter'
 
 " A tree explorer plugin for vim.
-" See: https://github.com/preservim/nerdtree
-Plug 'preservim/nerdtree'
+if !exists("g:vscode")
+  " See: https://github.com/preservim/nerdtree
+  Plug 'preservim/nerdtree'
+endif
 
 " The undo history visualizer for VIM.
-" See: https://github.com/mbbill/undotree
-Plug 'mbbill/undotree'
+if !exists("g:vscode")
+  " See: https://github.com/mbbill/undotree
+  Plug 'mbbill/undotree'
+endif
 
 " Lean & mean status/tabline for vim that's light as air.
-" See: https://github.com/vim-airline/vim-airline
-Plug 'vim-airline/vim-airline'
+if !exists("g:vscode")
+  " See: https://github.com/vim-airline/vim-airline
+  Plug 'vim-airline/vim-airline'
+endif
 
 " Vim motions on speed!
-" See: https://github.com/easymotion/vim-easymotion
-Plug 'easymotion/vim-easymotion'
+if !exists("g:vscode")
+  " See: https://github.com/easymotion/vim-easymotion
+  Plug 'easymotion/vim-easymotion'
+else
+  " See: http://github.com/asvetliakov/vim-easymotion
+  Plug 'asvetliakov/vim-easymotion', { 'as': 'vsc-easymotion' }
+endif
 
 " A Vim plugin which shows git diff markers in the sign column and
 " stages/previews/undoes hunks and partial hunks.
-" See: https://github.com/airblade/vim-gitgutter
-Plug 'airblade/vim-gitgutter'
+if !exists("g:vscode")
+  " See: https://github.com/airblade/vim-gitgutter
+  Plug 'airblade/vim-gitgutter'
+endif
 
 " Vim plugin for C/C++/ObjC semantic highlighting using cquery, ccls, or
 " clangd.
-" See: https://github.com/jackguo380/vim-lsp-cxx-highlight
-Plug 'jackguo380/vim-lsp-cxx-highlight'
+if !exists("g:vscode")
+  " See: https://github.com/jackguo380/vim-lsp-cxx-highlight
+  Plug 'jackguo380/vim-lsp-cxx-highlight'
+endif
 
 " True Sublime Text style multiple selections for Vim.
 " See: https://github.com/terryma/vim-multiple-cursors
 " Plug 'terryma/vim-multiple-cursors'
 
 " Plugin to toggle, display and navigate marks.
-" See: https://github.com/kshenoy/vim-signature
-Plug 'kshenoy/vim-signature'
+if !exists("g:vscode")
+  " See: https://github.com/kshenoy/vim-signature
+  Plug 'kshenoy/vim-signature'
+endif
 
 " surround.vim: quoting/parenthesizing made simple.
 " See: https://github.com/tpope/vim-surround
@@ -239,6 +256,14 @@ if !exists("*s:reload_config")
   endfunction
 endif
 
+function! s:plug_has_plugin(name)
+  if !exists("g:plugs")
+    return 0
+  endif
+
+  return has_key(g:plugs, a:name)
+endfunction
+
 " check_back_space checks if the current character is a whitespace.
 function s:check_back_space()
   let col = col('.') - 1
@@ -283,22 +308,28 @@ augroup checktime_on_cursor_hold
 augroup END
 
 " NERDTreeRefreshRoot.
-augroup auto_refrest_nerd_tree
-  autocmd!
-  autocmd BufEnter,CmdlineLeave,CursorHold,CursorHoldI * :NERDTreeRefreshRoot
-augroup END
+if s:plug_has_plugin("nerdtree")
+  augroup auto_refrest_nerd_tree
+    autocmd!
+    autocmd BufEnter,CmdlineLeave,CursorHold,CursorHoldI * :NERDTreeRefreshRoot
+  augroup END
+endif
 
 " coc.nvim autoformat.
-augroup autoformat_on_save
-  autocmd!
-  autocmd BufWritePre * call CocAction('format')
-augroup END
+if s:plug_has_plugin("coc.nvim")
+  augroup autoformat_on_save
+    autocmd!
+    autocmd BufWritePre * call CocAction('format')
+  augroup END
+endif
 
 " Highlight the symbol and its references when holding the cursor.
-augroup highlight_symbol_and_references
-  autocmd!
-  autocmd CursorHold * silent call CocActionAsync('highlight')
-augroup END
+if s:plug_has_plugin("coc.nvim")
+  augroup highlight_symbol_and_references
+    autocmd!
+    autocmd CursorHold * silent call CocActionAsync('highlight')
+  augroup END
+endif
 
 augroup fix_c_syntax_on_syntax
   autocmd!
@@ -385,9 +416,11 @@ let mapleader = "\<Space>"
 
 " Normal, Visual, Select, Operator-pending modes.
 "" EasyMotion.
-map <Leader> <Plug>(easymotion-prefix)
-map <Leader>L <Plug>(easymotion-bd-jk)
-map / <Plug>(easymotion-sn)
+if s:plug_has_plugin("vim-easymotion") || s:plug_has_plugin("vsc-easymotion")
+  map <Leader> <Plug>(easymotion-prefix)
+  map <Leader>L <Plug>(easymotion-bd-jk)
+  map / <Plug>(easymotion-sn)
+endif
 
 " Normal mode.
 "" Reload vim config.
@@ -402,53 +435,69 @@ nnoremap <C-j> :move +1<CR>
 
 " coc.nvim.
 "" Navigate diagnostics
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+if s:plug_has_plugin("coc.nvim")
+  nmap <silent> [g <Plug>(coc-diagnostic-prev)
+  nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-"" GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+  "" GoTo code navigation.
+  nmap <silent> gd <Plug>(coc-definition)
+  nmap <silent> gy <Plug>(coc-type-definition)
+  nmap <silent> gi <Plug>(coc-implementation)
+  nmap <silent> gr <Plug>(coc-references)
 
-"" Show documentation.
-nnoremap <silent> gh :call <SID>show_documentation()<CR>
+  "" Show documentation.
+  nnoremap <silent> gh :call <SID>show_documentation()<CR>
 
-"" Symbol renaming.
-nmap <Leader>rn <Plug>(coc-rename)
+  "" Symbol renaming.
+  nmap <Leader>rn <Plug>(coc-rename)
+endif
 
 " NERDTree.
-nnoremap <C-n> :NERDTreeFocus<CR>
+if s:plug_has_plugin("nerdtree")
+  nnoremap <C-n> :NERDTreeFocus<CR>
+endif
 
 " NERDCommenter.
-nmap <C-_> <Plug>NERDCommenterToggle
+if s:plug_has_plugin("nerdcommenter")
+  nmap <C-_> <Plug>NERDCommenterToggle
+endif
 
 " undotree.
-nnoremap <Leader>u :UndotreeShow<CR>:UndotreeFocus<CR>
-nnoremap <Leader>U :UndotreeHide<CR>
+if s:plug_has_plugin("undotree")
+  nnoremap <Leader>u :UndotreeShow<CR>:UndotreeFocus<CR>
+  nnoremap <Leader>U :UndotreeHide<CR>
+endif
 
 " Visual mode.
 " NERDCommenter.
-vmap <C-_> <Plug>NERDCommenterToggle<CR>gv
+if s:plug_has_plugin("nerdcommenter")
+  vmap <C-_> <Plug>NERDCommenterToggle<CR>gv
+endif
 
 " Insert mode.
 "" Escape.
-inoremap jk <Esc>
+if !exists("g:vscode")
+  inoremap jk <Esc>
+endif
 
 " Close popup window on <Esc>.
 inoremap <expr> <Esc> pumvisible() ? "\<C-e>" : "\<Esc>"
 
 " coc.nvim.
-"" Use tab for trigger completion with characters ahead and navigate.
-inoremap <silent><expr> <TAB>
-  \ pumvisible() ? "\<C-n>" :
-  \ <SID>check_back_space() ? "\<TAB>" :
-  \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+if s:plug_has_plugin("coc.nvim")
+  "" Use tab for trigger completion with characters ahead and navigate.
+  inoremap <silent><expr> <TAB>
+    \ pumvisible() ? "\<C-n>" :
+    \ <SID>check_back_space() ? "\<TAB>" :
+    \ coc#refresh()
+  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
-"" Use <cr> to confirm completion.
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+  "" Use <cr> to confirm completion.
+  inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
 
 " Operator-pending mode.
 "" EasyMotion.
-omap / <Plug>(easymotion-tn)
+if s:plug_has_plugin("vim-easymotion") || s:plug_has_plugin("vcs-easymotion")
+  omap / <Plug>(easymotion-tn)
+endif

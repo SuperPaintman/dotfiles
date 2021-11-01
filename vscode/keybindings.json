@@ -1,0 +1,69 @@
+[
+  // Vim emulator.
+  {
+    "key": "j",
+    "command": "vscode-neovim.compositeEscape1",
+    "args": "j",
+    "when": "neovim.mode == insert && editorTextFocus"
+  },
+  {
+    "key": "k",
+    "command": "vscode-neovim.compositeEscape2",
+    "args": "k",
+    "when": "neovim.mode == insert && editorTextFocus"
+  },
+  {
+    "key": "ctrl+n",
+    "command": "workbench.files.action.focusFilesExplorer",
+    "when": "neovim.init"
+  },
+  {
+    "key": "ctrl+r",
+    "command": "workbench.files.action.refreshFilesExplorer",
+    "when": "neovim.init && filesExplorerFocus"
+  },
+  {
+    "key": "ctrl+w",
+    "command": "workbench.action.focusActiveEditorGroup",
+    "when": "neovim.init && filesExplorerFocus"
+  },
+  {
+    "key": "tab",
+    "command": "list.toggleExpand",
+    "when": "neovim.init && filesExplorerFocus && !inputFocus"
+  },
+  {
+    "key": "shift+tab",
+    "command": "list.collapseAll",
+    "when": "neovim.init && filesExplorerFocus && !inputFocus"
+  },
+  {
+    "key": "ctrl+left",
+    "command": "-list.collapseAll",
+    "when": "neovim.init && filesExplorerFocus && !inputFocus"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "list.focusDown",
+    "when": "neovim.init && filesExplorerFocus"
+  },
+  {
+    "key": "ctrl+k",
+    "command": "list.focusUp",
+    "when": "neovim.init && filesExplorerFocus"
+  },
+  {
+    "key": "ctrl+shift+n",
+    "command": "list.focusUp",
+    "when": "neovim.init && filesExplorerFocus"
+  },
+  {
+    "key": "ctrl+n",
+    "command": "list.focusDown",
+    "when": "neovim.init && filesExplorerFocus"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "-workbench.action.togglePanel"
+  }
+]
