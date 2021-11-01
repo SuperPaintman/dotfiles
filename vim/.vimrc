@@ -499,6 +499,11 @@ if s:plug_has_plugin("undotree")
 endif
 
 " Visual mode.
+" Paste / change / delete without replacing.
+vmap P "_dP
+vmap C "_c
+vmap D "_d
+
 " NERDCommenter.
 if s:plug_has_plugin("nerdcommenter")
   vmap <C-_> <Plug>NERDCommenterToggle<CR>gv
