@@ -202,6 +202,13 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   " See: https://github.com/tpope/vim-surround
   Plug 'tpope/vim-surround'
 
+  " FZF integration.
+  " if !exists("g:vscode")
+  "   " See: https://github.com/junegunn/fzf
+  "   Plug 'junegunn/fzf'
+  "   Plug 'junegunn/fzf.vim'
+  " endif
+
   call plug#end()
 endif
 
@@ -432,6 +439,12 @@ let mapleader = "\<Space>"
 " See: `help :map-modes`
 
 " Normal, Visual, Select, Operator-pending modes.
+" Clipboard.
+if has("clipboard")
+  map <Leader>y "+y
+  map <Leader>p "+p
+endif
+
 "" EasyMotion.
 if s:plug_has_plugin("vim-easymotion") || s:plug_has_plugin("vsc-easymotion")
   map <Leader> <Plug>(easymotion-prefix)
