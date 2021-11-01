@@ -8,6 +8,10 @@
 " Specify the character encoding used in the script.
 scriptencoding utf-8
 
+" Save old values.
+let s:old_columns=&columns
+let s:old_lines=&lines
+
 " Set all options to their default value.
 set all&
 
@@ -37,6 +41,9 @@ set nobackup
 " Columns to highlight.
 set colorcolumn=80,120
 
+" Set default number of columns of the screen.
+let &columns=s:old_columns
+
 " Highlight the screen line of the cursor.
 set cursorline
 
@@ -64,6 +71,9 @@ set laststatus=2 " Always.
 " Don't redraw while executing macros.
 set lazyredraw
 
+" Set default number of lines of the window.
+let &lines=s:old_lines
+
 " Show <Tab> and <EOL>.
 set list
 
@@ -81,6 +91,9 @@ set shiftwidth=2
 
 " Tells when the tab pages line is displayed.
 set showtabline=2 " Always.
+
+" Use ~/.vim as the runtime path.
+set runtimepath^=~/.vim,~/.vim/after
 
 " No ignore case when pattern has uppercase.
 set smartcase
