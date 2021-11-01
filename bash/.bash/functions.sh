@@ -121,6 +121,16 @@ if can emacs && [ ! -z "$EMACSIFY_EDITORS" ]; then
         }
     fi
 
+    if can nvim; then
+        if [ -z "$_EMACS_FORCE_NVIM" ]; then
+            export _EMACS_FORCE_NVIM="$(which nvim)"
+        fi
+
+        nvim() {
+            _emacsify "nvim" "$_EMACS_FORCE_NVIM" $@
+        }
+    fi
+
     if can vim; then
         if [ -z "$_EMACS_FORCE_VIM" ]; then
             export _EMACS_FORCE_VIM="$(which vim)"

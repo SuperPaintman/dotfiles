@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-if can emacs; then
-    export EDITOR="emacs"
+if can nvim; then
+    export EDITOR="nvim"
 elif can vim; then
     export EDITOR="vim"
 elif can vi; then
     export EDITOR="vi"
+elif can emacs; then
+    export EDITOR="emacs"
 elif can code; then
     export EDITOR="code"
 fi
