@@ -202,7 +202,7 @@ call plug#end()
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Color Schemes.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-if filereadable(expand("~/.vim/colors/monokai/monokai.vim"))
+if filereadable(expand("~/.vim/colors/monokai/monokai.vim")) && !exists("g:vscode")
   colorscheme monokai/monokai
 endif
 
