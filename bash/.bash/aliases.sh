@@ -46,8 +46,20 @@ if ! can pbpaste; then
     alias pbpaste='xclip -selection clipboard -o'
 fi
 
-# `npx`
+# `npx`.
 alias npx='npx --no-install'
+
+# `vim`, `vi` and `v`.
+if can nvim; then
+    alias vim='nvim'
+    alias vi='nvim'
+    alias v='nvim'
+elif can vim; then
+    alias vi='vim'
+    alias v='vim'
+elif can vi; then
+    alias v='vi'
+fi
 
 #===============================================================================
 # Shortcats.

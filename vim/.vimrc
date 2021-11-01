@@ -110,6 +110,11 @@ set splitbelow
 " New window is put right of the current one.
 set splitright
 
+if $TERM =~ "-256color" || $COLORTERM == "truecolor"
+  " Enable 24-bit RGB color.
+  set termguicolors
+endif
+
 " Whether to use a swapfile for a buffer.
 set noswapfile
 
@@ -204,8 +209,14 @@ endif
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Color Schemes.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-if filereadable(expand("~/.vim/colors/monokai/monokai.vim")) && !exists("g:vscode")
-  colorscheme monokai/monokai
+if !exists("g:vscode")
+  if filereadable(expand("~/.vim/autoload/onedark.vim")) && filereadable(expand("~/.vim/colors/onedark/onedark.vim"))
+    colorscheme onedark/onedark
+  endif
+
+  " if filereadable(expand("~/.vim/colors/monokai/monokai.vim"))
+  "   colorscheme monokai/monokai
+  " endif
 endif
 
 
@@ -397,7 +408,11 @@ let g:undotree_ShortIndicators = 1
 " See: https://github.com/vim-airline/vim-airline/blob/master/doc/airline.txt
 let g:airline_powerline_fonts = 1
 
-let g:airline_theme = "dark"
+if filereadable(expand("~/.vim/autoload/airline/themes/onedark.vim"))
+  let g:airline_theme = "onedark"
+else
+  let g:airline_theme = "dark"
+endif
 
 " Enable/disable enhanced tabline.
 let g:airline#extensions#tabline#enabled = 1
