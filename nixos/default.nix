@@ -290,6 +290,10 @@ in
           stderr = "$HOME/.cache/awesome/stderr";
         };
 
+        awesome = pkgs.awesome.override {
+          luaPackages = pkgs.luajit.pkgs;
+        };
+
         awesomeWithLogs = pkgs.stdenv.mkDerivation rec {
           name = "awesome-with-logs";
 
@@ -301,7 +305,7 @@ in
             mkdir -p $out/bin
 
             # Link all bin files.
-            for b in ${pkgs.awesome}/bin/*; do
+            for b in ${awesome}/bin/*; do
               if [ ! -f "$b" ]; then
                 continue
               fi
@@ -312,7 +316,7 @@ in
             # Override awesome.
             rm -f "$out/bin/awesome"
             echo "#! ${pkgs.runtimeShell} -e" > "$out/bin/awesome"
-            echo exec \"${pkgs.awesome}/bin/awesome\" '"$@"' \
+            echo exec \"${awesome}/bin/awesome\" '"$@"' \
               \>\> \"'${logfiles.stdout}'\" \
               2\>\> \"'${logfiles.stderr}'\" \
               >> "$out/bin/awesome"
