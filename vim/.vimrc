@@ -193,6 +193,10 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   " See: https://github.com/terryma/vim-multiple-cursors
   " Plug 'terryma/vim-multiple-cursors'
 
+  " Multiple cursors plugin.
+  " See: https://github.com/mg979/vim-visual-multi
+  Plug 'mg979/vim-visual-multi'
+
   " Plugin to toggle, display and navigate marks.
   if exists("g:plug_update_all") || !exists("g:vscode")
     " See: https://github.com/kshenoy/vim-signature
@@ -201,7 +205,9 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
 
   " surround.vim: quoting/parenthesizing made simple.
   " See: https://github.com/tpope/vim-surround
-  Plug 'tpope/vim-surround'
+  if exists("g:plug_update_all") || !exists("g:vscode")
+    Plug 'tpope/vim-surround'
+  endif
 
   " FZF integration.
   " if !exists("g:vscode")
@@ -320,6 +326,21 @@ function s:fix_c_syntax()
   syntax keyword cThis this
 endfunction
 
+if s:plug_has_plugin("vim-visual-multi")
+  function s:scroll_down_or_vm_find_under()
+    if g:Vm.extend_mode
+      call vm#commands#ctrln(v:count1)
+    else
+      " let height = winheight(0)
+      " let pos = winsaveview()
+      " let pos.lnum = min([pos.lnum + (height / 2), line('$')])
+      " let pos.topline = min([pos.topline + (height / 2), line('$') - height + 1])
+      " call winrestview(pos)
+
+      call feedkeys("<Local>(ScrollDown)")
+    endif
+  endfunction
+endif
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Commands.
@@ -433,6 +454,15 @@ endif
 " Enable/disable enhanced tabline.
 let g:airline#extensions#tabline#enabled = 1
 
+" vim-visual-multi
+" See: https://github.com/mg979/vim-visual-multi/blob/master/doc/vm-settings.txt
+let g:VM_maps = {
+  \ "Find Under": ""
+  \ }
+let g:VM_default_mappings = 0
+let g:VM_case_setting = "sensitive"
+let g:VM_notify_previously_selected = 2
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Leader.
@@ -516,6 +546,14 @@ vmap D "_d
 " NERDCommenter.
 if s:plug_has_plugin("nerdcommenter")
   vmap <C-_> <Plug>NERDCommenterToggle<CR>gv
+endif
+
+" vim-visual-multi
+if s:plug_has_plugin("vim-visual-multi")
+  " nmap <C-d> <Plug>(VM-Find-Under)
+  nnoremap <Local>(ScrollDown) <C-d>
+  nmap <silent> <C-d> :call <SID>scroll_down_or_vm_find_under()<CR>
+  vmap <C-d> <Plug>(VM-Find-Subword-Under)
 endif
 
 " Insert mode.
