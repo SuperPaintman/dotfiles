@@ -2,6 +2,15 @@
 	editor = $EDITOR
 	hooksPath = ~/.git-global/hooks
 
+[diff]
+	tool = difft
+
+[difftool]
+	prompt = false
+
+[difftool "difft"]
+	cmd = difft "$LOCAL" "$REMOTE"
+
 [user]
 	email = SuperPaintmanDeveloper@gmail.com
 	name = SuperPaintman

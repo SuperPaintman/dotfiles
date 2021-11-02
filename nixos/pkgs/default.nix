@@ -21,4 +21,7 @@ with pkgs; rec {
 
   # OS Specific.
   zsa-udev-rules = callPackage ./os-specific/linux/zsa-udev-rules { };
+
+  # Tools.
+  difftastic = callPackage ./tools/text/difftastic { };
 }

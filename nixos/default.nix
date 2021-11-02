@@ -169,6 +169,7 @@ in
     shfmt
     nixpkgs-fmt
     arduino
+    localPkgs.difftastic
 
     # Docker.
     docker

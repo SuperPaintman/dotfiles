@@ -22,5 +22,10 @@ if can fd; then
     export FZF_DEFAULT_COMMAND='fd --type f'
 fi
 
+# Git.
+if can difft; then
+    export GIT_EXTERNAL_DIFF="difft"
+fi
+
 # Nix.
 export NIX_BUILD_SHELL=bash
