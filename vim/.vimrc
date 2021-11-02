@@ -495,6 +495,9 @@ endif
 "" Reload vim config.
 " nnoremap <Leader>vr :ReloadConfig<CR>
 
+" No highlight search.
+nmap <silent> <Esc> :nohlsearch<CR>
+
 " Split window vertically.
 nnoremap <C-w>N :vnew<CR>
 
