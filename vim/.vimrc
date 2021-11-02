@@ -550,7 +550,6 @@ endif
 
 " vim-visual-multi
 if s:plug_has_plugin("vim-visual-multi")
-  " nmap <C-d> <Plug>(VM-Find-Under)
   nnoremap <Local>(ScrollDown) <C-d>
   nmap <silent> <C-d> :call <SID>scroll_down_or_vm_find_under()<CR>
   vmap <C-d> <Plug>(VM-Find-Subword-Under)
