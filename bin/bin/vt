@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+# vt opens Neovim/Vim terminal (optional: ternimal may be run with given command).
+
+set -e
+set -u
+set -o pipefail
+
+COMMAND='let g:term_vt = 1 | terminal '"$@"
+
+if which nvim > /dev/null 2>&1; then
+  nvim -c "$COMMAND"
+elif which vim > /dev/null 2>&1; then
+  vim -c "$COMMAND"
+else
+  echo "nvim/vim not found" 1>&2
+  exit 1
+fi

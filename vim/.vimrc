@@ -326,6 +326,24 @@ function s:fix_c_syntax()
   syntax keyword cThis this
 endfunction
 
+function s:setup_terminal()
+  " Do not highlight columns.
+  setlocal colorcolumn=
+  " Do not highlight the cursor line.
+  setlocal nocursorline
+  " Do not show special characters.
+  setlocal nolist
+  " Do not print the line number.
+  setlocal nonumber
+
+  if exists("g:term_vt")
+    " Do not show tabline.
+    setlocal showtabline=0
+
+    " TODO(SuperPaintman): set up the airline. I tried but on the refresh it drops the sections.
+  endif
+endfunction
+
 if s:plug_has_plugin("vim-visual-multi")
   function s:scroll_down_or_vm_find_under()
     if g:Vm.extend_mode
@@ -386,6 +404,22 @@ augroup fix_c_syntax_on_syntax
   autocmd Syntax cpp call s:fix_c_syntax()
 augroup END
 
+" Set up the Terminal.
+augroup setup_terminal
+  autocmd!
+  if exists("##TermOpen")
+    autocmd TermOpen * silent call s:setup_terminal()
+    autocmd TermOpen * startinsert
+  elseif exists('##TerminalOpen')
+    autocmd TerminalOpen * silent call s:setup_terminal()
+  end
+
+  if exists("##TermClose")
+    " TODO(SuperPaintman): add exit code. Neovim 5.1 does not support it.
+    " autocmd TermClose * if !v:event.status | exe 'bdelete! '..expand('<abuf>') | endif
+    autocmd TermClose * if exists("g:term_vt") | :q! | endif
+  end
+augroup END
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Plugin settings.
@@ -584,4 +618,9 @@ endif
 "" EasyMotion.
 if s:plug_has_plugin("vim-easymotion") || s:plug_has_plugin("vcs-easymotion")
   omap / <Plug>(easymotion-tn)
+endif
+
+" Terminal mode.
+if exists(":tnoremap")
+  tnoremap <Esc><Space> <C-\><C-n>
 endif
