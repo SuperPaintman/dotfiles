@@ -194,8 +194,10 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   " Plug 'terryma/vim-multiple-cursors'
 
   " Multiple cursors plugin.
-  " See: https://github.com/mg979/vim-visual-multi
-  Plug 'mg979/vim-visual-multi'
+  if exists("g:plug_update_all") || !exists("g:vscode")
+    " See: https://github.com/mg979/vim-visual-multi
+    Plug 'mg979/vim-visual-multi'
+  endif
 
   " Plugin to toggle, display and navigate marks.
   if exists("g:plug_update_all") || !exists("g:vscode")
@@ -359,6 +361,25 @@ if s:plug_has_plugin("vim-visual-multi")
     endif
   endfunction
 endif
+
+" VSCode.
+if exists("g:vscode")
+  function s:vscode_notify_visual(cmd, leaveSelection, ...)
+    let mode = mode()
+    if mode ==# 'V'
+      let startLine = line('v')
+      let endLine = line('.')
+      call VSCodeNotifyRange(a:cmd, startLine, endLine, a:leaveSelection, a:000)
+    elseif mode ==# 'v' || mode ==# "\<C-v>"
+      let startPos = getpos('v')
+      let endPos = getpos('.')
+      call VSCodeNotifyRangePos(a:cmd, startPos[1], endPos[1], startPos[2], endPos[2] + 1, a:leaveSelection, a:000)
+    else
+      call VSCodeNotify(a:cmd, a:000)
+    endif
+  endfunction
+endif
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Commands.
@@ -568,7 +589,7 @@ if s:plug_has_plugin("nerdcommenter")
   nmap <C-_> <Plug>NERDCommenterToggle
 endif
 
-" Debug.
+" VSCode Debug.
 if exists("g:vscode")
   " See: https://github.com/microsoft/vscode/blob/main/src/vs/workbench/contrib/debug/browser/debugCommands.ts
 
@@ -610,6 +631,29 @@ if exists("g:vscode")
   " nmap <Leader>dz <Cmd>call VSCodeNotify('debug.jumpToCursor')<CR>
 endif
 
+" VSCode Diff (Git).
+if exists("g:vscode")
+  " See: https://github.com/microsoft/vscode/blob/main/extensions/git/src/commands.ts
+  " See: https://github.com/microsoft/vscode/blob/main/src/vs/workbench/contrib/scm/browser/dirtydiffDecorator.ts
+  " See: https://github.com/hlissner/doom-emacs/blob/4903db036d7342be7efbe0c6bd6978ad4873c1a3/modules/config/default/%2Bemacs-bindings.el#L350
+
+  " Git next/prev
+  nmap <Leader>gn <Cmd>call VSCodeNotify('workbench.action.editor.nextChange')<CR>
+  nmap <Leader>gN <Cmd>call VSCodeNotify('workbench.action.editor.previousChange')<CR>
+
+  " Git stage.
+  " TODO(SuperPaintman): replace it with hunk staging. At the moment VSCode
+  " can't do it.
+  " nmap <Leader>gs <Cmd>call VSCodeNotify('git.stageChange')<CR>
+  nmap <Leader>gs <Cmd>call VSCodeNotify('git.stageSelectedRanges')<CR>
+  vmap <Leader>gs <Cmd>call <SID>vscode_notify_visual('git.stageSelectedRanges', 1)<CR>
+
+  " Git unstage.
+  " nmap <Leader>gu <Cmd>call VSCodeNotify('git.unstageChange')<CR>
+  nmap <Leader>gu <Cmd>call VSCodeNotify('git.unstageSelectedRanges')<CR>
+  vmap <Leader>gu <Cmd>call <SID>vscode_notify_visual('git.unstageSelectedRanges', 1)<CR>
+endif
+
 " undotree.
 if s:plug_has_plugin("undotree")
   nnoremap <Leader>u :UndotreeShow<CR>:UndotreeFocus<CR>
@@ -632,6 +676,14 @@ if s:plug_has_plugin("vim-visual-multi")
   nnoremap <Local>(ScrollDown) <C-d>
   nmap <silent> <C-d> :call <SID>scroll_down_or_vm_find_under()<CR>
   vmap <C-d> <Plug>(VM-Find-Subword-Under)
+endif
+
+" VSCode multiline
+if exists("g:vscode")
+  " TODO(SuperPaintman): it does not work because VSCode Neovim uses the native
+  " command.
+  " See: https://github.com/asvetliakov/vscode-neovim/blob/master/src/commands_controller.ts
+  " vmap <C-d> <Cmd>call VSCodeNotify('editor.action.addSelectionToNextFindMatch')<CR>
 endif
 
 " Insert mode.
