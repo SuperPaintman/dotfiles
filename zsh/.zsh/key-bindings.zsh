@@ -87,7 +87,8 @@ edit-zsh-buffer() {
     zle redisplay
 }
 zle -N edit-zsh-buffer
-bindkey '\ee' edit-zsh-buffer
+bindkey '^e' edit-zsh-buffer
+# bindkey '\ee' edit-zsh-buffer
 
 # Unbindings.
 bindkey -r '^s' # history-incremental-search-forward.
