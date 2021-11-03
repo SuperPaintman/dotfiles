@@ -568,6 +568,45 @@ if s:plug_has_plugin("nerdcommenter")
   nmap <C-_> <Plug>NERDCommenterToggle
 endif
 
+" Debug.
+if exists("g:vscode")
+  " See: https://github.com/microsoft/vscode/blob/main/src/vs/workbench/contrib/debug/browser/debugCommands.ts
+
+  " Debug breakpoint
+  nmap <Leader>db <Cmd>call VSCodeNotify('editor.debug.action.toggleBreakpoint')<CR>
+  nmap <Leader>dB <Cmd>call VSCodeNotify('editor.debug.action.toggleInlineBreakpoint')<CR>
+
+  " Debug continue
+  nmap <Leader>dc <Cmd>call VSCodeNotify('workbench.action.debug.continue')<CR>
+  nmap <Leader>dC <Cmd>call VSCodeNotify('workbench.action.debug.reverseContinue')<CR>
+
+  " Debug next/prev.
+  nmap <Leader>dn <Cmd>call VSCodeNotify('editor.debug.action.goToNextBreakpoint')<CR>
+  nmap <Leader>dN <Cmd>call VSCodeNotify('editor.debug.action.goToPreviousBreakpoint')<CR>
+
+  " Debug run (start)
+  nmap <Leader>dr <Cmd>call VSCodeNotify('workbench.action.debug.start')<CR>
+
+  " Debug restart
+  nmap <Leader>dR <Cmd>call VSCodeNotify('workbench.action.debug.restart')<CR>
+
+  " Debug step
+  nmap <Leader>ds <Cmd>call VSCodeNotify('workbench.action.debug.stepOver')<CR>
+  nmap <Leader>dS <Cmd>call VSCodeNotify('workbench.action.debug.stepBack')<CR>
+
+  " Debug quit (stop)
+  nmap <Leader>dq <Cmd>call VSCodeNotify('workbench.action.debug.stop')<CR>
+
+  " Debug quit view
+  nmap <Leader>dQ <Cmd>call VSCodeNotify('workbench.debug.action.focusRepl')<CR><Cmd>call VSCodeNotify('workbench.action.closePanel')<CR>
+
+  " Debug remove all breakpoints
+  nmap <Leader>dX <Cmd>call VSCodeNotify('workbench.debug.viewlet.action.removeAllBreakpoints')<CR>
+
+  " Debug focus
+  " nmap <Leader>dz <Cmd>call VSCodeNotify('debug.jumpToCursor')<CR>
+endif
+
 " undotree.
 if s:plug_has_plugin("undotree")
   nnoremap <Leader>u :UndotreeShow<CR>:UndotreeFocus<CR>
