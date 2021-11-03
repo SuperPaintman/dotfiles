@@ -18,7 +18,7 @@ set -o pipefail
 # Create a temp file.
 TEMP_FILE="/tmp/ep.$$.txt"
 rm -f "$TEMP_FILE"
-touch "$TEMP_FILE"
+(umask 077 && touch "$TEMP_FILE")
 trap "rm -f $TEMP_FILE" EXIT
 
 # Read from stdin.

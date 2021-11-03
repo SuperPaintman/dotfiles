@@ -59,7 +59,7 @@ fi
 edit-zsh-buffer() {
     local temp_file="/tmp/edit-zsh-buffer.$$.zsh"
     rm -f "$temp_file"
-    touch "$temp_file"
+    (umask 077 && touch "$temp_file")
     echo "$LBUFFER" > "$temp_file"
 
     local editor="$EDITOR"
