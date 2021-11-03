@@ -71,7 +71,7 @@ edit-zsh-buffer() {
     case "$editor" in
         nvim | vim)
             # Auto enter into INSERT mode.
-            options=('-c' 'set syntax=zsh | call feedkeys("\<Esc>GA")')
+            options=('-c' 'set syntax=zsh | set filetype=zsh | call feedkeys("\<Esc>GA")')
             ;;
     esac
 
