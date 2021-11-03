@@ -584,6 +584,9 @@ if exists("g:vscode")
   nmap <Leader>dn <Cmd>call VSCodeNotify('editor.debug.action.goToNextBreakpoint')<CR>
   nmap <Leader>dN <Cmd>call VSCodeNotify('editor.debug.action.goToPreviousBreakpoint')<CR>
 
+  " Debug pause
+  nmap <Leader>dp <Cmd>call VSCodeNotify('workbench.action.debug.pause')<CR>
+
   " Debug run (start)
   nmap <Leader>dr <Cmd>call VSCodeNotify('workbench.action.debug.start')<CR>
 
