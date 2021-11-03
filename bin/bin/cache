@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+#
+# cache(1) - Cache result of the command into a file.
+#
+# Examples:
+#
+#   $ cache curl ...
+#   $ cache --clean curl ...
+#   $ ls | cache sort -u
+#   $ cache clean
+#
+
+set -e
+set -u
+set -o pipefail
+
+if [ "$#" = "1" ]; then
+    case "$1" in
+    clean)
+        rm -rf "/tmp/shell-cache-"*
+        exit
+        ;;
+    esac
+elif [ "$#" != "0" ]; then
+    case "$1" in
+    -c|--clean)
+        rm -rf "/tmp/shell-cache-"*
+        shift
+        ;;
+    esac
+fi
+
+if [ "$#" = "0" ]; then
+    exit
+fi
+
+# Create a cache key.
+CACHE_KEY="$(echo "$@" | sha256sum | awk '{print $1}')"
+
+# Read from stdin.
+STDIN=""
+if [ ! -t 0 ]; then
+    STDIN="$(cat)"
+    CACHE_KEY="${CACHE_KEY}-$(echo "$STDIN" | sha256sum | awk '{print $1}')"
+fi
+
+CACHE_FILE="/tmp/shell-cache-${CACHE_KEY}"
+
+if [ -f "$CACHE_FILE" ]; then
+    cat "$CACHE_FILE"
+    exit
+fi
+
+rm -f "$CACHE_FILE"
+(umask 077 && touch "$CACHE_FILE")
+if [ ! -t 0 ]; then
+    echo "$STDIN" | exec $@ | tee "$CACHE_FILE"
+else
+    exec $@ | tee "$CACHE_FILE"
+fi
