@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+#
+# ep(1) - Edit Pipe in and out of $EDITOR
+#
+# Example:
+#
+#   $ echo foo | ep | gist
+#   $ ep | gist
+#
+# Inspired by the vipe: https://github.com/madx/moreutils/blob/master/vipe
+#
+
+set -e
+set -u
+set -o pipefail
+
+# Create a temp file.
+TEMP_FILE="/tmp/ep.$$.txt"
+rm -f "$TEMP_FILE"
+touch "$TEMP_FILE"
+trap "rm -f $TEMP_FILE" EXIT
+
+# Read from stdin.
+if [ ! -t 0 ]; then
+    cat > "$TEMP_FILE"
+fi
+
+# Spawn editor with stdio connected
+if [ -z "$EDITOR" ]; then
+    if which nvim > /dev/null 2>&1; then
+        EDITOR="nvim"
+    elif which vim > /dev/null 2>&1; then
+        EDITOR="vim"
+    elif which vi > /dev/null 2>&1; then
+        EDITOR="vi"
+    else
+        echo "No one editor was found" 1>&2
+        exit 1
+    fi
+fi
+
+${EDITOR} "$TEMP_FILE" < /dev/tty > /dev/tty || { exit "$?"; }
+
+# Write the temp file to stdout.
+cat "$TEMP_FILE"
