@@ -57,7 +57,7 @@ fi
 
 ## Edit buffer in $EDITOR.
 edit-zsh-buffer() {
-    local temp_file="/tmp/edit-zsh-buffer.$$.txt"
+    local temp_file="/tmp/edit-zsh-buffer.$$.zsh"
     rm -f "$temp_file"
     touch "$temp_file"
     echo "$LBUFFER" > "$temp_file"
@@ -71,7 +71,7 @@ edit-zsh-buffer() {
     case "$editor" in
         nvim | vim)
             # Auto enter into INSERT mode.
-            options=('-c' 'call feedkeys("\<Esc>GA")')
+            options=('-c' 'set syntax=zsh | call feedkeys("\<Esc>GA")')
             ;;
     esac
 
@@ -83,6 +83,8 @@ edit-zsh-buffer() {
 
     LBUFFER="$(cat "$temp_file")"
     rm -r "$temp_file"
+    # Apply colors.
+    zle redisplay
 }
 zle -N edit-zsh-buffer
 bindkey '\ee' edit-zsh-buffer
