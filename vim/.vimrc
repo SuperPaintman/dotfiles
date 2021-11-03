@@ -641,6 +641,11 @@ if exists("g:vscode")
   nmap <Leader>gn <Cmd>call VSCodeNotify('workbench.action.editor.nextChange')<CR>
   nmap <Leader>gN <Cmd>call VSCodeNotify('workbench.action.editor.previousChange')<CR>
 
+  " Git revert
+  " nmap <Leader>gr <Cmd>call VSCodeNotify('git.revertChange')<CR>
+  nmap <Leader>gr <Cmd>call VSCodeNotify('git.revertSelectedRanges')<CR>
+  vmap <Leader>gr <Cmd>call <SID>vscode_notify_visual('git.revertSelectedRanges', 1)<CR>
+
   " Git stage.
   " TODO(SuperPaintman): replace it with hunk staging. At the moment VSCode
   " can't do it.
