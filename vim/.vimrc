@@ -518,6 +518,14 @@ let g:VM_default_mappings = 0
 let g:VM_case_setting = "sensitive"
 let g:VM_notify_previously_selected = 2
 
+" Neovide
+" See: https://github.com/neovide/neovide/wiki/Configuration
+if exists("neovide")
+  set guifont=JetBrains\ Mono:h10
+
+  let g:neovide_cursor_animation_length = 0
+endif
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Leader.

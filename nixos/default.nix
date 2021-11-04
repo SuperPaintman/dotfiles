@@ -104,6 +104,7 @@ in
     # Editors.
     vim
     unstable.neovim
+    unstable.neovide
     emacs
     (
       unstable.vscode-with-extensions.override {
