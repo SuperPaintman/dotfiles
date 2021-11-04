@@ -173,6 +173,7 @@ in
     terraform-lsp
     arduino
     localPkgs.difftastic
+    nodePackages.prettier
 
     # Docker.
     docker
