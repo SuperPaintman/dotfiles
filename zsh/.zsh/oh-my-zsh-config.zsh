@@ -13,7 +13,7 @@ DISABLE_AUTO_UPDATE="true"
 plugins=()
 
 plugins+=(colored-man-pages)
-plugins+=(sudo)
+# plugins+=(sudo)
 
 plugins+=(zsh-autosuggestions)
 plugins+=(zsh-syntax-highlighting)
