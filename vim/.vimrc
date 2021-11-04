@@ -316,6 +316,14 @@ function s:show_documentation()
   endif
 endfunction
 
+function s:format_code()
+  if s:plug_has_plugin("coc.nvim")
+    if CocHasProvider("format")
+      call CocAction("format")
+    endif
+  endif
+endfunction
+
 function s:fix_c_syntax()
   " Operators.
   "" - + % < > ~ ! & | ^ * = ? : .
@@ -404,13 +412,11 @@ if s:plug_has_plugin("nerdtree")
   augroup END
 endif
 
-" coc.nvim autoformat.
-if s:plug_has_plugin("coc.nvim")
-  augroup autoformat_on_save
-    autocmd!
-    autocmd BufWritePre * call CocAction("format")
-  augroup END
-endif
+" Auto format on save.
+augroup autoformat_on_save
+  autocmd!
+  autocmd BufWritePre * call s:format_code()
+augroup END
 
 " Highlight the symbol and its references when holding the cursor.
 if s:plug_has_plugin("coc.nvim")
@@ -446,11 +452,19 @@ augroup END
 " Plugin settings.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " coc.nvim.
-" See: https://github.com/neoclide/coc.nvim/blob/master/doc/coc.txt
-"" Global extension names to install when they aren't installed.
-let g:coc_global_extensions = []
-""" C/C++/Objective-C.
-call add(g:coc_global_extensions, "coc-clangd")
+if s:plug_has_plugin("coc.nvim")
+  " See: https://github.com/neoclide/coc.nvim/blob/master/doc/coc.txt
+  if isdirectory(expand("~/.vim"))
+    let g:coc_config_home = expand("~/.vim")
+  endif
+
+  "" Global extension names to install when they aren't installed.
+  let g:coc_global_extensions = []
+  """ C/C++/Objective-C.
+  call add(g:coc_global_extensions, "coc-clangd")
+  """ Go
+  " call add(g:coc_global_extensions, "coc-go")
+endif
 
 " NERDTree.
 " See: https://github.com/preservim/nerdtree/blob/master/doc/NERDTree.txt
