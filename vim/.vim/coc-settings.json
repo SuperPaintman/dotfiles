@@ -2,11 +2,36 @@
   "languageserver": {
     "go": {
       "command": "gopls",
-      "rootPatterns": ["go.mod"],
+      "rootPatterns": [
+        "go.mod"
+      ],
       "trace.server": "verbose",
-      "filetypes": ["go"]
+      "filetypes": [
+        "go"
+      ]
+    },
+    "rust": {
+      "command": "rust-analyzer",
+      "rootPatterns": [
+        "Cargo.toml"
+      ],
+      "filetypes": [
+        "rust"
+      ]
+    },
+    "nix": {
+      "command": "rnix-lsp",
+      "filetypes": [
+        "nix"
+      ]
+    },
+    "terraform": {
+      "command": "terraform-lsp",
+      "filetypes": [
+        "terraform"
+      ],
+      "initializationOptions": {}
     }
   },
-
   "clangd.semanticHighlighting": true
 }

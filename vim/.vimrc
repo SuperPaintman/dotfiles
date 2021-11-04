@@ -312,7 +312,11 @@ function s:show_documentation()
   if (index(["vim", "help"], &filetype) >= 0)
     execute "h ".expand("<cword>")
   else
-    call CocAction("doHover")
+    if s:plug_has_plugin("coc.nvim")
+      if CocHasProvider("hover")
+        call CocAction("doHover")
+      endif
+    endif
   endif
 endfunction
 
@@ -454,14 +458,21 @@ augroup END
 " coc.nvim.
 if s:plug_has_plugin("coc.nvim")
   " See: https://github.com/neoclide/coc.nvim/blob/master/doc/coc.txt
+  " See: https://github.com/neoclide/coc.nvim/wiki/Language-servers
   if isdirectory(expand("~/.vim"))
     let g:coc_config_home = expand("~/.vim")
   endif
 
   "" Global extension names to install when they aren't installed.
   let g:coc_global_extensions = []
+  """ JSON.
+  call add(g:coc_global_extensions, "coc-json")
+  """ Markdown.
+  call add(g:coc_global_extensions, "coc-markdownlint")
   """ C/C++/Objective-C.
   call add(g:coc_global_extensions, "coc-clangd")
+  """ TypeScript/JavaScript.
+  call add(g:coc_global_extensions, "coc-tsserver")
   """ Go
   " call add(g:coc_global_extensions, "coc-go")
 endif

@@ -169,6 +169,8 @@ in
     unstable.flutter
     shfmt
     nixpkgs-fmt
+    rnix-lsp
+    terraform-lsp
     arduino
     localPkgs.difftastic
 
