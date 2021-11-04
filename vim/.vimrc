@@ -320,12 +320,91 @@ function s:show_documentation()
   endif
 endfunction
 
-function s:format_code()
-  if s:plug_has_plugin("coc.nvim")
-    if CocHasProvider("format")
-      call CocAction("format")
+function s:create_create_temp_file(cb)
+  " Save current position.
+  let view = winsaveview()
+  let search = @/
+  " let original_filetype = &filetype
+
+  let tmp = tempname()
+
+  try
+    " Write current buffer into a temp file.
+    let content = getline(1, "$")
+    call writefile([], tmp) " Similar to the unix touch.
+    call setfperm(tmp, "rw-------")
+    call writefile(content, tmp)
+
+    " Call the callback.
+    let result = a:cb(tmp)
+
+    " Set new content into the buffer.
+    silent! execute 1 . "," . line('$') . "delete _"
+    call setline(1, result)
+
+    " Hack for VSCode sync.
+    " if exists("g:vscode")
+    "   sleep 100ms
+    " endif
+  finally
+    " Delete the temp file.
+    if filewritable(tmp)
+      call delete(tmp)
     endif
+
+    " Reset original position.
+    if !exists("g:vscode")
+      " if &filetype != original_filetype
+      "   let &filetype = original_filetype
+      " endif
+      let @/ = search
+      call winrestview(view)
+    else
+      " call timer_start(100, {-> let @/ = search})
+      " call timer_start(100, {-> winrestview(view)})
+    endif
+  endtry
+endfunction
+
+function s:format_prettier(filename, parser)
+  " Call formatter.
+  let cmd = "prettier --parser=" . shellescape(a:parser) . " --write " . shellescape(a:filename)
+  let output = system(cmd)
+  if v:shell_error != 0
+    throw output
   endif
+
+  " Read new file content.
+  return readfile(a:filename)
+endfunction
+
+function s:format_code()
+  try
+    if &filetype == "markdown"
+      if executable("prettier")
+        call s:create_create_temp_file({filename -> s:format_prettier(filename, "markdown")})
+        return
+      endif
+    endif
+
+    if &filetype == "json"
+      if executable("prettier")
+        call s:create_create_temp_file({filename -> s:format_prettier(filename, "json")})
+        return
+      endif
+    endif
+
+    if s:plug_has_plugin("coc.nvim")
+      if CocHasProvider("format")
+        call CocAction("format")
+        return
+      endif
+    endif
+  finally
+    if exists("*gitgutter#all")
+      call gitgutter#all(1)
+    endif
+  endtry
 endfunction
 
 function s:fix_c_syntax()
@@ -397,6 +476,22 @@ endif
 " Commands.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 command! ReloadConfig call <SID>reload_config()
+command! FormatCode call <SID>format_code()
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" VSCode Neowim hacks.
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" if exists("g:vscode")
+"   " Run BufWritePre before the Write.
+"   "
+"   " Original:
+"   " command! -complete=file -bang -nargs=? Write if <q-bang> ==# '!' | call VSCodeNotify('workbench.action.files.saveAs') | else | call VSCodeNotify('workbench.action.files.save') | endif
+"   "
+"   " See: https://github.com/asvetliakov/vscode-neovim/blob/master/vim/vscode-file-commands.vim
+"   command! -complete=file -bang -nargs=? Write doautocmd BufWritePre
+"     \ | if <q-bang> ==# '!' | call VSCodeNotify('workbench.action.files.saveAs') | else | call VSCodeNotify('workbench.action.files.save') | endif
+" endif
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
