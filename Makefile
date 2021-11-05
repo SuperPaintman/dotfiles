@@ -1,6 +1,6 @@
 NIXOS_VERSION := 20.09
 
-NIX_LOCAL_PACKAGES := $(shell nix eval --raw \
+NIX_LOCAL_PACKAGES := $(shell nix eval --raw $(shell nix --version | grep -E '2\.3\.' > /dev/null || echo "--impure --expr") \
 	'( \
 		with import <nixpkgs> {}; \
 		with lib; \
@@ -95,6 +95,9 @@ nixos-switch:
 .PHONY: nixos-build
 nixos-build:
 	nixos-rebuild build
+
+lp:
+	echo $(NIX_LOCAL_PACKAGES)
 
 .PHONY: $(addprefix nixos-build-pkgs-, $(NIX_LOCAL_PACKAGES))
 $(addprefix nixos-build-pkgs-, $(NIX_LOCAL_PACKAGES)): nixos-build-pkgs-%:

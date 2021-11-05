@@ -23,7 +23,7 @@ fi
 
 TESTS="$(
     cd "$ROOT" && nix eval \
-        --raw \
+        --raw $(nix --version | grep -E '2\.3\.' > /dev/null || echo "--impure --expr") \
         '(
     with import <nixpkgs> {};
     with lib;
@@ -51,13 +51,13 @@ run_tests() {
         -E 'with import <nixpkgs> { }; callPackage ./. { }' \
         -A "$name")"
 
-    failed="$(cd "$ROOT" && nix eval "(builtins.length $results)")"
+    failed="$(cd "$ROOT" && nix eval $(nix --version | grep -E '2\.3\.' > /dev/null || echo "--impure --expr") "(builtins.length $results)")"
     if [ "$failed" = "0" ]; then
         echo "--- ${GREEN}PASS${RESET}: $name"
         return 0
     fi
 
-    (cd "$ROOT" && nix eval --raw '(
+    (cd "$ROOT" && nix eval --raw $(nix --version | grep -E '2\.3\.' > /dev/null || echo "--impure --expr") '(
         with import <nixpkgs> {};
         with builtins;
         with lib;

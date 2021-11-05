@@ -1,6 +1,6 @@
 # See: https://nixos.org/nixos/options.html#
 
-{ pkgs, lib, ... }@args:
+{ pkgs, lib, config, ... }@args:
 let
   getLocalOrRemote = { local, remote }:
     # Use a local copy if we have one.
@@ -65,7 +65,13 @@ in
   # ];
 
   # Nix.
-  nix.trustedUsers = [ "root" "@wheel" ];
+  nix = {
+    package = pkgs.nixFlakes;
+    extraOptions = lib.optionalString (config.nix.package == pkgs.nixFlakes) ''
+      experimental-features = nix-command flakes
+    '';
+    trustedUsers = [ "root" "@wheel" ];
+   };
 
   # Nix Packages.
   nixpkgs.config.allowUnfree = true;
