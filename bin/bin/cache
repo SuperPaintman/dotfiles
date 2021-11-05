@@ -17,17 +17,17 @@ set -o pipefail
 
 if [ "$#" = "1" ]; then
     case "$1" in
-    clean)
-        rm -rf "/tmp/shell-cache-"*
-        exit
-        ;;
+        clean)
+            rm -rf "/tmp/shell-cache-"*
+            exit
+            ;;
     esac
 elif [ "$#" != "0" ]; then
     case "$1" in
-    -c|--clean)
-        rm -rf "/tmp/shell-cache-"*
-        shift
-        ;;
+        -c | --clean)
+            rm -rf "/tmp/shell-cache-"*
+            shift
+            ;;
     esac
 fi
 
