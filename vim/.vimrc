@@ -682,7 +682,37 @@ endif
 nmap <silent> <Esc> :nohlsearch<CR>
 
 " Split window vertically.
-nnoremap <C-w>N :vnew<CR>
+if !exists("g:vscode")
+  nnoremap <C-w>N :new<CR>
+  nnoremap <C-w>V :vnew<CR>
+else
+  nnoremap <C-w>N :New<CR>
+  nnoremap <C-w>V :Vnew<CR>
+endif
+
+"" Tabs.
+"" Tab new.
+nmap <silent> <Leader>tn :tabnew<CR>
+
+"" Tab close.
+nmap <silent> <Leader>tq :tabclose<CR>
+
+"" Tab next/previous.
+nmap <silent> <Leader>th :tabprevious<CR>
+nmap <silent> <Leader>tl :tabnext<CR>
+
+"" Tab move next/previous.
+nmap <silent> <Leader>tH :tabmove -1<CR>
+nmap <silent> <Leader>tL :tabmove +1<CR>
+
+"" Tab go.
+for i in [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  execute "nmap <silent> <Leader>t" . i . " :tabnext " . i . "<CR>"
+endfor
+
+"" Tab go first/last.
+nmap <silent> <Leader>t0 :tabfirst<CR>
+nmap <silent> <Leader>t$ :tablast<CR>
 
 " Move lines.
 nnoremap <C-k> :move -2<CR>
