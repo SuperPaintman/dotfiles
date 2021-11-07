@@ -29,3 +29,6 @@ fi
 
 # Nix.
 export NIX_BUILD_SHELL=bash
+
+# Bat.
+export BAT_THEME="TwoDark"

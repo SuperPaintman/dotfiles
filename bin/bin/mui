@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+set -e
+set -u
+set -o pipefail
+
+for executable in fzf bat mu; do
+    if ! which "$executable" > /dev/null 2>&1; then
+        echo "Please install $executable" 1>&2
+        exit 1
+    fi
+done
+
+DELIMITER=';_;_;_;_;_;'
+COLOR_RESET="$(printf '\033[0m')"
+COLOR_GREEN="$(printf '\033[0;32m')"
+COLOR_RED="$(printf '\033[31;01m')"
+COLOR_YELLOW="$(printf '\033[33;01m')"
+COLOR_BLUE="$(printf '\033[0;34m')"
+COLOR_GRAY="$(printf '\033[90m')"
+FIELDS="l${DELIMITER}d${DELIMITER}f${DELIMITER}s"
+FORMAT="{ print \$1\"${DELIMITER}\"\"${COLOR_YELLOW}\"\$2\"${COLOR_RESET} \"\"${COLOR_BLUE}\"\$3\"${COLOR_RESET} \"\"${COLOR_GREEN}\"\$4\"${COLOR_RESET}\" }"
+
+query="$(
+    echo -n '' | \
+        fzf \
+            --phony \
+            --ansi \
+            --print-query \
+            --with-nth '2' \
+            --delimiter "$DELIMITER" \
+            --bind "change:reload:(if [ ! -z {q} ]; then (mu find --fields='${FIELDS}' --sortfield=date --reverse {q} | awk -F'${DELIMITER}' '${FORMAT}') || true; fi)" \
+            --preview-window='right:40%' \
+            --preview "mu view {1} | bat --color=always --language=email --plain" |
+        head -1
+)"
+
+echo "$query"

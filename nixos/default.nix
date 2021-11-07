@@ -216,6 +216,7 @@ in
     unstable.anki-bin # Spaced repetition flashcard program
     (localPkgs.anki-desktop.override { anki-bin = unstable.anki-bin; }) # Spaced repetition flashcard program.
     wally-cli # CLI flashing tool for ZSA Moonlander.
+    mu
     mutt # CLI email client.
     neomutt # CLI email client with some extras.
 
