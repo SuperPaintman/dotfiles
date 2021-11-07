@@ -32,7 +32,7 @@ query="$(
             --bind "change:reload:(if [ ! -z {q} ]; then (mu find --fields='${FIELDS}' --sortfield=date --reverse {q} | awk -F'${DELIMITER}' '${FORMAT}') || true; fi)" \
             --preview-window='right:40%' \
             --preview "mu view {1} | bat --color=always --language=email --plain" |
-        head -1
+        head -1 || true
 )"
 
 echo "$query"
