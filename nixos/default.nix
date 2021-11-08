@@ -218,6 +218,7 @@ in
     wally-cli # CLI flashing tool for ZSA Moonlander.
     mu
     mutt # CLI email client.
+    notmuch
     neomutt # CLI email client with some extras.
 
     # Icons.
