@@ -78,6 +78,7 @@ in
     curl
     atop
     htop
+    unstable.btop
     git
     jq
     tmux
