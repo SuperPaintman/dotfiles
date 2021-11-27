@@ -60,6 +60,8 @@
     # cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
 
     nvidia.prime = {
+      # TODO(SuperPaintman): works not so well, display shows artifacts.
+      # sync.enable = true;
       offload.enable = true;
 
       # Bus ID of the Intel GPU.
@@ -68,6 +70,8 @@
       # Bus ID of the NVIDIA GPU.
       nvidiaBusId = "PCI:1:0:0";
     };
+
+    nvidia.powerManagement.enable = true;
   };
 
   # Nix Packages.
@@ -78,16 +82,30 @@
   services = {
     xserver = {
       videoDrivers = [ "nvidia" ];
+      dpi = 96;
+      screenSection = lib.optionalString (config.hardware.nvidia.prime.sync.enable) ''
+        Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
+        Option         "AllowIndirectGLXProtocol" "off"
+        Option         "TripleBuffer" "on"
+      '';
 
       # Display manager.
       displayManager =
         let
           xrandrCommands = with pkgs; ''
+            if xrandr --query 2>&1 | grep 'eDP-1-1 connected' 2>&1 > /dev/null; then
+              DISPLAY_PRIMARY='eDP-1-1'
+              DISPLAY_SECONDARY='DP-1-1'
+            else
+              DISPLAY_PRIMARY='eDP-1'
+              DISPLAY_SECONDARY='DP-1'
+            fi
+
             # Primary bottom.
             # ${xorg.xrandr}/bin/xrandr --output eDP-1 --primary --mode 1920x1080 --pos 0x1080 --output DP-3 --mode 1920x1080 --pos 0x0
 
             # Primary left.
-            ${xorg.xrandr}/bin/xrandr --output eDP-1 --primary --mode 1920x1080 --pos 0x0 --output DP-1 --mode 1920x1080 --pos 1920x0
+            ${xorg.xrandr}/bin/xrandr --output "$DISPLAY_PRIMARY" --primary --mode 1920x1080 --pos 0x0 --output "$DISPLAY_SECONDARY" --mode 1920x1080 --pos 1920x0
           '';
 
           xinputToggleTouchpadCommand = with pkgs; writeShellScript "xinput-toggle-touchpad" ''

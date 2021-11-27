@@ -112,7 +112,7 @@ in
         vscodeExtensions = import ../vscode/extensions.nix args;
       }
     )
-    android-studio
+    # android-studio
 
     # Browsers.
     firefox
@@ -162,10 +162,10 @@ in
     ruby
     localPkgs.rustup-openssl
     rust-analyzer
-    ghc
-    stack
-    haskellPackages.brittany
-    elmPackages.elm
+    # ghc
+    # stack
+    # haskellPackages.brittany
+    # elmPackages.elm
     dart
     unstable.flutter
     shfmt
@@ -181,7 +181,7 @@ in
     docker-compose
 
     # Vagrant
-    vagrant
+    # vagrant
 
     # Server configuration utils.
     ansible

@@ -60,5 +60,5 @@ rm -f "$CACHE_FILE"
 if [ ! -t 0 ]; then
     echo "$STDIN" | exec $@ | tee "$CACHE_FILE"
 else
-    exec $@ | tee "$CACHE_FILE"
+    eval "$@" | tee "$CACHE_FILE"
 fi
