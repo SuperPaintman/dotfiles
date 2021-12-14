@@ -22,7 +22,7 @@ FIELDS="l${DELIMITER}d${DELIMITER}f${DELIMITER}s"
 FORMAT="{ print \$1\"${DELIMITER}\"\"${COLOR_YELLOW}\"\$2\"${COLOR_RESET} \"\"${COLOR_BLUE}\"\$3\"${COLOR_RESET} \"\"${COLOR_GREEN}\"\$4\"${COLOR_RESET}\" }"
 
 query="$(
-    echo -n '' | \
+    echo -n '' |
         fzf \
             --phony \
             --ansi \

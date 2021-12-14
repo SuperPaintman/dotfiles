@@ -126,7 +126,7 @@ in
     chromium
 
     # Messengers.
-    tdesktop # Telegram.
+    unstable.tdesktop # Telegram.
     discord
     skypeforlinux
 
@@ -367,6 +367,11 @@ in
       # with blur-background. My tests show a 15% performance boost.
       # Recommended.
       glx-no-stencil = true;
+
+      # Use X Sync fence to sync clients' draw calls, to make sure all draw
+      # calls are finished before picom starts drawing. Needed on
+      # nvidia-drivers with GLX backend for some users.
+      xrender-sync-fence = true;
     };
   };
 

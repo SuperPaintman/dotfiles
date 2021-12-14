@@ -60,3 +60,7 @@ user_pref('toolkit.legacyUserProfileCustomizations.stylesheets', true);
 user_pref('toolkit.telemetry.enabled', false);
 user_pref('toolkit.telemetry.unified', false);
 user_pref('toolkit.telemetry.archive.enabled', false);
+
+/* mouse */
+// Didsble middle mouse button click paste.
+user_pref('middlemouse.paste', false);

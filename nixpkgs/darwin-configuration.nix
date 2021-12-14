@@ -1,7 +1,6 @@
 # See: https://daiderd.com/nix-darwin/manual/index.html
 
 { config, pkgs, lib, ... }:
-
 let
   home-manager = builtins.fetchGit {
     url = "https://github.com/rycee/home-manager.git";
@@ -11,7 +10,6 @@ let
 
   unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
 in
-
 {
   # Imports.
   imports = lib.lists.flatten [

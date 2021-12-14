@@ -19,6 +19,7 @@
   "editor.acceptSuggestionOnCommitCharacter": false,
   "editor.acceptSuggestionOnEnter": "on",
   "editor.snippetSuggestions": "bottom",
+  "editor.selectionClipboard": false,
   // Workbench
   "workbench.colorTheme": "Atom One Dark",
   "workbench.welcome.enabled": false,
