@@ -41,6 +41,7 @@ imports ([
   ./vim
   ./vscode
   ./xdg
+  ./xmodmap
   ./xresources
   ./yabai
   ./yarn

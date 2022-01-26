@@ -93,7 +93,7 @@
       displayManager =
         let
           xrandrCommands = with pkgs; ''
-            if xrandr --query 2>&1 | grep 'eDP-1-1 connected' 2>&1 > /dev/null; then
+            if ${xorg.xrandr}/bin/xrandr --query 2>&1 | grep 'eDP-1-1 connected' 2>&1 > /dev/null; then
               DISPLAY_PRIMARY='eDP-1-1'
               DISPLAY_SECONDARY='DP-1-1'
             else

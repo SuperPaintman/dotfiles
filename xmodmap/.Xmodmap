@@ -1,0 +1,11 @@
+! See: xmodmap -pke
+! See: xev
+
+! Remap some russian symbols for Moonlander.
+
+! \ -> х
+! / -> Х
+keycode  51 = backslash bar Cyrillic_ha Cyrillic_HA
+
+! Ь -> ъ
+keycode  58 = m M Cyrillic_softsign Cyrillic_hardsign

@@ -1,6 +1,6 @@
 # See: https://nixos.org/nixos/options.html#
 
-{ pkgs, lib, ... }@args:
+{ pkgs, lib, config, ... }@args:
 let
   getLocalOrRemote = { local, remote }:
     # Use a local copy if we have one.
@@ -227,6 +227,14 @@ in
 
     # Custom / mine.
     monitroidPkgs.monitroid # Machine stats.
+
+    # Scripts.
+    (writeShellScriptBin "restart-setup-commands" ''
+    ${config.services.xserver.displayManager.setupCommands}
+    '')
+    (writeShellScriptBin "restart-session-commands" ''
+    ${config.services.xserver.displayManager.sessionCommands}
+    '')
   ];
 
   # Programs.
@@ -274,10 +282,17 @@ in
 
       sessionCommands = with pkgs; ''
         # Load X resources.
-        ${xorg.xrdb}/bin/xrdb -load ~/.Xresources
+        if [ -f ~/.Xresources ]; then
+          ${xorg.xrdb}/bin/xrdb -load ~/.Xresources
+        fi
 
         # Turn NumLock on.
         ${numlockx}/bin/numlockx on
+
+        # Load Xmodmap config.
+        if [ -f ~/.Xmodmap ]; then
+          ${xorg.xmodmap}/bin/xmodmap ~/.Xmodmap
+        fi
 
         # Remove previous AwesomeWM state.
         ${coreutils}/bin/rm -f ~/.cache/awesome/state.json
