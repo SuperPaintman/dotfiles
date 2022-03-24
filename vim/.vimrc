@@ -218,6 +218,13 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
   "   Plug 'junegunn/fzf.vim'
   " endif
 
+  " Vim plugin that shows keybindings in popup.
+  " See: https://github.com/liuchengxu/vim-which-key
+  if exists("g:plug_update_all") || !exists("g:vscode")
+    " Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+    Plug 'liuchengxu/vim-which-key'
+  endif
+
   call plug#end()
 
   if exists("g:plug_update_all")
@@ -275,6 +282,14 @@ if exists("g:colors_name") && g:colors_name == "monokai"
   highlight LspCxxHlSymNamespace ctermfg=252 guifg=#E8E8E3
   highlight LspCxxHlSymClass ctermfg=81 guifg=#66D9EF
   " highlight LspCxxHlSymClass ctermfg=148 guifg=#A6E22D
+endif
+
+" vim-which-key
+" See: https://github.com/liuchengxu/vim-which-key
+if exists("g:colors_name") && g:colors_name == "onedark"
+  " highlight default link WhichKeyFloating Pmenu
+  " highlight WhichKeyFloating ctermbg=235 guibg=#282C34
+  highlight WhichKeyFloating ctermbg=234 guibg=#21252b
 endif
 
 
@@ -646,6 +661,14 @@ if exists("neovide")
   let g:neovide_cursor_animation_length = 0
 endif
 
+" vim-which-key
+" See: https://github.com/liuchengxu/vim-which-key
+let g:which_key_map = {}
+
+if s:plug_has_plugin("vim-which-key")
+  call which_key#register('<Space>', "g:which_key_map")
+endif
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Leader.
@@ -663,14 +686,24 @@ let mapleader = "\<Space>"
 " Normal, Visual, Select, Operator-pending modes.
 " Clipboard.
 if has("clipboard")
-  map <Leader>y "+y
+  map <Leader>y "+y 
+  let g:which_key_map.y = 'clipboard-yank'
+
   map <Leader>p "+p
+  let g:which_key_map.p = 'clipboard-paste'
 endif
 
 "" EasyMotion.
 if s:plug_has_plugin("vim-easymotion") || s:plug_has_plugin("vsc-easymotion")
-  map <Leader> <Plug>(easymotion-prefix)
+  " map <Leader> <Plug>(easymotion-prefix)
+  for c in ['j', 'k', 'w', 'e', 'b', 'n', 'N', 's', 'f']
+    execute "map <Leader>" . c . " <Plug>(easymotion-" . c . ")"
+    let g:which_key_map[c] = 'which_key_ignore'
+  endfor
+
   map <Leader>L <Plug>(easymotion-bd-jk)
+  let g:which_key_map['L'] = 'which_key_ignore'
+
   map / <Plug>(easymotion-sn)
 endif
 
@@ -691,28 +724,42 @@ else
 endif
 
 "" Tabs.
+let g:which_key_map.t = { 'name': '+tabs' }
+
 "" Tab new.
 nmap <silent> <Leader>tn :tabnew<CR>
+let g:which_key_map.t.n = 'tab-new'
 
 "" Tab close.
 nmap <silent> <Leader>tq :tabclose<CR>
+let g:which_key_map.t.q = 'tab-close'
 
 "" Tab next/previous.
 nmap <silent> <Leader>th :tabprevious<CR>
+let g:which_key_map.t.h = 'tab-previous'
+
 nmap <silent> <Leader>tl :tabnext<CR>
+let g:which_key_map.t.l = 'tab-next'
 
 "" Tab move next/previous.
 nmap <silent> <Leader>tH :tabmove -1<CR>
+let g:which_key_map.t.H = 'tab-move-next'
+
 nmap <silent> <Leader>tL :tabmove +1<CR>
+let g:which_key_map.t.L = 'tab-move-previous'
 
 "" Tab go.
 for i in [1, 2, 3, 4, 5, 6, 7, 8, 9]
   execute "nmap <silent> <Leader>t" . i . " :tabnext " . i . "<CR>"
+  let g:which_key_map.t[i] = 'which_key_ignore'
 endfor
 
 "" Tab go first/last.
 nmap <silent> <Leader>t0 :tabfirst<CR>
+let g:which_key_map.t[0] = 'tab-first'
+
 nmap <silent> <Leader>t$ :tablast<CR>
+let g:which_key_map.t['$'] = 'tab-last'
 
 " Move lines.
 nnoremap <C-k> :move -2<CR>
@@ -820,7 +867,10 @@ endif
 " undotree.
 if s:plug_has_plugin("undotree")
   nnoremap <Leader>u :UndotreeShow<CR>:UndotreeFocus<CR>
+  let g:which_key_map.u = 'undotree-show'
+
   nnoremap <Leader>U :UndotreeHide<CR>
+  let g:which_key_map.U = 'undotree-hide'
 endif
 
 " Visual mode.
@@ -881,3 +931,11 @@ endif
 if exists(":tnoremap")
   tnoremap <Esc><Space> <C-\><C-n>
 endif
+
+" vim-which-key
+" See: https://github.com/liuchengxu/vim-which-key
+if s:plug_has_plugin("vim-which-key")
+  nnoremap <silent> <leader> :<c-u>WhichKey '<Space>'<CR>
+  vnoremap <silent> <leader> :<c-u>WhichKeyVisual '<Space>'<CR>
+endif
+
