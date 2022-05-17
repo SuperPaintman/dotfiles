@@ -20,6 +20,8 @@
   "editor.acceptSuggestionOnEnter": "on",
   "editor.snippetSuggestions": "bottom",
   "editor.selectionClipboard": false,
+  "editor.suggest.showKeywords": false,
+  "editor.bracketPairColorization.enabled": false,
   // Workbench
   "workbench.colorTheme": "Atom One Dark",
   "workbench.welcome.enabled": false,
@@ -37,9 +39,6 @@
   "explorer.decorations.colors": false,
   "explorer.compactFolders": false,
   "editor.suggest.showIcons": true,
-  "editor.suggest.filteredTypes": {
-    "keyword": false
-  },
   // Files
   "files.exclude": {
     // Common
@@ -238,6 +237,7 @@
   "go.lintFlags": ["--fast"],
   "go.gopath": "~/.go",
   "go.useLanguageServer": true,
+  "go.languageServerFlags": [],
   "go.languageServerExperimentalFeatures": {
     "format": true,
     "autoComplete": true,
@@ -261,6 +261,8 @@
   "prettier.semi": true,
   // VSCode Neovim
   "vscode-neovim.neovimExecutablePaths.linux": "nvim",
+  // Rust
+  "rust-analyzer.server.path": "rust-analyzer",
   /** Language specific settings */
   "[json]": {
     "editor.defaultFormatter": "vscode.json-language-features"

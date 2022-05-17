@@ -11,9 +11,6 @@ EXIT_CODE=0
 
 source "$ROOT/../common.sh"
 
-
-
-
 if is_linux; then
     link $@ "$ROOT/.Xmodmap" "$HOME/.Xmodmap" || { EXIT_CODE="$?"; }
 fi

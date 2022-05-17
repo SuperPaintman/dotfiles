@@ -40,7 +40,7 @@ function templateNix(config) {
 { pkgs, ... }:
 
 (
-  with pkgs.vscode-extensions; [
+  with pkgs; with pkgs.vscode-extensions; [
     ${nixPackages.join('\n')}
   ]
 ) ++ (

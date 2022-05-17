@@ -23,7 +23,7 @@ with pkgs; rec {
   };
 
   gopls = callPackage ./development/tools/gopls {
-    buildGoModule =  buildGo118beta1Module;
+    buildGoModule = buildGo118beta1Module;
   };
 
   rustup-openssl = callPackage ./development/tools/rust/rustup-openssl { };
@@ -33,6 +33,7 @@ with pkgs; rec {
 
   # Misc.
   firefox-install-extensions = callPackage ./misc/firefox-install-extensions { };
+  vscode-extensions = callPackage ./misc/vscode-extensions { };
 
   # OS Specific.
   zsa-udev-rules = callPackage ./os-specific/linux/zsa-udev-rules { };

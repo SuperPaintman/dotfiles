@@ -69,6 +69,12 @@ in
 
   # Nix Packages.
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = [
+    (self: super: {
+      unstable = unstable;
+      local = localPkgs;
+    })
+  ];
 
   # Environment.
   environment.systemPackages = with pkgs; lib.lists.flatten [
@@ -142,9 +148,11 @@ in
     cmake
     llvm
     ccls
-    go
+    # go
+    localPkgs.go_1_18beta1
     gotools
-    unstable.gopls
+    # unstable.gopls
+    localPkgs.gopls
     godef
     go-outline
     gomodifytags
@@ -230,10 +238,10 @@ in
 
     # Scripts.
     (writeShellScriptBin "restart-setup-commands" ''
-    ${config.services.xserver.displayManager.setupCommands}
+      ${config.services.xserver.displayManager.setupCommands}
     '')
     (writeShellScriptBin "restart-session-commands" ''
-    ${config.services.xserver.displayManager.sessionCommands}
+      ${config.services.xserver.displayManager.sessionCommands}
     '')
   ];
 

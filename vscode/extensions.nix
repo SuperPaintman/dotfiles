@@ -4,8 +4,9 @@
 { pkgs, ... }:
 
 (
-  with pkgs.vscode-extensions; [
+  with pkgs; with pkgs.vscode-extensions; [
     ms-vscode.cpptools
+    local.vscode-extensions.sumneko.lua
   ]
 ) ++ (
   pkgs.vscode-utils.extensionsFromVscodeMarketplace [
@@ -42,8 +43,8 @@
     {
       name = "Go";
       publisher = "golang";
-      version = "0.14.1";
-      sha256 = "1zj87m0swjnr7k9nwxj2db96h90fs1cny7w9c0q4kqnrrysh8ala";
+      version = "0.31.0";
+      sha256 = "09yjcdwn711pcdaflagwycsjyd5v64aijsl897hjchnnlcn2zzwa";
     }
     {
       name = "language-haskell";
@@ -64,12 +65,6 @@
       sha256 = "1cfbzc8fmvfsxyfwr11vnszvirl47zzjbjp6rihg5518gf5wd36k";
     }
     {
-      name = "lua";
-      publisher = "sumneko";
-      version = "0.17.0";
-      sha256 = "1s639aw3x8j9wz8rffivvpid8bbd7d77zb75y3vb9259ndxppy7q";
-    }
-    {
       name = "nix-ide";
       publisher = "jnoortheen";
       version = "0.1.12";
@@ -83,9 +78,9 @@
     }
     {
       name = "rust-analyzer";
-      publisher = "matklad";
-      version = "0.2.583";
-      sha256 = "0abz4hcndjr3yvacv1nr18zsblrr7vy3dhsi3dida79sqzvl29qy";
+      publisher = "rust-lang";
+      version = "0.3.1057";
+      sha256 = "0piz5dgihg1plwfaq5ybi71hq1hfva9dq8s1kj35hkffl7k0jjsh";
     }
     {
       name = "stylus";

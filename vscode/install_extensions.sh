@@ -78,7 +78,7 @@ extension "Elmtooling" "elm-ls-vscode" "1.5.2"
 extension "Dart-Code" "flutter" "3.12.2"
 
 # Go (golang)
-extension "golang" "Go" "0.14.1"
+extension "golang" "Go" "0.31.0"
 
 # language-haskell (justusadam)
 extension "justusadam" "language-haskell" "3.3.0"
@@ -90,7 +90,7 @@ extension "dramforever" "vscode-ghc-simple" "0.1.22"
 extension "MaxGabriel" "brittany" "0.0.9"
 
 # lua (sumneko)
-extension "sumneko" "lua" "0.17.0"
+extension "sumneko" "lua" "2.6.3"
 
 # nix-ide (jnoortheen)
 extension "jnoortheen" "nix-ide" "0.1.12"
@@ -98,8 +98,8 @@ extension "jnoortheen" "nix-ide" "0.1.12"
 # python (ms-python)
 extension "ms-python" "python" "2020.9.114305"
 
-# rust-analyzer (matklad)
-extension "matklad" "rust-analyzer" "0.2.583"
+# rust-analyzer (rust-lang)
+extension "rust-lang" "rust-analyzer" "0.3.1057"
 
 # stylus (alan)
 extension "alan" "stylus" "0.0.4"
