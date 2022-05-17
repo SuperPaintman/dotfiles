@@ -38,28 +38,28 @@ extensions:
     ## Flutter support and debugger for Visual Studio Code.
     - name: flutter
       publisher: Dart-Code
-      version: "3.12.2"
-      sha256: 0a7s9nadr10dia8j247aha98snqfq7vpafpsgmn4ls4nshr3ayjv
+      version: "3.41.20220516"
+      sha256: 0mkz4a0gk4wvywkxlr5srxh60mqvdgy06ap7qam0kbzdg716cyya
 
     # Go
     ## Rich Go language support for Visual Studio Code.
     - name: Go
       publisher: golang
-      version: "0.31.0"
-      sha256: 09yjcdwn711pcdaflagwycsjyd5v64aijsl897hjchnnlcn2zzwa
+      version: "0.33.0"
+      sha256: 1wd9zg4jnn7y75pjqhrxm4g89i15gff69hsxy7y5i6njid0x3x0w
 
     # Haskell
     ## Syntax support for the Haskell programming language.
     - name: language-haskell
       publisher: justusadam
-      version: "3.3.0"
-      sha256: 1285bs89d7hqn8h8jyxww7712070zw2ccrgy6aswd39arscniffs
+      version: "3.6.0"
+      sha256: 115y86w6n2bi33g1xh6ipz92jz5797d3d00mr4k8dv5fz76d35dd
 
     ## Simple Haskell support using only GHCi.
     - name: vscode-ghc-simple
       publisher: dramforever
-      version: "0.1.22"
-      sha256: 0x3csdn3pz5rhl9mhplpm8kxb40l1dw5rnwhh3zsif3rz0nqhk2a
+      version: "0.2.3"
+      sha256: 1pd7p4xdvcgmp8m9aymw0ymja1qxvds7ikgm4jil7ffnzl17n6kp
 
     ## Runs the Haskell code formatting tool Brittany.
     - name: brittany
@@ -80,16 +80,16 @@ extensions:
     ## Nix language support with formatting and error report.
     - name: nix-ide
       publisher: jnoortheen
-      version: "0.1.12"
-      sha256: 1wkc5mvxv7snrpd0py6x83aci05b9fb9v4w9pl9d1hyaszqbfnif
+      version: "0.1.20"
+      sha256: 16mmivdssjky11gmih7zp99d41m09r0ii43n17d4i6xwivagi9a3
 
     # Python
     ## Linting, Debugging (multi-threaded, remote), Intellisense, Jupyter Notebooks, code formatting, refactoring,
     ## unit tests, snippets, and more.
     - name: python
       publisher: ms-python
-      version: "2020.9.114305"
-      sha256: 1vh0wvfvzszc58lw7dbl60knpm5l6rrsghfchhn5dvwyadx4a33h
+      version: "2022.7.11371008"
+      sha256: 0w88gc73akgq5890sz0xzgmwxyps6vfxnghfz4kprwx3si199sdf
 
     # Rust
     ## Rust for Visual Studio Code (powered by Rust Language Server/Rust
@@ -116,8 +116,8 @@ extensions:
     ## Svelte language support for VS Code.
     - name: svelte-vscode
       publisher: svelte
-      version: "105.3.0"
-      sha256: 11plqsj3c4dv0xg2d76pxrcn382qr9wbh1lhln2x8mzv840icvwr
+      version: "105.16.1"
+      sha256: 1ridb70vdhirsqfrp2cvmlijkcb997gzakq1nr5xxbcih09r60y0
 
     # VimL
     ## VimL language syntax for vscode from textmate.
@@ -149,8 +149,8 @@ extensions:
     ## Fully-featured TOML support.
     - name: even-better-toml
       publisher: tamasfe
-      version: "0.12.1"
-      sha256: 1421ybxmz164m7g66bwl2wzkm0sgbz6n4cx9fwvas31n0xx3s6hs
+      version: "0.14.2"
+      sha256: 17djwa2bnjfga21nvyz8wwmgnjllr4a7nvrsqvzm02hzlpwaskcl
 
     # Terraform
     ## Syntax highlighting and autocompletion for Terraform.
@@ -177,20 +177,20 @@ extensions:
     ## LLVM IR syntax highlight.
     - name: llvm
       publisher: RReverser
-      version: "0.0.3"
-      sha256: 14d0iki124h1dj5v54rxk358qslpw7rpm0s2ky769nmq0km8xf6q
+      version: "0.1.1"
+      sha256: 0r58hfzxvgmr1xsirkyq2ffdmk3nmwj406d08aiqipr3i7kkrxih
 
     ## Code formatter using prettier.
     - name: prettier-vscode
       publisher: esbenp
-      version: "9.0.0"
-      sha256: 1nak1hg46wxkl0kb0zhc343kq2f4nd5q1fqscb29jybd4qdb8lgn
+      version: "9.5.0"
+      sha256: 0h5g746ij36h22v1y2883bqaphds7h1ck8mg8bywn9r723mxdy1g
 
     ## JavaScript and TypeScript playground in your editor.
     - name: quokka-vscode
       publisher: WallabyJs
-      version: "1.0.291"
-      sha256: 11dghkx8v3rx97fx2v1wlvxhihgiia6b9hgmr714z0sa267fnv2v
+      version: "1.0.472"
+      sha256: 1zl44ibimi3sd966xlphs2s9h48idasmw06p63i5mvnscpj3jfc4
 
     ## Arduino for Visual Studio Code.
     - name: vscode-arduino
@@ -201,31 +201,31 @@ extensions:
     ## Language support for .gitignore files.
     - name: gitignore
       publisher: codezombiech
-      version: "0.6.0"
-      sha256: 0gnc0691pwkd9s8ldqabmpfvj0236rw7bxvkf0bvmww32kv1ia0b
+      version: "0.7.0"
+      sha256: 0fm4sxx1cb679vn4v85dw8dfp5x0p74m9p2b56gqkvdap0f2q351
 
     ## REST Client for Visual Studio Code.
     - name: rest-client
       publisher: humao
-      version: "0.24.3"
-      sha256: 1pb30rxg5f0s20x1s8h51kblgyv6idnm50qm21sfv9n0vw00wipk
+      version: "0.24.6"
+      sha256: 196pm7gv0488bpv1lklh8hpwmdqc4yimz389gad6nsna368m4m43
 
     ## Compare (diff) text selections within a file, across files, or to the
     ## clipboard.
     - name: partial-diff
       publisher: ryu1kn
-      version: "1.4.1"
-      sha256: 1r4kg4slgxncdppr4fn7i5vfhvzcg26ljia2r97n6wvwn8534vs9
+      version: "1.4.3"
+      sha256: 0x3lkvna4dagr7s99yykji3x517cxk5kp7ydmqa6jb4bzzsv1s6h
 
     ## Syntax highlighting for jinja(2) including HTML, Markdown, YAML, Ruby
     ## and LaTeX templates.
     - name: jinjahtml
       publisher: samuelcolvin
-      version: "0.15.0"
-      sha256: 18mjabpzldsaz5r1sp94kwk28chrmifcr4aql0fag6yh2kms1jas
+      version: "0.17.0"
+      sha256: 120z8barzgva0sr1g7xj4arpjz96v4zxh2zgk56jzdgnafzyq71b
 
     ## VSCode Neovim Integration.
     - name: vscode-neovim
       publisher: asvetliakov
-      version: "0.0.82"
-      sha256: 17f0jzg9vdbqdjnnc5i1q28ij2kckvvxi7fw9szmyy754f074jb1
+      version: "0.0.84"
+      sha256: 042z6qi5y6n8znnf23w1r0rn1i8pc8s253vc3jh3i8nqfjkx02x5

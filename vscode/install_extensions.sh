@@ -75,16 +75,16 @@ extension "Dart-Code" "dart-code" "3.11.0"
 extension "Elmtooling" "elm-ls-vscode" "1.5.2"
 
 # flutter (Dart-Code)
-extension "Dart-Code" "flutter" "3.12.2"
+extension "Dart-Code" "flutter" "3.41.20220516"
 
 # Go (golang)
-extension "golang" "Go" "0.31.0"
+extension "golang" "Go" "0.33.0"
 
 # language-haskell (justusadam)
-extension "justusadam" "language-haskell" "3.3.0"
+extension "justusadam" "language-haskell" "3.6.0"
 
 # vscode-ghc-simple (dramforever)
-extension "dramforever" "vscode-ghc-simple" "0.1.22"
+extension "dramforever" "vscode-ghc-simple" "0.2.3"
 
 # brittany (MaxGabriel)
 extension "MaxGabriel" "brittany" "0.0.9"
@@ -93,10 +93,10 @@ extension "MaxGabriel" "brittany" "0.0.9"
 extension "sumneko" "lua" "2.6.3"
 
 # nix-ide (jnoortheen)
-extension "jnoortheen" "nix-ide" "0.1.12"
+extension "jnoortheen" "nix-ide" "0.1.20"
 
 # python (ms-python)
-extension "ms-python" "python" "2020.9.114305"
+extension "ms-python" "python" "2022.7.11371008"
 
 # rust-analyzer (rust-lang)
 extension "rust-lang" "rust-analyzer" "0.3.1057"
@@ -105,7 +105,7 @@ extension "rust-lang" "rust-analyzer" "0.3.1057"
 extension "alan" "stylus" "0.0.4"
 
 # svelte-vscode (svelte)
-extension "svelte" "svelte-vscode" "105.3.0"
+extension "svelte" "svelte-vscode" "105.16.1"
 
 # vimL (fallenwood)
 extension "fallenwood" "vimL" "0.0.3"
@@ -120,7 +120,7 @@ extension "akamud" "vscode-theme-onelight" "2.2.3"
 extension "akamud" "vscode-theme-onedark" "2.2.3"
 
 # even-better-toml (tamasfe)
-extension "tamasfe" "even-better-toml" "0.12.1"
+extension "tamasfe" "even-better-toml" "0.14.2"
 
 # terraform (HashiCorp)
 extension "HashiCorp" "terraform" "2.10.2"
@@ -132,28 +132,28 @@ extension "william-voyek" "vscode-nginx" "0.7.2"
 extension "oouo-diogo-perdigao" "docthis" "0.8.2"
 
 # llvm (RReverser)
-extension "RReverser" "llvm" "0.0.3"
+extension "RReverser" "llvm" "0.1.1"
 
 # prettier-vscode (esbenp)
-extension "esbenp" "prettier-vscode" "9.0.0"
+extension "esbenp" "prettier-vscode" "9.5.0"
 
 # quokka-vscode (WallabyJs)
-extension "WallabyJs" "quokka-vscode" "1.0.291"
+extension "WallabyJs" "quokka-vscode" "1.0.472"
 
 # vscode-arduino (vsciot-vscode)
 extension "vsciot-vscode" "vscode-arduino" "0.2.29"
 
 # gitignore (codezombiech)
-extension "codezombiech" "gitignore" "0.6.0"
+extension "codezombiech" "gitignore" "0.7.0"
 
 # rest-client (humao)
-extension "humao" "rest-client" "0.24.3"
+extension "humao" "rest-client" "0.24.6"
 
 # partial-diff (ryu1kn)
-extension "ryu1kn" "partial-diff" "1.4.1"
+extension "ryu1kn" "partial-diff" "1.4.3"
 
 # jinjahtml (samuelcolvin)
-extension "samuelcolvin" "jinjahtml" "0.15.0"
+extension "samuelcolvin" "jinjahtml" "0.17.0"
 
 # vscode-neovim (asvetliakov)
-extension "asvetliakov" "vscode-neovim" "0.0.82"
+extension "asvetliakov" "vscode-neovim" "0.0.84"
