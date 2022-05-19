@@ -1,6 +1,20 @@
+# See: xdg-mime query filetype <filename>
+
 [Default Applications]
+inode/directory=org.kde.dolphin.desktop
+
 text/html=firefox.desktop
+application/pdf=firefox.desktop
+
+image/png=feh.desktop
+image/jpeg=feh.desktop
+image/webp=feh.desktop
+
 x-scheme-handler/http=firefox.desktop
 x-scheme-handler/https=firefox.desktop
 x-scheme-handler/about=firefox.desktop
 x-scheme-handler/unknown=firefox.desktop
+x-scheme-handler/tg=telegramdesktop.desktop
+
+application/x-shellscript=code.desktop
+application/x-yaml=code.desktop
