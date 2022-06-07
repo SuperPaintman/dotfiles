@@ -246,7 +246,7 @@ end
 local function set_top_bar(s)
     -- Initialize widgets.
     ---- Separator.
-    local separator = wibox.widget.textbox("<span foreground='#FFFFFF3F'>|</span>")
+    local separator = wibox.widget.textbox("<b><span foreground='#FFFFFF3F'>⋮</span></b>")
 
     ---- Tagline.
     local taglist_buttons = gears.table.join(
@@ -406,7 +406,7 @@ local function set_top_bar(s)
         {
             -- Right widgets.
             layout = wibox.layout.fixed.horizontal,
-            widget_margin_horizontal(separator, dpi(12)),
+            -- widget_margin_horizontal(separator, dpi(12)),
             widget_margin_horizontal(telegram, dpi(6)),
             widget_margin_horizontal(separator, dpi(12)),
             widget_margin_horizontal(cpu, dpi(6)),
