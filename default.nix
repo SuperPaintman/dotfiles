@@ -22,6 +22,7 @@ imports ([
   ./bin
   ./cargo
   ./ctags
+  ./discord
   ./doom
   ./git
   ./gtk

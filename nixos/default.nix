@@ -133,7 +133,7 @@ in
 
     # Messengers.
     unstable.tdesktop # Telegram.
-    discord
+    unstable.discord
     skypeforlinux
 
     # Terminals.
