@@ -70,87 +70,6 @@ let
     process.stdout.write(JSON.stringify(res));
   '');
 
-  # charToHexMap = {
-  #   "0" = 0;
-  #   "1" = 1;
-  #   "2" = 2;
-  #   "3" = 3;
-  #   "4" = 4;
-  #   "5" = 5;
-  #   "6" = 6;
-  #   "7" = 7;
-  #   "8" = 8;
-  #   "9" = 9;
-  #   "a" = 10;
-  #   "A" = 10;
-  #   "b" = 11;
-  #   "B" = 11;
-  #   "c" = 12;
-  #   "C" = 12;
-  #   "d" = 13;
-  #   "D" = 13;
-  #   "e" = 14;
-  #   "E" = 14;
-  #   "f" = 15;
-  #   "F" = 15;
-  # };
-
-  # hexToCharMap = {
-  #   "0" = "0";
-  #   "1" = "1";
-  #   "2" = "2";
-  #   "3" = "3";
-  #   "4" = "4";
-  #   "5" = "5";
-  #   "6" = "6";
-  #   "7" = "7";
-  #   "8" = "8";
-  #   "9" = "9";
-  #   "10" = "A";
-  #   "11" = "B";
-  #   "12" = "C";
-  #   "13" = "D";
-  #   "14" = "E";
-  #   "15" = "F";
-  # };
-
-  # parseHexademicalChar = c:
-  #   if builtins.hasAttr c charToHexMap
-  #   then charToHexMap."${c}"
-  #   else null;
-
-  # parseHexadecimal = value:
-  #   let
-  #     len = builtins.stringLength value;
-  #   in
-  #   if len == 0
-  #   then 0
-  #   else
-  #     let
-  #       v = parseHexademicalChar (builtins.substring (len - 1) 1 value);
-  #     in
-  #     assert v != null;
-  #     v + (parseHexadecimal (builtins.substring 0 (len - 1) value)) * 16;
-
-  # hexadecimalToString = value:
-  #   let
-  #     head = lib.mod value 16;
-  #     tail = builtins.div value 16;
-  #     h = v:
-  #       assert builtins.hasAttr (builtins.toString v) hexToCharMap;
-  #       hexToCharMap."${builtins.toString v}";
-  #   in
-  #   if tail == 0
-  #   then (h head)
-  #   else (hexadecimalToString tail) + (h head);
-
-  # assertRGBA = { r, g, b, a ? 255 }:
-  #   assert r >= 0 && r <= 255;
-  #   assert b >= 0 && b <= 255;
-  #   assert g >= 0 && g <= 255;
-  #   assert a == null || a >= 0 && a <= 255;
-  #   true;
-
   x = self: rec {
     inherit executeCommand execute executeJS;
 
@@ -175,43 +94,6 @@ let
     '';
 
     colors = rec {
-      # toRGBA' = parseAlpha: color:
-      #   if builtins.isAttrs color
-      #   then
-      #     assert assertRGBA color;
-      #     color
-      #   else
-      #     let
-      #       len = builtins.stringLength color;
-      #     in
-      #     assert (builtins.substring 0 1 color) == "#";
-      #     assert len == 7 || len == 9;
-      #     let
-      #       c = n: parseHexadecimal (builtins.substring (1 + 2 * n) 2 color);
-      #       r = c 0;
-      #       g = c 1;
-      #       b = c 2;
-      #       a =
-      #         if parseAlpha && len == 9
-      #         then c 3
-      #         else 255;
-      #     in
-      #     assert assertRGBA { inherit r g b a; };
-      #     {
-      #       inherit r g b;
-      #     } // (if parseAlpha then { inherit a; } else { });
-
-      # toRGB = toRGBA' false;
-
-      # toRGBA = toRGBA' true;
-
-      # toHEX = { r, g, b, a ? null }:
-      #   assert assertRGBA { inherit r g b a; };
-      #   let
-      #     h = hexadecimalToString;
-      #   in
-      #   "#${h r}${h g}${h b}${if a == null then "" else h a}";
-
       toRGB = color: tinycolor ''
         (v) => {
           const res = v(${toJSON color}).toRgb();

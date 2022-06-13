@@ -68,46 +68,6 @@ runTests {
     '';
   };
 
-  # testToRGBWithValidRGBHexColor = {
-  #   expr = x.colors.toRGB "#ABCDEF";
-  #   expected = { r = 171; g = 205; b = 239; };
-  # };
-
-  # testToRGBWithValidRGBAHexColor = {
-  #   expr = x.colors.toRGB "#ABCDEF12";
-  #   expected = { r = 171; g = 205; b = 239; };
-  # };
-
-  # testToRGBAWithValidRGBHexColor = {
-  #   expr = x.colors.toRGBA "#ABCDEF";
-  #   expected = { r = 171; g = 205; b = 239; a = 255; };
-  # };
-
-  # testToRGBAWithValidRGBAHexColor = {
-  #   expr = x.colors.toRGBA "#ABCDEF12";
-  #   expected = { r = 171; g = 205; b = 239; a = 18; };
-  # };
-
-  # testToRGBAWithValidRGBColor = {
-  #   expr = x.colors.toRGBA { r = 171; g = 205; b = 239; a = 255; };
-  #   expected = { r = 171; g = 205; b = 239; a = 255; };
-  # };
-
-  # testToRGBAWithValidRGBAColor = {
-  #   expr = x.colors.toRGBA { r = 171; g = 205; b = 239; a = 18; };
-  #   expected = { r = 171; g = 205; b = 239; a = 18; };
-  # };
-
-  # testToHEXWithValieRGBColor = {
-  #   expr = x.colors.toHEX { r = 171; g = 205; b = 239; };
-  #   expected = "#ABCDEF";
-  # };
-
-  # testToHEXWithValieRGBAColor = {
-  #   expr = x.colors.toHEX { r = 171; g = 205; b = 239; a = 18; };
-  #   expected = "#ABCDEF12";
-  # };
-
   testColorsToRGB = {
     expr = x.colors.toRGB "#ABCDEF";
     expected = { r = 171; g = 205; b = 239; };
