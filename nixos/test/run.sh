@@ -48,6 +48,7 @@ run_tests() {
     results="$(cd "$ROOT" && nix-instantiate \
         --eval \
         --strict \
+        --read-write-mode \
         -E 'with import <nixpkgs> { }; callPackage ./. { }' \
         -A "$name")"
 
