@@ -60,15 +60,17 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     mkdir -p extension/{themes,}
 
-    cat <<EOF > extension/package.json
+    cat <<EOF | ${pkgs.jq}/bin/jq . > extension/package.json
     ${builtins.toJSON package}
     EOF
 
     cp ${./icon.png} extension/icon.png
 
-    cat <<EOF > extension/themes/theme.json
+    cat <<EOF | ${pkgs.jq}/bin/jq . > extension/themes/theme.json
     ${builtins.toJSON theme}
     EOF
+
+    ${pkgs.remarshal}/bin/json2yaml extension/themes/theme.json extension/themes/theme.yml
   '';
 
   installPhase = ''
