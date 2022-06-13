@@ -13,6 +13,4 @@ source "$ROOT/../common.sh"
 
 link $@ "$ROOT/settings.json" "$HOME/.config/discord/settings.json" || { EXIT_CODE="$?"; }
 
-
-
 exit "$EXIT_CODE"

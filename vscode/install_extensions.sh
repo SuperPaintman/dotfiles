@@ -119,6 +119,9 @@ extension "akamud" "vscode-theme-onelight" "2.2.3"
 # vscode-theme-onedark (akamud)
 extension "akamud" "vscode-theme-onedark" "2.2.3"
 
+# undefined (undefined)
+extension undefined undefined undefined
+
 # even-better-toml (tamasfe)
 extension "tamasfe" "even-better-toml" "0.14.2"
 

@@ -7,6 +7,7 @@
   with pkgs; with pkgs.vscode-extensions; [
     ms-vscode.cpptools
     local.vscode-extensions.sumneko.lua
+    local.vscode-extensions.themes.superpaintman
   ]
 ) ++ (
   pkgs.vscode-utils.extensionsFromVscodeMarketplace [

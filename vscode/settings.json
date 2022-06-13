@@ -23,7 +23,7 @@
   "editor.suggest.showKeywords": false,
   "editor.bracketPairColorization.enabled": false,
   // Workbench
-  "workbench.colorTheme": "Atom One Dark",
+  "workbench.colorTheme": "SuperPaintman",
   "workbench.welcome.enabled": false,
   "workbench.colorCustomizations": {
     "statusBar.background": "#23241F",

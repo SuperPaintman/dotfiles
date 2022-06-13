@@ -70,11 +70,13 @@ async function processConfig(cfg, ctx) {
 
   function walk(ctx, node) {
     if (isArray(node)) {
-      return node.map((n, i) => walk({...ctx, path: [...ctx.path, i]}, n));
+      return node.map((n, i) => walk({ ...ctx, path: [...ctx.path, i] }, n));
     }
 
     if (isObject(node)) {
-      return mapValues(node, (value, key) => walk({...ctx, path: [...ctx.path, key]}, value));
+      return mapValues(node, (value, key) =>
+        walk({ ...ctx, path: [...ctx.path, key] }, value)
+      );
     }
 
     if (isString(node) && hasTemplate(node)) {
