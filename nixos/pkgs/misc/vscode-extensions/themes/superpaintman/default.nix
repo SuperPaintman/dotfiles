@@ -17,9 +17,12 @@ let
       uiTheme = "vs-dark";
       path = "./themes/theme.json";
     }];
+
+
+
   };
 
-  flattenAttrs' = sep: prefix: set:
+  normalizeColors' = prefix: set:
     let
       names = builtins.attrNames set;
     in
@@ -29,21 +32,21 @@ let
           let
             value = set.${name};
           in
-          if builtins.isAttrs value
-          then flattenAttrs' sep "${prefix}${name}${sep}" value
-          else [{ name = "${prefix}${name}"; value = value; }]
+          if value ? gui
+          then [{ name = "${prefix}${name}"; value = value.gui; }]
+          else normalizeColors' "${prefix}${name}." value
         )
         names
     );
 
-  flattenAttrs = set: builtins.listToAttrs (flattenAttrs' "." "" set);
+  normalizeColors = set: builtins.listToAttrs (normalizeColors' "" set);
 
-  theme' = builtins.removeAttrs (pkgs.callPackage ./theme.nix { }) [ "override" "overrideDerivation" ];
+  theme' = builtins.removeAttrs (pkgs.callPackage ./theme2.nix { }) [ "override" "overrideDerivation" ];
 
   theme = {
     inherit (theme') author name tokenColors;
 
-    colors = flattenAttrs theme'.colors;
+    colors = normalizeColors theme'.colors;
   };
 in
 stdenv.mkDerivation rec {
