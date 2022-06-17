@@ -116,6 +116,8 @@ let
       brighten = modify "brighten";
 
       darken = modify "darken";
+
+      alpha = modify "setAlpha";
     };
   };
 in

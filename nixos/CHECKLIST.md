@@ -60,7 +60,7 @@ I think many of them should be replaced with a script.
 
 - [ ] Setup [1Password CLI](https://support.1password.com/command-line/).
 
-  ```
+  ```sh
   $ EMAIL="<email>"
   $ op signin my.1password.com "$EMAIL"
   # Enter the secret key from https://my.1password.com/profile .

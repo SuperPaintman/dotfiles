@@ -13,6 +13,54 @@
 
 { pkgs, stdenv, lib, callPackage, runCommand, applications, colors }:
 let
+  langs =
+    let
+      comb = groups:
+        if (builtins.length groups) == 0
+        then [ "" ]
+        else
+          let
+            head = lib.head groups;
+            tail = lib.tail groups;
+            variants =
+              if builtins.isList head
+              then head
+              else [ head ];
+          in
+          # comb' prefix tail;
+          lib.flatten (
+            map
+              (suffix:
+                map
+                  (variant:
+                    "${variant}${suffix}"
+                  )
+                  variants
+              )
+              (comb tail)
+          );
+
+      source = [ "source." "meta.embedded.block." ];
+
+      lang = names: variants: comb [ source names " " variants ];
+    in
+    {
+      inherit lang;
+
+      c = lang "c";
+      css = lang "css";
+      go = lang "go";
+      html = variants: comb [ [ "text.html" "meta.embedded.block.html" ] " " variants ];
+      javascript = lang [ "js" "javascript" "jsx" "ts" "typescript" "tsx" ];
+      json = lang "json";
+      markdown = variants: comb [ [ "text.html.markdown" "meta.embedded.block.markdown" ] " " variants ];
+      nix = lang "nix";
+      rust = lang "rust";
+      shell = lang [ "shell" "shellscript" ];
+      toml = lang "toml";
+      yaml = lang "yaml";
+    };
+
   normalizeColors' = prefix: set:
     let
       names = builtins.attrNames set;
@@ -40,18 +88,21 @@ let
         bold = false;
         italic = false;
         underline = false;
+        strikethrough = false;
       } // settings;
     in
     {
-      inherit (color) name scope;
+      inherit (color) name;
+      scope = lib.flatten color.scope;
       settings =
         (lib.optionalAttrs (settings ? foreground) { foreground = settings.foreground.gui; })
         // (lib.optionalAttrs (settings ? background) { background = settings.background.gui; })
-        // (lib.optionalAttrs (styles.italic || styles.bold || styles.underline) {
+        // (lib.optionalAttrs (lib.any (v: builtins.isBool v && v) (lib.attrValues styles)) {
           fontStyle = lib.concatStringsSep " " (
             (lib.optional (styles.italic) "italic")
             ++ (lib.optional (styles.bold) "bold")
             ++ (lib.optional (styles.underline) "underline")
+            ++ (lib.optional (styles.strikethrough) "strikethrough")
           );
         });
     };
@@ -359,8 +410,6 @@ in
 
   tokenColors = with colors; with syntax;
     let
-      scopes = prefixes: scope: map (prefix: "${prefix} ${scope}") prefixes;
-
       reset = {
         inherit foreground;
       };
@@ -395,14 +444,17 @@ in
           "constant"
           "support.constant"
 
-          # C - hexademical prefixes.
-          "source.c keyword.other.unit.hexadecimal"
+          # C.
+          (langs.c [
+            # C - hexademical prefixes.
+            "keyword.other.unit.hexadecimal"
 
-          # C - characters.
-          "source.c string.quoted.single"
+            # C - characters.
+            "string.quoted.single"
+          ])
 
           # Rust - characters.
-          "source.rust string.quoted.single"
+          (langs.rust "string.quoted.single")
         ];
         settings = constant;
       }
@@ -414,10 +466,10 @@ in
           "keyword.other.unit"
 
           # CSS - hex colors.
-          "source.css punctuation.definition.constant"
+          (langs.css "punctuation.definition.constant")
 
           # Rust.
-          "source.rust constant entity.name.type"
+          (langs.rust "constant.numeric entity.name.type.numeric")
         ];
         settings = unit;
       }
@@ -438,15 +490,20 @@ in
           "string"
 
           # CSS.
-          "source.css entity.other.attribute-name.class"
-          "source.css variable.parameter.url"
-          "source.css support.constant.font-name"
+          (langs.css [
+            "entity.other.attribute-name.class"
+            "variable.parameter.url"
+            "support.constant.font-name"
+          ])
 
           # C - characters.
-          "source.c string.quoted.single punctuation.definition"
+          (langs.c "string.quoted.single punctuation.definition")
 
           # Rust - characters.
-          "source.rust string.quoted.single punctuation.definition"
+          (langs.rust "string.quoted.single punctuation.definition")
+
+          # Go - imports.
+          (langs.go "string.quoted entity.name.import")
         ];
         settings = string;
       }
@@ -456,9 +513,13 @@ in
         name = "Interpolation";
         scope = [
           "punctuation.section.embedded"
-        ]
-        # JavaScript  / TypeScript- template strings.
-        ++ (scopes [ "source.js" "source.jsx" "source.ts" "source.tsx" ] "punctuation.definition.template-expression");
+
+          # Shell.
+          (langs.shell "string variable")
+
+          # JavaScript  / TypeScript- template strings.
+          (langs.javascript "punctuation.definition.template-expression")
+        ];
         settings = interpolation;
       }
 
@@ -477,7 +538,7 @@ in
           "constant.other.placeholder"
 
           # Rust.
-          "source.rust meta.interpolation"
+          (langs.rust "meta.interpolation")
         ];
         settings = syntax.placeholder;
       }
@@ -506,23 +567,30 @@ in
           "storage"
 
           # C.
-          "source.c storage.type.struct"
-          "source.c storage.type.enum"
+          (langs.c [
+            "storage.type.struct"
+            "storage.type.enum"
+          ])
 
           # Go.
-          "source.go keyword.function"
-          "source.go keyword.type"
-          "source.go keyword.interface"
-          "source.go keyword.struct"
-          "source.go keyword.map"
-          "source.go keyword.channel"
+          (langs.go [
+            "keyword.function"
+            "keyword.type"
+            "keyword.interface"
+            "keyword.struct"
+            "keyword.map"
+            "keyword.channel"
+          ])
 
           # Rust.
-          "source.rust storage.type"
-          "source.rust keyword.other"
-        ]
-        # JavaScript / TypeScript.
-        ++ (scopes ["source.js" "source.jsx" "source.ts" "source.tsx"] "storage.type");
+          (langs.rust [
+            "storage.type"
+            "keyword.other"
+          ])
+
+          # JavaScript / TypeScript.
+          (langs.javascript "storage.type")
+        ];
         settings = keyword;
       }
 
@@ -532,8 +600,10 @@ in
           "storage.modifier"
 
           # Rust.
-          "source.rust punctuation.definition.attribute"
-          "source.rust punctuation.brackets.attribute"
+          (langs.rust [
+            "punctuation.definition.attribute"
+            "punctuation.brackets.attribute"
+          ])
         ];
         settings = keyword;
       }
@@ -555,14 +625,16 @@ in
           "support.variable.property"
 
           # YAML.
-          "source.yaml entity.name.type.anchor"
+          (langs.yaml "entity.name.type.anchor")
 
           # Rust.
-          "source.rust meta.attribute"
+          (langs.rust "meta.attribute")
 
           # Nix.
-          "source.nix variable.parameter.name"
-          "source.nix entity.other.attribute-name"
+          (langs.nix [
+            "variable.parameter.name"
+            "entity.other.attribute-name"
+          ])
         ];
         settings = variable;
       }
@@ -574,10 +646,10 @@ in
           "variable.parameter"
 
           # Rust.
-          "source.rust meta.function.definition variable.other"
+          (langs.rust "meta.function.definition variable.other")
 
           # Nix.
-          "source.nix variable.parameter.function"
+          (langs.nix "variable.parameter.function")
         ];
         settings = parameter;
       }
@@ -591,11 +663,13 @@ in
           "support.function"
 
           # Go.
-          "source.go support.function"
+          (langs.go "support.function")
 
           # YAML.
-          "source.yaml constant.language.merge"
-          "source.yaml storage.type.tag-handle"
+          (langs.yaml [
+            "constant.language.merge"
+            "storage.type.tag-handle"
+          ])
         ];
         settings = function;
       }
@@ -619,15 +693,19 @@ in
           "support.type"
 
           # C.
-          "source.c storage.type.built-in"
-          "source.c storage.modifier.array"
+          (langs.c [
+            "storage.type.built-in"
+            "storage.modifier.array"
+          ])
 
           # Go.
-          "source.go storage.type"
+          (langs.go "storage.type")
 
           # Rust.
-          "source.rust entity.name.type.numeric"
-          "source.rust entity.name.type.primitive"
+          (langs.rust [
+            "entity.name.type.numeric"
+            "entity.name.type.primitive"
+          ])
         ];
         settings = primitive;
       }
@@ -639,15 +717,19 @@ in
           "punctuation.accessor"
 
           # CSS.
-          "source.css entity.other.attribute-name.pseudo-class punctuation.definition.entity"
-          "source.css entity.other.attribute-name.pseudo-element punctuation.definition.entity"
+          (langs.css [
+            "entity.other.attribute-name.pseudo-class punctuation.definition.entity"
+            "entity.other.attribute-name.pseudo-element punctuation.definition.entity"
+          ])
 
           # Go.
-          "source.go punctuation.other.period"
+          (langs.go "punctuation.other.period")
 
           # Rust.
-          "source.rust keyword.operator.access"
-          "source.rust keyword.operator.namespace"
+          (langs.rust [
+            "keyword.operator.access"
+            "keyword.operator.namespace"
+          ])
         ];
         settings = accessor;
       }
@@ -660,17 +742,20 @@ in
           "support.type.property-name"
 
           # JSON.
-          "source.json support.type.property-name"
+          (langs.json "support.type.property-name")
 
           # YAML.
-          "source.yaml entity.name.tag"
+          (langs.yaml "entity.name.tag")
 
           # TOML.
-          "source.toml variable.key"
-        ]
-        # JavaScript / TypeScript.
-        ++ (scopes ["source.js" "source.jsx" "source.ts" "source.tsx"] "variable.object.property")
-        ++ (scopes ["source.js" "source.jsx" "source.ts" "source.tsx"] "meta.object-literal.key");
+          (langs.toml "variable.key")
+
+          # JavaScript / TypeScript.
+          (langs.javascript [
+            "variable.object.property"
+            "meta.object-literal.key"
+          ])
+        ];
         settings = property;
       }
 
@@ -693,9 +778,100 @@ in
           "entity.other.attribute-name"
 
           # CSS.
-          "source.css ntity.other.attribute-name.id punctuation.definition.entity"
+          (langs.css "ntity.other.attribute-name.id punctuation.definition.entity")
         ];
         settings = attribute;
+      }
+
+      # Markup.
+      # See: https://www.sublimetext.com/docs/scope_naming.html#markup
+      {
+        name = "Markup: heading";
+        scope = [
+          "markup.heading"
+          "markup.heading entity.name"
+        ];
+        settings = markup.heading;
+      }
+
+      {
+        name = "Markup: list";
+        scope = [
+          "markup.list punctuation.definition.list"
+        ];
+        settings = markup.list;
+      }
+
+      {
+        name = "Markup: bold";
+        scope = [
+          "markup.bold"
+        ];
+        settings = markup.bold;
+      }
+
+      {
+        name = "Markup: italic";
+        scope = [
+          "markup.italic"
+        ];
+        settings = markup.italic;
+      }
+
+      {
+        name = "Markup: underline";
+        scope = [
+          "markup.underline"
+        ];
+        settings = markup.underline;
+      }
+
+      {
+        name = "Markup: strikethrough";
+        scope = [
+          "markup.strikethrough"
+        ];
+        settings = markup.strikethrough;
+      }
+
+      {
+        name = "Markup: quote";
+        scope = [
+          "markup.quote"
+        ];
+        settings = markup.quote;
+      }
+
+      {
+        name = "Markup: link";
+        scope = [
+          "markup.underline.link"
+        ];
+        settings = markup.link;
+      }
+
+      {
+        name = "Markup: code";
+        scope = [
+          "markup.inline.raw"
+          "markup.raw"
+
+          # Markdown.
+          (langs.markdown [
+            "markup.fenced_code punctuation.definition.markdown"
+            "markup.fenced_code fenced_code.block.language"
+          ])
+        ];
+        settings = markup.code;
+      }
+
+      {
+        name = "Markup: separator";
+        scope = [
+          # Markdown.
+          (langs.markdown "text.html.markdown meta.separator")
+        ];
+        settings = markup.separator;
       }
 
       # Fixes.
@@ -704,19 +880,25 @@ in
         scope = [
           "punctuation.separator.key-value"
 
+          # HTML.
+          (langs.html "meta.tag")
+
           # CSS.
-          "source.css punctuation.definition.entity.begin.bracket"
-          "source.css punctuation.definition.entity.end.bracket"
+          (langs.css [
+            "punctuation.definition.entity.begin.bracket"
+            "punctuation.definition.entity.end.bracket"
+          ])
 
           # Rust.
-          "source.rust keyword.operator.key-value"
-        ]
-        # JavaScript / TypeScript.
-        ++ (scopes ["source.js" "source.jsx" "source.ts" "source.tsx"] "punctuation.separator.key-value")
-        ++ (scopes ["source.ts" "source.tsx"] "keyword.operator.type.annotation");
+          (langs.rust "keyword.operator.key-value")
+
+          # JavaScript / TypeScript.
+          (langs.javascript [
+            "punctuation.separator.key-value"
+            "keyword.operator.type.annotation"
+          ])
+        ];
         settings = reset;
       }
-
-      # TODO(SuperPaintman): add colors for Markdown.
     ];
 }

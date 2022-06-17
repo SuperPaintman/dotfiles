@@ -127,6 +127,9 @@ let
     primitive = type;
 
     # A key-value or a namespace accessor (e.g. `.`, `::`, `:`).
+    #
+    # TODO(SuperPaintman):
+    #     Maybe I should remove this token type and replace it with `operator`;
     accessor = operator;
 
     # A property name (e.g. a property in json, key in JS object, attribute
@@ -138,6 +141,20 @@ let
 
     # A HTML attribute.
     attribute = { foreground = yellow; };
+
+    # Markup specific syntax.
+    markup = {
+      heading = { foreground = red; };
+      list = { foreground = violet; };
+      bold = { foreground = yellow; bold = true; };
+      italic = { foreground = yellow; italic = true; };
+      underline = { underline = true; };
+      strikethrough = { foreground = yellow; strikethrough = true; };
+      link = constant // { underline = true; };
+      quote = { foreground = violet; italic = true; };
+      code = { foreground = magenta; };
+      separator = comment;
+    };
   };
 in
 {
