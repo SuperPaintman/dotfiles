@@ -369,16 +369,34 @@ in
 
   # See: https://github.com/yshui/picom/blob/master/picom.sample.conf
   # See: https://wiki.archlinux.org/index.php/Picom
+  # See: `xprop`.
   services.picom = {
     enable = true;
     backend = "glx";
     vSync = true;
 
+    opacityRules = [
+      "90:window_type = 'notification' && class_g = 'awesome'"
+    ];
+
     shadow = true;
-    shadowOffsets = [ (-15) (-10) ];
-    shadowOpacity = 0.35;
+    shadowOffsets = [ (-10) (-10) ];
+    shadowOpacity = 0.22;
 
     settings = {
+      blur-background = true;
+      blur-kern = "7x7box";
+      blur-strength = 320;
+      blur-background-exclude = [
+        "window_type = 'dock'"
+        "window_type = 'desktop'"
+        "_GTK_FRAME_EXTENTS@:c"
+      ];
+
+      # The blur radius for shadows, in pixels. (defaults to 12)
+      # shadow-radius = 12
+      shadow-radius = 12;
+
       # Unredirect all windows if a full-screen opaque window is detected,
       # to maximize performance for full-screen windows. Known to cause
       # flickering when redirecting/unredirecting windows.
