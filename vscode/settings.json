@@ -95,6 +95,7 @@
   "files.trimTrailingWhitespace": true,
   "files.insertFinalNewline": true,
   "files.autoSave": "off",
+  "files.defaultLanguage": "markdown",
   // Extensions
   "extensions.autoUpdate": false,
   "extensions.ignoreRecommendations": true,
