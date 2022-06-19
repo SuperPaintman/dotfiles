@@ -346,8 +346,11 @@ in
     };
 
     titleBar = {
-      activeBackground = red; # TODO
-      activeForeground = green; # TODO
+      activeBackground = base2;
+      activeForeground = white;
+      inactiveBackground = base2;
+      inactiveForeground = grey;
+      border = { gui = "#00000000"; };
     };
 
     badge = {

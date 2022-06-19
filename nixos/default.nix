@@ -17,7 +17,7 @@ let
     };
 in
 let
-  localPkgs = pkgs.callPackage ./pkgs  { };
+  localPkgs = pkgs.callPackage ./pkgs { };
 
   themes = pkgs.callPackage ../themes { };
 

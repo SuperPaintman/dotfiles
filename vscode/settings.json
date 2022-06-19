@@ -30,6 +30,8 @@
     "statusBar.noFolderBackground": "#23241F",
     "statusBar.debuggingBackground": "#23241F"
   },
+  // Window.
+  "window.titleBarStyle": "custom",
   // Disable to allow Neovim navigation.
   "workbench.list.automaticKeyboardNavigation": false,
   // Breadcrumbs

@@ -95,6 +95,7 @@ theme.titlebar_size = dpi(22)
 theme.titlebar_fg_normal = colors.primary.foreground
 -- theme.titlebar_bg_normal = colors.normal.background -- "00"
 
+
 --------------------------------------------------------------------------------
 -- Wibars.
 --------------------------------------------------------------------------------
