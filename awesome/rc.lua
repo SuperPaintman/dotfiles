@@ -494,6 +494,12 @@ awful.rules.rules = {
         },
         properties = {floating = true}
     },
+    -- Make all child Steam windows floating.
+    {
+        rule = {class = "Steam"},
+        except = {name = "Steam"},
+        properties = {floating = true}
+    },
     -- Add titlebars to normal clients and dialogs
     {
         rule_any = {
