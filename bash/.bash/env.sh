@@ -31,4 +31,8 @@ fi
 export NIX_BUILD_SHELL=bash
 
 # Bat.
-export BAT_THEME="TwoDark"
+if [ -f "$HOME/.config/bat/themes/SuperPaintman/SuperPaintman.tmTheme" ]; then
+    export BAT_THEME="SuperPaintman"
+else
+    export BAT_THEME="TwoDark"
+fi

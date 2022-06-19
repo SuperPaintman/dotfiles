@@ -17,7 +17,9 @@ let
     };
 in
 let
-  localPkgs = import ./pkgs args;
+  localPkgs = pkgs.callPackage ./pkgs  { };
+
+  themes = pkgs.callPackage ../themes { };
 
   home-manager = builtins.fetchGit {
     url = "https://github.com/rycee/home-manager.git";
@@ -599,6 +601,20 @@ in
             "${configPath}/${profilePath}/chrome/userContent.css".source = ../firefox/chrome/userContent.css;
           }
           { };
+
+      batFiles = {
+        ".config/bat/themes/SuperPaintman/SuperPaintman.tmTheme" = {
+          source = themes.applications.textmate.writeTextmateThemeFile {
+            name = "SuperPaintman";
+            author = "SuperPaintman";
+            semanticClass = "theme.dark.superpaintman";
+            uuid = "ad17b280-ee9e-11ec-a8bd-43d0ce50926a";
+          };
+          onChange = ''
+            ${pkgs.bat}/bin/bat cache --build
+          '';
+        };
+      };
     in
     {
       superpaintman = {
@@ -611,6 +627,7 @@ in
         home.file = lib.mkMerge [
           files
           firefoxFiles
+          batFiles
           {
             ".dotfiles".source = mkSymlink "/home/superpaintman/Projects/github.com/SuperPaintman/dotfiles";
             "Org".source = mkSymlink "/home/superpaintman/Projects/github.com/SuperPaintman/Org";
@@ -622,6 +639,7 @@ in
         home.file = lib.mkMerge [
           files
           firefoxFiles
+          batFiles
         ];
       };
     }
