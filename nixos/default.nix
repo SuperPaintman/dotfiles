@@ -203,6 +203,7 @@ in
 
     # Misc.
     (polybar.override { pulseSupport = true; })
+    entr # Run arbitrary commands when files change.
     tldr # Simple man pages.
     lf # Terminal file manager.
     fzf # A command-line fuzzy finder written in Go.
