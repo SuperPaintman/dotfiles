@@ -311,9 +311,9 @@ in
     };
 
     scrollbarSlider = {
-      background = base4;
-      hoverBackground = base5;
-      activeBackground = base6;
+      background = { gui = alpha 0.2 base5.gui; };
+      hoverBackground = { gui = alpha 0.4 base5.gui; };
+      activeBackground = { gui = alpha 0.5 base5.gui; };
     };
 
     sideBar = {
