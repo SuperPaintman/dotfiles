@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+/* Imports */
+const vm = require('vm');
+const readline = require('readline');
+
+/* Helpers */
+function pipe(...fns) {
+  return function combined(...args) {
+    if (fns.length === 0) {
+      return undefined;
+    }
+
+    let res = fns[0].apply(null, args);
+    for (let i = 1; i < fns.length; i++) {
+      res = fns[i].call(null, res);
+    }
+
+    return res;
+  };
+}
+
+/* Main */
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  terminal: false
+});
+
+const defaultCode = 'l => l';
+const code = process.argv.slice(2).join(' ').trim() || defaultCode;
+const sandbox = new vm.Script(code);
+
+const fn = sandbox.runInNewContext({
+  console,
+  log: console.log.bind(console),
+  path: require('path'),
+  pipe,
+  echo(...args) {
+    rl.output.write(args.map((a) => '' + a).join(' ') + '\n');
+  }
+});
+
+rl.on('line', (line) => {
+  const v = fn(line);
+  if (v !== undefined && typeof v !== 'function') {
+    rl.output.write('' + v + '\n');
+  }
+});
