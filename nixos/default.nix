@@ -53,6 +53,7 @@ in
 
   # Imports.
   imports = lib.lists.flatten [
+    ./modules/services/network-filesystems/rclone.nix
     (import "${home-manager}/nixos")
     (import "${monitroid.path}/nixos")
     (if builtins.pathExists ../secrets then ../secrets/nixos else [ ])

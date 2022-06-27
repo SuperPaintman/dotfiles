@@ -121,3 +121,8 @@ I think many of them should be replaced with a script.
   ```
 
   3. Run `make nixos-switch`.
+
+- [ ] Configure Rclone.
+  - [ ] Google Drive
+    1. Run `rclone config`.
+    2. Follow the instructions on <https://rclone.org/drive/>.
