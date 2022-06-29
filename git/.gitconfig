@@ -18,6 +18,12 @@
 [color]
 	ui = true
 
+[color "status"]
+	added = green
+	changed = blue
+	untracked = magenta
+	deleted = red
+
 [alias]
 	# A
 	## Alias
@@ -82,7 +88,7 @@
 
 	# S
 	## Status
-	s = status -sb
+	s = status --short --branch --find-renames --untracked-files=all
 
 	## Stash
 	sin = stash --include-untracked
