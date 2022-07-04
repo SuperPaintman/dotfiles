@@ -41,6 +41,7 @@ let
       nix = lang "nix";
       rust = lang "rust";
       shell = lang [ "shell" "shellscript" ];
+      stylus = lang "stylus";
       toml = lang "toml";
       yaml = lang "yaml";
     };
@@ -218,6 +219,7 @@ in
 
           # CSS - hex colors.
           (langs.css "punctuation.definition.constant")
+          (langs.stylus "punctuation.definition.constant")
 
           # Rust.
           (langs.rust "constant.numeric entity.name.type.numeric")
@@ -242,6 +244,11 @@ in
 
           # CSS.
           (langs.css [
+            "entity.other.attribute-name.class"
+            "variable.parameter.url"
+            "support.constant.font-name"
+          ])
+          (langs.stylus [
             "entity.other.attribute-name.class"
             "variable.parameter.url"
             "support.constant.font-name"
@@ -421,6 +428,9 @@ in
             "constant.language.merge"
             "storage.type.tag-handle"
           ])
+
+          # Stylus.
+          (langs.stylus "entity.function-name")
         ];
         settings = function;
       }
@@ -472,6 +482,10 @@ in
             "entity.other.attribute-name.pseudo-class punctuation.definition.entity"
             "entity.other.attribute-name.pseudo-element punctuation.definition.entity"
           ])
+          (langs.stylus [
+            "entity.other.attribute-name.pseudo-class punctuation.definition.entity"
+            "entity.other.attribute-name.pseudo-element punctuation.definition.entity"
+          ])
 
           # Go.
           (langs.go "punctuation.other.period")
@@ -506,6 +520,9 @@ in
             "variable.object.property"
             "meta.object-literal.key"
           ])
+
+          # Stylus.
+          (langs.stylus "variable.other.property")
         ];
         settings = property;
       }
@@ -518,6 +535,7 @@ in
 
           # CSS.
           "meta.selector.css"
+          "meta.selector.stylus"
         ];
         settings = tag;
       }
@@ -529,7 +547,8 @@ in
           "entity.other.attribute-name"
 
           # CSS.
-          (langs.css "ntity.other.attribute-name.id punctuation.definition.entity")
+          (langs.css "entity.other.attribute-name.id punctuation.definition.entity")
+          (langs.stylus "entity.other.attribute-name.id punctuation.definition.entity")
         ];
         settings = attribute;
       }
@@ -636,6 +655,10 @@ in
 
           # CSS.
           (langs.css [
+            "punctuation.definition.entity.begin.bracket"
+            "punctuation.definition.entity.end.bracket"
+          ])
+          (langs.stylus [
             "punctuation.definition.entity.begin.bracket"
             "punctuation.definition.entity.end.bracket"
           ])
