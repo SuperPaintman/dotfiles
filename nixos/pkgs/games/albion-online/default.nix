@@ -4,6 +4,7 @@
 , unzip
 , runtimeShell
 , steam-run
+, makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {
@@ -28,6 +29,8 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/{bin,opt}
     cp -r data $out/opt/albion-online
 
@@ -93,5 +96,39 @@ stdenv.mkDerivation rec {
     EOF
 
     chmod +x $out/bin/Albion-Online
+
+    runHook postInstall
+  '';
+
+  desktopItemGame = makeDesktopItem {
+    name = "albion-online";
+    desktopName = "Albion Online";
+    exec = "@out@/bin/Albion-Online";
+    icon = "AlbionOnline";
+    fileValidation = false;
+  };
+
+  desktopItemLauncher = makeDesktopItem {
+    name = "albion-online-launcher";
+    desktopName = "Albion Online Launcher";
+    exec = "@out@/bin/Albion-Online-Launcher";
+    icon = "AlbionOnline";
+    fileValidation = false;
+  };
+
+  postInstall = ''
+    mkdir -p $out/share/{applications,pixmaps}
+
+    for d in ${desktopItemGame} ${desktopItemLauncher}; do
+      install -Dm644 -t $out/share/applications \
+        $d/share/applications/*
+    done
+
+    for f in $out/share/applications/*; do
+      substituteInPlace "$f" \
+        --replace "@out@" "$out"
+    done
+
+    ln -s "$out/opt/albion-online/AlbionOnline.xpm" "$out/share/pixmaps/AlbionOnline.xpm"
   '';
 }

@@ -201,6 +201,7 @@ in
 
     # Games.
     unstable.steam
+    localPkgs.albion-online
 
     # Misc.
     (polybar.override { pulseSupport = true; })
