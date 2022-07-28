@@ -29,6 +29,8 @@ with pkgs; rec {
   rustup-openssl = callPackage ./development/tools/rust/rustup-openssl { };
 
   # Games.
+  albion-online = callPackage ./games/albion-online { };
+
   anki-desktop = callPackage ./games/anki-desktop { };
 
   # Misc.
