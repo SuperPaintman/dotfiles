@@ -452,6 +452,17 @@ in
   # Services: custom / mine.
   services.monitroid.enable = true;
 
+  services.rclone = {
+    enable = true;
+
+    users.superpaintman = {
+      mounts.google-drive = {
+        remote = "Google Drive";
+        mountPoint = "~/GoogleDrive";
+      };
+    };
+  };
+
   # Systemd.
   systemd.services = {
     # $ systemctl status greasemonkey-scripts.service.
