@@ -4,6 +4,7 @@
 , unzip
 , runtimeShell
 , steam-run
+, imagemagick
 , makeDesktopItem
 }:
 
@@ -130,5 +131,13 @@ stdenv.mkDerivation rec {
     done
 
     ln -s "$out/opt/albion-online/AlbionOnline.xpm" "$out/share/pixmaps/AlbionOnline.xpm"
+
+    for size in 16 24 32 64 128; do
+      mkdir -p "$out/share/icons/hicolor/''${size}x''${size}/apps"
+      ${imagemagick}/bin/convert \
+        -resize ''${size}x''${size} \
+        "$out/opt/albion-online/AlbionOnline.xpm" \
+        "$out/share/icons/hicolor/''${size}x''${size}/apps/AlbionOnline.png"
+    done
   '';
 }
