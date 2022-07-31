@@ -518,6 +518,17 @@ in
         # No password for `nixos-rebuild`.
         # %wheel ALL=(ALL:ALL) NOPASSWD: /run/current-system/sw/bin/nixos-rebuild switch
 
+        # nmcli - device wifi.
+        ${lib.concatMapStringsSep "\n"
+          (command: ''
+            %wheel ALL=(ALL:ALL) NOPASSWD: ${pkgs.networkmanager}/bin/nmcli dev wifi ${command}
+            %wheel ALL=(ALL:ALL) NOPASSWD: ${pkgs.networkmanager}/bin/nmcli dev wifi ${command} *
+            %wheel ALL=(ALL:ALL) NOPASSWD: ${pkgs.networkmanager}/bin/nmcli device wifi ${command}
+            %wheel ALL=(ALL:ALL) NOPASSWD: ${pkgs.networkmanager}/bin/nmcli device wifi ${command} *
+          '')
+          [ "list" "connect" "rescan" ]
+        }
+
         # VPN.
         ${lib.concatStringsSep "\n"
         (
