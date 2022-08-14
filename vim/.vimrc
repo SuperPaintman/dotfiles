@@ -225,6 +225,18 @@ if filereadable(expand("~/.vim/autoload/plug.vim"))
     Plug 'liuchengxu/vim-which-key'
   endif
 
+  " Syntax highlighting for Fennel.
+  " See: https://github.com/jaawerth/fennel.vim
+  if exists("g:plug_update_all") || !exists("g:vscode")
+    Plug 'jaawerth/fennel.vim'
+  endif
+
+  " Interactive evaluation for Neovim.
+  " See: https://github.com/Olical/conjure
+  if exists("g:plug_update_all") || has("nvim")
+    Plug 'Olical/conjure'
+  endif
+
   call plug#end()
 
   if exists("g:plug_update_all")
@@ -393,6 +405,17 @@ function s:format_prettier(filename, parser)
   return readfile(a:filename)
 endfunction
 
+function s:format_fennel(filename)
+  let cmd = "fnlfmt --fix " . shellescape(a:filename)
+  let output = system(cmd)
+  if v:shell_error != 0
+    throw output
+  endif
+
+  " Read new file content.
+  return readfile(a:filename)
+endfunction
+
 function s:format_code()
   try
     if &filetype == "markdown"
@@ -405,6 +428,13 @@ function s:format_code()
     if &filetype == "json"
       if executable("prettier")
         call s:create_create_temp_file({filename -> s:format_prettier(filename, "json")})
+        return
+      endif
+    endif
+
+    if &filetype == "fennel"
+      if executable("fnlfmt")
+        call s:create_create_temp_file({filename -> s:format_fennel(filename)})
         return
       endif
     endif
@@ -669,12 +699,20 @@ if s:plug_has_plugin("vim-which-key")
   call which_key#register('<Space>', "g:which_key_map")
 endif
 
+" conjure
+" See: https://github.com/Olical/conjure
+if s:plug_has_plugin("conjure")
+  let g:conjure#log#hud#height = 1.0
+endif
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Leader.
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Use <Space> as a <Leader>. Double quotes are required.
 let mapleader = "\<Space>"
+let maplocalleader = "\\"
+" let maplocalleader = "\<Space>"
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -686,7 +724,7 @@ let mapleader = "\<Space>"
 " Normal, Visual, Select, Operator-pending modes.
 " Clipboard.
 if has("clipboard")
-  map <Leader>y "+y 
+  map <Leader>y "+y
   let g:which_key_map.y = 'clipboard-yank'
 
   map <Leader>p "+p
