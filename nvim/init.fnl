@@ -9,7 +9,7 @@
 
 (local {: expand :isdirectory directory? :filereadable file-readable?} vim.fn)
 
-(macro command [name ...]
+(macro command! [name ...]
   (var opts {})
   (var f nil)
   (var consume nil)
@@ -19,11 +19,11 @@
     (set f last))
 
   (fn create-consumer [name ?checker]
-    (fn [tbl n]
-      (let [(v move) (if (not= ?checker nil) (?checker (. tbl n))
-                         (values true false))]
-        (tset opts name v)
-        (consume tbl (+ n (if move 1 0))))))
+    (let [checker (or ?checker #(values true false))]
+      (fn [tbl n]
+        (let [(v move) (checker (. tbl n))]
+          (tset opts name v)
+          (consume tbl (+ n (if move 1 0)))))))
 
   ;; See: https://neovim.io/doc/user/map.html#command-attributes
   (local consume-range
@@ -49,15 +49,15 @@
 (when (file-readable? (expand "~/.vimrc"))
   (cmd (.. "source " (expand "~/.vimrc"))))
 
-(command :Eval :range "%"
-         (fn [opts]
-           (let [filetype bo.filetype
-                 {: line1 : line2} opts]
-             (if (member? filetype [:lua :fennel :vim])
-                 (let [lines (api.nvim_buf_get_lines 0 (- line1 1) line2 false)
-                       source (table.concat lines "\n")]
-                   (match filetype
-                     :lua (let [f (loadstring source)]
-                            (f))
-                     :fennel (fennel.eval source)
-                     :vim (api.nvim_exec source false)))))))
+(command! :Eval :range "%"
+          (fn [opts]
+            (let [filetype bo.filetype
+                  {: line1 : line2} opts]
+              (if (member? filetype [:lua :fennel :vim])
+                  (let [lines (api.nvim_buf_get_lines 0 (- line1 1) line2 false)
+                        source (table.concat lines "\n")]
+                    (match filetype
+                      :lua (let [f (loadstring source)]
+                             (f))
+                      :fennel (fennel.eval source)
+                      :vim (api.nvim_exec source false)))))))
