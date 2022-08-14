@@ -1,5 +1,4 @@
-{ pkgs ? import <nixpkgs> { }, ... }:
-
+{ pkgs ? import <nixpkgs> {}, ... }:
 
 with builtins;
 with pkgs.lib;
@@ -30,19 +29,20 @@ in
         "${fennel}/share/lua/5.1/?/init.lua"
       ];
     in
-    mkFennelFile "nvim-init-fnl" ''
-      ${appendPackagePath paths}
+      mkFennelFile "nvim-init-fnl" ''
+        ${appendPackagePath paths}
 
-      (local fennel (require :fennel))
-      (table.insert (or package.loaders package.searchers) fennel.searcher)
-      (set debug.traceback fennel.traceback)
+        (local fennel (require :fennel))
+        (table.insert (or package.loaders package.searchers) fennel.searcher)
+        (set debug.traceback fennel.traceback)
 
-      (let [cfgd (vim.fn.expand "~/.config/nvim")]
-        (set fennel.path (.. fennel.path
-                             ";" cfgd "/fnl/?.fnl"
-                             ";" cfgd "/fnl/?/init.fnl")))
+        ;; fnlfmt: skip
+        (let [cfgd (vim.fn.expand "~/.config/nvim")]
+          (set fennel.path (.. fennel.path
+                               ";" cfgd :/fnl/?.fnl
+                               ";" cfgd :/fnl/?/init.fnl)))
 
-      (require :init)
-    '';
+        (require :init)
+      '';
   ".config/nvim/fnl/init.fnl".source = ./init.fnl;
 }
