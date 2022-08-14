@@ -11,6 +11,6 @@ EXIT_CODE=0
 
 source "$ROOT/../common.sh"
 
-link $@ "$ROOT/init.vim" "$HOME/.config/nvim/init.vim" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/init.fnl" "$HOME/.config/nvim/fnl/init.fnl" || { EXIT_CODE="$?"; }
 
 exit "$EXIT_CODE"
