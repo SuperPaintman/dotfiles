@@ -6,36 +6,7 @@ with pkgs.lib;
 let
   inherit (pkgs) lib stdenv;
 
-  fennel = stdenv.mkDerivation rec {
-    name = "fennel";
-    version = "1.1.0";
-
-    src = fetchTarball {
-      url = "https://fennel-lang.org/downloads/${name}-${version}.tar.gz";
-      sha256 = "1m4sv8lq26dyx8vvq9l6rv7j9wd20ychyqddrb0skfi14ccb3bhx";
-    };
-
-    buildInputs = [
-      pkgs.luajit
-    ];
-
-    phases = "installPhase";
-    installPhase = ''
-      mkdir -p $out $out/bin
-      cp $src/fennel $out/bin/fennel
-      cp $src/fennel.lua $out/fennel.lua
-      chmod +x $out/bin/fennel
-      sed -i 's%^#!/usr/bin/env lua$%#!${pkgs.luajit}/bin/luajit%' $out/bin/fennel
-    '';
-
-    meta = {
-      homepage = "https://github.com/bakpakin/Fennel";
-      description = "Lua Lisp Language";
-      license = lib.licenses.mit;
-      platforms = [ "x86_64-linux" ];
-      maintainers = [ ];
-    };
-  };
+  fennel = (pkgs.callPackage ../nixos/pkgs {}).fennel;
 
   mkFennelFile = name: source: pkgs.runCommand name
     {
@@ -55,8 +26,8 @@ in
   ".config/nvim/init.lua".source =
     let
       paths = [
-        "${fennel}/?.lua"
-        "${fennel}/?/init.lua"
+        "${fennel}/share/lua/5.1/?.lua"
+        "${fennel}/share/lua/5.1/?/init.lua"
       ];
     in
     mkFennelFile "nvim-init-fnl" ''

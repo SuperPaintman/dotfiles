@@ -22,6 +22,15 @@ with pkgs; rec {
     go = go_1_18beta1;
   };
 
+  fennel = callPackage ./development/interpreters/fennel {
+    lua = luajit;
+  };
+
+  fnlfmt = callPackage ./development/tools/fnlfmt {
+    inherit fennel;
+    lua = luajit;
+  };
+
   gopls = callPackage ./development/tools/gopls {
     buildGoModule = buildGo118beta1Module;
   };

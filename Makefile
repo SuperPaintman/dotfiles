@@ -58,6 +58,10 @@ LUA_FILES := $(shell find . \
 	-type f -name '*.lua' \
 	$(addprefix -and -not -path , $(IGNORE_PATHS)) \
 )
+FNL_FILES := $(shell find . \
+	-type f -name '*.fnl' \
+	$(addprefix -and -not -path , $(IGNORE_PATHS)) \
+)
 DEFAULT_NIX_FILES := $(shell find . \
 	-mindepth 2 -maxdepth 2 \
 	-type f -name 'default.nix' \
@@ -135,7 +139,7 @@ qmk-moonlander:
 	$(MAKE) -C qmk moonlander
 
 .PHONY: format
-format: format-shell format-nix format-prettier
+format: format-shell format-nix format-prettier format-lua
 
 .PHONY: format-shell
 format-shell:
@@ -152,6 +156,10 @@ format-prettier:
 .PHONY: format-lua
 format-lua:
 	./scripts/lua-format.sh --config=./.lua-format -i $(LUA_FILES)
+
+.PHONY: format-fnl
+format-fnl:
+	fnlfmt --fix $(FNL_FILES)
 
 .PHONY: generate
 generate: generate-configs generate-vscode-extensions

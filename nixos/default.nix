@@ -186,6 +186,15 @@ in
     arduino
     localPkgs.difftastic
     nodePackages.prettier
+    (
+      luajit.withPackages (
+        packages: [
+          localPkgs.fennel
+        ]
+      )
+    )
+    localPkgs.fennel
+    localPkgs.fnlfmt
 
     # Docker.
     docker
