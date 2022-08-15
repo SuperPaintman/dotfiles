@@ -33,16 +33,27 @@ in
         ${appendPackagePath paths}
 
         (local fennel (require :fennel))
+
         (table.insert (or package.loaders package.searchers) fennel.searcher)
         (set debug.traceback fennel.traceback)
 
+        (local cfgd (vim.fn.expand "~/.config/nvim"))
+
         ;; fnlfmt: skip
-        (let [cfgd (vim.fn.expand "~/.config/nvim")]
-          (set fennel.path (.. fennel.path
-                               ";" cfgd :/fnl/?.fnl
-                               ";" cfgd :/fnl/?/init.fnl)))
+        (set fennel.path (.. fennel.path
+                             ";" cfgd :/fnl/?.fnl
+                             ";" cfgd :/fnl/?/init.fnl))
+
+        (fn vim-macro-searcher [module-name]
+          (let [filename (.. cfgd :/fnl/ (string.gsub module-name "%." "/") :.fnl)]
+            (when (= (vim.fn.filereadable filename) 1)
+              (let [lines (vim.fn.readfile filename)
+                    code (table.concat lines "\n")]
+                (values (partial fennel.eval code {:env :_COMPILER}) filename)))))
+
+        (table.insert fennel.macro-searchers vim-macro-searcher)
 
         (require :init)
       '';
-  ".config/nvim/fnl/init.fnl".source = ./init.fnl;
+  ".config/nvim/fnl".source = ./fnl;
 }
