@@ -20,7 +20,8 @@
   networking.networkmanager.enable = true;
 
   # Time.
-  time.timeZone = "Europe/Moscow";
+  # time.timeZone = "Europe/Moscow";
+  time.timeZone = "Europe/London";
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
