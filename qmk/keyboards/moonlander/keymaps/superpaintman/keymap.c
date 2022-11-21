@@ -36,6 +36,16 @@
 #define KC_TGL_LANG LALT(LGUI(KC_SPACE))
 #define BP_NDSH_MAC ALGR(KC_8)
 #define MOON_LED_LEVEL LED_LEVEL
+#define MAC_LHYPR(kc) (QK_LCTL | QK_LALT | QK_LGUI | (kc))
+#define KC_MAC_LHYPR MAC_LHYPR(KC_NO)
+#define MAC_RHYPR(kc) (QK_RCTL | QK_RALT | QK_RGUI | (kc))
+#define KC_MAC_RHYPR MAC_RHYPR(KC_NO)
+#define MAC_SHYPR(kc) (QK_LGUI | QK_RGUI | (kc))
+#define KC_MAC_SHYPR MAC_SHYPR(KC_NO)
+
+#define MOONLANDER_K71_LED (62)
+#define MOONLANDER_K72_LED (57)
+#define MOONLANDER_K73_LED (52)
 
 // clang-format off
 #define LEDMAP_moonlander(                                                     \
@@ -110,7 +120,8 @@
 enum layouts {
   _LAYOUTS_BEGINNING = -1,
   BASE,          // default layout.
-  GAMING,        // gaming.
+  BASE_MAC,      // MacOS (OSX).
+  BASE_GAMING,   // gaming.
   GAMING_NUMPAD, // gaming NumPad.
   SYMBOLS,       // symbols.
   NUMPAD,        // NumPad.
@@ -118,6 +129,7 @@ enum layouts {
   FUNCTIONAL,    // functional.
   EMOJI,         // emoji.
   CLICKY,        // clicky layout just to do clicky-clacky.
+  SWITCH,        // switch.
   _LAYOUTS_END,
 };
 
@@ -152,16 +164,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB,         KC_Q,           KC_W,           KC_E,           KC_R,           KC_T,           _______,          /**/   _______,        KC_Y,           KC_U,           KC_I,           KC_O,           KC_P,           KC_BSLASH,
     KC_ESCAPE,      KC_A,           KC_S,           KC_D,           KC_F,           KC_G,           _______,          /**/   _______,        KC_H,           KC_J,           KC_K,           KC_L,           KC_SCOLON,      KC_QUOTE,
     KC_LCTRL,       KC_Z,           KC_X,           KC_C,           KC_V,           KC_B,                             /**/                   KC_N,           KC_M,           KC_COMMA,       KC_DOT,         KC_SLASH,       _______,
-    KC_LSHIFT,      _______,        KC_TGL_LANG,    KC_LALT,        MO(NUMPAD),                     MO(EMOJI),        /**/   TO(GAMING),                     KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       MO(MEDIA),
+    KC_LSHIFT,      _______,        KC_TGL_LANG,    KC_LALT,        MO(NUMPAD),                     MO(EMOJI),        /**/   MO(SWITCH),                     KC_LEFT,        KC_DOWN,        KC_UP,          KC_RIGHT,       MO(MEDIA),
                                                                     KC_SPACE,       MO(SYMBOLS),    KC_LGUI,          /**/   KC_BSPACE,      KC_ENTER,       KC_RSHIFT
   ),
 
-  [GAMING] = LAYOUT_moonlander(
-    _______,        KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           KC_6,             /**/   XXXXXXX,        _______,        _______,        _______,        _______,        _______,        TO(BASE),
+  [BASE_MAC] = LAYOUT_moonlander(
+    _______,        _______,        _______,        _______,        _______,        _______,        _______,          /**/   _______,        _______,        _______,        _______,        _______,        _______,        _______,
+    _______,        _______,        _______,        _______,        _______,        _______,        _______,          /**/   _______,        _______,        _______,        _______,        _______,        _______,        _______,
+    _______,        _______,        _______,        _______,        _______,        _______,        _______,          /**/   _______,        _______,        _______,        _______,        _______,        _______,        _______,
+    _______,        _______,        _______,        _______,        _______,        _______,                          /**/                   _______,        _______,        _______,        _______,        _______,        _______,
+    _______,        _______,        KC_LOPT,        KC_LCMD,        _______,                        _______,          /**/   _______,                        _______,        _______,        _______,        _______,        _______,
+                                                                    _______,        _______,        KC_MAC_SHYPR,     /**/   _______,        _______,        _______
+  ),
+
+  [BASE_GAMING] = LAYOUT_moonlander(
+    _______,        KC_1,           KC_2,           KC_3,           KC_4,           KC_5,           KC_6,             /**/   XXXXXXX,        _______,        _______,        _______,        _______,        _______,        _______,
     KC_TAB,         _______,        _______,        _______,        _______,        _______,        KC_Y,             /**/   _______,        _______,        _______,        _______,        _______,        _______,        _______,
     KC_ESCAPE,      _______,        _______,        _______,        _______,        _______,        KC_H,             /**/   _______,        _______,        _______,        _______,        _______,        _______,        _______,
     KC_LSHIFT,      _______,        _______,        _______,        _______,        _______,                          /**/                   _______,        _______,        _______,        _______,        _______,        _______,
-    KC_LCTRL,       XXXXXXX,        MO(GAMING_NUMPAD),KC_LALT,      KC_SPACE,                       KC_I,             /**/   XXXXXXX,                        _______,        _______,        _______,        _______,        _______,
+    KC_LCTRL,       XXXXXXX,        MO(GAMING_NUMPAD),KC_LALT,      KC_SPACE,                       KC_I,             /**/   _______,                        _______,        _______,        _______,        _______,        _______,
                                                                     KC_SPACE,       KC_ENTER,       KC_M,             /**/   KC_TGL_LANG,    XXXXXXX,        XXXXXXX
   ),
 
@@ -228,6 +249,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                                                     XXXXXXX,        XXXXXXX,        XXXXXXX,          /**/   XXXXXXX,        XXXXXXX,        XXXXXXX
   ),
 
+  [SWITCH] = LAYOUT_moonlander(
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,          /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,          /**/   XXXXXXX,        TO(BASE),       TO(BASE_MAC),   TO(BASE_GAMING),XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,          /**/   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                          /**/                   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+    XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        XXXXXXX,          /**/   _______,                        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
+                                                                    XXXXXXX,        XXXXXXX,        XXXXXXX,          /**/   XXXXXXX,        XXXXXXX,        XXXXXXX
+  )
+
   // Template.
   //
   // [NAME] = LAYOUT_moonlander(
@@ -237,6 +267,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                           /**/                   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
   //   XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,                        XXXXXXX,           /**/   XXXXXXX,                        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,        XXXXXXX,
   //                                                                   XXXXXXX,        XXXXXXX,        XXXXXXX,           /**/   XXXXXXX,        XXXXXXX,        XXXXXXX
+  // ),
+  //
+  // [NAME] = LAYOUT_moonlander(
+  //   _______,        _______,        _______,        _______,        _______,        _______,        _______,           /**/   _______,        _______,        _______,        _______,        _______,        _______,        _______,
+  //   _______,        _______,        _______,        _______,        _______,        _______,        _______,           /**/   _______,        _______,        _______,        _______,        _______,        _______,        _______,
+  //   _______,        _______,        _______,        _______,        _______,        _______,        _______,           /**/   _______,        _______,        _______,        _______,        _______,        _______,        _______,
+  //   _______,        _______,        _______,        _______,        _______,        _______,                           /**/                   _______,        _______,        _______,        _______,        _______,        _______,
+  //   _______,        _______,        _______,        _______,        _______,                        _______,           /**/   _______,                        _______,        _______,        _______,        _______,        _______,
+  //                                                                   _______,        _______,        _______,           /**/   _______,        _______,        _______
   // ),
 };
 // clang-format on
@@ -257,12 +296,21 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
                                                             CLR_ORANGE,   CLR_RED,      CLR_PURPLE,   /**/   CLR_ORANGE,   CLR_ORANGE,   CLR_PURPLE
   ),
 
-  [GAMING] = LEDMAP_moonlander(
-    CLR_RED,      CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     /**/   CLR_XXXXXX,   CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_RED,
+  [BASE_MAC] = LEDMAP_moonlander(
+    CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_______,   /**/   CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_ORANGE,
+    CLR_ORANGE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_______,   /**/   CLR_______,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,
+    CLR_ORANGE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_______,   /**/   CLR_______,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,
+    CLR_PURPLE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,                 /**/                 CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_______,
+    CLR_PURPLE,   CLR_______,   CLR_PURPLE,   CLR_PURPLE,   CLR_RED,                    CLR_RED,      /**/   CLR_RED,                    CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE,   CLR_RED,
+                                                            CLR_ORANGE,   CLR_RED,      CLR_PURPLE,   /**/   CLR_ORANGE,   CLR_ORANGE,   CLR_PURPLE
+  ),
+
+  [BASE_GAMING] = LEDMAP_moonlander(
+    CLR_RED,      CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     CLR_BLUE,     /**/   CLR_XXXXXX,   CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_ORANGE,
     CLR_PURPLE,   CLR_YELLOW,   CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   /**/   CLR_XXXXXX,   CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,
     CLR_PURPLE,   CLR_RED,      CLR_RED,      CLR_RED,      CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   /**/   CLR_XXXXXX,   CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,
     CLR_PURPLE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,                 /**/                 CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_XXXXXX,
-    CLR_PURPLE,   CLR_XXXXXX,   CLR_RED,      CLR_PURPLE,   CLR_ORANGE,                 CLR_YELLOW,   /**/   CLR_XXXXXX,                 CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_XXXXXX,
+    CLR_PURPLE,   CLR_XXXXXX,   CLR_RED,      CLR_PURPLE,   CLR_ORANGE,                 CLR_YELLOW,   /**/   CLR_RED,                    CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_GREY,     CLR_XXXXXX,
                                                             CLR_ORANGE,   CLR_ORANGE,   CLR_YELLOW,   /**/   CLR_BLUE,     CLR_XXXXXX,   CLR_XXXXXX
   ),
 
@@ -327,6 +375,15 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
     CLR_GR_4,     CLR_GR_4,     CLR_GR_4,     CLR_GR_4,     CLR_GR_4,     CLR_GR_4,                   /**/                 CLR_GR_4,     CLR_GR_4,     CLR_GR_4,     CLR_GR_4,     CLR_GR_4,     CLR_GR_4,
     CLR_GR_5,     CLR_GR_5,     CLR_GR_5,     CLR_GR_5,     CLR_GR_5,                   CLR_GR_4,     /**/   CLR_GR_4,                   CLR_GR_5,     CLR_GR_5,     CLR_GR_5,     CLR_GR_5,     CLR_GR_5,
                                                             CLR_GR_5,     CLR_GR_5,     CLR_GR_5,     /**/   CLR_GR_5,     CLR_GR_5,     CLR_GR_5
+  ),
+
+  [SWITCH] = LEDMAP_moonlander(
+    CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,   /**/   CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,
+    CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,   /**/   CLR_______,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_______,   CLR_______,   CLR_______,
+    CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,   /**/   CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,
+    CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,                 /**/                 CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,
+    CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,                 CLR_______,   /**/   CLR_BLUE,                   CLR_______,   CLR_______,   CLR_______,   CLR_______,   CLR_______,
+                                                            CLR_______,   CLR_______,   CLR_______,   /**/   CLR_______,   CLR_______,   CLR_______
   )
 
   // Template.
@@ -342,7 +399,24 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
 };
 // clang-format on
 
+static layer_state_t base_layer_state = 0;
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+  switch (get_highest_layer(state)) {
+  case BASE:
+  case BASE_MAC:
+  case BASE_GAMING:
+    base_layer_state = state;
+    break;
+  }
+
+  return state;
+}
+
 static void set_layer_color(int layer) {
+  uint8_t base_layer = get_highest_layer(base_layer_state);
+  float f = (float)rgb_matrix_config.hsv.v / UINT8_MAX;
+
   for (int i = 0; i < DRIVER_LED_TOTAL; i++) {
     HSV hsv = {
         .h = pgm_read_byte(&ledmap[layer][i][0]),
@@ -357,9 +431,9 @@ static void set_layer_color(int layer) {
         hsv = (HSV)CLR_XXXXXX;
       } else {
         hsv = (HSV){
-            .h = pgm_read_byte(&ledmap[BASE][i][0]) * 0.5,
-            .s = pgm_read_byte(&ledmap[BASE][i][1]) * 0.5,
-            .v = pgm_read_byte(&ledmap[BASE][i][2]) * 0.5,
+            .h = pgm_read_byte(&ledmap[base_layer][i][0]) * 0.5,
+            .s = pgm_read_byte(&ledmap[base_layer][i][1]) * 0.5,
+            .v = pgm_read_byte(&ledmap[base_layer][i][2]) * 0.5,
         };
       }
     }
@@ -370,8 +444,36 @@ static void set_layer_color(int layer) {
     }
 
     RGB rgb = hsv_to_rgb(hsv);
-    float f = (float)rgb_matrix_config.hsv.v / UINT8_MAX;
     rgb_matrix_set_color(i, f * rgb.r, f * rgb.g, f * rgb.b);
+  }
+
+  // Highlight the base layer key.
+  int base_layer_key = -1;
+  switch (base_layer) {
+  case BASE:
+    base_layer_key = MOONLANDER_K71_LED;
+    break;
+
+  case BASE_MAC:
+    base_layer_key = MOONLANDER_K72_LED;
+    break;
+
+  case BASE_GAMING:
+    base_layer_key = MOONLANDER_K73_LED;
+    break;
+  }
+
+  if (base_layer_key > 0) {
+    switch (get_highest_layer(layer_state)) {
+    case BASE:
+    case BASE_MAC:
+    case BASE_GAMING:
+    case SWITCH: {
+      RGB rgb = hsv_to_rgb((HSV)CLR_BLUE);
+      rgb_matrix_set_color(base_layer_key, f * rgb.r, f * rgb.g, f * rgb.b);
+      break;
+    }
+    }
   }
 }
 
@@ -380,7 +482,7 @@ void rgb_matrix_indicators_user(void) {
     return;
   }
 
-  const uint8_t layout = biton32(layer_state);
+  const uint8_t layout = get_highest_layer(layer_state);
   if (IS_LAYOUT(layout)) {
     set_layer_color(layout);
     return;
