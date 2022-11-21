@@ -172,9 +172,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,        _______,        _______,        _______,        _______,        _______,        _______,          /**/   _______,        _______,        _______,        _______,        _______,        _______,        _______,
     _______,        _______,        _______,        _______,        _______,        _______,        _______,          /**/   _______,        _______,        _______,        _______,        _______,        _______,        _______,
     _______,        _______,        _______,        _______,        _______,        _______,        _______,          /**/   _______,        _______,        _______,        _______,        _______,        _______,        _______,
-    _______,        _______,        _______,        _______,        _______,        _______,                          /**/                   _______,        _______,        _______,        _______,        _______,        _______,
-    _______,        _______,        KC_LOPT,        KC_LCMD,        _______,                        _______,          /**/   _______,                        _______,        _______,        _______,        _______,        _______,
-                                                                    _______,        _______,        KC_MAC_SHYPR,     /**/   _______,        _______,        _______
+    KC_LCMD,        _______,        _______,        _______,        _______,        _______,                          /**/                   _______,        _______,        _______,        _______,        _______,        _______,
+    _______,        _______,        _______,        KC_LOPT,        _______,                        _______,          /**/   _______,                        _______,        _______,        _______,        _______,        _______,
+                                                                    _______,        _______,        KC_LCTRL,         /**/   _______,        _______,        _______
   ),
 
   [BASE_GAMING] = LAYOUT_moonlander(
@@ -301,7 +301,7 @@ const uint8_t PROGMEM ledmap[][DRIVER_LED_TOTAL][3] = {
     CLR_ORANGE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_______,   /**/   CLR_______,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,
     CLR_ORANGE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_______,   /**/   CLR_______,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,
     CLR_PURPLE,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,                 /**/                 CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_YELLOW,   CLR_______,
-    CLR_PURPLE,   CLR_______,   CLR_PURPLE,   CLR_PURPLE,   CLR_RED,                    CLR_RED,      /**/   CLR_RED,                    CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE,   CLR_RED,
+    CLR_PURPLE,   CLR_______,   CLR_BLUE,     CLR_PURPLE,   CLR_RED,                    CLR_RED,      /**/   CLR_RED,                    CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE,   CLR_ORANGE,   CLR_RED,
                                                             CLR_ORANGE,   CLR_RED,      CLR_PURPLE,   /**/   CLR_ORANGE,   CLR_ORANGE,   CLR_PURPLE
   ),
 
