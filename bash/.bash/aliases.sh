@@ -23,7 +23,7 @@ fi
 alias tree='tree -C'
 
 # `grep`.
-alias grep='grep --color=auto --exclude-dir={.bzr,CVS,.git,.hg,.svn}'
+alias grep='grep --color=auto' # --exclude-dir={.bzr,CVS,.git,.hg,.svn}
 
 # `fgrep`.
 alias fgrep='fgrep --color=auto'
