@@ -93,7 +93,7 @@
       displayManager =
         let
           xrandrCommands = with pkgs; ''
-            if ${xorg.xrandr}/bin/xrandr --query 2>&1 | grep 'eDP-1-1 connected' 2>&1 > /dev/null; then
+            if ${xorg.xrandr}/bin/xrandr --query 2>&1 | grep '^eDP-1-1 connected' 2>&1 > /dev/null; then
               DISPLAY_PRIMARY='eDP-1-1'
               DISPLAY_SECONDARY='DP-1-1'
             else
@@ -101,11 +101,24 @@
               DISPLAY_SECONDARY='DP-1'
             fi
 
-            # Primary bottom.
-            # ${xorg.xrandr}/bin/xrandr --output eDP-1 --primary --mode 1920x1080 --pos 0x1080 --output DP-3 --mode 1920x1080 --pos 0x0
+            DISPLAY_SECONDARY_MODE=""
+            if ${xorg.xrandr}/bin/xrandr --query 2>&1 | grep "^$DISPLAY_SECONDARY connected" 2>&1 > /dev/null; then
+              DISPLAY_SECONDARY_MODE="$(${xorg.xrandr}/bin/xrandr --query 2>&1 | grep "^$DISPLAY_SECONDARY connected" -A1 | tail -n1 | awk '{print $1}')"
+            fi
+
+            if [ -z "$DISPLAY_SECONDARY_MODE" ]; then
+              DISPLAY_SECONDARY_MODE='1920x1080'
+            fi
+
+            DISPLAY_SECONDARY_POS='1920x0'
+            if [ "$DISPLAY_SECONDARY_MODE" = '3840x2160' ]; then
+              DISPLAY_SECONDARY_POS="1920x$((1080 / 2 * -1))"
+            fi
 
             # Primary left.
-            ${xorg.xrandr}/bin/xrandr --output "$DISPLAY_PRIMARY" --primary --mode 1920x1080 --pos 0x0 --output "$DISPLAY_SECONDARY" --mode 1920x1080 --pos 1920x0
+            ${xorg.xrandr}/bin/xrandr \
+              --output "$DISPLAY_PRIMARY" --primary --mode 1920x1080 --pos 0x0 \
+              --output "$DISPLAY_SECONDARY" --mode "$DISPLAY_SECONDARY_MODE" --pos "$DISPLAY_SECONDARY_POS"
           '';
 
           xinputToggleTouchpadCommand = with pkgs; writeShellScript "xinput-toggle-touchpad" ''
