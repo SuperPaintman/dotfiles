@@ -172,7 +172,7 @@ in
     )
     ruby
     localPkgs.rustup-openssl
-    rust-analyzer
+    unstable.rust-analyzer
     # ghc
     # stack
     # haskellPackages.brittany
