@@ -22,13 +22,6 @@
   networking.networkmanager.enable = true;
   # networking.wireless.enable = true;
 
-  # The global useDHCP flag is deprecated, therefore explicitly set to false here.
-  # Per-interface useDHCP will be mandatory in the future, so this generated config
-  # replicates the default behaviour.
-  networking.useDHCP = false;
-  networking.interfaces.eth0.useDHCP = true;
-  networking.interfaces.wlan0.useDHCP = true;
-
   # Firewall.
   networking.firewall = {
     enable = true;
@@ -47,7 +40,14 @@
 
         # Pi-hole.
         53
-        8080
+        8081
+
+        # UniFi Controller.
+        8080 # Port for UAP to inform controller.
+        8880 # Port for HTTP portal redirect, if guest portal is enabled.
+        8443 # Port for UAP to inform controller.
+        8843 # Port for HTTPS portal redirect, ditto.
+        6789 # Port for UniFi mobile speed test.
       ];
 
       allowedUDPPorts = [
@@ -56,6 +56,10 @@
 
         # Pi-hole.
         53
+
+        # UniFi Controller.
+        3478 # UDP port used for STUN.
+        10001 # UDP port used for device discovery.
       ];
 
       mkRules = subnet: protocol: ports:
@@ -99,6 +103,15 @@
     passwordAuthentication = false;
   };
 
+  # Services.
+  services.unifi = {
+    enable = true;
+    jrePackage = pkgs.openjdk11;
+    unifiPackage = pkgs.unifi;
+    initialJavaHeapSize = 512;
+    maximumJavaHeapSize = 512;
+  };
+
   # Virtualisation.
   virtualisation.docker.enable = true;
 
@@ -115,7 +128,7 @@
         ports = [
           "53:53/tcp"
           "53:53/udp"
-          "8080:80/tcp"
+          "8081:80/tcp"
         ];
         volumes = [
           "/tmp/etc-pihole:/etc/pihole"
@@ -129,11 +142,15 @@
     };
   };
 
+  # Nix Packages.
+  # Allow unfree for UniFi.
+  nixpkgs.config.allowUnfree = true;
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
   # this value at the release version of the first install of this system.
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-  system.stateVersion = "20.09"; # Did you read the comment?
+  system.stateVersion = "22.11"; # Did you read the comment?
 }

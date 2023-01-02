@@ -9,12 +9,13 @@ Raspberry Pi 3 Model B Vi. 2
 ## Installation
 
 ```bash
-$ curl -sL -o ./nixos-sd-image-20.09.4331.686720050c3-aarch64-linux.img.zst https://hydra.nixos.org/build/145713954/download/1/nixos-sd-image-20.09.4331.686720050c3-aarch64-linux.img.zst
-$ nix-shell -p zstd --run "unzstd ./nixos-sd-image-20.09.4331.686720050c3-aarch64-linux.img.zst"
+$ curl -sL -o ./nixos-sd-image-22.11.1329.feda52be1d5-aarch64-linux.img.zst https://hydra.nixos.org/build/203683602/download/1/nixos-sd-image-22.11.1329.feda52be1d5-aarch64-linux.img.zst
+$ nix-shell -p zstd --run "unzstd ./nixos-sd-image-22.11.1329.feda52be1d5-aarch64-linux.img.zst"
 
 # Or build a new image.
 
-$ nix-build -I 'nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/tags/20.09.tar.gz' -I 'nixos-config=./image.nix' '<nixpkgs/nixos>' -A config.system.build.sdImage
+$ NIX_PATH='nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/tags/22.11.tar.gz' nix-build -I 'nixos-config=./image.nix' '<nixpkgs/nixos>' -A config.system.build.sdImage --argstr system aarch64-linux
+$ nix-shell -p zstd --run "unzstd ./result/sd-image/nixos-sd-image-22.11pre-git-aarch64-linux.img.zst -o ./nixos-sd-image-22.11pre-git-aarch64-linux.img"
 ```
 
 ## Checklist
