@@ -44,11 +44,18 @@
       allowedTCPPorts = [
         # Extra accept SSH ports in local networks.
         22
+
+        # Pi-hole.
+        53
+        8080
       ];
 
       allowedUDPPorts = [
         # Extra accept SSH ports in local networks.
         22
+
+        # Pi-hole.
+        53
       ];
 
       mkRules = subnet: protocol: ports:
@@ -90,6 +97,36 @@
     enable = true;
     openFirewall = false;
     passwordAuthentication = false;
+  };
+
+  # Virtualisation.
+  virtualisation.docker.enable = true;
+
+  virtualisation.oci-containers = {
+    backend = "docker";
+
+    containers = {
+      pihole = {
+        image = "pihole/pihole:latest";
+        autoStart = true;
+        environment = {
+          TZ = "Europe/London";
+        };
+        ports = [
+          "53:53/tcp"
+          "53:53/udp"
+          "8080:80/tcp"
+        ];
+        volumes = [
+          "/tmp/etc-pihole:/etc/pihole"
+          "/tmp/etc-dnsmasq.d:/etc/dnsmasq.d"
+        ];
+        extraOptions = [
+          "--cpus=2"
+          "--memory=512m"
+        ];
+      };
+    };
   };
 
   # This value determines the NixOS release from which the default
