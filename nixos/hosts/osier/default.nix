@@ -32,10 +32,34 @@
   # Firewall.
   networking.firewall = {
     enable = true;
-    allowedTCPPorts = [
-      22
-    ];
+    # allowedTCPPorts = [ ... ];
     # allowedUDPPorts = [ ... ];
+
+    # See: https://github.com/NixOS/nixpkgs/blob/nixos-20.09/nixos/modules/services/networking/firewall.nix
+    extraCommands = let
+      localNetwork = {
+        subnet = "192.168.0.0/24";
+      };
+
+      allowedTCPPorts = [
+        # Extra accept SSH ports in local networks.
+        22
+      ];
+
+      allowedUDPPorts = [
+        # Extra accept SSH ports in local networks.
+        22
+      ];
+
+      mkRules = subnet: protocol: ports:
+        lib.concatMapStringsSep
+          "\n"
+          (port: "iptables -A nixos-fw -s ${subnet} -p ${protocol} --dport ${builtins.toString port} -j nixos-fw-accept")
+          ports;
+    in ''
+      ${mkRules localNetwork.subnet "tcp" allowedTCPPorts}
+      ${mkRules localNetwork.subnet "udp" allowedUDPPorts}
+    '';
   };
 
   # Set your time zone.
@@ -64,6 +88,8 @@
   # OpenSSH.
   services.openssh = {
     enable = true;
+    openFirewall = false;
+    passwordAuthentication = false;
   };
 
   # This value determines the NixOS release from which the default
