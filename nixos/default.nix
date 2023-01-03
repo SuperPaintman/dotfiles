@@ -43,6 +43,7 @@ let
   vpnConfigs = builtins.filter (item: builtins.pathExists item.config) [
     { name = "server"; config = "/home/superpaintman/.openvpn/server.conf"; }
     { name = "sandbox1"; config = "/home/superpaintman/.openvpn/sandbox1.conf"; autoStart = true; }
+    { name = "moscow0"; config = "/home/superpaintman/.openvpn/moscow0.conf"; }
   ];
 in
 {
@@ -61,6 +62,7 @@ in
 
   # Boot.
   boot.cleanTmpDir = true; # Delete all files in `/tmp` during boot.
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   # TODO(SuperPaintman): it doesn't work with my wifi stick :(.
   # boot.extraModulePackages = with config.boot.kernelPackages; [
@@ -76,6 +78,7 @@ in
     (self: super: {
       unstable = unstable;
       local = localPkgs;
+      home-manager = pkgs.callPackage home-manager { };
     })
   ];
 
