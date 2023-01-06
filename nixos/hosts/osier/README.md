@@ -9,8 +9,9 @@ Raspberry Pi 3 Model B Vi. 2
 ## Installation
 
 ```bash
-$ curl -sL -o ./nixos-sd-image-22.11.1329.feda52be1d5-aarch64-linux.img.zst https://hydra.nixos.org/build/203683602/download/1/nixos-sd-image-22.11.1329.feda52be1d5-aarch64-linux.img.zst
-$ nix-shell -p zstd --run "unzstd ./nixos-sd-image-22.11.1329.feda52be1d5-aarch64-linux.img.zst"
+$ NIXOS_IMAGE="nixos-sd-image-22.11.1329.feda52be1d5-aarch64-linux.img.zst"
+$ curl -L -O "https://hydra.nixos.org/build/203683602/download/1/$NIXOS_IMAGE"
+$ nix-shell -p zstd --run "unzstd ./$NIXOS_IMAGE"
 
 # Or build a new image.
 

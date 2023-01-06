@@ -31,7 +31,7 @@
     # See: https://github.com/NixOS/nixpkgs/blob/nixos-20.09/nixos/modules/services/networking/firewall.nix
     extraCommands = let
       localNetwork = {
-        subnet = "192.168.0.0/24";
+        subnet = "192.168.1.0/24";
       };
 
       allowedTCPPorts = [
@@ -41,13 +41,6 @@
         # Pi-hole.
         53
         8081
-
-        # UniFi Controller.
-        8080 # Port for UAP to inform controller.
-        8880 # Port for HTTP portal redirect, if guest portal is enabled.
-        8443 # Port for UAP to inform controller.
-        8843 # Port for HTTPS portal redirect, ditto.
-        6789 # Port for UniFi mobile speed test.
       ];
 
       allowedUDPPorts = [
@@ -56,10 +49,6 @@
 
         # Pi-hole.
         53
-
-        # UniFi Controller.
-        3478 # UDP port used for STUN.
-        10001 # UDP port used for device discovery.
       ];
 
       mkRules = subnet: protocol: ports:
@@ -103,15 +92,6 @@
     passwordAuthentication = false;
   };
 
-  # Services.
-  services.unifi = {
-    enable = true;
-    jrePackage = pkgs.openjdk11;
-    unifiPackage = pkgs.unifi;
-    initialJavaHeapSize = 512;
-    maximumJavaHeapSize = 512;
-  };
-
   # Virtualisation.
   virtualisation.docker.enable = true;
 
@@ -131,8 +111,8 @@
           "8081:80/tcp"
         ];
         volumes = [
-          "/tmp/etc-pihole:/etc/pihole"
-          "/tmp/etc-dnsmasq.d:/etc/dnsmasq.d"
+          "/var/lib/pihole:/etc/pihole"
+          "/var/lib/pihole-dnsmasq.d:/etc/dnsmasq.d"
         ];
         extraOptions = [
           "--cpus=2"
@@ -141,10 +121,6 @@
       };
     };
   };
-
-  # Nix Packages.
-  # Allow unfree for UniFi.
-  nixpkgs.config.allowUnfree = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
