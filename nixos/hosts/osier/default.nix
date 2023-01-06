@@ -4,6 +4,19 @@
 
 { config, pkgs, lib, ... }:
 
+let
+  mkDockerVolumeText = name: path: text: let
+    file = pkgs.writeText name text;
+  in
+    "${file}:${path}:ro";
+
+  mkDockerVolumeJSON = name: path: attrs: mkDockerVolumeText name path (builtins.toJSON attrs);
+
+  mkDockerVolumeYAML = mkDockerVolumeJSON;
+
+  mkDockerUser = user: group: "${builtins.toString user.uid}:${builtins.toString group.gid}";
+in
+
 {
   # Imports.
   imports = [
@@ -41,6 +54,9 @@
         # Pi-hole.
         53
         8081
+
+        # Prometheus.
+        9090
       ];
 
       allowedUDPPorts = [
@@ -79,6 +95,13 @@
       ++ lib.optional (builtins.pathExists ./id_rsa.cashapona.pub) ./id_rsa.cashapona.pub;
   };
 
+  users.groups.prometheus.gid = config.ids.gids.prometheus;
+  users.users.prometheus = {
+    description = "Prometheus daemon user";
+    uid = config.ids.uids.prometheus;
+    group = "prometheus";
+  };
+
   # Environment.
   environment.systemPackages = with pkgs; [
     vim
@@ -103,7 +126,7 @@
         image = "pihole/pihole:latest";
         autoStart = true;
         environment = {
-          TZ = "Europe/London";
+          TZ = config.time.timeZone;
         };
         ports = [
           "53:53/tcp"
@@ -119,6 +142,38 @@
           "--memory=512m"
         ];
       };
+
+      prometheus = {
+        image = "prom/prometheus:latest";
+        autoStart = true;
+        user = mkDockerUser config.users.users.prometheus config.users.groups.prometheus;
+        ports = [
+          "9090:9090/tcp"
+        ];
+        volumes = [
+          "/var/lib/prometheus:/prometheus"
+          (mkDockerVolumeYAML "prometheus.yml" "/etc/prometheus/prometheus.yml" {
+            global = {
+              scrape_interval = "15s";
+              evaluation_interval = "15s";
+            };
+          })
+        ];
+        extraOptions = [
+          "--cpus=2"
+          "--memory=512m"
+        ];
+      };
+    };
+  };
+
+  # Systemd.
+  systemd.services = {
+    docker-prometheus = {
+      preStart = ''
+        mkdir -p /var/lib/prometheus
+        chown ${mkDockerUser config.users.users.prometheus config.users.groups.prometheus} /var/lib/prometheus
+      '';
     };
   };
 
