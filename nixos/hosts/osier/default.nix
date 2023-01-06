@@ -14,6 +14,8 @@ let
 
   mkDockerVolumeYAML = mkDockerVolumeJSON;
 
+  mkDockerVolumeINI = name: path: options: attrs: mkDockerVolumeText name path (lib.generators.toINI options attrs);
+
   mkDockerUser = user: group: "${builtins.toString user.uid}:${builtins.toString group.gid}";
 in
 
@@ -57,6 +59,9 @@ in
 
         # Prometheus.
         9090
+
+        # Grafana.
+        3000
       ];
 
       allowedUDPPorts = [
@@ -102,10 +107,18 @@ in
     group = "prometheus";
   };
 
+  users.groups.grafana.gid = 196;
+  users.users.grafana = {
+    description = "Grafana daemon user";
+    uid = 196;
+    group = "grafana";
+  };
+
   # Environment.
   environment.systemPackages = with pkgs; [
     vim
     wirelesstools
+    htop
   ];
 
   # OpenSSH.
@@ -164,6 +177,59 @@ in
           "--memory=512m"
         ];
       };
+
+      grafana = {
+        image = "grafana/grafana:latest";
+        autoStart = true;
+        user = mkDockerUser config.users.users.grafana config.users.groups.grafana;
+        ports = [
+          "3000:3000/tcp"
+        ];
+        volumes = [
+          "/var/lib/grafana:/var/lib/grafana"
+          # See: https://raw.githubusercontent.com/grafana/grafana/v6.7.x/conf/sample.ini
+          (mkDockerVolumeINI "grafana.ini" "/etc/grafana/grafana.ini" {} {
+            server = {
+              protocol = "http";
+            };
+
+            analytics = {
+              # Server reporting, sends usage counters to stats.grafana.org every 24 hours.
+              # No ip addresses are being tracked, only simple counters to track
+              # running instances, dashboard and error counts. It is very helpful to us.
+              # Change this option to false to disable reporting.
+              reporting_enabled = false;
+
+              # Set to false to disable all checks to https://grafana.net
+              # for new vesions (grafana itself and plugins), check is used
+              # in some UI views to notify that grafana or plugin update exists
+              # This option does not cause any auto updates, nor send any information
+              # only a GET request to http://grafana.com to get latest versions
+              check_for_updates = false;
+            };
+
+            users = {
+              # disable user signup / registration
+              allow_sign_up = false;
+
+              # Allow non admin users to create organizations
+              allow_org_create = false;
+
+              # Set to true to automatically assign new users to the default organization (id 1)
+              auto_assign_org = false;
+            };
+
+            explore = {
+              # Enable the Explore section
+              enabled = true;
+            };
+          })
+        ];
+        extraOptions = [
+          "--cpus=2"
+          "--memory=512m"
+        ];
+      };
     };
   };
 
@@ -173,6 +239,13 @@ in
       preStart = ''
         mkdir -p /var/lib/prometheus
         chown ${mkDockerUser config.users.users.prometheus config.users.groups.prometheus} /var/lib/prometheus
+      '';
+    };
+
+    docker-grafana = {
+      preStart = ''
+        mkdir -p /var/lib/grafana
+        chown ${mkDockerUser config.users.users.grafana config.users.groups.grafana} /var/lib/grafana
       '';
     };
   };
