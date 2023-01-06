@@ -25,6 +25,29 @@ in
     ./hardware-configuration.nix
   ];
 
+  # Swap.
+  swapDevices = []
+    ++ lib.optional (builtins.pathExists /swapfile) ({
+      device = "/swapfile";
+    });
+
+  system.activationScripts.create-swapfile.text = let
+    swapSize = 2 * 1024 * 1024 * 1024; # 2G
+    bs = 1024;
+  in ''
+    if ${pkgs.procps}/bin/free | ${pkgs.gawk}/bin/awk '/^Swap:/ {exit !!$2}'; then
+      if [ ! -f /swapfile ]; then
+        rm -f /swapfile
+        fallocate -l ${builtins.toString swapSize} /swapfile
+        dd if=/dev/zero of=/swapfile bs=${builtins.toString bs} count=${builtins.toString (swapSize / bs)}
+        chmod 600 /swapfile
+        mkswap /swapfile
+      fi
+
+      swapon /swapfile
+    fi
+  '';
+
   # Boot.
   # Use the extlinux boot loader. (NixOS wants to enable GRUB by default)
   boot.loader.grub.enable = false;

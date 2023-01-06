@@ -21,6 +21,17 @@ $ nix-shell -p zstd --run "unzstd ./result/sd-image/nixos-sd-image-22.11pre-git-
 
 ## Checklist
 
+- [ ] Create a swap file:
+
+  ```bash
+  $ rm -f /swapfile
+  $ fallocate -l 2G /swapfile
+  $ dd if=/dev/zero of=/swapfile bs=1024 count=2097152
+  $ chmod 600 /swapfile
+  $ mkswap /swapfile
+  $ swapon /swapfile
+  ```
+
 - [ ] Change the Root password. `sudo passwd root`.
 - [ ] Change the main user password. `sudo passwd superpaintman`.
 
