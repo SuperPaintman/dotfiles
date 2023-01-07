@@ -344,6 +344,9 @@ in
               url = "https://192.168.1.1";
               # pass = "file:///secrets/unpoller/pass";
               sites = [ "all" ];
+              save_sites = true;
+              save_dpi = true;
+              save_rogue = true;
             };
           })
         ];
