@@ -22,6 +22,8 @@ let
     file = pkgs.writeScript name text;
   in
     "${file}:${path}:ro";
+
+  dockerNetworkName = "trusted";
 in
 
 {
@@ -93,7 +95,7 @@ in
 
         # Unpoller
         9130 # Prometheus.
-        37288 # Web server.
+        # 37288 # Web server.
       ];
 
       allowedUDPPorts = [
@@ -181,6 +183,8 @@ in
         environment = {
           TZ = config.time.timeZone;
         };
+        dependsOn = []
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "network-${dockerNetworkName}";
         ports = [
           "53:53/tcp"
           "53:53/udp"
@@ -193,35 +197,54 @@ in
         extraOptions = [
           "--cpus=2"
           "--memory=512m"
-        ];
+        ]
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "--network=${dockerNetworkName}";
       };
 
       prometheus = {
         image = "prom/prometheus:latest";
         autoStart = true;
         user = mkDockerUser config.users.users.prometheus config.users.groups.prometheus;
+        dependsOn = []
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "network-${dockerNetworkName}";
         ports = [
           "9090:9090/tcp"
         ];
         volumes = [
           "/var/lib/prometheus:/prometheus"
+
           (mkDockerVolumeYAML "prometheus.yml" "/etc/prometheus/prometheus.yml" {
             global = {
               scrape_interval = "15s";
               evaluation_interval = "15s";
             };
+
+            scrape_configs = [
+              {
+                job_name = "unpoller";
+                scrape_interval = "30s";
+                static_configs = [
+                  {
+                    targets = [ "unpoller:9130" ];
+                  }
+                ];
+              }
+            ];
           })
         ];
         extraOptions = [
           "--cpus=2"
           "--memory=512m"
-        ];
+        ]
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "--network=${dockerNetworkName}";
       };
 
       grafana = {
         image = "grafana/grafana:latest";
         autoStart = true;
         user = mkDockerUser config.users.users.grafana config.users.groups.grafana;
+        dependsOn = []
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "network-${dockerNetworkName}";
         ports = [
           "3000:3000/tcp"
         ];
@@ -268,7 +291,8 @@ in
         extraOptions = [
           "--cpus=2"
           "--memory=512m"
-        ];
+        ]
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "--network=${dockerNetworkName}";
       };
 
       unpoller = {
@@ -276,9 +300,11 @@ in
         autoStart = true;
         cmd = [ "--config" "/etc/unpoller/up.json" ];
         user = mkDockerUser config.users.users.unpoller config.users.groups.unpoller;
+        dependsOn = []
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "network-${dockerNetworkName}";
         ports = [
           "9130:9130/tcp"
-          "37288:37288/tcp"
+          # "37288:37288/tcp"
         ];
         environmentFiles = [
           "/secrets/unpoller/env"
@@ -324,7 +350,8 @@ in
         extraOptions = [
           "--cpus=2"
           "--memory=512m"
-        ];
+        ]
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "--network=${dockerNetworkName}";
       };
     };
   };
@@ -367,7 +394,30 @@ in
         chown ${mkDockerUser config.users.users.unpoller config.users.groups.unpoller} /secrets/unpoller/env
       '';
     };
-  };
+  }
+    // lib.optionalAttrs (config.virtualisation.docker.enable) {
+      "docker-network-${dockerNetworkName}" = {
+        wantedBy = [ "multi-user.target" ];
+        after = [ "docker.service" "docker.socket" ];
+        path = [ pkgs.docker ];
+        preStart = ''
+          docker network rm ${dockerNetworkName} || true
+        '';
+        script = ''
+          docker network create \
+            --driver=bridge \
+            --subnet=10.0.0.0/16 \
+            ${dockerNetworkName}
+        '';
+        postStop = ''
+          docker network rm ${dockerNetworkName} || true
+        '';
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+      };
+    };
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
