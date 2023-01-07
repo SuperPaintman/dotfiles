@@ -245,10 +245,12 @@ in
                 static_configs = [
                   {
                     targets = [ "10.0.0.1:9100" ];
+                    labels.instance = "osier";
                   }
 
                   {
                     targets = [ "192.168.1.1:9100" ];
+                    labels.instance = "unifi-dream-router";
                   }
                 ];
               }
@@ -259,6 +261,7 @@ in
                 static_configs = [
                   {
                     targets = [ "unpoller:9130" ];
+                    labels.instance = "osier";
                   }
                 ];
               }
