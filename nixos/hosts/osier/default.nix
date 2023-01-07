@@ -75,6 +75,10 @@ in
 
     # See: https://github.com/NixOS/nixpkgs/blob/nixos-20.09/nixos/modules/services/networking/firewall.nix
     extraCommands = let
+      dockerNetwork = {
+        subnet = "10.0.0.0/16";
+      };
+
       localNetwork = {
         subnet = "192.168.1.0/24";
       };
@@ -96,6 +100,9 @@ in
         # Unpoller
         9130 # Prometheus.
         # 37288 # Web server.
+
+        # Node Exporter.
+        9100
       ];
 
       allowedUDPPorts = [
@@ -106,14 +113,27 @@ in
         53
       ];
 
+
+      allowedDockerHostTCPPorts = [
+        # Node Exporter.
+        9100
+      ];
+
+      allowedDockerHostUDPPorts = [];
+
       mkRules = subnet: protocol: ports:
         lib.concatMapStringsSep
           "\n"
           (port: "iptables -A nixos-fw -s ${subnet} -p ${protocol} --dport ${builtins.toString port} -j nixos-fw-accept")
           ports;
     in ''
+      # Local Network.
       ${mkRules localNetwork.subnet "tcp" allowedTCPPorts}
       ${mkRules localNetwork.subnet "udp" allowedUDPPorts}
+
+      # Docker Network.
+      ${mkRules dockerNetwork.subnet "tcp" allowedDockerHostTCPPorts}
+      ${mkRules dockerNetwork.subnet "udp" allowedDockerHostUDPPorts}
     '';
   };
 
@@ -220,6 +240,15 @@ in
             };
 
             scrape_configs = [
+              {
+                job_name = "node";
+                static_configs = [
+                  {
+                    targets = [ "10.0.0.1:9100" ];
+                  }
+                ];
+              }
+
               {
                 job_name = "unpoller";
                 scrape_interval = "30s";
@@ -355,6 +384,21 @@ in
           "--memory=512m"
         ]
           ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "--network=${dockerNetworkName}";
+      };
+
+      node-exporter = {
+        image = "prom/node-exporter:latest";
+        autoStart = true;
+        cmd = [ "--path.rootfs=/host" ];
+        volumes = [
+          "/:/host:ro,rslave"
+        ];
+        extraOptions = [
+          "--cpus=2"
+          "--memory=512m"
+          "--pid=host"
+          "--network=host"
+        ];
       };
     };
   };
