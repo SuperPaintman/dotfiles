@@ -17,6 +17,11 @@ let
   mkDockerVolumeINI = name: path: options: attrs: mkDockerVolumeText name path (lib.generators.toINI options attrs);
 
   mkDockerUser = user: group: "${builtins.toString user.uid}:${builtins.toString group.gid}";
+
+  mkDockerEntryPoint = name: path: text: let
+    file = pkgs.writeScript name text;
+  in
+    "${file}:${path}:ro";
 in
 
 {
@@ -85,6 +90,10 @@ in
 
         # Grafana.
         3000
+
+        # Unpoller
+        9130 # Prometheus.
+        37288 # Web server.
       ];
 
       allowedUDPPorts = [
@@ -123,6 +132,7 @@ in
       ++ lib.optional (builtins.pathExists ./id_rsa.cashapona.pub) ./id_rsa.cashapona.pub;
   };
 
+  # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/misc/ids.nix.
   users.groups.prometheus.gid = config.ids.gids.prometheus;
   users.users.prometheus = {
     description = "Prometheus daemon user";
@@ -135,6 +145,13 @@ in
     description = "Grafana daemon user";
     uid = 196;
     group = "grafana";
+  };
+
+  users.groups.unpoller.gid = 330;
+  users.users.unpoller = {
+    description = "Unpoller daemon user";
+    uid = 330;
+    group = "unpoller";
   };
 
   # Environment.
@@ -253,8 +270,71 @@ in
           "--memory=512m"
         ];
       };
+
+      unpoller = {
+        image = "ghcr.io/unpoller/unpoller:latest";
+        autoStart = true;
+        cmd = [ "--config" "/etc/unpoller/up.json" ];
+        user = mkDockerUser config.users.users.unpoller config.users.groups.unpoller;
+        ports = [
+          "9130:9130/tcp"
+          "37288:37288/tcp"
+        ];
+        environmentFiles = [
+          "/secrets/unpoller/env"
+        ];
+        volumes = [
+          # "/secrets/unpoller:/secrets/unpoller:ro"
+
+          # https://raw.githubusercontent.com/unpoller/unpoller/master/examples/up.conf.example
+          (mkDockerVolumeJSON "up.json" "/etc/unpoller/up.json" {
+            poller = {
+              debug = false;
+              quiet = false;
+            };
+
+            prometheus = {
+              disable = false;
+            };
+
+            influxdb = {
+              disable = true;
+            };
+
+            loki = {
+              disable = true;
+            };
+
+            datadog = {
+              enable = false;
+            };
+
+            webserver = {
+              enable = false;
+            };
+
+            unifi.dynamic = false;
+            unifi.defaults = {
+              url = "https://192.168.1.1";
+              # pass = "file:///secrets/unpoller/pass";
+              sites = [ "all" ];
+            };
+          })
+        ];
+        extraOptions = [
+          "--cpus=2"
+          "--memory=512m"
+        ];
+      };
     };
   };
+
+  # Secrets.
+  system.activationScripts.create-secrets-dir.text = ''
+    (umask 077 && mkdir -p /secrets)
+    chmod 700 /secrets
+    chown root:root /secrets
+  '';
 
   # Systemd.
   systemd.services = {
@@ -269,6 +349,22 @@ in
       preStart = ''
         mkdir -p /var/lib/grafana
         chown ${mkDockerUser config.users.users.grafana config.users.groups.grafana} /var/lib/grafana
+      '';
+    };
+
+    docker-unpoller = {
+      preStart = ''
+        (umask 077 && mkdir -p /secrets/unpoller)
+        chmod 700 /secrets/unpoller
+        chown ${mkDockerUser config.users.users.unpoller config.users.groups.unpoller} /secrets/unpoller
+
+        if [ ! -f /secrets/unpoller/env ]; then
+          (umask 077 && touch /secrets/unpoller/env)
+          echo "UP_UNIFI_DEFAULT_USER=unifipoller" > /secrets/unpoller/env
+          echo "UP_UNIFI_DEFAULT_PASS=unifipoller" >> /secrets/unpoller/env
+        fi
+        chmod 0400 /secrets/unpoller/env
+        chown ${mkDockerUser config.users.users.unpoller config.users.groups.unpoller} /secrets/unpoller/env
       '';
     };
   };
