@@ -10,8 +10,15 @@ ssh "$SSH_USER@$IP" '(umask 077 && mkdir -p /secrets) && chown root:root /secret
 
 if [ -f "./secrets/unpoller/env" ]; then
   ssh "$SSH_USER@$IP" ' (umask 077 && mkdir -p /secrets/unpoller) && chown unpoller:unpoller /secrets/unpoller' && \
-    ssh "$SSH_USER@$IP" '(umask 077 && touch /secrets/unpoller/env) && chmod 0400 /secrets/unpoller/env && chown unpoller:unpoller /secrets/unpoller' && \
+    ssh "$SSH_USER@$IP" '(umask 077 && touch /secrets/unpoller/env) && chmod 0400 /secrets/unpoller/env && chown unpoller:unpoller /secrets/unpoller/env' && \
     (cat ./secrets/unpoller/env | ssh "$SSH_USER@$IP" 'cat > /secrets/unpoller/env') || \
+    true
+fi
+
+if [ -f "./secrets/alertmanager/env" ]; then
+  ssh "$SSH_USER@$IP" ' (umask 077 && mkdir -p /secrets/alertmanager) && chown alertmanager:alertmanager /secrets/alertmanager' && \
+    ssh "$SSH_USER@$IP" '(umask 077 && touch /secrets/alertmanager/env) && chmod 0400 /secrets/alertmanager/env && chown alertmanager:alertmanager /secrets/alertmanager/env' && \
+    (cat ./secrets/alertmanager/env | ssh "$SSH_USER@$IP" 'cat > /secrets/alertmanager/env') || \
     true
 fi
 

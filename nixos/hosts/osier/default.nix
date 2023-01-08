@@ -116,6 +116,9 @@ in
 
         # Home Assistant.
         8123
+
+        # Alertmanager.
+        9093
       ];
 
       allowedUDPPorts = [
@@ -204,6 +207,13 @@ in
     extraGroups = [ "systemd-journal" ];
   };
 
+  users.groups.alertmanager.gid = 333;
+  users.users.alertmanager = {
+    description = "Alertmanager daemon user";
+    uid = 333;
+    group = "alertmanager";
+  };
+
   # Environment.
   environment.systemPackages = with pkgs; [
     vim
@@ -250,6 +260,7 @@ in
             192.168.1.16 grafana.local
             192.168.1.16 promtail.local
             192.168.1.16 home.local
+            192.168.1.16 alertmanager.local
 
             # UniFi Dream Router.
             192.168.1.1 unifi.local
@@ -703,6 +714,7 @@ in
             grafana.servers."grafana:3000" = {};
             promtail.servers."promtail:9080" = {};
             home-assistant.servers."home-assistant:8123" = {};
+            alertmanager.servers."alertmanager:9093" = {};
           };
 
           virtualHosts = {
@@ -738,6 +750,12 @@ in
             "home.local" = {
               locations."/" = {
                 proxyPass = "http://home-assistant";
+              };
+            };
+
+            "alertmanager.local" = {
+              locations."/" = {
+                proxyPass = "http://alertmanager";
               };
             };
           };
@@ -927,6 +945,61 @@ in
         ]
           ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "--network=${dockerNetworkName}";
       };
+
+      alertmanager = {
+        image = "prom/alertmanager:latest";
+        autoStart = true;
+        cmd = [
+          "--config.file=/tmp/alertmanager-generated.yml"
+          "--storage.path=/alertmanager"
+        ];
+        user = mkDockerUser config.users.users.alertmanager config.users.groups.alertmanager;
+        dependsOn = []
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "network-${dockerNetworkName}";
+        entrypoint = "/custom-entry-point.sh";
+        ports = [
+          "9093:9093/tcp"
+        ];
+        environmentFiles = [
+          "/secrets/alertmanager/env"
+        ];
+        volumes = [
+          "/var/lib/alertmanager:/alertmanager"
+
+          # Alertmanager do not support env variables in the config.
+          (mkDockerEntryPoint "alertmanager-entry-point.sh" "/custom-entry-point.sh" ''
+            #!/bin/sh
+
+            set -euo pipefail
+
+            eval "cat <<EOF
+            $(cat /etc/alertmanager/alertmanager-template.yml)
+            EOF
+            " > /tmp/alertmanager-generated.yml
+
+            exec /bin/alertmanager $@
+          '')
+
+          # See: https://raw.githubusercontent.com/prometheus/alertmanager/main/doc/examples/simple.yml
+          # See: https://prometheus.io/docs/alerting/latest/configuration/
+          # See: https://stackoverflow.com/questions/32423837/telegram-bot-how-to-get-a-group-chat-id
+          (mkDockerVolumeText "alertmanager.yml" "/etc/alertmanager/alertmanager-template.yml" ''
+            route:
+              receiver: SuperPaintman
+
+            receivers:
+              - name: SuperPaintman
+                telegram_configs:
+                  - bot_token: $TELEGRAM_BOT_TOKEN
+                    chat_id: $TELEGRAM_CHAT_ID
+          '')
+        ];
+        extraOptions = [
+          "--cpus=2"
+          "--memory=512m"
+        ]
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "--network=${dockerNetworkName}";
+      };
     };
   };
 
@@ -980,6 +1053,25 @@ in
       preStart = ''
         mkdir -p /var/lib/promtail
         chown ${mkDockerUser config.users.users.promtail config.users.groups.promtail} /var/lib/promtail
+      '';
+    };
+
+    docker-alertmanager = {
+      preStart = ''
+        mkdir -p /var/lib/alertmanager
+        chown ${mkDockerUser config.users.users.alertmanager config.users.groups.alertmanager} /var/lib/alertmanager
+
+        (umask 077 && mkdir -p /secrets/alertmanager)
+        chmod 700 /secrets/alertmanager
+        chown ${mkDockerUser config.users.users.alertmanager config.users.groups.alertmanager} /secrets/alertmanager
+
+        if [ ! -f /secrets/alertmanager/env ]; then
+          (umask 077 && touch /secrets/alertmanager/env)
+          echo "TELEGRAM_BOT_TOKEN=" > /secrets/alertmanager/env
+          echo "TELEGRAM_CHAT_ID=" >> /secrets/alertmanager/env
+        fi
+        chmod 0400 /secrets/alertmanager/env
+        chown ${mkDockerUser config.users.users.alertmanager config.users.groups.alertmanager} /secrets/alertmanager/env
       '';
     };
   }
