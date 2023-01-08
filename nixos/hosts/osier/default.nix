@@ -113,6 +113,9 @@ in
         # Nginx.
         80
         443
+
+        # Home Assistant.
+        8123
       ];
 
       allowedUDPPorts = [
@@ -246,6 +249,7 @@ in
             192.168.1.16 prometheus.local
             192.168.1.16 grafana.local
             192.168.1.16 promtail.local
+            192.168.1.16 home.local
 
             # UniFi Dream Router.
             192.168.1.1 unifi.local
@@ -698,16 +702,18 @@ in
             prometheus.servers."prometheus:9090" = {};
             grafana.servers."grafana:3000" = {};
             promtail.servers."promtail:9080" = {};
+            home-assistant.servers."home-assistant:8123" = {};
           };
 
           virtualHosts = {
             "pihole.local" = {
-              locations."/" = {
-                proxyPass = "http://pihole";
+              locations."= /" = {
+                priority = 500;
+                return = "302 $scheme://$host/admin";
               };
 
-              location."= /" = {
-                return = "302 https://$host/admin";
+              locations."/" = {
+                proxyPass = "http://pihole";
               };
             };
 
@@ -728,13 +734,19 @@ in
                 proxyPass = "http://promtail";
               };
             };
+
+            "home.local" = {
+              locations."/" = {
+                proxyPass = "http://home-assistant";
+              };
+            };
           };
 
           mkListen = { port, ... }: with lib; ''
             listen ${toString port};
           '';
 
-          mkLocation = { location, return ? null, proxyPass ? null }: with lib; ''
+          mkLocation = { location, return ? null, proxyPass ? null, ... }: with lib; ''
             location ${location} {
               ${optionalString (return != null) "return ${return};"}
               ${optionalString (proxyPass != null) "proxy_pass ${proxyPass};"}
@@ -870,6 +882,43 @@ in
               # Virtual Hosts
               ${virtualHostsConfig}
             }
+          '')
+        ];
+        extraOptions = [
+          "--cpus=2"
+          "--memory=512m"
+        ]
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "--network=${dockerNetworkName}";
+      };
+
+      home-assistant = {
+        image = "ghcr.io/home-assistant/home-assistant:stable";
+        autoStart = true;
+        environment = {
+          TZ = config.time.timeZone;
+        };
+        dependsOn = []
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "network-${dockerNetworkName}";
+        ports = [
+          "8123:8123/tcp"
+        ];
+        volumes = [
+          # See: https://www.home-assistant.io/docs/configuration/
+          # See: https://www.home-assistant.io/integrations/default_config/
+          (mkDockerVolumeText "home-assistant-configuration.yaml" "/config/configuration.yaml" ''
+            # Loads default set of integrations. Do not remove.
+            default_config:
+
+            # See: https://www.home-assistant.io/integrations/http/
+            http:
+              server_port: 8123
+              use_x_forwarded_for: true
+              trusted_proxies:
+                - 10.0.0.0/16
+
+            # Text to speech
+            tts:
+              - platform: google_translate
           '')
         ];
         extraOptions = [
