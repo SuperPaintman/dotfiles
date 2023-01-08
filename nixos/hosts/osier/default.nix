@@ -224,6 +224,14 @@ in
       prometheus = {
         image = "prom/prometheus:latest";
         autoStart = true;
+        cmd = [
+          "--config.file=/etc/prometheus/prometheus.yml"
+          "--storage.tsdb.path=/prometheus"
+          "--storage.tsdb.retention.time=1y"
+          "--storage.tsdb.retention.size=32GB"
+          "--web.console.libraries=/usr/share/prometheus/console_libraries"
+          "--web.console.templates=/usr/share/prometheus/consoles"
+        ];
         user = mkDockerUser config.users.users.prometheus config.users.groups.prometheus;
         dependsOn = []
           ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "network-${dockerNetworkName}";
