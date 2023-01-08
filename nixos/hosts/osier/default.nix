@@ -543,7 +543,7 @@ in
       promtail = {
         image = "grafana/promtail:latest";
         autoStart = true;
-        # user = mkDockerUser config.users.users.promtail config.users.groups.promtail;
+        user = mkDockerUser config.users.users.promtail config.users.groups.promtail;
         dependsOn = []
           ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "network-${dockerNetworkName}";
         ports = [
@@ -641,6 +641,7 @@ in
         extraOptions = [
           "--cpus=2"
           "--memory=512m"
+          "--group-add=${builtins.toString config.users.groups.systemd-journal.gid}"
         ]
           ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "--network=${dockerNetworkName}";
       };
