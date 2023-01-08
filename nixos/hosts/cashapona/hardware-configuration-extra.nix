@@ -25,7 +25,7 @@
   # Control fans.
   # See: https://docs.kernel.org/hwmon/dell-smm-hwmon.html
   boot.extraModprobeConfig = ''
-    options dell-smm-hwmon restricted=0
+    options dell-smm-hwmon restricted=0 force=1
   '';
 
   # Networking.
