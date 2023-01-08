@@ -109,6 +109,10 @@ in
 
         # Promtail.
         9080
+
+        # Nginx.
+        80
+        443
       ];
 
       allowedUDPPorts = [
@@ -234,6 +238,18 @@ in
         volumes = [
           "/var/lib/pihole:/etc/pihole"
           "/var/lib/pihole-dnsmasq.d:/etc/dnsmasq.d"
+
+          (mkDockerVolumeText "pihole-custom.list" "/etc/pihole/custom.list" ''
+            # Osier.
+            192.168.1.16 local
+            192.168.1.16 pihole.local
+            192.168.1.16 prometheus.local
+            192.168.1.16 grafana.local
+            192.168.1.16 promtail.local
+
+            # UniFi Dream Router.
+            192.168.1.1 unifi.local
+          '')
         ];
         extraOptions = [
           "--cpus=2"
@@ -642,6 +658,223 @@ in
           "--cpus=2"
           "--memory=512m"
           "--group-add=${builtins.toString config.users.groups.systemd-journal.gid}"
+        ]
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "--network=${dockerNetworkName}";
+      };
+
+      nginx = {
+        image = "nginx:latest";
+        autoStart = true;
+        dependsOn = []
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "network-${dockerNetworkName}";
+        ports = [
+          "80:80/tcp"
+          "443:443/tcp"
+        ];
+        volumes = let
+          defaultConfig = ''
+            server {
+              listen 80;
+              listen [::]:80;
+              server_name _;
+
+              location / {
+                root /usr/share/nginx/html;
+                index index.html index.htm;
+              }
+
+              # error_page 404 /404.html;
+
+              error_page 500 502 503 504 /50x.html;
+              location = /50x.html {
+                root /usr/share/nginx/html;
+              }
+            }
+          '';
+
+          # See: https://github.com/NixOS/nixpkgs/blob/nixos-22.11/nixos/modules/services/web-servers/nginx/default.nix
+          upstreams = {
+            pihole.servers."pihole:80" = {};
+            prometheus.servers."prometheus:9090" = {};
+            grafana.servers."grafana:3000" = {};
+            promtail.servers."promtail:9080" = {};
+          };
+
+          virtualHosts = {
+            "pihole.local" = {
+              locations."/" = {
+                proxyPass = "http://pihole";
+              };
+
+              location."= /" = {
+                return = "302 https://$host/admin";
+              };
+            };
+
+            "prometheus.local" = {
+              locations."/" = {
+                proxyPass = "http://prometheus";
+              };
+            };
+
+            "grafana.local" = {
+              locations."/" = {
+                proxyPass = "http://grafana";
+              };
+            };
+
+            "promtail.local" = {
+              locations."/" = {
+                proxyPass = "http://promtail";
+              };
+            };
+          };
+
+          mkListen = { port, ... }: with lib; ''
+            listen ${toString port};
+          '';
+
+          mkLocation = { location, return ? null, proxyPass ? null }: with lib; ''
+            location ${location} {
+              ${optionalString (return != null) "return ${return};"}
+              ${optionalString (proxyPass != null) "proxy_pass ${proxyPass};"}
+            }
+          '';
+
+          mkLocations = locations: with lib; concatStringsSep "\n" (map mkLocation (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
+
+          upstreamConfig = with lib; concatStringsSep "\n" (flip mapAttrsToList upstreams (name: upstream: ''
+            upstream ${name} {
+              ${toString (flip mapAttrsToList upstream.servers (name: server: ''
+                server ${name} ${optionalString (server.backup or false) "backup"};
+              ''))}
+              ${upstream.extraConfig or ""}
+            }
+          ''));
+
+          virtualHostsConfig = with lib; concatStringsSep "\n" (flip mapAttrsToList virtualHosts (vhostName: vhost: ''
+            # ${vhostName}
+            server {
+              ${concatMapStringsSep "\n" mkListen (vhost.listen or [{ port = 80; }])}
+              server_name ${vhostName};
+
+              ${mkLocations vhost.locations}
+            }
+          ''));
+
+          # logFormat = lib.concatStringsSep "" [
+          #   "$remote_addr - $remote_user [$time_local] \"$request\" "
+          #   "$status $body_bytes_sent \"$http_referer\" "
+          #   "\"$http_user_agent\" \"$http_x_forwarded_for\""
+          # ];
+
+          # See: https://stackoverflow.com/questions/25049667/how-to-generate-a-json-log-from-nginx
+          # See: https://brandur.org/logfmt
+          logFormat = lib.concatStringsSep " " (lib.mapAttrsToList
+            (key: { alias ? null, escape ? false }: let
+              value'' = if alias == null then key else alias;
+              value' = "\$${value''}";
+              value = if escape then builtins.toJSON value' else value';
+            in "${key}=${value}")
+            {
+              host.escape = true;
+              time_local.escape = true;
+              remote_addr.escape = true;
+              remote_user.escape = true;
+              request_method.escape = true;
+              server_protocol.escape = true;
+              request_uri.escape = true;
+              uri.escape = true;
+              args.escape = true;
+              status = {};
+              body_bytes_sent = {};
+              request_length = {};
+              request_time.escape = true;
+              http_referer.escape = true;
+              http_user_agent.escape = true;
+              http_x_forwarded_for.escape = true;
+              request_id.escape = true;
+            }
+          );
+        in [
+          (mkDockerVolumeText "nginx.conf" "/etc/nginx/nginx.conf" ''
+            user nginx;
+            worker_processes auto;
+
+            error_log /dev/stderr notice;
+            pid /var/run/nginx.pid;
+
+            events {
+              worker_connections 1024;
+            }
+
+            http {
+              # Basic Settings
+              sendfile on;
+              tcp_nopush on;
+              tcp_nodelay on;
+              keepalive_timeout 75 20;
+              types_hash_max_size 2048;
+              server_tokens off;
+              ignore_invalid_headers on;
+
+              # Defaults
+              include /etc/nginx/mime.types;
+              default_type application/octet-stream;
+
+              # Logging
+              log_format main ${builtins.toJSON logFormat};
+              access_log /dev/stdout main;
+
+              # Gzip
+              gzip on;
+              gzip_vary on;
+
+              gzip_disable "MSIE [4-6]\.";
+              gzip_types text/plain
+                         text/css
+                         application/json
+                         application/x-javascript
+                         text/xml
+                         application/xml
+                         application/xml+rss
+                         text/javascript
+                         application/javascript;
+
+              # Proxy
+              proxy_redirect off;
+              proxy_connect_timeout 60s;
+              proxy_send_timeout 60s;
+              proxy_read_timeout 60s;
+              proxy_http_version 1.1;
+
+              # Proxy Headers
+              proxy_set_header Host $host;
+              proxy_set_header X-Real-IP $remote_addr;
+              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+              proxy_set_header X-Forwarded-Proto $scheme;
+              proxy_set_header X-Forwarded-Host $host;
+              proxy_set_header X-Forwarded-Server $host;
+
+              # Request ID
+              add_header X-Request-ID $request_id;
+              proxy_set_header X-Request-ID $request_id;
+
+              # Upstreams
+              ${upstreamConfig}
+
+              # Configs
+              # Default Config
+              ${defaultConfig}
+
+              # Virtual Hosts
+              ${virtualHostsConfig}
+            }
+          '')
+        ];
+        extraOptions = [
+          "--cpus=2"
+          "--memory=512m"
         ]
           ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "--network=${dockerNetworkName}";
       };

@@ -17,6 +17,9 @@ $ nix-shell -p zstd --run "unzstd ./$NIXOS_IMAGE"
 
 $ NIX_PATH='nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/tags/22.11.tar.gz' nix-build -I 'nixos-config=./image.nix' '<nixpkgs/nixos>' -A config.system.build.sdImage --argstr system aarch64-linux
 $ nix-shell -p zstd --run "unzstd ./result/sd-image/nixos-sd-image-22.11pre-git-aarch64-linux.img.zst -o ./nixos-sd-image-22.11pre-git-aarch64-linux.img"
+
+# Or just the top level.
+$ NIX_PATH='nixpkgs=https://github.com/NixOS/nixpkgs/archive/refs/tags/22.11.tar.gz' nix-build -I 'nixos-config=./default.nix' '<nixpkgs/nixos>' -A config.system.build.toplevel
 ```
 
 ## Checklist
