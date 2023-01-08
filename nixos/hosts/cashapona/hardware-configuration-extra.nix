@@ -22,6 +22,12 @@
   # See: https://github.com/NixOS/nixos-hardware/blob/master/common/cpu/intel/default.nix
   boot.initrd.kernelModules = [ "i915" ];
 
+  # Control fans.
+  # See: https://docs.kernel.org/hwmon/dell-smm-hwmon.html
+  boot.extraModprobeConfig = ''
+    options dell-smm-hwmon restricted=0
+  '';
+
   # Networking.
   networking = {
     useDHCP = false;
