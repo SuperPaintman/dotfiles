@@ -103,6 +103,12 @@ in
 
         # Node Exporter.
         9100
+
+        # Loki.
+        3100
+
+        # Promtail.
+        9080
       ];
 
       allowedUDPPorts = [
@@ -174,6 +180,21 @@ in
     description = "Unpoller daemon user";
     uid = 330;
     group = "unpoller";
+  };
+
+  users.groups.loki.gid = 331;
+  users.users.loki = {
+    description = "Loki daemon user";
+    uid = 331;
+    group = "loki";
+  };
+
+  users.groups.promtail.gid = 332;
+  users.users.promtail = {
+    description = "Promtail daemon user";
+    uid = 332;
+    group = "promtail";
+    extraGroups = [ "systemd-journal" ];
   };
 
   # Environment.
@@ -263,6 +284,16 @@ in
                 static_configs = [
                   {
                     targets = [ "grafana:3000" ];
+                    labels.instance = "osier";
+                  }
+                ];
+              }
+
+              {
+                job_name = "loki";
+                static_configs = [
+                  {
+                    targets = [ "loki:3100" ];
                     labels.instance = "osier";
                   }
                 ];
@@ -435,6 +466,184 @@ in
           "--network=host"
         ];
       };
+
+      loki = {
+        image = "grafana/loki:latest";
+        autoStart = true;
+        user = mkDockerUser config.users.users.loki config.users.groups.loki;
+        dependsOn = []
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "network-${dockerNetworkName}";
+        ports = [
+          "3100:3100/tcp"
+        ];
+        volumes = [
+          "/var/lib/loki:/loki"
+
+          # See: https://grafana.com/docs/loki/latest/configuration/
+          # See: https://raw.githubusercontent.com/grafana/loki/main/cmd/loki/loki-local-config.yaml
+          # See: https://raw.githubusercontent.com/grafana/loki/blob/main/cmd/loki/loki-docker-config.yaml
+          (mkDockerVolumeYAML "loki.yaml" "/etc/loki/local-config.yaml" {
+            auth_enabled = false;
+
+            server.http_listen_port = 3100;
+            # server.grpc_listen_port = 9096;
+
+            common = {
+              path_prefix = "/loki";
+              storage.filesystem = {
+                chunks_directory = "/loki/chunks";
+                rules_directory = "/loki/rules";
+              };
+              replication_factor = 1;
+              ring.kvstore.store = "inmemory";
+            };
+
+            schema_config.configs = [
+              {
+                from = "2020-10-24";
+                store = "boltdb-shipper";
+                object_store = "filesystem";
+                schema = "v11";
+                index = {
+                  prefix = "index_";
+                  period = "24h";
+                };
+              }
+            ];
+
+            compactor = {
+              shared_store = "filesystem";
+              retention_enabled = true;
+            };
+
+            limits_config.retention_period = "1y";
+
+            # ruler.alertmanager_url = "http://localhost:9093";
+
+            # By default, Loki will send anonymous, but uniquely-identifiable usage and configuration
+            # analytics to Grafana Labs. These statistics are sent to https://stats.grafana.org/
+            #
+            # Statistics help us better understand how Loki is used, and they show us performance
+            # levels for most users. This helps us prioritize features and documentation.
+            # For more information on what's sent, look at
+            # https://github.com/grafana/loki/blob/main/pkg/usagestats/stats.go
+            # Refer to the buildReport method to see what goes into a report.
+            #
+            # If you would like to disable reporting, uncomment the following lines:
+            analytics.reporting_enabled = false;
+          })
+        ];
+        extraOptions = [
+          "--cpus=2"
+          "--memory=512m"
+        ]
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "--network=${dockerNetworkName}";
+      };
+
+      promtail = {
+        image = "grafana/promtail:latest";
+        autoStart = true;
+        # user = mkDockerUser config.users.users.promtail config.users.groups.promtail;
+        dependsOn = []
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "network-${dockerNetworkName}";
+        ports = [
+          "9080:9080/tcp"
+        ];
+        volumes = [
+          "/var/lib/promtail:/promtail"
+
+          "/var/log/journal:/var/log/journal:ro"
+          "/run/log/journal:/run/log/journal:ro"
+          "/etc/machine-id:/etc/machine-id:ro"
+
+          # See: https://grafana.com/docs/loki/latest/clients/promtail/configuration/
+          # See: https://raw.githubusercontent.com/grafana/loki/main/clients/cmd/promtail/promtail-journal.yaml
+          # See: https://raw.githubusercontent.com/grafana/loki/main/clients/cmd/promtail/promtail-docker-config.yaml
+          (mkDockerVolumeYAML "promtail.yml" "/etc/promtail/config.yml" {
+            server.http_listen_port = 9080;
+
+            positions.filename = "/promtail/positions.yaml";
+
+            clients = [
+              {
+                url = "http://loki:3100/loki/api/v1/push";
+              }
+            ];
+
+            # See: https://grafana.com/docs/loki/latest/clients/promtail/scraping/
+            scrape_configs = [
+              {
+                job_name = "journal";
+
+                journal = {
+                  max_age = "24h";
+                  labels.job = "systemd-journal";
+                };
+
+                relabel_configs = [
+                  {
+                    source_labels = [ "__journal__systemd_unit" ];
+                    target_label = "unit";
+                  }
+                  {
+                    source_labels = [ "__journal__hostname" ];
+                    target_label = "hostname";
+                  }
+                  {
+                    source_labels = [ "__journal_container_name" ];
+                    target_label = "container";
+                  }
+                ];
+
+                # See: https://grafana.com/docs/loki/latest/clients/promtail/pipelines/
+                # See: https://grafana.com/docs/loki/latest/clients/promtail/stages/
+                pipeline_stages = let
+                  containerNames = builtins.attrNames config.virtualisation.oci-containers.containers;
+                  containerNamesRegex = "(${lib.concatStringsSep "|" containerNames})";
+                in [
+                  # Drop duplicate logs.
+                  {
+                    match = {
+                      selector = "{unit=\"docker.service\"}";
+                      stages = [
+                        {
+                          drop = {
+                            source = "container";
+                            expression = "^${containerNamesRegex}$";
+                          };
+                        }
+                      ];
+                    };
+                  }
+
+                  # Get container name from the Docker unit names.
+                  {
+                    match = {
+                      selector = "{unit=~\"^docker-${containerNamesRegex}\\\\.service$\"}";
+                      stages = [
+                        {
+                          regex = {
+                            source = "unit";
+                            expression = "^docker-(?P<container>.+)\\.service$";
+                          };
+                        }
+                        {
+                          labels.container = "container";
+                        }
+                      ];
+                    };
+                  }
+                ];
+              }
+            ];
+          })
+        ];
+        extraOptions = [
+          "--cpus=2"
+          "--memory=512m"
+        ]
+          ++ lib.optional (config.systemd.services ? "docker-network-${dockerNetworkName}") "--network=${dockerNetworkName}";
+      };
     };
   };
 
@@ -474,6 +683,20 @@ in
         fi
         chmod 0400 /secrets/unpoller/env
         chown ${mkDockerUser config.users.users.unpoller config.users.groups.unpoller} /secrets/unpoller/env
+      '';
+    };
+
+    docker-loki = {
+      preStart = ''
+        mkdir -p /var/lib/loki
+        chown ${mkDockerUser config.users.users.loki config.users.groups.loki} /var/lib/loki
+      '';
+    };
+
+    docker-promtail = {
+      preStart = ''
+        mkdir -p /var/lib/promtail
+        chown ${mkDockerUser config.users.users.promtail config.users.groups.promtail} /var/lib/promtail
       '';
     };
   }
