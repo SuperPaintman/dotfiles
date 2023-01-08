@@ -249,6 +249,26 @@ in
 
             scrape_configs = [
               {
+                job_name = "prometheus";
+                static_configs = [
+                  {
+                    targets = [ "prometheus:9090" ];
+                    labels.instance = "osier";
+                  }
+                ];
+              }
+
+              {
+                job_name = "grafana";
+                static_configs = [
+                  {
+                    targets = [ "grafana:3000" ];
+                    labels.instance = "osier";
+                  }
+                ];
+              }
+
+              {
                 job_name = "node";
                 static_configs = [
                   {
