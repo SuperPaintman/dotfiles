@@ -356,6 +356,63 @@ in
                 ];
               }
             ];
+
+            alerting = {
+              alertmanagers = [
+                {
+                  static_configs = [
+                    {
+                      targets = [ "alertmanager:9093" ];
+                      labels.instance = "osier";
+                    }
+                  ];
+                }
+              ];
+            };
+
+            rule_files = [
+              "/etc/prometheus/rules.yml"
+            ];
+          })
+
+          # See: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
+          # See: https://awesome-prometheus-alerts.grep.to/rules.html
+          (mkDockerVolumeYAML "alert-rules.yml" "/etc/prometheus/rules.yml" {
+            # TODO(SuperPaintman): add a nice template.
+            groups = [
+              {
+                name = "node";
+                rules = with lib; let
+                  threshold = 50; # TODO(SuperPaintman): add more thresholds.
+                in [
+                  {
+                    alert = "HostOutOfDiskSpace";
+                    expr = ''
+                      (
+                        100
+                        -
+                        (
+                          (node_filesystem_avail_bytes{mountpoint="/",fstype!="rootfs"} * 100)
+                          /
+                          node_filesystem_size_bytes{mountpoint="/",fstype!="rootfs"}
+                        )
+                      )
+                      > ${toString threshold}
+                    '';
+                    for = "5m";
+                    labels = {
+                      severity = "warning";
+                    };
+                    annotations = {
+                      summary = "Host out of disk space (>${toString threshold}%)";
+                      description = ''
+                        Disk is almost full ({{ $value }}%)
+                      '';
+                    };
+                  }
+                ];
+              }
+            ];
           })
         ];
         extraOptions = [
