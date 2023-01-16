@@ -22,6 +22,10 @@ if [ -f "./secrets/alertmanager/env" ]; then
     true
 fi
 
+ssh "$SSH_USER@$IP" '(umask 077 && mkdir -p /etc/nixos/alertmanager) && chown root:root /etc/nixos/alertmanager && chmod 0755 /etc/nixos/alertmanager'
+scp ./alertmanager/telegram.tmpl "$SSH_USER@$IP:/etc/nixos/alertmanager/telegram.tmpl"
+
 scp ./hardware-configuration.nix "$SSH_USER@$IP:/etc/nixos/hardware-configuration.nix"
 scp ./default.nix "$SSH_USER@$IP:/etc/nixos/configuration.nix"
+
 ssh "$SSH_USER@$IP" nixos-rebuild switch

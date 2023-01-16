@@ -1049,7 +1049,17 @@ in
                 telegram_configs:
                   - bot_token: $TELEGRAM_BOT_TOKEN
                     chat_id: $TELEGRAM_CHAT_ID
+                    parse_mode: "Markdown"
+                    message: '{{ template "telegram.custom.message" . }}'
+
+            templates:
+              - /etc/alertmanager/templates/telegram.tmpl
           '')
+
+          # See: https://prometheus.io/docs/alerting/latest/notifications/
+          # See: https://github.com/prometheus/alertmanager/blob/main/template/default.tmpl
+          # See: https://hodovi.cc/blog/creating-awesome-alertmanager-templates-for-slack/
+          (mkDockerVolumeText "alertmanager-telegram.tmpl" "/etc/alertmanager/templates/telegram.tmpl" (builtins.readFile ./alertmanager/telegram.tmpl))
         ];
         extraOptions = [
           "--cpus=2"

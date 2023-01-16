@@ -1,0 +1,92 @@
+{{ define "__telegram_custom_title" -}}
+{{- $critical := "🔥" -}}
+{{- $error := "🔥" -}}
+{{- $warning := "⚠️" -}}
+{{- $info := "ℹ️" -}}
+{{- $resolved := "✅" -}}
+{{- $default := $error -}}
+{{- if eq .Status "firing" -}}
+{{- $severity := index .Labels "severity" -}}
+{{- if eq $severity "critical" -}}{{- $critical -}}
+{{- else if eq $severity "error" -}}{{- $error -}}
+{{- else if eq $severity "warning" -}}{{- $warning -}}
+{{- else if eq $severity "info" -}}{{- $info -}}
+{{- else -}}{{- $default -}}
+{{- end -}}
+{{- else -}}
+{{- $resolved -}}
+{{- end -}}
+{{- " " -}}
+{{- "\\[*" -}}
+{{ if index .Labels "severity" -}}
+{{- index .Labels "severity" -}}
+{{- else -}}
+unknown
+{{- end -}}
+{{- "*]" -}}
+{{- " " -}}
+{{- "*" -}}
+{{- if ne .GeneratorURL "" -}}
+{{- "[" -}}
+{{- end -}}
+{{ if index .Labels "alertname" -}}
+{{- index .Labels "alertname" -}}
+{{- else -}}
+unknown
+{{- end -}}
+{{- if ne .GeneratorURL "" -}}
+{{- "]" -}}
+{{- "(" -}}
+{{ .GeneratorURL | urlquery }}
+{{- ")" -}}
+{{- end -}}
+{{- "*" -}}
+{{- end }}
+
+{{ define "__telegram_custom_alert" -}}
+{{ template "__telegram_custom_title" . }}{{ "\n" }}
+
+{{- if index .Annotations "summary" -}}
+{{ "\n" }}{{ "*" }}{{ index .Annotations "summary" }}{{ "*" }}{{ "\n" }}
+{{- end -}}
+
+{{ $labels := .Labels.Remove (stringSlice "alertname" "severity") -}}
+{{- if gt (len $labels.SortedPairs) 0 -}}
+{{- "\n" -}}
+{{ range $labels.SortedPairs -}}
+- `{{ .Name }}`: `{{ .Value }}`
+{{ end -}}
+{{- end -}}
+
+{{ if index .Annotations "description" -}}
+{{ "\n" }}{{ index .Annotations "description" }}{{ "\n" }}
+{{- end -}}
+
+{{ $annotations := .Annotations.Remove (stringSlice "summary" "description") -}}
+{{- if gt (len $annotations.SortedPairs) 0 -}}
+{{- "\n" -}}
+*Annotations*:
+{{ range $annotations.SortedPairs -}}
+- `{{ .Name }}`: `{{ .Value }}`
+{{ end -}}
+{{- end -}}
+{{- end }}
+
+{{ define "telegram.custom.message" }}
+{{ if gt (len .Alerts.Firing) 0 -}}
+{{ range $i, $alert := .Alerts.Firing -}}
+{{- if ne $i 0 -}}{{ "---\n\n" }}{{- end -}}
+{{ template "__telegram_custom_alert" $alert }}
+{{- "\n" -}}
+{{- end -}}
+{{ end -}}
+
+{{ if gt (len .Alerts.Resolved) 0 -}}
+{{- if gt (len .Alerts.Firing) 0 -}}{{ "---\n\n" }}{{- end -}}
+{{ range $i, $alert := .Alerts.Resolved -}}
+{{- if ne $i 0 -}}{{ "---\n\n" }}{{- end -}}
+{{ template "__telegram_custom_alert" $alert }}
+{{- "\n" -}}
+{{- end -}}
+{{- end -}}
+{{ end }}
