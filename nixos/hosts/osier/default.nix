@@ -445,7 +445,7 @@ in
                   inherit severity;
                 };
                 annotations = {
-                  summary = "Node temperature is higher than {{ ${toString threshold} | ${humanizeTemperature} }}";
+                  summary = "Node temperature is higher than {{ ${toString threshold}.0 | ${humanizeTemperature} }}";
                   description = ''
                     Temperature: {{ $value | ${humanizeTemperature} }}
                   '';
