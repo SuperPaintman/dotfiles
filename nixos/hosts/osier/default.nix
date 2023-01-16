@@ -283,6 +283,7 @@ in
           "--storage.tsdb.retention.size=32GB"
           "--web.console.libraries=/usr/share/prometheus/console_libraries"
           "--web.console.templates=/usr/share/prometheus/consoles"
+          "--web.external-url=http://prometheus.local/"
         ];
         user = mkDockerUser config.users.users.prometheus config.users.groups.prometheus;
         dependsOn = []
@@ -377,24 +378,33 @@ in
 
           # See: https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/
           # See: https://awesome-prometheus-alerts.grep.to/rules.html
+          # See: https://prometheus.io/docs/prometheus/latest/configuration/template_reference/
           (mkDockerVolumeYAML "alert-rules.yml" "/etc/prometheus/rules.yml" {
             # TODO(SuperPaintman): add a nice template.
             groups = [
               {
                 name = "node";
                 rules = with lib; let
-                  threshold = 50; # TODO(SuperPaintman): add more thresholds.
+                  threshold = 0.5; # TODO(SuperPaintman): add more thresholds.
+                  mountpoints = [
+                    "/"
+
+                    # Unifi Dream Router.
+                    "/ssd1"
+                    "/sdcard1"
+                  ];
+                  mountpointRegex = concatStringsSep "|" mountpoints;
                 in [
                   {
                     alert = "HostOutOfDiskSpace";
                     expr = ''
                       (
-                        100
+                        1
                         -
                         (
-                          (node_filesystem_avail_bytes{mountpoint="/",fstype!="rootfs"} * 100)
+                          node_filesystem_avail_bytes{mountpoint=~"${mountpointRegex}",fstype!="rootfs"}
                           /
-                          node_filesystem_size_bytes{mountpoint="/",fstype!="rootfs"}
+                          node_filesystem_size_bytes{mountpoint=~"${mountpointRegex}",fstype!="rootfs"}
                         )
                       )
                       > ${toString threshold}
@@ -404,9 +414,9 @@ in
                       severity = "warning";
                     };
                     annotations = {
-                      summary = "Host out of disk space (>${toString threshold}%)";
+                      summary = "Host out of disk space (>{{ ${toString threshold} | humanizePercentage }})";
                       description = ''
-                        Disk is almost full ({{ $value }}%)
+                        Disk is almost full ({{ $value | humanizePercentage }})
                       '';
                     };
                   }

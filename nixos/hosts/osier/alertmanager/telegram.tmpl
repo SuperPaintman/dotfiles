@@ -25,7 +25,6 @@ unknown
 {{- end -}}
 {{- "*]" -}}
 {{- " " -}}
-{{- "*" -}}
 {{- if ne .GeneratorURL "" -}}
 {{- "[" -}}
 {{- end -}}
@@ -37,10 +36,9 @@ unknown
 {{- if ne .GeneratorURL "" -}}
 {{- "]" -}}
 {{- "(" -}}
-{{ .GeneratorURL | urlquery }}
+{{ .GeneratorURL }}
 {{- ")" -}}
 {{- end -}}
-{{- "*" -}}
 {{- end }}
 
 {{ define "__telegram_custom_alert" -}}
