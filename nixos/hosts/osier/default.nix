@@ -381,11 +381,80 @@ in
           # See: https://prometheus.io/docs/prometheus/latest/configuration/template_reference/
           (mkDockerVolumeYAML "alert-rules.yml" "/etc/prometheus/rules.yml" {
             # TODO(SuperPaintman): add a nice template.
-            groups = [
+            groups = with lib; let
+              mkNodeDiskUsageAlert = name: mountpoints: threshold: { severity ? "critical", for ? "5m" }: let
+                mountpointRegex = concatStringsSep "|" mountpoints;
+              in {
+                inherit for;
+                alert = "NodeDiskSpaceUsage${name}${builtins.toJSON (builtins.div (threshold * 100) 1)}Percent";
+                expr = ''
+                  (
+                    1
+                    -
+                    (
+                      node_filesystem_avail_bytes{mountpoint=~"${mountpointRegex}",fstype!="rootfs"}
+                      /
+                      node_filesystem_size_bytes{mountpoint=~"${mountpointRegex}",fstype!="rootfs"}
+                    )
+                  )
+                  > ${toString threshold}
+                '';
+                labels = {
+                  inherit severity;
+                };
+                annotations = {
+                  summary = "Node uses more than {{ ${toString threshold} | humanizePercentage }} of the disk";
+                  description = ''
+                    Disk usage: {{ $value | humanizePercentage }}
+                  '';
+                };
+              };
+
+              mkNodeCPULoadAlert = name: threshold: { severity ? "critical", for ? "0s" }: {
+                inherit for;
+                alert = "NodeCPULoad${name}${builtins.toJSON (builtins.div (threshold * 100) 1)}Percent";
+                expr = ''
+                  (
+                    1 - (avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[2m])))
+                  )
+                  > ${toString threshold}
+                '';
+                labels = {
+                  inherit severity;
+                };
+                annotations = {
+                  summary = "Node CPU load is more than {{ ${toString threshold} | humanizePercentage }}";
+                  description = ''
+                    CPU load: {{ $value | humanizePercentage }}
+                  '';
+                };
+              };
+
+              mkNodeHighTemperatureAlert = name: instance: threshold: { severity ? "critical", for ? "0s" }: let
+                humanizeTemperature = "printf \"%.1f°C\"";
+              in {
+                inherit for;
+                alert = "NodeHighTemperature${name}${builtins.toJSON threshold}";
+                expr = ''
+                  (
+                    node_hwmon_temp_celsius{instance=${builtins.toJSON instance}}
+                  )
+                  > ${toString threshold}
+                '';
+                labels = {
+                  inherit severity;
+                };
+                annotations = {
+                  summary = "Node temperature is higher than {{ ${toString threshold} | ${humanizeTemperature} }}";
+                  description = ''
+                    Temperature: {{ $value | ${humanizeTemperature} }}
+                  '';
+                };
+              };
+            in [
               {
                 name = "node";
-                rules = with lib; let
-                  threshold = 0.5; # TODO(SuperPaintman): add more thresholds.
+                rules = let
                   mountpoints = [
                     "/"
 
@@ -393,33 +462,28 @@ in
                     "/ssd1"
                     "/sdcard1"
                   ];
-                  mountpointRegex = concatStringsSep "|" mountpoints;
                 in [
-                  {
-                    alert = "HostOutOfDiskSpace";
-                    expr = ''
-                      (
-                        1
-                        -
-                        (
-                          node_filesystem_avail_bytes{mountpoint=~"${mountpointRegex}",fstype!="rootfs"}
-                          /
-                          node_filesystem_size_bytes{mountpoint=~"${mountpointRegex}",fstype!="rootfs"}
-                        )
-                      )
-                      > ${toString threshold}
-                    '';
-                    for = "5m";
-                    labels = {
-                      severity = "warning";
-                    };
-                    annotations = {
-                      summary = "Host out of disk space (>{{ ${toString threshold} | humanizePercentage }})";
-                      description = ''
-                        Disk is almost full ({{ $value | humanizePercentage }})
-                      '';
-                    };
-                  }
+                  # Disk Usage.
+                  (mkNodeDiskUsageAlert "" mountpoints 0.50 { severity = "info"; })
+                  (mkNodeDiskUsageAlert "" mountpoints 0.75 { severity = "warning"; })
+                  (mkNodeDiskUsageAlert "" mountpoints 0.95 { severity = "critical"; })
+
+                  # CPU Load.
+                  (mkNodeCPULoadAlert "" 0.80 { severity = "warning"; })
+                  (mkNodeCPULoadAlert "Critical" 0.80 { severity = "critical"; for = "1m"; })
+
+                  # High Temperature.
+                  #
+                  # Critical temperatures:
+                  # - osier - 90°C.
+                  # - unifi-dream-router - 125°C.
+                  (mkNodeHighTemperatureAlert "Osier" "osier" 45 { severity = "info"; for = "2m"; })
+                  (mkNodeHighTemperatureAlert "Osier" "osier" 50 { severity = "warning"; for = "2m"; })
+                  (mkNodeHighTemperatureAlert "Osier" "osier" 60 { severity = "critical"; })
+
+                  (mkNodeHighTemperatureAlert "UDR" "unifi-dream-router" 55 { severity = "info"; for = "2m"; })
+                  (mkNodeHighTemperatureAlert "UDR" "unifi-dream-router" 60 { severity = "warning"; for = "2m"; })
+                  (mkNodeHighTemperatureAlert "UDR" "unifi-dream-router" 70 { severity = "critical"; })
                 ];
               }
             ];

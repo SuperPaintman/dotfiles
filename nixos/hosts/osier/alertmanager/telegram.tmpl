@@ -39,6 +39,12 @@ unknown
 {{ .GeneratorURL }}
 {{- ")" -}}
 {{- end -}}
+{{- if index .Labels "instance" -}}
+{{- " " -}}
+{{- "(`" -}}
+{{- index .Labels "instance" -}}
+{{- "`)" -}}
+{{- end -}}
 {{- end }}
 
 {{ define "__telegram_custom_alert" -}}
