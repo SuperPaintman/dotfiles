@@ -138,6 +138,12 @@
       sha256 = "0s4akrhdmrf8qwn6vp8kc31k5hx2k2wml5mcashfc09hxiqsf2cq";
     }
     {
+      name = "vscode-proto3";
+      publisher = "zxh404";
+      version = "0.5.5";
+      sha256 = "08gjq2ww7pjr3ck9pyp5kdr0q6hxxjy3gg87aklplbc9bkfb0vqj";
+    }
+    {
       name = "docthis";
       publisher = "oouo-diogo-perdigao";
       version = "0.8.2";

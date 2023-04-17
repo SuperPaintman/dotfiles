@@ -131,6 +131,9 @@ extension "HashiCorp" "terraform" "2.10.2"
 # vscode-nginx (william-voyek)
 extension "william-voyek" "vscode-nginx" "0.7.2"
 
+# vscode-proto3 (zxh404)
+extension "zxh404" "vscode-proto3" "0.5.5"
+
 # docthis (oouo-diogo-perdigao)
 extension "oouo-diogo-perdigao" "docthis" "0.8.2"
 

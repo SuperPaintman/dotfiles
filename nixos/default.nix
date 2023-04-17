@@ -198,6 +198,9 @@ in
     )
     localPkgs.fennel
     localPkgs.fnlfmt
+    unstable.protobuf
+    unstable.protoc-gen-go
+    unstable.protoc-gen-go-grpc
 
     # Docker.
     docker
