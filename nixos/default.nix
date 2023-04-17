@@ -246,6 +246,7 @@ in
     mutt # CLI email client.
     notmuch
     neomutt # CLI email client with some extras.
+    unstable.prusa-slicer # Prusa Slicer
 
     # Icons.
     paper-icon-theme
