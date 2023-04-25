@@ -95,6 +95,9 @@ extension "sumneko" "lua" "2.6.3"
 # nix-ide (jnoortheen)
 extension "jnoortheen" "nix-ide" "0.1.20"
 
+# openscad (Antyos)
+extension "Antyos" "openscad" "1.1.1"
+
 # python (ms-python)
 extension "ms-python" "python" "2022.7.11371008"
 

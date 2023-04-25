@@ -249,7 +249,9 @@ in
     mutt # CLI email client.
     notmuch
     neomutt # CLI email client with some extras.
-    unstable.prusa-slicer # Prusa Slicer
+    unstable.prusa-slicer # Prusa Slicer.
+    openscad # 3D parametric model compiler.
+    freecad
 
     # Icons.
     paper-icon-theme

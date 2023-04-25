@@ -72,6 +72,12 @@
       sha256 = "16mmivdssjky11gmih7zp99d41m09r0ii43n17d4i6xwivagi9a3";
     }
     {
+      name = "openscad";
+      publisher = "Antyos";
+      version = "1.1.1";
+      sha256 = "1adcw9jj3npk3l6lnlfgji2l529c4s5xp9jl748r9naiy3w3dpjv";
+    }
+    {
       name = "python";
       publisher = "ms-python";
       version = "2022.7.11371008";

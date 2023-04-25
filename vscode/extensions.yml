@@ -83,6 +83,13 @@ extensions:
       version: "0.1.20"
       sha256: 16mmivdssjky11gmih7zp99d41m09r0ii43n17d4i6xwivagi9a3
 
+    # OpenSCAD.
+    ## OpenSCAD highlighting, snippets, and more for VSCode.
+    - name: openscad
+      publisher: Antyos
+      version: "1.1.1"
+      sha256: 1adcw9jj3npk3l6lnlfgji2l529c4s5xp9jl748r9naiy3w3dpjv
+
     # Python
     ## Linting, Debugging (multi-threaded, remote), Intellisense, Jupyter Notebooks, code formatting, refactoring,
     ## unit tests, snippets, and more.
