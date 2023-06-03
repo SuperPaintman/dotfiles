@@ -1,4 +1,4 @@
-NIXOS_VERSION := 20.09
+NIXOS_VERSION := 23.05
 
 NIX_LOCAL_PACKAGES := $(shell nix eval --raw \
 	'( \

@@ -29,6 +29,17 @@
     options dell-smm-hwmon restricted=0 force=1
   '';
 
+  # Setup keyfile
+  boot.initrd.secrets = {
+    "/crypto_keyfile.bin" = null;
+  };
+
+  # Enable swap on luks
+  boot.initrd.luks.devices."luks-884a0591-6542-40be-a601-ce0bfc29de49" = {
+    device = "/dev/disk/by-uuid/884a0591-6542-40be-a601-ce0bfc29de49";
+    keyFile = "/crypto_keyfile.bin";
+  };
+
   # Networking.
   networking = {
     useDHCP = false;
@@ -249,12 +260,12 @@
       libinput = {
         enable = true;
 
-        additionalOptions = ''
+        touchpad.additionalOptions = ''
           MatchIsTouchpad "on"
         '';
 
         # Enable natural scrolling behavior.
-        naturalScrolling = true;
+        touchpad.naturalScrolling = true;
       };
     };
 

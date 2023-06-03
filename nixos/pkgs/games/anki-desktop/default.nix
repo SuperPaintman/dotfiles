@@ -8,11 +8,11 @@ makeDesktopItem {
   genericName = "Flashcards";
   # http://www.myiconfinder.com/icon/anki-flashcard-program-japanese/10959
   icon = ./icon.png;
-  terminal = "false";
-  categories = lib.concatStringsSep ";" [
+  terminal = false;
+  categories = [
     "Education"
   ];
-  mimeType = lib.concatStringsSep ";" [
+  mimeTypes = [
     "application/x-apkg"
     "application/x-anki"
   ];

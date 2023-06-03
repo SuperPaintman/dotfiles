@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, autoPatchelfHook, fetchurl, xar, cpio, installShellFiles }:
+{ stdenv, lib, fetchzip, autoPatchelfHook, fetchurl, xar, cpio, installShellFiles }:
 
 stdenv.mkDerivation rec {
   pname = "1password";
@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
         }
     else throw "Architecture not supported";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ xar cpio ];
+  buildInputs = lib.optionals stdenv.isDarwin [ xar cpio ];
 
   postPhases = [ "postInstall" ];
 
-  unpackPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  unpackPhase = lib.optionalString stdenv.isDarwin ''
     xar -xf $src
     zcat Payload | cpio -i
   '';
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   dontStrip = stdenv.isDarwin;
 
-  nativeBuildInputs = [ installShellFiles ] ++ stdenv.lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [ installShellFiles ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   doInstallCheck = true;
 
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     $out/bin/op --version
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "1Password command-line tool";
     homepage = "https://support.1password.com/command-line/";
     downloadPage = "https://app-updates.agilebits.com/product_history/CLI";

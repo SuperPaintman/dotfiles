@@ -6,12 +6,12 @@ makeDesktopItem {
   desktopName = "Firefox (Private)";
   genericName = "Web Browser";
   icon = "firefox";
-  terminal = "false";
-  categories = lib.concatStringsSep ";" [
+  terminal = false;
+  categories = [
     "Network"
     "WebBrowser"
   ];
-  mimeType = lib.concatStringsSep ";" [
+  mimeTypes = [
     "text/html"
     "text/xml"
     "application/xhtml+xml"

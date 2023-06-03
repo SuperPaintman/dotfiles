@@ -23,8 +23,8 @@ let
 
   home-manager = builtins.fetchGit {
     url = "https://github.com/rycee/home-manager.git";
-    rev = "63f299b3347aea183fc5088e4d6c4a193b334a41";
-    ref = "release-20.09";
+    rev = "33ccc5c28572d200f1e8d93fccba17e084e5f587";
+    ref = "release-23.05";
   };
 
   unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
@@ -61,7 +61,7 @@ in
   ];
 
   # Boot.
-  boot.cleanTmpDir = true; # Delete all files in `/tmp` during boot.
+  boot.tmp.cleanOnBoot = true; # Delete all files in `/tmp` during boot.
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   # TODO(SuperPaintman): it doesn't work with my wifi stick :(.
@@ -70,7 +70,7 @@ in
   # ];
 
   # Nix.
-  nix.trustedUsers = [ "root" "@wheel" ];
+  nix.settings.trusted-users = [ "root" "@wheel" ];
 
   # Nix Packages.
   nixpkgs.config.allowUnfree = true;
@@ -120,8 +120,8 @@ in
     unstable.neovide
     emacs
     (
-      unstable.vscode-with-extensions.override {
-        vscodeExtensions = import ../vscode/extensions.nix args;
+      vscode-with-extensions.override {
+        vscodeExtensions = []; # import ../vscode/extensions.nix args;
       }
     )
     # android-studio
@@ -165,7 +165,7 @@ in
     impl
     unstable.delve
     nodejs
-    python
+    # python
     (
       python3.withPackages (
         packages: with packages; [
@@ -187,7 +187,7 @@ in
     rnix-lsp
     terraform-lsp
     arduino
-    localPkgs.difftastic
+    # localPkgs.difftastic
     nodePackages.prettier
     (
       luajit.withPackages (
@@ -216,7 +216,6 @@ in
 
     # Games.
     unstable.steam
-    localPkgs.albion-online
 
     # Misc.
     (polybar.override { pulseSupport = true; })
@@ -241,7 +240,7 @@ in
     scrot # A command-line screen capture utility.
     libnotify # A library that sends desktop notifications to a notification daemon.
     localPkgs._1password # 1Password command-line tool.
-    localPkgs.gh # GitHub CLI tool.
+    # localPkgs.gh # GitHub CLI tool.
     unstable.anki-bin # Spaced repetition flashcard program
     (localPkgs.anki-desktop.override { anki-bin = unstable.anki-bin; }) # Spaced repetition flashcard program.
     wally-cli # CLI flashing tool for ZSA Moonlander.
@@ -257,7 +256,7 @@ in
     paper-icon-theme
 
     # Custom / mine.
-    monitroidPkgs.monitroid # Machine stats.
+    # monitroidPkgs.monitroid # Machine stats.
 
     # Scripts.
     (writeShellScriptBin "restart-setup-commands" ''
@@ -348,7 +347,7 @@ in
         };
 
         awesome = pkgs.awesome.override {
-          luaPackages = pkgs.luajit.pkgs;
+          lua = pkgs.luajit;
         };
 
         awesomeWithLogs = pkgs.stdenv.mkDerivation rec {
@@ -469,7 +468,7 @@ in
   ];
 
   # Services: custom / mine.
-  services.monitroid.enable = true;
+  # services.monitroid.enable = true;
 
   services.rclone = {
     enable = true;
@@ -511,6 +510,7 @@ in
 
   users.users.superpaintman = {
     isNormalUser = true;
+    description = "Aleksandr Krivoshchekov";
     uid = 1000;
     extraGroups = [ "wheel" "docker" "libvirtd" "plugdev" ];
     shell = pkgs.zsh;
@@ -694,6 +694,8 @@ in
             "Org".source = mkSymlink "/home/superpaintman/Projects/github.com/SuperPaintman/Org";
           }
         ];
+
+        home.stateVersion = "23.05";
       };
 
       root = {
@@ -702,20 +704,22 @@ in
           firefoxFiles
           batFiles
         ];
+
+        home.stateVersion = "23.05";
       };
     }
   );
 
   # Fonts.
   fonts = {
-    enableFontDir = true;
+    fontDir.enable = true;
     enableGhostscriptFonts = true;
 
     fonts = with pkgs; [
       ubuntu_font_family
       dejavu_fonts
       fira-code
-      font-awesome-ttf
+      font-awesome
       siji
       jetbrains-mono
       # helvetica-neue-lt-std

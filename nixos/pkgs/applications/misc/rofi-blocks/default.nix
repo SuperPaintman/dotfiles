@@ -1,6 +1,6 @@
 # See: https://github.com/NixOS/nixpkgs/pull/92858.
 
-{ stdenv, fetchFromGitHub, rofi-unwrapped, pkg-config, autoreconfHook, json-glib, cairo }:
+{ stdenv, lib, fetchFromGitHub, rofi-unwrapped, pkg-config, autoreconfHook, json-glib, cairo }:
 
 stdenv.mkDerivation rec {
   pname = "rofi-blocks";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ./0001-Patch-plugindir-to-output.patch
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Rofi modi that allows controlling rofi content throug communication with an external program.";
     homepage = "https://github.com/OmarCastro/rofi-blocks";
     license = licenses.gpl3;
