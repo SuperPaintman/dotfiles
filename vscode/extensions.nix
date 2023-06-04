@@ -5,8 +5,8 @@
 
 (
   with pkgs; with pkgs.vscode-extensions; [
-    ms-vscode.cpptools
-    local.vscode-extensions.sumneko.lua
+    # ms-vscode.cpptools
+    # local.vscode-extensions.sumneko.lua
     local.vscode-extensions.themes.superpaintman
   ]
 ) ++ (
@@ -83,24 +83,24 @@
       version = "2022.7.11371008";
       sha256 = "0w88gc73akgq5890sz0xzgmwxyps6vfxnghfz4kprwx3si199sdf";
     }
-    {
-      name = "rust-analyzer";
-      publisher = "rust-lang";
-      version = "0.3.1057";
-      sha256 = "0piz5dgihg1plwfaq5ybi71hq1hfva9dq8s1kj35hkffl7k0jjsh";
-    }
+    # {
+    #   name = "rust-analyzer";
+    #   publisher = "rust-lang";
+    #   version = "0.3.1057";
+    #   sha256 = "0piz5dgihg1plwfaq5ybi71hq1hfva9dq8s1kj35hkffl7k0jjsh";
+    # }
     {
       name = "stylus";
       publisher = "alan";
       version = "0.0.4";
       sha256 = "0rlzkc6g9g44526ln5gmb4xsrn64rnmz4ddkiarpr4sf26dndpjq";
     }
-    {
-      name = "svelte-vscode";
-      publisher = "svelte";
-      version = "105.16.1";
-      sha256 = "1ridb70vdhirsqfrp2cvmlijkcb997gzakq1nr5xxbcih09r60y0";
-    }
+    # {
+    #   name = "svelte-vscode";
+    #   publisher = "svelte";
+    #   version = "105.16.1";
+    #   sha256 = "1ridb70vdhirsqfrp2cvmlijkcb997gzakq1nr5xxbcih09r60y0";
+    # }
     {
       name = "vimL";
       publisher = "fallenwood";
@@ -143,12 +143,12 @@
       version = "0.7.2";
       sha256 = "0s4akrhdmrf8qwn6vp8kc31k5hx2k2wml5mcashfc09hxiqsf2cq";
     }
-    {
-      name = "vscode-proto3";
-      publisher = "zxh404";
-      version = "0.5.5";
-      sha256 = "08gjq2ww7pjr3ck9pyp5kdr0q6hxxjy3gg87aklplbc9bkfb0vqj";
-    }
+    # {
+    #   name = "vscode-proto3";
+    #   publisher = "zxh404";
+    #   version = "0.5.5";
+    #   sha256 = "08gjq2ww7pjr3ck9pyp5kdr0q6hxxjy3gg87aklplbc9bkfb0vqj";
+    # }
     {
       name = "docthis";
       publisher = "oouo-diogo-perdigao";
@@ -173,12 +173,12 @@
       version = "1.0.472";
       sha256 = "1zl44ibimi3sd966xlphs2s9h48idasmw06p63i5mvnscpj3jfc4";
     }
-    {
-      name = "vscode-arduino";
-      publisher = "vsciot-vscode";
-      version = "0.2.29";
-      sha256 = "0q727mgncrcjlrag6aaa95h65sa7x7z23c8cxnjcpmkgfb2gcmin";
-    }
+    # {
+    #   name = "vscode-arduino";
+    #   publisher = "vsciot-vscode";
+    #   version = "0.2.29";
+    #   sha256 = "0q727mgncrcjlrag6aaa95h65sa7x7z23c8cxnjcpmkgfb2gcmin";
+    # }
     {
       name = "gitignore";
       publisher = "codezombiech";
@@ -197,12 +197,12 @@
       version = "1.4.3";
       sha256 = "0x3lkvna4dagr7s99yykji3x517cxk5kp7ydmqa6jb4bzzsv1s6h";
     }
-    {
-      name = "jinjahtml";
-      publisher = "samuelcolvin";
-      version = "0.17.0";
-      sha256 = "120z8barzgva0sr1g7xj4arpjz96v4zxh2zgk56jzdgnafzyq71b";
-    }
+    # {
+    #   name = "jinjahtml";
+    #   publisher = "samuelcolvin";
+    #   version = "0.17.0";
+    #   sha256 = "120z8barzgva0sr1g7xj4arpjz96v4zxh2zgk56jzdgnafzyq71b";
+    # }
     {
       name = "vscode-neovim";
       publisher = "asvetliakov";

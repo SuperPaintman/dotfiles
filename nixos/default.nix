@@ -121,7 +121,7 @@ in
     emacs
     (
       vscode-with-extensions.override {
-        vscodeExtensions = []; # import ../vscode/extensions.nix args;
+        vscodeExtensions = import ../vscode/extensions.nix args;
       }
     )
     # android-studio

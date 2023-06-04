@@ -128,7 +128,8 @@ let
       vscodeExtUniqueId = "${publisher}.${name}";
     in
     stdenv.mkDerivation {
-      inherit vscodeExtUniqueId icon copyIcon;
+      inherit vscodeExtUniqueId icon copyIcon version;
+      vscodeExtPublisher = publisher;
 
       name = "vscode-extension-${publisher}-${name}-${version}";
 
