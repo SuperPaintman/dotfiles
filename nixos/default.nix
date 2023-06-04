@@ -371,11 +371,20 @@ in
 
             # Override awesome.
             rm -f "$out/bin/awesome"
-            echo "#! ${pkgs.runtimeShell} -e" > "$out/bin/awesome"
-            echo exec \"${awesome}/bin/awesome\" '"$@"' \
-              \>\> \"'${logfiles.stdout}'\" \
-              2\>\> \"'${logfiles.stderr}'\" \
-              >> "$out/bin/awesome"
+
+            cat <<'EOF' > "$out/bin/awesome"
+            #! ${pkgs.runtimeShell} -e
+
+            if [ ! -d "$HOME/.cache/awesome" ]; then
+              (umask 077 && mkdir "$HOME/.cache/awesome")
+            fi
+            chmod 0700 "$HOME/.cache/awesome"
+
+            exec ${awesome}/bin/awesome "$@" \
+              >> "${logfiles.stdout}" \
+              2>> "${logfiles.stderr}"
+            EOF
+
             chmod +x "$out/bin/awesome"
           '';
         };
