@@ -686,7 +686,7 @@ let g:VM_notify_previously_selected = 2
 " Neovide
 " See: https://github.com/neovide/neovide/wiki/Configuration
 if exists("neovide")
-  set guifont=JetBrains\ Mono:h10
+  set guifont=JetBrainsMono\ Nerd\ Font:h10
 
   let g:neovide_cursor_animation_length = 0
 endif

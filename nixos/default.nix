@@ -744,11 +744,12 @@ in
       siji
       jetbrains-mono
       # helvetica-neue-lt-std
+      (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
     ];
 
     fontconfig.defaultFonts = {
       sansSerif = [ "Ubuntu" ];
-      monospace = [ "JetBrains Mono" ];
+      monospace = [ "JetBrainsMono Nerd Font" ];
     };
   };
 }

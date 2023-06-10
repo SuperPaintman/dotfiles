@@ -19,9 +19,9 @@ env:
 
 font:
     normal:
-        family: JetBrains Mono
+        family: JetBrainsMono Nerd Font
 
-    size: 10
+    size: 12
 
 mouse_bindings:
     - { mouse: Middle, action: None } # No more paste.

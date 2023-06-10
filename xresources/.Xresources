@@ -61,7 +61,7 @@
 !===============================================================================
 ! See: https://github.com/gnotclub/xst/blob/master/doc/Xresources
 !st.opacity: 243
-st.font: JetBrains Mono:pixelsize=12
+st.font: JetBrainsMono Nerd Font:pixelsize=12
 
 !===============================================================================
 ! Xcursor
