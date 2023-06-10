@@ -54,11 +54,23 @@ in
 
   # Imports.
   imports = lib.lists.flatten [
+    # EXPERIMENTAL
+    ../modules
+    # / EXPERIMENTAL
+
     ./modules/services/network-filesystems/rclone.nix
     (import "${home-manager}/nixos")
     (import "${monitroid.path}/nixos")
     (if builtins.pathExists ../secrets then ../secrets/nixos else [ ])
   ];
+
+  # EXPERIMENTAL
+  modules = {
+    users = {
+      users.superpaintman = { };
+    };
+  };
+  # / EXPERIMENTAL
 
   # Boot.
   boot.tmp.cleanOnBoot = true; # Delete all files in `/tmp` during boot.
