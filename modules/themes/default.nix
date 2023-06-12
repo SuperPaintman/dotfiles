@@ -155,10 +155,22 @@ let
 
         # Non-standard.
         grey = mkColorOption "grey" "#555555" "90" "100";
+
+        darkBlack = mkColorOption "darkBlack" "#000000" "30" "40";
+        darkRed = mkColorOption "darkRed" "#AA0000" "31" "41";
+        darkGreen = mkColorOption "darkGreen" "#00AA00" "32" "42";
+        darkYellow = mkColorOption "darkYellow" "#AAAA00" "33" "43";
+        darkBlue = mkColorOption "darkBlue" "#0000AA" "34" "44";
+        darkMagenta = mkColorOption "darkMagenta" "#AA00AA" "35" "45";
+        darkCyan = mkColorOption "darkCyan" "#00AAAA" "36" "46";
+        darkWhite = mkColorOption "darkWhite" "#AAAAAA" "37" "47";
+
         orange = mkColorOption "orange" "#AA4000" "31" "41";
         brightOrange = mkColorOption "brightOrange" "#FF8000" "91" "101";
+        darkOrange = mkColorOption "darkOrange" "#AA4000" "31" "41";
         violet = mkColorOption "violet" "#4000AA" "35" "95";
         brightViolet = mkColorOption "brightViolet" "#8000FF" "95" "105";
+        darkViolet = mkColorOption "darkViolet" "#4000AA" "35" "95";
 
         # GUI.
         background = mkColorOption "background" "#000000" "30" "40";
@@ -218,10 +230,22 @@ let
 
         # Non-standard.
         grey = getColor "grey";
+
+        darkBlack = getColor "darkBlack";
+        darkRed = getColor "darkRed";
+        darkGreen = getColor "darkGreen";
+        darkYellow = getColor "darkYellow";
+        darkBlue = getColor "darkBlue";
+        darkMagenta = getColor "darkMagenta";
+        darkCyan = getColor "darkCyan";
+        darkWhite = getColor "darkWhite";
+
         orange = getColor "orange";
         brightOrange = getColor "brightOrange";
+        darkOrange = getColor "darkOrange";
         violet = getColor "violet";
         brightViolet = getColor "brightViolet";
+        darkViolet = getColor "darkViolet";
 
         # GUI.
         background = getColor "background";
@@ -281,7 +305,7 @@ in
         # ANSI colors.
         black.color = base1.color;
         red.color = "#FF6C6B";
-        green.color = "#98C379";
+        green.color = "#98BE65";
         yellow.color = "#ECBE7B";
         blue.color = "#51AFEF";
         magenta.color = "#C678DD";
@@ -290,7 +314,7 @@ in
 
         brightBlack.color = base5.color;
         brightRed.color = "#FF8584";
-        brightGreen.color = "#B1DC92";
+        brightGreen.color = "#B1D77E";
         brightYellow.color = "#FFD794";
         brightBlue.color = "#6AC8FF";
         brightMagenta.color = "#DF91F6";
@@ -299,25 +323,37 @@ in
 
         # Non-standard.
         grey.color = brightBlack.color;
+
+        darkBlack.color = base0.color;
+        darkRed.color = "#FF3938";
+        darkGreen.color = "#7FA947";
+        darkYellow.color = "#E6A84E";
+        darkBlue.color = "#229AEB";
+        darkMagenta.color = "#B54FD3";
+        darkCyan.color = "#13CFFF";
+        darkWhite.color = base10.color;
+
         orange.color = "#DA8548";
         brightOrange.color = "#F39E61";
+        darkOrange.color = "#C76A28";
         violet.color = "#A9A1E1";
         brightViolet.color = "#C2BAFA";
+        darkViolet.color = "#867AD5";
 
         # GUI.
         background.color = base3.color;
         foreground.color = base11.color;
         cursor.color = base12.color;
-        base0.color  = "#000000";
-        base1.color  = "#00030B";
-        base2.color  = "#141820";
-        base3.color  = "#282C34";
-        base4.color  = "#3C4048";
-        base5.color  = "#51555D";
-        base6.color  = "#656971";
-        base7.color  = "#7A7E86";
-        base8.color  = "#8E929A";
-        base9.color  = "#A2A6AE";
+        base0.color = "#000000";
+        base1.color = "#00030B";
+        base2.color = "#141820";
+        base3.color = "#282C34";
+        base4.color = "#3C4048";
+        base5.color = "#51555D";
+        base6.color = "#656971";
+        base7.color = "#7A7E86";
+        base8.color = "#8E929A";
+        base9.color = "#A2A6AE";
         base10.color = "#B7BBC3";
         base11.color = "#CBCFD7";
         base12.color = "#E0E4EC";

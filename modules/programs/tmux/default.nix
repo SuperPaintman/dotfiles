@@ -79,43 +79,45 @@ let
       # Background.
       ++ optional (background != "") "#[bg=${background}]");
 
-  mkWindowStatusFormat = current: let
-    color1 = if current then "brightBlue" else "base4";
-    color2 = if current then "blue" else "base5";
-  in concatStringsSep "" [
-    "#{?#{window_start_flag},"
-    (style { fg = color1; bg = "default"; })
-    ""
-    ","
-    "#{?#{==:#{window_index},#{active_window_index}},"
-    (style { fg = color1; bg = "base5"; })
-    ""
-    ","
-    (style { fg = "base4"; bg = "base5"; })
-    ""
-    "}"
-    "}"
+  mkWindowStatusFormat = current:
+    let
+      color1 = if current then "darkBlue" else "base4";
+      color2 = if current then "blue" else "base5";
+    in
+    concatStringsSep "" [
+      "#{?#{window_start_flag},"
+      (style { fg = color1; bg = "default"; })
+      ""
+      ","
+      "#{?#{==:#{window_index},#{active_window_index}},"
+      (style { fg = color1; bg = "base5"; })
+      ""
+      ","
+      (style { fg = "base4"; bg = "base5"; })
+      ""
+      "}"
+      "}"
 
-    (style { bg = color1; fg = "brightWhite"; bold = true; })
-    " #I "
-    (style { bg = color2; fg = color1; bold = true; })
-    ""
-    (style { bg = color2; fg = "brightWhite"; })
-    " #W "
+      (style { bg = color1; fg = "brightWhite"; bold = true; })
+      " #I "
+      (style { bg = color2; fg = color1; bold = true; })
+      ""
+      (style { bg = color2; fg = "brightWhite"; })
+      " #W "
 
-    "#{?#{window_end_flag},"
-    (style { fg = color2; bg = "default"; })
-    ""
-    ","
-    "#{?#{==:#{window_index},#{active_window_index}},"
-    (style { fg = color2; bg = "base5"; })
-    ""
-    ","
-    (style { fg = "base5"; bg = "base5"; })
-    ""
-    "}"
-    "}"
-  ];
+      "#{?#{window_end_flag},"
+      (style { fg = color2; bg = "default"; })
+      ""
+      ","
+      "#{?#{==:#{window_index},#{active_window_index}},"
+      (style { fg = color2; bg = "base5"; })
+      ""
+      ","
+      (style { fg = "base5"; bg = "base5"; })
+      ""
+      "}"
+      "}"
+    ];
 in
 
 {
@@ -193,7 +195,7 @@ in
             ","
             (style { fg = "brightWhite"; })
             "}"
-            "   "
+            "    "
 
             # End.
             "#[default]"
@@ -213,22 +215,22 @@ in
           # Display string to the right of the status line.
           set-option -g status-right ${escapeShellArg (concatStringsSep "" [
             # Window.
+            # (style { fg = "magenta"; })
+            # ""
+            # (style { bg = "magenta"; fg = "brightWhite"; })
+            # "  "
+            # (style { bg = "magenta"; fg = "brightWhite"; bold = true; })
+            # " #W "
+            # (style { bg = "magenta"; })
+
+            # Session.
             (style { fg = "magenta"; })
             ""
             (style { bg = "magenta"; fg = "brightWhite"; })
-            "  "
-            (style { bg = "magenta"; fg = "brightWhite"; bold = true; })
-            " #W "
-            (style { bg = "magenta"; })
-
-            # Session.
-            (style { fg = "blue"; })
-            ""
-            (style { bg = "blue"; fg = "brightWhite"; })
             "  "
-            (style { bg = "blue"; fg = "brightWhite"; bold = true; })
+            (style { bg = "magenta"; fg = "brightWhite"; bold = true; })
             " #S "
-            (style { bg = "blue"; })
+            (style { bg = "magenta"; })
 
             # End.
             " "
