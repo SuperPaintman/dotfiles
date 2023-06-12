@@ -7,6 +7,12 @@ let
 in
 
 {
+  # Imports.
+  imports = [
+    ./themes
+    ./programs/tmux
+  ];
+
   # Options.
   options.modules = with types; {
     # User.
@@ -37,6 +43,14 @@ in
     #
     # Options and aliases for managing dotfiles (via Home Manager).
     home = {
+      standalone = mkOption {
+        type = bool;
+        default = false;
+        description = mdDoc ''
+          Whenever to generate all dotfiles in the standalone (portable) mode.
+        '';
+      };
+
       files = mkOption {
         type = attrs;
         default = { };
@@ -58,6 +72,19 @@ in
         default = { };
         description = mdDoc ''
           The set of files to link into the user's XDG data home.
+        '';
+      };
+    };
+
+    # Environment.
+    #
+    # Options and aliases for environment.
+    environment = {
+      variables = mkOption {
+        type = attrs;
+        default = { };
+        description = mdDoc ''
+          The set of environment variables used in the global environment.
         '';
       };
     };
@@ -96,6 +123,16 @@ in
           };
         })
         cfg.users.users;
+    };
+
+    # Environment.
+    environment.variables = mkAliasDefinitions options.modules.environment.variables;
+
+    # Global environment variables.
+    environment.sessionVariables = {
+      XDG_CACHE_HOME = "$HOME/.cache";
+      XDG_CONFIG_HOME = "$HOME/.config";
+      XDG_DATA_HOME = "$HOME/.local/share";
     };
   };
 }
