@@ -159,15 +159,6 @@ in
         TMUX_HOME = "$XDG_CONFIG_HOME/tmux";
       };
 
-      home.files."colors-test".text = ''
-        ${concatStringsSep "\n" (mapAttrsToList
-          (name: color: ''
-            printf ${escapeShellArg "\\x1b[38;2;${toString color.color.r};${toString color.color.g};${toString color.color.b}m[X]\\x1b[0m "}
-            echo ${escapeShellArg name} " | " ${escapeShellArg "rgba(${toString color.color.r}, ${toString color.color.g}, ${toString color.color.b}, ${toString color.color.a})"} " | " ${toString color.ansi.foreground} ${toString color.ansi.background}
-          '')
-          config.modules.themes.theme.colors)}
-      '';
-
       home.configFiles = {
         "tmux/tmux.conf".text = ''
           ${includeFile "options.conf"}
