@@ -79,44 +79,53 @@ let
       # Background.
       ++ optional (background != "") "#[bg=${background}]");
 
-  mkWindowStatusFormat = current:
+  mkWindowStatusFormat = s:
     let
-      color1 = if current then "darkBlue" else "base4";
-      color2 = if current then "blue" else "base5";
+      color1 = {
+        default = "base4";
+        current = "darkBlue";
+      }.${s};
+      color2 = {
+        default = "base5";
+        current = "blue";
+      }.${s};
     in
     concatStringsSep "" [
       "#{?#{window_start_flag},"
       (style { fg = color1; bg = "default"; })
-      ""
       ","
       "#{?#{==:#{window_index},#{active_window_index}},"
       (style { fg = color1; bg = "base5"; })
-      ""
       ","
       (style { fg = "base4"; bg = "base5"; })
+      "}"
+      "}"
       ""
-      "}"
-      "}"
 
       (style { bg = color1; fg = "brightWhite"; bold = true; })
       " #I "
       (style { bg = color2; fg = color1; bold = true; })
       ""
+
       (style { bg = color2; fg = "brightWhite"; })
       " #W "
 
+      "#{?#{window_activity_flag},"
+      (style { bg = color2; fg = "brightYellow"; })
+      ""
+      ","
+      "}"
+
       "#{?#{window_end_flag},"
       (style { fg = color2; bg = "default"; })
-      ""
       ","
       "#{?#{==:#{window_index},#{active_window_index}},"
       (style { fg = color2; bg = "base5"; })
-      ""
       ","
       (style { fg = "base5"; bg = "base5"; })
+      "}"
+      "}"
       ""
-      "}"
-      "}"
     ];
 in
 
@@ -168,6 +177,9 @@ in
         "tmux/options.conf".source = ./options.conf;
         "tmux/key-bindings.conf".source = ./key-bindings.conf;
         "tmux/theme.conf".text = ''
+          # Set the position of the status line
+          # set-option -g status-position top
+
           # Set the position of the window list component of the status line:
           # left, centre or right justified.
           set-option -g status-justify left
@@ -206,11 +218,11 @@ in
 
           # Like window-status-format, but is the format used when the window
           # is the current window.
-          set-option -g window-status-current-format ${escapeShellArg (mkWindowStatusFormat true)}
+          set-option -g window-status-current-format ${escapeShellArg (mkWindowStatusFormat "current")}
 
           # Set the format in which the window is displayed in the status line
           # window list.
-          set-option -g window-status-format ${escapeShellArg (mkWindowStatusFormat false)}
+          set-option -g window-status-format ${escapeShellArg (mkWindowStatusFormat "default")}
 
           # Display string to the right of the status line.
           set-option -g status-right ${escapeShellArg (concatStringsSep "" [
@@ -236,6 +248,9 @@ in
             " "
             "#[default]"
           ])}
+
+          # Set status line style for windows with an activity alert.
+          set-option -g window-status-activity-style 'default'
 
           # Set status line message command style. This is used for the command
           # prompt with vi(1) keys when in command mode.
