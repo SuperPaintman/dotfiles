@@ -69,6 +69,10 @@ in
     users = {
       users.superpaintman = { };
     };
+
+    programs = {
+      tmux.enable = true;
+    };
   };
   # / EXPERIMENTAL
 
@@ -87,6 +91,8 @@ in
   # Nix Packages.
   nixpkgs.config.allowUnfree = true;
   nixpkgs.overlays = [
+    (import ../overlays/lib.nix)
+    (import ../overlays/pkgs.nix)
     (self: super: {
       unstable = unstable;
       local = localPkgs;

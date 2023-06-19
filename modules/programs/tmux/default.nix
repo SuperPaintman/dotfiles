@@ -7,6 +7,8 @@
 with lib;
 
 let
+  inherit (pkgs.lib.x.generators) mkWTKKeyBinding toWTKConfig;
+
   cfg = config.modules.programs.tmux;
   theme = config.modules.themes.theme;
 
@@ -107,6 +109,12 @@ let
       (style { bg = color2; fg = color1; bold = true; })
       ""
 
+      "#{?#{window_zoomed_flag},"
+      (style { bg = color2; fg = "brightWhite"; })
+      " 󰍉"
+      ","
+      "}"
+
       (style { bg = color2; fg = "brightWhite"; })
       " #W "
 
@@ -127,6 +135,26 @@ let
       "}"
       ""
     ];
+
+  wtkConfig = pkgs.writeText "wtk-tmux.json" (toWTKConfig {
+    # TODO(SuperPaintman): generate from key bindings.
+    "" = [
+      (mkWTKKeyBinding [{ leader = true; keys = [ "Space" ]; }] "Select next layout.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "?" ]; }] "List key bindings.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "/" ]; }] "Describe key binding.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "!" ]; }] "Break pane to a new window.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "#" ]; }] "List all paste buffers.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "$" ]; }] "Rename current session.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "," ]; }] "Rename current window.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "~" ]; }] "Show messages.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ ";" ]; }] "Move to the previously active pane.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "c" ]; }] "Create a new window.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "d" ]; }] "Detach the current client.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "w" ]; }] "Choose a window from a list.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "x" ]; }] "Kill the active pane.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "z" ]; }] "Zoom the active pane.")
+    ];
+  });
 in
 
 {
@@ -163,10 +191,17 @@ in
         "tmux/tmux.conf".text = ''
           ${includeFile "options.conf"}
           ${includeFile "key-bindings.conf"}
+          ${includeFile "key-bindings-extra.conf"}
           ${includeFile "theme.conf"}
         '';
         "tmux/options.conf".source = ./options.conf;
         "tmux/key-bindings.conf".source = ./key-bindings.conf;
+        "tmux/key-bindings-extra.conf".text = ''
+          unbind-key ?
+          bind-key ? split-window -Z ${escapeShellArg
+            "cat ${wtkConfig} | ${pkgs.wtk}/bin/wtk --color=always | ${pkgs.less}/bin/less"
+          }
+        '';
         "tmux/theme.conf".text = ''
           # Set the position of the status line
           # set-option -g status-position top
