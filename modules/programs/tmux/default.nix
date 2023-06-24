@@ -168,7 +168,9 @@ let
     ];
   });
 
-  tmux-thumbs = pkgs.callPackage ./plugins/tmux-thumbs { };
+  tmux-thumbs = pkgs.callPackage ./plugins/tmux-thumbs {
+    tmux = cfg.package;
+  };
 
   clipboard =
     if pkgs.stdenv.hostPlatform.isLinux
@@ -323,7 +325,8 @@ in
             set-option -g @thumbs-key '/'
 
             # Add extra patterns to match. This parameter can have multiple instances.
-            # set-option -g @thumbs-regexp-1 'git rebase --(abort|continue)'
+            # Nix SHA256 pattern.
+            set-option -g @thumbs-regexp-1 'sha256-(?:[a-zA-Z0-9+=\\/]+)'
 
             # Choose which command execute when you press a hint. tmux-thumbs will
             # replace {} with the picked hint.

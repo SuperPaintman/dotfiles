@@ -1,4 +1,4 @@
-{ lib, rustPlatform, fetchFromGitHub, ... }:
+{ lib, rustPlatform, fetchFromGitHub, makeWrapper, tmux, ... }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tmux-thumbs";
@@ -12,6 +12,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "sha256-XqAX42HOTIDJk+6fWmpsGifIei9O+BfRdu9dvkMU/II=";
+
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
   patches = [
     ./0001-tmux-thumbs-dir.patch
@@ -29,6 +33,13 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -D "tmux-thumbs.sh" "$out/bin/tmux-thumbs.sh"
     install -D "tmux-thumbs.tmux" "$out/bin/tmux-thumbs.tmux"
+
+    for bin in $out/bin/*; do
+      wrapProgram "$bin" \
+        --prefix PATH ':' ${lib.makeBinPath [
+          tmux
+        ]}
+    done
   '';
 
 
