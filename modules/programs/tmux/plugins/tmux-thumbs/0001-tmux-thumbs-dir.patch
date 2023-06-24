@@ -1,0 +1,67 @@
+diff --git a/src/swapper.rs b/src/swapper.rs
+index c901f48..e14a65a 100644
+--- a/src/swapper.rs
++++ b/src/swapper.rs
+@@ -215,7 +215,7 @@ impl<'a> Swapper<'a> {
+     };
+
+     let pane_command = format!(
+-        "tmux capture-pane -J -t {active_pane_id} -p{scroll_params} | tail -n {height} | {dir}/target/release/thumbs -f '%U:%H' -t {tmp} {args}; tmux swap-pane -t {active_pane_id}; {zoom_command} tmux wait-for -S {signal}",
++        "tmux capture-pane -J -t {active_pane_id} -p{scroll_params} | tail -n {height} | {dir}/bin/thumbs -f '%U:%H' -t {tmp} {args}; tmux swap-pane -t {active_pane_id}; {zoom_command} tmux wait-for -S {signal}",
+         active_pane_id = active_pane_id,
+         scroll_params = scroll_params,
+         height = self.active_pane_height.unwrap_or(i32::MAX),
+diff --git a/tmux-thumbs.sh b/tmux-thumbs.sh
+index 7e060e8..7481291 100755
+--- a/tmux-thumbs.sh
++++ b/tmux-thumbs.sh
+@@ -2,20 +2,9 @@
+ set -Eeu -o pipefail
+
+ # Setup env variables to be compatible with compiled and bundled installations
+-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+-RELEASE_DIR="${CURRENT_DIR}/target/release"
+-
+-THUMBS_BINARY="${RELEASE_DIR}/thumbs"
+-TMUX_THUMBS_BINARY="${RELEASE_DIR}/tmux-thumbs"
+-VERSION=$(grep 'version =' "${CURRENT_DIR}/Cargo.toml" | grep -o "\".*\"" | sed 's/"//g')
+-
+-if [ ! -f "$THUMBS_BINARY" ]; then
+-  tmux split-window "cd ${CURRENT_DIR} && bash ./tmux-thumbs-install.sh"
+-  exit
+-elif [[ $(${THUMBS_BINARY} --version) != "thumbs ${VERSION}"  ]]; then
+-  tmux split-window "cd ${CURRENT_DIR} && bash ./tmux-thumbs-install.sh update"
+-  exit
+-fi
++THUMBS_BINARY="@out@/bin/thumbs"
++TMUX_THUMBS_BINARY="@out@/bin/tmux-thumbs"
++VERSION="@version@"
+
+ function get-opt-value() {
+   tmux show -vg "@thumbs-${1}" 2> /dev/null
+@@ -35,7 +24,7 @@ function get-opt-arg() {
+   fi
+ }
+
+-PARAMS=(--dir "${CURRENT_DIR}")
++PARAMS=(--dir "@out@")
+
+ function add-param() {
+   local type opt arg
+diff --git a/tmux-thumbs.tmux b/tmux-thumbs.tmux
+index 949527d..38ba190 100755
+--- a/tmux-thumbs.tmux
++++ b/tmux-thumbs.tmux
+@@ -1,11 +1,9 @@
+ #!/usr/bin/env bash
+
+-CURRENT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+-
+ DEFAULT_THUMBS_KEY=space
+
+ THUMBS_KEY="$(tmux show-option -gqv @thumbs-key)"
+ THUMBS_KEY=${THUMBS_KEY:-$DEFAULT_THUMBS_KEY}
+
+-tmux set-option -ag command-alias "thumbs-pick=run-shell -b ${CURRENT_DIR}/tmux-thumbs.sh"
++tmux set-option -ag command-alias "thumbs-pick=run-shell -b @out@/bin/tmux-thumbs.sh"
+ tmux bind-key "${THUMBS_KEY}" thumbs-pick

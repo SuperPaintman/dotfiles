@@ -1,6 +1,7 @@
 # See: https://github.com/tmux/tmux/wiki
 # See: https://linux.die.net/man/1/tmux
 # See: http://man.openbsd.org/OpenBSD-current/man1/tmux.1
+# See: https://github.com/tmux/tmux/blob/3.3/key-bindings.c#L344
 
 { config, lib, pkgs, ... }:
 
@@ -11,6 +12,7 @@ let
 
   cfg = config.modules.programs.tmux;
   theme = config.modules.themes.theme;
+  standalone = config.modules.home.standalone;
 
   includeFile' =
     { TMUX_HOME
@@ -29,8 +31,8 @@ let
       source-file "${path}"
     '';
   includeFile = includeFile' {
+    inherit standalone;
     TMUX_HOME = config.environment.variables.TMUX_HOME;
-    standalone = config.modules.home.standalone;
   };
 
   toHEX = v:
@@ -136,25 +138,44 @@ let
       ""
     ];
 
+  # TODO(SuperPaintman): generate from key bindings.
   wtkConfig = pkgs.writeText "wtk-tmux.json" (toWTKConfig {
-    # TODO(SuperPaintman): generate from key bindings.
-    "" = [
-      (mkWTKKeyBinding [{ leader = true; keys = [ "Space" ]; }] "Select next layout.")
+    "Tmux" = (mkOrder 1) [
       (mkWTKKeyBinding [{ leader = true; keys = [ "?" ]; }] "List key bindings.")
-      (mkWTKKeyBinding [{ leader = true; keys = [ "/" ]; }] "Describe key binding.")
-      (mkWTKKeyBinding [{ leader = true; keys = [ "!" ]; }] "Break pane to a new window.")
-      (mkWTKKeyBinding [{ leader = true; keys = [ "#" ]; }] "List all paste buffers.")
-      (mkWTKKeyBinding [{ leader = true; keys = [ "$" ]; }] "Rename current session.")
-      (mkWTKKeyBinding [{ leader = true; keys = [ "," ]; }] "Rename current window.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "/" ]; }] "Enter in thumbs mode.")
       (mkWTKKeyBinding [{ leader = true; keys = [ "~" ]; }] "Show messages.")
-      (mkWTKKeyBinding [{ leader = true; keys = [ ";" ]; }] "Move to the previously active pane.")
-      (mkWTKKeyBinding [{ leader = true; keys = [ "c" ]; }] "Create a new window.")
       (mkWTKKeyBinding [{ leader = true; keys = [ "d" ]; }] "Detach the current client.")
+    ];
+    "Session" = (mkOrder 2) [
+      (mkWTKKeyBinding [{ leader = true; keys = [ "$" ]; }] "Rename current session.")
+    ];
+    "Window" = (mkOrder 3) [
+      (mkWTKKeyBinding [{ leader = true; keys = [ "Space" ]; }] "Select next layout.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "," ]; }] "Rename current window.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "c" ]; }] "Create a new window.")
       (mkWTKKeyBinding [{ leader = true; keys = [ "w" ]; }] "Choose a window from a list.")
+    ];
+    "Pane" = (mkOrder 4) [
+      (mkWTKKeyBinding [{ leader = true; keys = [ "!" ]; }] "Break pane to a new window.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ ";" ]; }] "Move to the previously active pane.")
       (mkWTKKeyBinding [{ leader = true; keys = [ "x" ]; }] "Kill the active pane.")
       (mkWTKKeyBinding [{ leader = true; keys = [ "z" ]; }] "Zoom the active pane.")
     ];
+    "Buffer" = (mkOrder 5) [
+      (mkWTKKeyBinding [{ leader = true; keys = [ "#" ]; }] "List all paste buffers.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "p" ]; }] "Paste the most recent paste buffer.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "y" ]; }] "Enter copy mode.")
+    ];
   });
+
+  tmux-thumbs = pkgs.callPackage ./plugins/tmux-thumbs { };
+
+  clipboard =
+    if pkgs.stdenv.hostPlatform.isLinux
+    then "${pkgs.xclip}/bin/xclip -selection clipboard"
+    else if pkgs.stdenv.hostPlatform.isMacOS
+    then "pbcopy"
+    else assertMsg false "Unsupported platform.";
 in
 
 {
@@ -193,6 +214,7 @@ in
           ${includeFile "key-bindings.conf"}
           ${includeFile "key-bindings-extra.conf"}
           ${includeFile "theme.conf"}
+          ${includeFile "plugins.conf"}
         '';
         "tmux/options.conf".source = ./options.conf;
         "tmux/key-bindings.conf".source = ./key-bindings.conf;
@@ -231,7 +253,11 @@ in
             "#{?client_prefix,"
             (style { fg = "green"; })
             ","
+            "#{?#{==:#{pane_mode},copy-mode},"
+            (style { fg = "blue"; })
+            ","
             (style { fg = "brightWhite"; })
+            "}"
             "}"
             "    "
 
@@ -285,6 +311,31 @@ in
           # Set status line message style. This is used for messages and for
           # the command prompt.
           set-option -g message-style ${escapeShellArg "bg=${toHEXColor theme.colors.base2.color}"}
+        '';
+        "tmux/plugins.conf".text = ''
+          # Tmux Thumbs.
+          ${optionalString standalone ''
+            # Unsupported.
+            unbind-key /
+          ''}
+          ${optionalString (!standalone) ''
+            # Choose which key is used to enter in thumbs mode.
+            set-option -g @thumbs-key '/'
+
+            # Add extra patterns to match. This parameter can have multiple instances.
+            # set-option -g @thumbs-regexp-1 'git rebase --(abort|continue)'
+
+            # Choose which command execute when you press a hint. tmux-thumbs will
+            # replace {} with the picked hint.
+            set-option -g @thumbs-command 'tmux set-buffer -- {}'
+
+            # Choose which command execute when you press a upcase hint.
+            # tmux-thumbs will replace {} with the picked hint.
+            set-option -g @thumbs-upcase-command 'echo -n {} | ${clipboard}'
+
+            # Run the plugin.
+            run-shell ${tmux-thumbs}/bin/tmux-thumbs.tmux
+          ''}
         '';
       };
     };
