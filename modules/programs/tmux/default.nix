@@ -172,6 +172,10 @@ let
     tmux = cfg.package;
   };
 
+  # TODO(aleksandr.krivoshchekov): review the following plugins:
+  #     - https://github.com/tmux-plugins/tmux-logging
+  #     - https://github.com/trevarj/tmux-open-nvim
+
   clipboard =
     if pkgs.stdenv.hostPlatform.isLinux
     then "${pkgs.xclip}/bin/xclip -selection clipboard"

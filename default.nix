@@ -38,7 +38,6 @@ imports ([
   ./rofi
   ./sbt
   ./skhd
-  ./tmux
   ./vim
   ./vscode
   ./xdg

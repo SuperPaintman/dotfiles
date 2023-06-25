@@ -111,7 +111,6 @@ in
     unstable.btop
     git
     jq
-    tmux
     zip
     unzip
     unrar
