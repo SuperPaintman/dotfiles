@@ -3,6 +3,9 @@
 # See: http://man.openbsd.org/OpenBSD-current/man1/tmux.1
 # See: https://github.com/tmux/tmux/blob/3.3/key-bindings.c#L344
 
+# TODO(SuperPaintman):
+# - [ ] Attach to the previous session when the current one is closed.
+
 { config, lib, pkgs, ... }:
 
 with lib;
@@ -180,7 +183,7 @@ let
     tmux = cfg.package;
   };
 
-  # TODO(aleksandr.krivoshchekov): review the following plugins:
+  # TODO(SuperPaintman): review the following plugins:
   #     - https://github.com/tmux-plugins/tmux-logging
   #     - https://github.com/trevarj/tmux-open-nvim
 
