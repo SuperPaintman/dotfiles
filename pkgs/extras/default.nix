@@ -5,6 +5,7 @@
 , fd
 , exa
 , zoxide
+, tmux
 }:
 
 buildGoModule rec {
@@ -12,7 +13,10 @@ buildGoModule rec {
 
   src = ./.;
 
-  subPackages = [ "cmd/fzf-jump" ];
+  subPackages = [
+    "cmd/fzf-jump"
+    "cmd/tmux-session-manager"
+  ];
 
   vendorSha256 = "sha256-YoufxUbr3hNfivIjbI1OJdszTyP0gxCfcS6uiGZmnb4=";
 
@@ -27,6 +31,7 @@ buildGoModule rec {
         fd
         exa
         zoxide
+        tmux
       ]}
   '';
 }

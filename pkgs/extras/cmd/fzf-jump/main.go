@@ -12,8 +12,9 @@ import (
 	"path"
 	"sort"
 
-	"github.com/SuperPaintman/dotfiles/pkgs/fzf-extras/internal/commands"
 	"github.com/SuperPaintman/nice/colors"
+
+	"github.com/SuperPaintman/dotfiles/pkgs/fzf-extras/internal/commands"
 )
 
 var (
@@ -42,11 +43,11 @@ type Directory struct {
 	Path  string
 }
 
-type ByScore []Directory
+type ByPriority []Directory
 
-func (s ByScore) Len() int      { return len(s) }
-func (s ByScore) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
-func (s ByScore) Less(i, j int) bool {
+func (s ByPriority) Len() int      { return len(s) }
+func (s ByPriority) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
+func (s ByPriority) Less(i, j int) bool {
 	if s[i].Score != s[j].Score {
 		return s[i].Score < s[j].Score
 	}
@@ -127,7 +128,7 @@ func main() {
 	}
 
 	// Normalize dirs.
-	sort.Stable(ByScore(dirs))
+	sort.Stable(ByPriority(dirs))
 	replaceDirPrefixes(dirs, homedir, "~")
 
 	// Run FZF.
@@ -192,10 +193,14 @@ func main() {
 		zoxideAddPaths = append(zoxideAddPaths, res)
 
 		fmt.Println(res)
+
+		break // Only the first dir.
 	}
 
 	// Update zoxide ranks.
-	_ = z.Add(ctx, zoxideAddPaths...)
+	if len(zoxideAddPaths) > 0 {
+		_ = z.Add(ctx, zoxideAddPaths...)
+	}
 }
 
 func replaceDirPrefixes(dirs []Directory, oldPrefix, newPrefix string) {

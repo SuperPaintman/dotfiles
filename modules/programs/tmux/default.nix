@@ -166,9 +166,17 @@ let
       (mkWTKKeyBinding [{ leader = true; keys = [ "p" ]; }] "Paste the most recent paste buffer.")
       (mkWTKKeyBinding [{ leader = true; keys = [ "y" ]; }] "Enter copy mode.")
     ];
+    "Find" = (mkOrder 6) [
+      (mkWTKKeyBinding [{ leader = true; keys = [ "f" ]; }] "Enter in find mode.")
+      (mkWTKKeyBinding [{ leader = true; keys = [ "f" ]; } { keys = [ "s" ]; }] "Find the session.")
+    ];
   });
 
   tmux-thumbs = pkgs.callPackage ./plugins/tmux-thumbs {
+    tmux = cfg.package;
+  };
+
+  tmux-session-manager = pkgs.extras.override {
     tmux = cfg.package;
   };
 
@@ -225,10 +233,19 @@ in
         "tmux/options.conf".source = ./options.conf;
         "tmux/key-bindings.conf".source = ./key-bindings.conf;
         "tmux/key-bindings-extra.conf".text = ''
+          # WTK.
           unbind-key ?
           bind-key ? split-window -Z ${escapeShellArg
             "cat ${wtkConfig} | ${pkgs.wtk}/bin/wtk --color=always | ${pkgs.less}/bin/less"
           }
+
+          # Tmux Session Manager.
+          unbind-key -T custom-table-find s
+          ${optionalString (!standalone) ''
+            bind-key -T custom-table-find s new-window -n 'tmux-session-manager' ${escapeShellArg
+              "${tmux-session-manager}/bin/tmux-session-manager"
+            }
+          ''}
         '';
         "tmux/theme.conf".text = ''
           # Set the position of the status line
@@ -320,10 +337,7 @@ in
         '';
         "tmux/plugins.conf".text = ''
           # Tmux Thumbs.
-          ${optionalString standalone ''
-            # Unsupported.
-            unbind-key /
-          ''}
+          unbind-key /
           ${optionalString (!standalone) ''
             # Choose which key is used to enter in thumbs mode.
             set-option -g @thumbs-key '/'
