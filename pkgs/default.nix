@@ -5,5 +5,6 @@ let
 in
 
 {
+  extras = callPackage ./extras { };
   wtk = callPackage ./wtk { };
 }

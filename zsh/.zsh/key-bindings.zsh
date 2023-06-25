@@ -28,31 +28,23 @@ if can git-fzf; then
     eval "$(git-fzf shell zsh log '^g^l')"
 fi
 
-if can project-find; then
-    project-find-widget() {
-        local dir="$(project-find)"
-        if [ "$dir" = "" ]; then
-            return
-        fi
-
-        zle reset-prompt
-        LBUFFER+="$dir"
-    }
-
-    project-find-cd-widget() {
-        local dir="$(project-find)"
+if can fzf-jump; then
+    fzf-jump-cd-widget() {
+        local dir="$(fzf-jump)"
         if [ "$dir" = "" ]; then
             return
         fi
 
         cd "$dir"
         local ret="$?"
-        zle fzf-redraw-prompt
+
+        zle reset-prompt
+
         return "$ret"
     }
 
-    zle -N project-find-cd-widget
-    bindkey '\ep' project-find-cd-widget
+    zle -N fzf-jump-cd-widget
+    bindkey '\ep' fzf-jump-cd-widget
 fi
 
 ## Edit buffer in $EDITOR.

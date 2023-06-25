@@ -282,6 +282,9 @@ in
     (writeShellScriptBin "restart-session-commands" ''
       ${config.services.xserver.displayManager.sessionCommands}
     '')
+
+    # Local bins.
+    extras
   ];
 
   # Programs.
