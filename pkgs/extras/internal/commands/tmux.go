@@ -66,6 +66,56 @@ func (t *Tmux) ListSessions(ctx context.Context) ([]TmuxSession, error) {
 	return sessions, nil
 }
 
+func (t *Tmux) PaneSession(ctx context.Context, pane string) (*TmuxSession, error) {
+	args := make([]string, 0, 16)
+
+	args = append(args, "list-panes")
+	args = append(args, "-t", pane)
+	args = append(args, "-F", "#{session_id} #{session_name}")
+
+	var (
+		stdout bytes.Buffer
+		stderr bytes.Buffer
+	)
+
+	cmd := exec.CommandContext(ctx, t.executable(), args...)
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+	if err := cmd.Run(); err != nil {
+		return nil, &Error{
+			Err:    err,
+			Stderr: stderr.String(),
+		}
+	}
+
+	var session *TmuxSession
+	s := bufio.NewScanner(&stdout)
+	s.Split(bufio.ScanLines)
+	for s.Scan() {
+		line := strings.TrimSpace(s.Text())
+		if line == "" {
+			continue
+		}
+
+		var (
+			id   int
+			name string
+		)
+		if _, err := fmt.Sscanf(line, "$%d %s", &id, &name); err != nil {
+			continue
+		}
+
+		session = &TmuxSession{
+			ID:   id,
+			Name: name,
+		}
+
+		break // Only the first session.
+	}
+
+	return session, nil
+}
+
 type TmuxOptions struct {
 	Detach          bool
 	SessionName     string

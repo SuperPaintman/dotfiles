@@ -45,11 +45,12 @@ const (
 )
 
 type Session struct {
-	Kind   Kind
-	Name   string
-	Active bool
-	Score  float64
-	Path   string
+	Kind    Kind
+	Name    string
+	Current bool
+	Active  bool
+	Score   float64
+	Path    string
 }
 
 type ByPriority []Session
@@ -57,6 +58,10 @@ type ByPriority []Session
 func (s ByPriority) Len() int      { return len(s) }
 func (s ByPriority) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
 func (s ByPriority) Less(i, j int) bool {
+	if s[i].Current != s[j].Current {
+		return !s[i].Current
+	}
+
 	if s[i].Active != s[j].Active {
 		return !s[i].Active
 	}
@@ -79,6 +84,10 @@ func main() {
 	// Initialize colors.
 	colors.SetMode(colors.Always)
 
+	// Check if tmux is running.
+	_, tmuxRunning := os.LookupEnv("TMUX")
+	tmuxPane := os.Getenv("TMUX_PANE")
+
 	// Find sessions.
 	ctx := context.Background()
 
@@ -86,18 +95,32 @@ func main() {
 	knownPath := make(map[string]int)
 	var sessions []Session
 
-	// Find active sessions.
+	// Get current session.
 	tmux := commands.Tmux{}
 
+	var currentSession *commands.TmuxSession
+	if tmuxRunning && tmuxPane != "" {
+		session, err := tmux.PaneSession(ctx, tmuxPane)
+		if err != nil {
+			// Ignore tmux errors, maybe tmux is not running.
+		} else {
+			currentSession = session
+		}
+	}
+
+	// Find active sessions.
 	tmuxActiveSessions, err := tmux.ListSessions(ctx)
 	if err != nil {
 		// Ignore tmux errors, maybe tmux is not running.
 	}
 
 	for _, s := range tmuxActiveSessions {
+		current := currentSession != nil && currentSession.ID == s.ID
+
 		if idx, ok := knownName[s.Name]; ok {
 			session := &sessions[idx]
 
+			session.Current = current
 			session.Active = true
 
 			if session.Name == "" {
@@ -106,9 +129,10 @@ func main() {
 		} else {
 			idx := len(sessions)
 			sessions = append(sessions, Session{
-				Kind:   KindTmux,
-				Active: true,
-				Name:   s.Name,
+				Kind:    KindTmux,
+				Current: current,
+				Active:  true,
+				Name:    s.Name,
 			})
 			knownName[s.Name] = idx
 		}
@@ -218,7 +242,7 @@ func main() {
 		}
 	}
 
-	// Normalize sessions.
+	// Sort sessions.
 	sort.Stable(ByPriority(sessions))
 
 	// Reindex sessions.
@@ -250,7 +274,11 @@ func main() {
 
 		case KindTmux:
 			symbol = defaultTmuxSymbol
-			color = colors.Green.String()
+			if session.Current {
+				color = colors.Magenta.String()
+			} else {
+				color = colors.Green.String()
+			}
 
 		default:
 			symbol = " "
@@ -285,9 +313,6 @@ func main() {
 
 		log.Fatalf("Failed to run FZF: %s", err)
 	}
-
-	// Check if tmux is running.
-	_, tmuxRunning := os.LookupEnv("TMUX")
 
 	// Normalize and create tmux sessions.
 	for _, res := range results {
