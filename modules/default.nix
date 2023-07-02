@@ -11,6 +11,7 @@ in
   imports = [
     ./themes
     ./programs/fzf
+    ./programs/neovim
     ./programs/tmux
   ];
 
