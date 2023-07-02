@@ -1,5 +1,18 @@
 # See: https://github.com/junegunn/fzf
 # See: https://github.com/junegunn/fzf/wiki
+# See: https://github.com/nix-community/home-manager/blob/master/modules/programs/fzf.nix
+
+# TODO(SuperPaintman):
+#     Add custom fuzzy completion:
+#       - [ ] Docker
+#       - [ ] Go
+#       - [ ] Git
+#
+#     See: https://github.com/junegunn/fzf#custom-fuzzy-completion
+#     See: https://github.com/pierpo/fzf-docker/blob/master/fzf-docker.plugin.zsh
+
+# TODO(SuperPaintman):
+#     Add FZF completions and key bindings.
 
 { config, lib, pkgs, ... }:
 

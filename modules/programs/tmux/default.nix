@@ -2,6 +2,7 @@
 # See: https://linux.die.net/man/1/tmux
 # See: http://man.openbsd.org/OpenBSD-current/man1/tmux.1
 # See: https://github.com/tmux/tmux/blob/3.3/key-bindings.c#L344
+# See: https://github.com/nix-community/home-manager/blob/master/modules/programs/tmux.nix
 
 # TODO(SuperPaintman):
 # - [ ] Attach to the previous session when the current one is closed.
