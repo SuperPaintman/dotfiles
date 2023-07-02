@@ -10,6 +10,7 @@ in
   # Imports.
   imports = [
     ./themes
+    ./programs/fzf
     ./programs/tmux
   ];
 
