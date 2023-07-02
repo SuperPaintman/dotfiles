@@ -37,13 +37,13 @@ opt.autoread = true
 opt.background = "dark"
 
 -- Influences the working of <BS>, <Del>, CTRL-W and CTRL-U in Insert mode.
-opt.backspace = table.concat({"indent", "eol", "start"}, ",")
+opt.backspace = {"indent", "eol", "start"}
 
 -- Make a backup before overwriting a file.
 opt.backup = false
 
 -- Columns to highlight.
-opt.colorcolumn = table.concat({80, 120}, ",")
+opt.colorcolumn = {80, 120}
 
 -- Set default number of columns of the screen.
 opt.columns = old_columns
@@ -54,8 +54,16 @@ opt.cursorline = true
 -- Encoding used internally.
 opt.encoding = "utf-8"
 
+-- When on, all the windows are automatically made the same size after
+-- splitting or closing a window.
+opt.equalalways = false
+
 -- In Insert mode: Use the appropriate number of spaces to insert a <Tab>.
 opt.expandtab = true
+
+-- Characters to fill the statuslines, vertical separators and special lines in
+-- the window.
+opt.fillchars = { eob = "~" }
 
 -- When off, all folds are open.
 --
@@ -84,14 +92,14 @@ opt.lines = old_lines
 opt.list = true
 
 -- Strings to use in 'list' mode and for the :list command.
-opt.listchars = table.concat({
-  "eol:¬",
-  "tab:>-",
-  "space:·",
-  "trail:·",
-  "extends:>",
-  "precedes:<",
-}, ",")
+opt.listchars = {
+  eol = "¬",
+  tab = ">-",
+  space = "·",
+  trail = "·",
+  extends = ">",
+  precedes = "<",
+}
 
 -- Enables mouse support.
 opt.mouse = "a" -- all modes
@@ -99,12 +107,21 @@ opt.mouse = "a" -- all modes
 -- Print the line number in front of each line.
 opt.number = true
 
+-- Minimal number of screen lines to keep above and below the cursor.
+opt.scrolloff = 10
+
 -- Number of spaces to use for each step of (auto)indent.
 opt.shiftwidth = 2
+
+-- If in Insert, Replace or Visual mode put a message on the last line.
+opt.showmode = false
 
 -- The value of this option specifies when the line with tab page labels will
 -- be displayed.
 opt.showtabline = 2 -- always
+
+-- When and how to draw the signcolumn.
+opt.signcolumn = "yes" -- always
 
 -- Override the 'ignorecase' option if the search pattern contains upper case
 -- characters.
@@ -136,6 +153,12 @@ opt.swapfile = false
 -- When this option is set, the syntax with this name is loaded, unless syntax
 -- highlighting has been switched off with ":syntax off".
 opt.syntax = old_syntax
+
+-- If this many milliseconds nothing is typed the swap file will be written to
+-- disk.
+-- 
+-- Also used for the CursorHold autocommand event.
+opt.updatetime = 1000
 
 -- This option changes how text is displayed.
 opt.wrap = false
