@@ -136,6 +136,21 @@ let
 
   plugins = [
     {
+      plugin = "catppuccin/nvim";
+      name = "catppuccin";
+      branch = "main";
+      commit = "8338b02e9a8ffcb999520de7f15943712618760f";
+      version = "1.2.0";
+      lazy = false;
+      priority = 1000;
+      config = mkRawLua ''
+        function()
+          vim.cmd [[ colorscheme catppuccin ]]
+        end
+      '';
+    }
+
+    {
       plugin = "nvim-lua/plenary.nvim";
       branch = "master";
       commit = "253d34830709d690f013daf2853a9d21ad7accab";
