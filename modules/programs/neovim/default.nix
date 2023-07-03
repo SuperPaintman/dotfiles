@@ -6,8 +6,10 @@ with lib;
 
 let
   inherit (builtins) toJSON;
+  inherit (pkgs) stdenv;
 
   cfg = config.modules.programs.neovim;
+  standalone = config.modules.home.standalone;
 
   trimNewlines = content:
     let
@@ -55,6 +57,7 @@ let
 
       toLuaValue = v:
         if v ? _type && v._type == "rawLua" then trimNewlines v.content
+        else if v == null then "nil"
         else if isDerivation v then toJSON v
         else if isPath v then toJSON v
         else if isAttrs v then attrsToLuaValue v
@@ -96,8 +99,18 @@ let
     , module ? null
     , priority ? null
     , optional ? null
+    , ...
     }:
     let
+      name' =
+        if name != null
+        then name
+        else replaceStrings [ "." ] [ "-" ] (last (splitString "/" plugin));
+
+      configWrapper = mkRawLua ''
+        require_optional_config(${toLua name'}, ${toLua config})
+      '';
+
       spec = concatStringsSep "\n" ([ ]
         ++ lib.optional (plugin != null) "${toLua plugin},"
         ++ lib.optional (dir != null) "dir = ${toLua dir},"
@@ -110,7 +123,7 @@ let
         ++ lib.optional (dependencies != null) "dependencies = ${toLua dependencies},"
         ++ lib.optional (init != null) "init = ${toLua init},"
         ++ lib.optional (opts != null) "opts = ${toLua opts},"
-        ++ lib.optional (config != null) "config = ${toLua config},"
+        ++ [ "config = ${toLua (if isBool config then config else configWrapper)}," ]
         ++ lib.optional (main != null) "main = ${toLua main},"
         ++ lib.optional (build != null) "build = ${toLua build},"
         ++ lib.optional (branch != null) "branch = ${toLua branch},"
@@ -164,6 +177,35 @@ let
       version = "0.1.2";
       dependencies = [ "nvim-lua/plenary.nvim" ];
     }
+
+    ((nativePlugins.nvim-treesitter.withParsers (p: with p; [
+      tree-sitter-go
+      tree-sitter-lua
+      tree-sitter-nix
+    ])).lazy.override {
+      config = mkRawLua ''
+        function()
+        ${optionalString (!standalone) (indent "  " ''
+          -- Disable compiling languages from source code.
+          require("nvim-treesitter.install").compilers = {
+            -- Alternatively, you can enable the compilers here.
+            -- ${toLua "${stdenv.cc}/bin/cc"}
+          }
+        '')}
+
+        ${optionalString standalone (indent "  " ''
+          -- Configure the plugin.
+          require("nvim-treesitter.configs").setup {
+            ensure_installed = {
+              "go",
+              "lua",
+              "nix",
+            },
+          }
+        '')}
+        end
+      '';
+    })
   ];
 in
 
@@ -197,16 +239,63 @@ in
         "nvim/init.lua".source = ./init.lua;
         "nvim/lua/options.lua".source = ./lua/options.lua;
         "nvim/lua/mappings.lua".source = ./lua/mappings.lua;
+        "nvim/lua/configs" = {
+          source = ./lua/configs;
+          recursive = true;
+        };
         "nvim/lua/utils" = {
           source = ./lua/utils;
           recursive = true;
         };
         "nvim/lua/lazyinit.lua".text = ''
           --------------------------------------------------------------------------------
+          -- Imports
+          --------------------------------------------------------------------------------
+          local is_available = require("utils.modules").is_available
+
+
+          --------------------------------------------------------------------------------
           -- Init
           --------------------------------------------------------------------------------
           vim.opt.rtp:prepend(${toLua nativePlugins.lazy-nvim})
 
+
+          --------------------------------------------------------------------------------
+          -- Helpers
+          --------------------------------------------------------------------------------
+          local require_optional_config = function(name, config)
+            return function(plugin, opts)
+              opts = opts or {}
+
+              -- Run the inline configuration.
+              if config ~= nil then
+                config(plugin, opts)
+              end
+
+              -- Run the configuration from file.
+              if is_available("configs." .. name) then
+                local mod = require("configs." .. name)
+                if mod and type(mod.config) == "function" then
+                  mod.config(plugin, opts)
+                end
+                return
+              end
+
+              -- Run the default configuration.
+              local main = require("lazy.core.loader").get_main(plugin)
+              if main and is_available(main) then
+                local mod = require(main)
+                if mod and type(mod.config) == "function" then
+                  mod.setup(opts)
+                end
+              end
+            end
+          end
+
+
+          --------------------------------------------------------------------------------
+          -- Setup
+          --------------------------------------------------------------------------------
           require("lazy").setup({
           ${concatMapStringsSep "\n" formatPlugin (filterPlugins plugins)}
           }, {})

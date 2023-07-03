@@ -44,6 +44,15 @@ M.reload = function(name)
   return require(name)
 end
 
+M.is_available = function(name)
+  if package.loaded[name] ~= nil then
+    return true
+  end
+
+  local ok = pcall(require, name)
+  return ok
+end
+
 
 --------------------------------------------------------------------------------
 -- Export
