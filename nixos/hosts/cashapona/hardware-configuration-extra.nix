@@ -58,6 +58,8 @@
 
     opengl = {
       enable = true;
+      driSupport = true;
+      driSupport32Bit = true;
 
       # Intel CPI.
       # See: https://github.com/NixOS/nixos-hardware/blob/master/common/cpu/intel/default.nix
@@ -79,8 +81,8 @@
 
     nvidia.prime = {
       # TODO(SuperPaintman): works not so well, display shows artifacts.
-      # sync.enable = true;
-      offload.enable = true;
+      sync.enable = true;
+      # offload.enable = true;
 
       # Bus ID of the Intel GPU.
       intelBusId = "PCI:0:2:0";
