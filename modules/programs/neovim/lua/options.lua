@@ -156,7 +156,7 @@ opt.syntax = old_syntax
 
 -- If this many milliseconds nothing is typed the swap file will be written to
 -- disk.
--- 
+--
 -- Also used for the CursorHold autocommand event.
 opt.updatetime = 1000
 
