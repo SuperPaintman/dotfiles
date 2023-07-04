@@ -11,6 +11,7 @@ unload("^configs%.", true)
 unload("^utils%.", true)
 unload("options")
 unload("mappings")
+unload("autocmds")
 
 
 --------------------------------------------------------------------------------
@@ -18,5 +19,6 @@ unload("mappings")
 --------------------------------------------------------------------------------
 require("options")
 require("mappings")
+require("autocmds")
 
 require("lazyinit")

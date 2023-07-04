@@ -211,6 +211,13 @@ let
       plugin = "neovim/nvim-lspconfig";
       branch = "master";
       commit = "0011c435282f043a018e23393cae06ed926c3f4a";
+      init = mkRawLua ''
+        function()
+          vim.schedule(function()
+            vim.cmd [[ silent! do FileType ]]
+          end, 0)
+        end
+      '';
       config = mkRawLua ''
         function()
           local lspconfig = require("lspconfig")
@@ -300,6 +307,7 @@ in
 
       home.configFiles = {
         "nvim/init.lua".source = ./init.lua;
+        "nvim/lua/autocmds.lua".source = ./lua/autocmds.lua;
         "nvim/lua/options.lua".source = ./lua/options.lua;
         "nvim/lua/mappings.lua".source = ./lua/mappings.lua;
         "nvim/lua/configs" = {
