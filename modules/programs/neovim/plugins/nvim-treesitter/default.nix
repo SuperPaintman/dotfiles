@@ -32,8 +32,8 @@ let
         passthru = {
           lazy = (removeAttrs self.lazy [ "dir" "override" ]) // {
             dir = selfWithParsers;
+            override = attrs: passthru.lazy // attrs;
           };
-          lazy.override = attrs: passthru.lazy // attrs;
         };
       };
     in

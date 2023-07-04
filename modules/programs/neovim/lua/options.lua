@@ -37,13 +37,13 @@ opt.autoread = true
 opt.background = "dark"
 
 -- Influences the working of <BS>, <Del>, CTRL-W and CTRL-U in Insert mode.
-opt.backspace = {"indent", "eol", "start"}
+opt.backspace = { "indent", "eol", "start" }
 
 -- Make a backup before overwriting a file.
 opt.backup = false
 
 -- Columns to highlight.
-opt.colorcolumn = {80, 120}
+opt.colorcolumn = { 80, 120 }
 
 -- Set default number of columns of the screen.
 opt.columns = old_columns

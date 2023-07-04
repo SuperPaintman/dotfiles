@@ -206,6 +206,69 @@ let
         end
       '';
     })
+
+    {
+      plugin = "neovim/nvim-lspconfig";
+      branch = "master";
+      commit = "0011c435282f043a018e23393cae06ed926c3f4a";
+      config = mkRawLua ''
+        function()
+          local lspconfig = require("lspconfig")
+
+          -- Go
+          lspconfig.gopls.setup {
+            cmd = { ${toLua "${pkgs.gopls}/bin/gopls"} },
+          }
+
+          -- Lua
+          lspconfig.lua_ls.setup {
+            cmd = { ${toLua "${pkgs.lua-language-server}/bin/lua-language-server"} }
+          }
+
+          -- Nix
+          lspconfig.rnix.setup {
+            cmd = { ${toLua "${pkgs.rnix-lsp}/bin/rnix-lsp"} },
+          }
+        end
+      '';
+    }
+
+    {
+      plugin = "hrsh7th/nvim-cmp";
+      branch = "main";
+      commit = "2743dd989e9b932e1b4813a4927d7b84272a14e2";
+      event = "InsertEnter";
+      dependencies = [
+        "hrsh7th/cmp-nvim-lua"
+        "hrsh7th/cmp-nvim-lsp"
+        "hrsh7th/cmp-buffer"
+        "hrsh7th/cmp-path"
+      ];
+    }
+
+    {
+      plugin = "hrsh7th/cmp-nvim-lua";
+      branch = "main";
+      commit = "f12408bdb54c39c23e67cab726264c10db33ada8";
+    }
+
+    {
+      plugin = "hrsh7th/cmp-nvim-lsp";
+      branch = "main";
+      commit = "44b16d11215dce86f253ce0c30949813c0a90765";
+    }
+
+    {
+      plugin = "hrsh7th/cmp-buffer";
+      branch = "main";
+      commit = "3022dbc9166796b644a841a02de8dd1cc1d311fa";
+    }
+
+    {
+      plugin = "hrsh7th/cmp-path";
+      branch = "main";
+      commit = "91ff86cd9c29299a64f968ebb45846c485725f23";
+    }
   ];
 in
 
@@ -267,9 +330,12 @@ in
             return function(plugin, opts)
               opts = opts or {}
 
+              local run_default = true
+
               -- Run the inline configuration.
               if config ~= nil then
                 config(plugin, opts)
+                run_default = false
               end
 
               -- Run the configuration from file.
@@ -277,16 +343,18 @@ in
                 local mod = require("configs." .. name)
                 if mod and type(mod.config) == "function" then
                   mod.config(plugin, opts)
+                  run_default = false
                 end
-                return
               end
 
               -- Run the default configuration.
-              local main = require("lazy.core.loader").get_main(plugin)
-              if main and is_available(main) then
-                local mod = require(main)
-                if mod and type(mod.config) == "function" then
-                  mod.setup(opts)
+              if run_default then
+                local main = require("lazy.core.loader").get_main(plugin)
+                if main and is_available(main) then
+                  local mod = require(main)
+                  if mod and type(mod.setup) == "function" then
+                    mod.setup(opts)
+                  end
                 end
               end
             end
