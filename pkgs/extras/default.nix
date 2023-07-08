@@ -6,6 +6,7 @@
 , exa
 , zoxide
 , tmux
+, nix-prefetch
 }:
 
 buildGoModule rec {
@@ -15,10 +16,11 @@ buildGoModule rec {
 
   subPackages = [
     "cmd/fzf-jump"
+    "cmd/nix-update"
     "cmd/tmux-session-manager"
   ];
 
-  vendorSha256 = "sha256-YoufxUbr3hNfivIjbI1OJdszTyP0gxCfcS6uiGZmnb4=";
+  vendorSha256 = "sha256-oxn5DTeQ2SZWiJg2tzQ7WyXol3Io8g7noux51gjUpwA=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -32,6 +34,11 @@ buildGoModule rec {
         exa
         zoxide
         tmux
+      ]}
+
+    wrapProgram "$out/bin/nix-update" \
+      --prefix PATH ':' ${lib.makeBinPath [
+        nix-prefetch
       ]}
   '';
 }

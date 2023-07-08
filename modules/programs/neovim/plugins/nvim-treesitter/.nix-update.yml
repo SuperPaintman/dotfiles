@@ -1,0 +1,168 @@
+output: generated.nix
+packages:
+    nvim-treesitter:
+        type: github
+        args:
+            owner: nvim-treesitter
+            repo: nvim-treesitter
+            rev: c42a8f96d37be82cf32934c4351150d7736f93f5
+        buildInputs:
+            - jq
+            - yj
+            - lua51Packages.lua
+            - lua51Packages.cjson
+        after:
+            - type: shell
+              args:
+                  text: |
+                      set -euo pipefail
+
+                      cat <<'EOF' | lua - "$src" | jq . | yj -jy > parsers.yml
+                      -- Config.
+                      local SRC = arg[1]
+
+                      local whitelist = {
+                        "bash",
+                        "c",
+                        "comment",
+                        "cpp",
+                        "css",
+                        "diff",
+                        "dockerfile",
+                        "gitattributes",
+                        "gitcommit",
+                        "git_config",
+                        "gitignore",
+                        "git_rebase",
+                        "go",
+                        "gomod",
+                        "gosum",
+                        "gowork",
+                        "html",
+                        "http",
+                        "java",
+                        "javascript",
+                        "jq",
+                        "jsdoc",
+                        "json",
+                        "json5",
+                        "llvm",
+                        "lua",
+                        "luadoc",
+                        "make",
+                        "nix",
+                        "org",
+                        "python",
+                        "query",
+                        "rasi",
+                        "regex",
+                        "rust",
+                        "sql",
+                        "starlark",
+                        "svelte",
+                        "terraform",
+                        "thrift",
+                        "toml",
+                        "tsx",
+                        "typescript",
+                        "vim",
+                        "vimdoc",
+                        "yaml",
+                      }
+
+                      -- Imports.
+                      local json = require("cjson")
+
+                      -- Helpers.
+                      local function key_to_package_name(key)
+                        return "tree-sitter-" .. key
+                      end
+
+                      local function read_file(filename)
+                        local f = io.open(filename, "rb")
+                        if not f then
+                          return nil
+                        end
+
+                        local content = f:read("*all")
+
+                        f:close()
+
+                        return content
+                      end
+
+                      local function to_set(array)
+                        local res = {}
+                        for _, value in ipairs(array) do
+                          res[value] = true
+                        end
+                        return res
+                      end
+
+                      -- Create polyfills / mocks for vim.
+                      local vim = {}
+                      vim.api = {}
+                      vim.treesitter = {
+                        language = {},
+                      }
+
+                      _G.vim = vim
+
+                      -- Init.
+                      whitelist = to_set(whitelist)
+
+                      -- Load the parsers list.
+                      package.path = SRC .. "/lua/?.lua;" .. package.path
+                      local parsers = require("nvim-treesitter.parsers").list
+
+                      -- Load the lockfile.
+                      local lockfile = json.decode(read_file(SRC .. "/lockfile.json"))
+
+                      -- Generate an nix file.
+                      local packages = {}
+
+                      for key, parser in pairs(parsers) do
+                        local info = parser["install_info"]
+
+                        if whitelist ~= nil and whitelist[key] and not parser["experimental"] then
+                          packages[key_to_package_name(key)] = {
+                            type = "git",
+                            args = {
+                              url = info["url"],
+                            },
+                            extraAttrs = {
+                              language = key,
+                              location = info["location"],
+                              generate = info["generate_requires_npm"] or info["generate_requires_npm"],
+                            },
+                          }
+                        end
+                      end
+
+                      for key, info in pairs(lockfile) do
+                        local parser = packages[key_to_package_name(key)]
+                        if parser ~= nil then
+                          -- parser["version"] = "0.0.0+rev=" .. string.sub(info["revision"], 1, 6)
+                          parser["args"]["rev"] = info["revision"]
+                        end
+                      end
+
+                      -- TODO(SuperPaitnman):
+                      --     These are broken parsers.
+                      --     Check why nix-prefetch cannot get them.
+                      local broken_parsers = {
+                        "dart",
+                        "hlsl",
+                      }
+                      for _, name in ipairs(broken_parsers) do
+                        packages[key_to_package_name(name)] = nil
+                      end
+
+                      print(json.encode({
+                        output = "parsers/generated.nix",
+                        packages = packages,
+                      }))
+                      EOF
+            - type: update
+              args:
+                  filename: parsers.yml

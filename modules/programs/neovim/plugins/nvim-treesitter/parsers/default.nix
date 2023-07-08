@@ -2,16 +2,16 @@
 # See: https://github.com/NixOS/nixpkgs/tree/master/pkgs/development/tools/parsing/tree-sitter/grammars/
 # See: https://github.com/nvim-treesitter/nvim-treesitter/blob/master/lua/nvim-treesitter/parsers.lua
 
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 let
   inherit (pkgs) callPackage;
 
   buildTreesitterParser = callPackage <nixpkgs/pkgs/development/tools/parsing/tree-sitter/grammar.nix> { };
+  generated = import ./generated.nix { inherit (pkgs) fetchgit; };
 in
 
-{
-  tree-sitter-go = callPackage ./tree-sitter-go.nix { inherit buildTreesitterParser; };
-  tree-sitter-lua = callPackage ./tree-sitter-lua.nix { inherit buildTreesitterParser; };
-  tree-sitter-nix = callPackage ./tree-sitter-nix.nix { inherit buildTreesitterParser; };
-}
+lib.mapAttrs
+  (name: attrs: buildTreesitterParser
+    (builtins.removeAttrs attrs [ "pname" ]))
+  generated
