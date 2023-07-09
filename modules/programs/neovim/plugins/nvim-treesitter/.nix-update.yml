@@ -25,55 +25,7 @@ packages:
                       -- Config.
                       local SRC = arg[1]
 
-                      local whitelist = {
-                        "bash",
-                        "c",
-                        "comment",
-                        "cpp",
-                        "css",
-                        "diff",
-                        "dockerfile",
-                        "gitattributes",
-                        "gitcommit",
-                        "git_config",
-                        "gitignore",
-                        "git_rebase",
-                        "go",
-                        "gomod",
-                        "gosum",
-                        "gowork",
-                        "html",
-                        "http",
-                        "java",
-                        "javascript",
-                        "jq",
-                        "jsdoc",
-                        "json",
-                        "json5",
-                        "llvm",
-                        "lua",
-                        "luadoc",
-                        "make",
-                        "nix",
-                        "org",
-                        "proto",
-                        "python",
-                        "query",
-                        "rasi",
-                        "regex",
-                        "rust",
-                        "sql",
-                        "starlark",
-                        "svelte",
-                        "terraform",
-                        "thrift",
-                        "toml",
-                        "tsx",
-                        "typescript",
-                        "vim",
-                        "vimdoc",
-                        "yaml",
-                      }
+                      local whitelist = nil
 
                       -- Imports.
                       local json = require("cjson")
@@ -97,6 +49,10 @@ packages:
                       end
 
                       local function to_set(array)
+                        if array == nil then
+                          return nil
+                        end
+
                         local res = {}
                         for _, value in ipairs(array) do
                           res[value] = true
@@ -129,7 +85,7 @@ packages:
                       for key, parser in pairs(parsers) do
                         local info = parser["install_info"]
 
-                        if whitelist ~= nil and whitelist[key] and not parser["experimental"] then
+                        if (whitelist == nil or whitelist[key]) and not parser["experimental"] then
                           packages[key_to_package_name(key)] = {
                             type = "git",
                             args = {
