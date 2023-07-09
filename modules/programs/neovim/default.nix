@@ -10,7 +10,6 @@ let
 
   inherit (config.modules.home) standalone;
   cfg = config.modules.programs.neovim;
-  standalone = config.modules.home.standalone;
 
   trimNewlines = content:
     let
