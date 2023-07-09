@@ -5,13 +5,19 @@
 { pkgs, lib, ... }:
 
 let
-  inherit (pkgs) callPackage;
+  inherit (pkgs) callPackage newScope;
 
   buildTreesitterParser = callPackage <nixpkgs/pkgs/development/tools/parsing/tree-sitter/grammar.nix> { };
+
   generated = import ./generated.nix { inherit (pkgs) fetchgit; };
+  generatedParsers = lib.mapAttrs
+    (name: attrs: buildTreesitterParser
+      (builtins.removeAttrs attrs [ "pname" ]))
+    generated;
+
+  callTreesitterParserPackage = newScope { inherit buildTreesitterParser; };
 in
 
-lib.mapAttrs
-  (name: attrs: buildTreesitterParser
-    (builtins.removeAttrs attrs [ "pname" ]))
-  generated
+generatedParsers // {
+  tree-sitter-format_string = callTreesitterParserPackage ./tree-parser-format_string { };
+}

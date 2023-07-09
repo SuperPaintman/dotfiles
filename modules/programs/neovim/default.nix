@@ -197,7 +197,13 @@ let
           else null;
       })
 
-      ((nativePlugins.nvim-treesitter.withParsers (p: map (lang: p."tree-sitter-${lang}") treesitterLanguages)).lazy.override {
+      ((nativePlugins.nvim-treesitter.withParsers
+        (p:
+          (map (lang: p."tree-sitter-${lang}") treesitterLanguages)
+          ++ [
+            p.tree-sitter-format_string
+          ]
+        )).lazy.override {
         config = mkRawLua ''
           function()
           ${optionalString (!standalone) (indent "  " ''
