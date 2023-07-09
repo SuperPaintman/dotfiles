@@ -91,8 +91,10 @@ opt.list = true
 
 -- Strings to use in 'list' mode and for the :list command.
 opt.listchars = {
-  eol = "¬",
-  tab = ">-",
+  -- eol = "¬",
+  -- tab = ">-",
+  -- tab = "→ ",
+  tab = "⇝ ",
   space = "·",
   trail = "·",
   extends = ">",
@@ -119,7 +121,7 @@ opt.showmode = false
 opt.showtabline = 2 -- always
 
 -- When and how to draw the signcolumn.
-opt.signcolumn = "yes" -- always
+opt.signcolumn = "yes:2" -- always show 2 columns.
 
 -- Override the 'ignorecase' option if the search pattern contains upper case
 -- characters.
@@ -140,6 +142,16 @@ opt.splitbelow = true
 -- one.
 opt.splitright = true
 
+-- Use a swapfile for the buffer.
+opt.swapfile = false
+
+-- When this option is set, the syntax with this name is loaded, unless syntax
+-- highlighting has been switched off with ":syntax off".
+opt.syntax = old_syntax
+
+-- Number of spaces that a <Tab> in the file counts for.
+opt.tabstop = 2
+
 -- Enables 24-bit RGB color in the TUI.
 if
     (env.TERM or ""):sub(-1 * string.len("-256color")) == "-256color"
@@ -147,13 +159,6 @@ if
 then
   opt.termguicolors = true
 end
-
--- Use a swapfile for the buffer.
-opt.swapfile = false
-
--- When this option is set, the syntax with this name is loaded, unless syntax
--- highlighting has been switched off with ":syntax off".
-opt.syntax = old_syntax
 
 -- If this many milliseconds nothing is typed the swap file will be written to
 -- disk.
