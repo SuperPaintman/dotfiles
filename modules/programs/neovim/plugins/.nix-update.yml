@@ -102,6 +102,17 @@ packages:
             repo: cmp-path
             rev: *commit
 
+    cmp_luasnip:
+        type: github
+        extraAttrs:
+            plugin: saadparwaiz1/cmp_luasnip
+            # branch: master
+            commit: &commit 18095520391186d634a0045dacaa346291096566
+        args:
+            owner: saadparwaiz1
+            repo: cmp_luasnip
+            rev: *commit
+
     gitsigns-nvim:
         type: github
         extraAttrs:
@@ -199,4 +210,15 @@ packages:
         args:
             owner: nvim-treesitter
             repo: playground
+            rev: *commit
+
+    luasnip:
+        type: github
+        extraAttrs:
+            plugin: L3MON4D3/LuaSnip
+            # branch: master
+            commit: &commit a658ae2906344a1d2b9c507738e585cf68e685c7
+        args:
+            owner: L3MON4D3
+            repo: LuaSnip
             rev: *commit

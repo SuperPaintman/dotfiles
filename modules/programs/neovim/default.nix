@@ -102,7 +102,13 @@ let
       name' =
         if name != null
         then name
-        else replaceStrings [ "." ] [ "-" ] (last (splitString "/" plugin));
+        else
+          pipe plugin [
+            (splitString "/")
+            last
+            (replaceStrings [ "." ] [ "-" ])
+            toLower
+          ];
 
       configWrapper = mkRawLua ''
         require_optional_config(${toLua name'}, ${toLua config})
@@ -276,6 +282,8 @@ let
             p.cmp-nvim-lsp.lazy.plugin
             p.cmp-buffer.lazy.plugin
             p.cmp-path.lazy.plugin
+            p.cmp_luasnip.lazy.plugin
+            p.luasnip.lazy.plugin
           ]
           else null;
       })
@@ -284,6 +292,7 @@ let
       p.cmp-nvim-lsp.lazy
       p.cmp-buffer.lazy
       p.cmp-path.lazy
+      p.cmp_luasnip.lazy
 
       p.gitsigns-nvim.lazy
 
@@ -345,6 +354,8 @@ let
       })
 
       p.trouble-nvim.lazy
+
+      p.luasnip.lazy
     ];
 in
 
@@ -381,6 +392,10 @@ in
         "nvim/lua/mappings.lua".source = ./lua/mappings.lua;
         "nvim/lua/configs" = {
           source = ./lua/configs;
+          recursive = true;
+        };
+        "nvim/lua/snippets" = {
+          source = ./lua/snippets;
           recursive = true;
         };
         "nvim/lua/utils" = {

@@ -7,6 +7,7 @@ local unload = require("utils.modules").unload
 -- Unload
 --------------------------------------------------------------------------------
 unload("^configs%.", true)
+unload("^snippets%.", true)
 unload("^utils%.", true)
 unload("options")
 unload("mappings")

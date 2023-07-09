@@ -69,6 +69,11 @@ M.config = function()
   local cmp = require("cmp")
 
   cmp.setup({
+    snippet = {
+      expand = function(args)
+        require("luasnip").lsp_expand(args.body)
+      end,
+    },
     window = {
       documentation = cmp.config.window.bordered({
         border = border("CmpDocBorder"),
@@ -114,6 +119,7 @@ M.config = function()
       { name = "nvim_lsp" },
       { name = "buffer" },
       { name = "path" },
+      { name = "luasnip" },
     }),
   })
 end

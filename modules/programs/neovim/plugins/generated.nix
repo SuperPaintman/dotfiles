@@ -79,6 +79,19 @@
     plugin = "hrsh7th/cmp-path";
   };
 
+  cmp_luasnip = {
+    pname = "cmp_luasnip";
+    version = "0.0.0+rev=1809552";
+    src = fetchFromGitHub {
+      owner = "saadparwaiz1";
+      repo = "cmp_luasnip";
+      rev = "18095520391186d634a0045dacaa346291096566";
+      sha256 = "sha256-Z5SPy3j2oHFxJ7bK8DP8Q/oRyLEMlnWyIfDaQcNVIS0=";
+    };
+    commit = "18095520391186d634a0045dacaa346291096566";
+    plugin = "saadparwaiz1/cmp_luasnip";
+  };
+
   comment-nvim = {
     pname = "comment-nvim";
     version = "0.0.0+rev=3d22da7";
@@ -116,6 +129,19 @@
     };
     commit = "442d2ab757b4de6bc492186ff76ffed9746d772b";
     plugin = "nvim-lualine/lualine.nvim";
+  };
+
+  luasnip = {
+    pname = "luasnip";
+    version = "0.0.0+rev=a658ae2";
+    src = fetchFromGitHub {
+      owner = "L3MON4D3";
+      repo = "LuaSnip";
+      rev = "a658ae2906344a1d2b9c507738e585cf68e685c7";
+      sha256 = "sha256-tH1VINoPuzdDrNuvFkV3sOiRcUCVDChR7bYbrAao2bk=";
+    };
+    commit = "a658ae2906344a1d2b9c507738e585cf68e685c7";
+    plugin = "L3MON4D3/LuaSnip";
   };
 
   null-ls-nvim = {
