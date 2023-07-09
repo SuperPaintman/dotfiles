@@ -219,6 +219,8 @@ let
         '';
       })
 
+      p.nvim-treesitter-playground.lazy
+
       (p.nvim-lspconfig.lazy.override {
         init = mkRawLua ''
           function()
@@ -436,6 +438,10 @@ in
           ${concatMapStringsSep "\n" formatPlugin (filterPlugins plugins)}
           }, {})
         '';
+        "nvim/queries" = {
+          source = ./queries;
+          recursive = true;
+        };
       };
     };
   };

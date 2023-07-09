@@ -189,3 +189,14 @@ packages:
             owner: folke
             repo: trouble.nvim
             rev: *commit
+
+    nvim-treesitter-playground:
+        type: github
+        extraAttrs:
+            plugin: nvim-treesitter/playground
+            # branch: master
+            commit: &commit 2b81a018a49f8e476341dfcb228b7b808baba68b
+        args:
+            owner: nvim-treesitter
+            repo: playground
+            rev: *commit

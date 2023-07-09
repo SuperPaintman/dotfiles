@@ -10,8 +10,8 @@ M.config = function()
   local mappings = require("mappings")
 
   if
-    mappings.telescope ~= nil
-    and type(mappings.telescope.config) == "function"
+      mappings.telescope ~= nil
+      and type(mappings.telescope.config) == "function"
   then
     mappings.telescope.config()
   end

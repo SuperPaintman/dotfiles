@@ -11,6 +11,11 @@ M.config = function()
     highlight = {
       enable = true,
     },
+    playground = {
+      enable = true,
+      updatetime = 25,
+      persist_queries = true,
+    },
   })
 end
 

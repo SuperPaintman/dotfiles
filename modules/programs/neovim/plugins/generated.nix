@@ -170,6 +170,19 @@
     plugin = "nvim-tree/nvim-tree.lua";
   };
 
+  nvim-treesitter-playground = {
+    pname = "nvim-treesitter-playground";
+    version = "0.0.0+rev=2b81a01";
+    src = fetchFromGitHub {
+      owner = "nvim-treesitter";
+      repo = "playground";
+      rev = "2b81a018a49f8e476341dfcb228b7b808baba68b";
+      sha256 = "sha256-2wSTVSkuEvTAq3tB5yLw13WWpp1lAycCL4U1BKMm8Kw=";
+    };
+    commit = "2b81a018a49f8e476341dfcb228b7b808baba68b";
+    plugin = "nvim-treesitter/playground";
+  };
+
   plenary-nvim = {
     pname = "plenary-nvim";
     version = "0.0.0+rev=253d348";

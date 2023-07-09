@@ -142,8 +142,8 @@ opt.splitright = true
 
 -- Enables 24-bit RGB color in the TUI.
 if
-  (env.TERM or ""):sub(-1 * string.len("-256color")) == "-256color"
-  or env.COLORTERM == "truecolor"
+    (env.TERM or ""):sub(-1 * string.len("-256color")) == "-256color"
+    or env.COLORTERM == "truecolor"
 then
   opt.termguicolors = true
 end
