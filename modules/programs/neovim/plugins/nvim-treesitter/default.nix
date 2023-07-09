@@ -5,6 +5,8 @@
 with lib;
 
 let
+  generated = (import ./generated.nix { inherit fetchFromGitHub; }).nvim-treesitter;
+
   availableParsers = pkgs.callPackage ./parsers { };
 
   parserName = parser:
@@ -40,15 +42,7 @@ let
     selfWithParsers;
 
   self = stdenv.mkDerivation rec {
-    pname = "nvim-treesitter";
-    version = "c42a8f96d37be82cf32934c4351150d7736f93f5";
-
-    src = fetchFromGitHub {
-      owner = "nvim-treesitter";
-      repo = pname;
-      rev = version;
-      sha256 = "sha256-GUSu8SIe6+avUY/4HrEFw1mo1fjAsoawbCqQxI3+Z34=";
-    };
+    inherit (generated) pname version src;
 
     installPhase = ''
       mkdir -p "$out"
@@ -62,9 +56,7 @@ let
       inherit withParsers;
 
       lazy = {
-        plugin = "nvim-treesitter/${pname}";
-        branch = "master";
-        commit = "c42a8f96d37be82cf32934c4351150d7736f93f5";
+        inherit (generated) plugin branch commit;
         dir = self;
       };
       lazy.override = attrs: passthru.lazy // attrs;

@@ -2,10 +2,14 @@ output: generated.nix
 packages:
     nvim-treesitter:
         type: github
+        extraAttrs:
+            plugin: nvim-treesitter/nvim-treesitter
+            branch: master
+            commit: &commit c42a8f96d37be82cf32934c4351150d7736f93f5
         args:
             owner: nvim-treesitter
             repo: nvim-treesitter
-            rev: c42a8f96d37be82cf32934c4351150d7736f93f5
+            rev: *commit
         buildInputs:
             - jq
             - yj

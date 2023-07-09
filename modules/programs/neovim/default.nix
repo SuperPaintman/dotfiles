@@ -179,9 +179,29 @@ let
     }
 
     ((nativePlugins.nvim-treesitter.withParsers (p: with p; [
+      tree-sitter-bash
+      tree-sitter-c
+      tree-sitter-css
+      tree-sitter-diff
+      tree-sitter-dockerfile
+      tree-sitter-gitignore
       tree-sitter-go
+      tree-sitter-html
+      tree-sitter-http
+      tree-sitter-javascript
+      tree-sitter-json
       tree-sitter-lua
+      tree-sitter-make
       tree-sitter-nix
+      tree-sitter-python
+      tree-sitter-query
+      tree-sitter-regex
+      tree-sitter-rust
+      tree-sitter-sql
+      tree-sitter-svelte
+      tree-sitter-terraform
+      tree-sitter-vim
+      tree-sitter-yaml
     ])).lazy.override {
       config = mkRawLua ''
         function()
@@ -197,9 +217,29 @@ let
           -- Configure the plugin.
           require("nvim-treesitter.configs").setup {
             ensure_installed = {
+              "bash",
+              "c",
+              "css",
+              "diff",
+              "dockerfile",
+              "gitignore",
               "go",
+              "html",
+              "http",
+              "javascript",
+              "json",
               "lua",
+              "make",
               "nix",
+              "python",
+              "query",
+              "regex",
+              "rust",
+              "sql",
+              "svelte",
+              "terraform",
+              "vim",
+              "yaml",
             },
           }
         '')}
