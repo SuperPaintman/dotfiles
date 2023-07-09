@@ -15,18 +15,18 @@ local old_lines = opt.lines
 local old_syntax = opt.syntax
 
 -- Set all options to their default value.
-cmd [[ set all& ]]
+cmd [[set all&]]
 
 -- Reset color scheme.
-cmd [[ colorscheme default ]]
+cmd [[colorscheme default]]
 
 
 --------------------------------------------------------------------------------
 -- Options
 --------------------------------------------------------------------------------
-cmd [[ syntax on ]]
+cmd [[syntax on]]
 
-cmd [[ filetype plugin indent on ]]
+cmd [[filetype plugin indent on]]
 
 -- When a file has been detecte.d to have been changed outside of Vim and it
 -- has not been changed inside of Vim, automatically read it again.

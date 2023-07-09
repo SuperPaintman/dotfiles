@@ -1,0 +1,103 @@
+output: generated.nix
+packages:
+    catppuccin:
+        type: github
+        extraAttrs:
+            plugin: catppuccin/nvim
+            # branch: main
+            # version: "1.2.0"
+            commit: &commit 8338b02e9a8ffcb999520de7f15943712618760f
+        args:
+            owner: catppuccin
+            repo: nvim
+            rev: *commit
+
+    plenary-nvim:
+        type: github
+        extraAttrs:
+            plugin: nvim-lua/plenary.nvim
+            # branch: master
+            # version: "0.1.3"
+            commit: &commit 253d34830709d690f013daf2853a9d21ad7accab
+        args:
+            owner: nvim-lua
+            repo: plenary.nvim
+            rev: *commit
+
+    telescope-nvim:
+        type: github
+        extraAttrs:
+            plugin: nvim-telescope/telescope.nvim
+            # branch: master
+            # version: "0.1.2"
+            commit: &commit 776b509f80dd49d8205b9b0d94485568236d1192
+        args:
+            owner: nvim-telescope
+            repo: telescope.nvim
+            rev: *commit
+
+    nvim-lspconfig:
+        type: github
+        extraAttrs:
+            plugin: neovim/nvim-lspconfig
+            # branch: master
+            commit: &commit 0011c435282f043a018e23393cae06ed926c3f4a
+        args:
+            owner: neovim
+            repo: nvim-lspconfig
+            rev: *commit
+
+    nvim-cmp:
+        type: github
+        extraAttrs:
+            plugin: hrsh7th/nvim-cmp
+            # branch: main
+            commit: &commit 2743dd989e9b932e1b4813a4927d7b84272a14e2
+        args:
+            owner: hrsh7th
+            repo: nvim-cmp
+            rev: *commit
+
+    cmp-nvim-lua:
+        type: github
+        extraAttrs:
+            plugin: hrsh7th/cmp-nvim-lua
+            # branch: main
+            commit: &commit f12408bdb54c39c23e67cab726264c10db33ada8
+        args:
+            owner: hrsh7th
+            repo: cmp-nvim-lua
+            rev: *commit
+
+    cmp-nvim-lsp:
+        type: github
+        extraAttrs:
+            plugin: hrsh7th/cmp-nvim-lsp
+            # branch: main
+            commit: &commit 44b16d11215dce86f253ce0c30949813c0a90765
+        args:
+            owner: hrsh7th
+            repo: cmp-nvim-lsp
+            rev: *commit
+
+    cmp-buffer:
+        type: github
+        extraAttrs:
+            plugin: hrsh7th/cmp-buffer
+            # branch: main
+            commit: &commit 3022dbc9166796b644a841a02de8dd1cc1d311fa
+        args:
+            owner: hrsh7th
+            repo: cmp-buffer
+            rev: *commit
+
+    cmp-path:
+        type: github
+        extraAttrs:
+            plugin: hrsh7th/cmp-path
+            # branch: main
+            commit: &commit 91ff86cd9c29299a64f968ebb45846c485725f23
+        args:
+            owner: hrsh7th
+            repo: cmp-path
+            rev: *commit

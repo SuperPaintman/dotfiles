@@ -147,176 +147,129 @@ let
     neovim = cfg.package;
   };
 
-  plugins = [
-    {
-      plugin = "catppuccin/nvim";
-      name = "catppuccin";
-      branch = "main";
-      commit = "8338b02e9a8ffcb999520de7f15943712618760f";
-      version = "1.2.0";
-      lazy = false;
-      priority = 1000;
-      config = mkRawLua ''
-        function()
-          vim.cmd [[ colorscheme catppuccin ]]
-        end
-      '';
-    }
-
-    {
-      plugin = "nvim-lua/plenary.nvim";
-      branch = "master";
-      commit = "253d34830709d690f013daf2853a9d21ad7accab";
-      version = "0.1.3";
-    }
-
-    {
-      plugin = "nvim-telescope/telescope.nvim";
-      branch = "master";
-      commit = "776b509f80dd49d8205b9b0d94485568236d1192";
-      version = "0.1.2";
-      dependencies = [ "nvim-lua/plenary.nvim" ];
-    }
-
-    ((nativePlugins.nvim-treesitter.withParsers (p: with p; [
-      tree-sitter-bash
-      tree-sitter-c
-      tree-sitter-css
-      tree-sitter-diff
-      tree-sitter-dockerfile
-      tree-sitter-gitignore
-      tree-sitter-go
-      tree-sitter-html
-      tree-sitter-http
-      tree-sitter-javascript
-      tree-sitter-json
-      tree-sitter-lua
-      tree-sitter-make
-      tree-sitter-nix
-      tree-sitter-python
-      tree-sitter-query
-      tree-sitter-regex
-      tree-sitter-rust
-      tree-sitter-sql
-      tree-sitter-svelte
-      tree-sitter-terraform
-      tree-sitter-vim
-      tree-sitter-yaml
-    ])).lazy.override {
-      config = mkRawLua ''
-        function()
-        ${optionalString (!standalone) (indent "  " ''
-          -- Disable compiling languages from source code.
-          require("nvim-treesitter.install").compilers = {
-            -- Alternatively, you can enable the compilers here.
-            -- ${toLua "${stdenv.cc}/bin/cc"}
-          }
-        '')}
-
-        ${optionalString standalone (indent "  " ''
-          -- Configure the plugin.
-          require("nvim-treesitter.configs").setup {
-            ensure_installed = {
-              "bash",
-              "c",
-              "css",
-              "diff",
-              "dockerfile",
-              "gitignore",
-              "go",
-              "html",
-              "http",
-              "javascript",
-              "json",
-              "lua",
-              "make",
-              "nix",
-              "python",
-              "query",
-              "regex",
-              "rust",
-              "sql",
-              "svelte",
-              "terraform",
-              "vim",
-              "yaml",
-            },
-          }
-        '')}
-        end
-      '';
-    })
-
-    {
-      plugin = "neovim/nvim-lspconfig";
-      branch = "master";
-      commit = "0011c435282f043a018e23393cae06ed926c3f4a";
-      init = mkRawLua ''
-        function()
-          vim.schedule(function()
-            vim.cmd [[ silent! do FileType ]]
-          end, 0)
-        end
-      '';
-      config = mkRawLua ''
-        function()
-          local lspconfig = require("lspconfig")
-
-          -- Go
-          lspconfig.gopls.setup {
-            cmd = { ${toLua "${pkgs.gopls}/bin/gopls"} },
-          }
-
-          -- Lua
-          lspconfig.lua_ls.setup {
-            cmd = { ${toLua "${pkgs.lua-language-server}/bin/lua-language-server"} }
-          }
-
-          -- Nix
-          lspconfig.rnix.setup {
-            cmd = { ${toLua "${pkgs.rnix-lsp}/bin/rnix-lsp"} },
-          }
-        end
-      '';
-    }
-
-    {
-      plugin = "hrsh7th/nvim-cmp";
-      branch = "main";
-      commit = "2743dd989e9b932e1b4813a4927d7b84272a14e2";
-      event = "InsertEnter";
-      dependencies = [
-        "hrsh7th/cmp-nvim-lua"
-        "hrsh7th/cmp-nvim-lsp"
-        "hrsh7th/cmp-buffer"
-        "hrsh7th/cmp-path"
-      ];
-    }
-
-    {
-      plugin = "hrsh7th/cmp-nvim-lua";
-      branch = "main";
-      commit = "f12408bdb54c39c23e67cab726264c10db33ada8";
-    }
-
-    {
-      plugin = "hrsh7th/cmp-nvim-lsp";
-      branch = "main";
-      commit = "44b16d11215dce86f253ce0c30949813c0a90765";
-    }
-
-    {
-      plugin = "hrsh7th/cmp-buffer";
-      branch = "main";
-      commit = "3022dbc9166796b644a841a02de8dd1cc1d311fa";
-    }
-
-    {
-      plugin = "hrsh7th/cmp-path";
-      branch = "main";
-      commit = "91ff86cd9c29299a64f968ebb45846c485725f23";
-    }
+  treesitterLanguages = [
+    "bash"
+    "c"
+    "css"
+    "diff"
+    "dockerfile"
+    "gitignore"
+    "go"
+    "html"
+    "http"
+    "javascript"
+    "json"
+    "lua"
+    "make"
+    "nix"
+    "python"
+    "query"
+    "regex"
+    "rust"
+    "sql"
+    "svelte"
+    "terraform"
+    "vim"
+    "yaml"
   ];
+
+  plugins =
+    let
+      p = nativePlugins;
+    in
+    [
+      (p.catppuccin.lazy.override {
+        lazy = false;
+        priority = 1000;
+        config = mkRawLua ''
+          function()
+            vim.cmd [[colorscheme catppuccin]]
+          end
+        '';
+      })
+
+      p.plenary-nvim.lazy
+
+      (p.telescope-nvim.lazy.override {
+        dependencies =
+          if standalone
+          then [
+            p.plenary-nvim.lazy.plugin
+          ]
+          else null;
+      })
+
+      ((nativePlugins.nvim-treesitter.withParsers (p: map (lang: p."tree-sitter-${lang}") treesitterLanguages)).lazy.override {
+        config = mkRawLua ''
+          function()
+          ${optionalString (!standalone) (indent "  " ''
+            -- Disable compiling languages from source code.
+            require("nvim-treesitter.install").compilers = {
+              -- Alternatively, you can enable the compilers here.
+              -- ${toLua "${stdenv.cc}/bin/cc"}
+            }
+          '')}
+
+          ${optionalString standalone (indent "  " ''
+            -- Configure the plugin.
+            require("nvim-treesitter.configs").setup {
+              ensure_installed = {
+            ${concatMapStringsSep "\n" (lang: "    ${toLua lang},") treesitterLanguages}
+              },
+            }
+          '')}
+          end
+        '';
+      })
+
+      (p.nvim-lspconfig.lazy.override {
+        init = mkRawLua ''
+          function()
+            vim.schedule(function()
+              vim.cmd [[silent! do FileType]]
+            end, 0)
+          end
+        '';
+        config = mkRawLua ''
+          function()
+            local lspconfig = require("lspconfig")
+
+            -- Go
+            lspconfig.gopls.setup {
+              cmd = { ${toLua "${pkgs.gopls}/bin/gopls"} },
+            }
+
+            -- Lua
+            lspconfig.lua_ls.setup {
+              cmd = { ${toLua "${pkgs.lua-language-server}/bin/lua-language-server"} }
+            }
+
+            -- Nix
+            lspconfig.rnix.setup {
+              cmd = { ${toLua "${pkgs.rnix-lsp}/bin/rnix-lsp"} },
+            }
+          end
+        '';
+      })
+
+      (p.nvim-cmp.lazy.override {
+        event = "InsertEnter";
+        dependencies =
+          if standalone
+          then [
+            p.cmp-nvim-lua.lazy.plugin
+            p.cmp-nvim-lsp.lazy.plugin
+            p.cmp-buffer.lazy.plugin
+            p.cmp-path.lazy.plugin
+          ]
+          else null;
+      })
+
+      p.cmp-nvim-lua.lazy
+      p.cmp-nvim-lsp.lazy
+      p.cmp-buffer.lazy
+      p.cmp-path.lazy
+    ];
 in
 
 {
