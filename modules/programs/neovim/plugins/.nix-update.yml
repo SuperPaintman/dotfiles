@@ -101,3 +101,91 @@ packages:
             owner: hrsh7th
             repo: cmp-path
             rev: *commit
+
+    gitsigns-nvim:
+        type: github
+        extraAttrs:
+            plugin: lewis6991/gitsigns.nvim
+            # branch: main
+            commit: &commit dc2962f7fce953a2a98e7c6d3d7fc4c1d1f66758
+        args:
+            owner: lewis6991
+            repo: gitsigns.nvim
+            rev: *commit
+
+    comment-nvim:
+        type: github
+        extraAttrs:
+            plugin: numToStr/Comment.nvim
+            # branch: master
+            commit: &commit 3d22da7f8d72d3eafe1491a7f05ea775b930c481
+        args:
+            owner: numToStr
+            repo: Comment.nvim
+            rev: *commit
+
+    nvim-tree-lua:
+        type: github
+        extraAttrs:
+            plugin: nvim-tree/nvim-tree.lua
+            # branch: master
+            commit: &commit 4af572246ce49883e2a52c49203a19984454f2e0
+        args:
+            owner: nvim-tree
+            repo: nvim-tree.lua
+            rev: *commit
+
+    which-key-nvim:
+        type: github
+        extraAttrs:
+            plugin: folke/which-key.nvim
+            # branch: main
+            commit: &commit 65b36cc258e857dea92fc11cdc0d6e2bb01d3e87
+        args:
+            owner: folke
+            repo: which-key.nvim
+            rev: *commit
+
+    lualine-nvim:
+        type: github
+        extraAttrs:
+            plugin: nvim-lualine/lualine.nvim
+            # branch: master
+            commit: &commit 442d2ab757b4de6bc492186ff76ffed9746d772b
+        args:
+            owner: nvim-lualine
+            repo: lualine.nvim
+            rev: *commit
+
+    bufferline-nvim:
+        type: github
+        extraAttrs:
+            plugin: akinsho/bufferline.nvim
+            # branch: main
+            commit: &commit 2f391fde91b9c3876eee359ee24cc352050e5e48
+        args:
+            owner: akinsho
+            repo: bufferline.nvim
+            rev: *commit
+
+    null-ls-nvim:
+        type: github
+        extraAttrs:
+            plugin: jose-elias-alvarez/null-ls.nvim
+            # branch: main
+            commit: &commit e45670abdcda293282b7a00d0e2f7d473e7d6251
+        args:
+            owner: jose-elias-alvarez
+            repo: null-ls.nvim
+            rev: *commit
+
+    trouble-nvim:
+        type: github
+        extraAttrs:
+            plugin: folke/trouble.nvim
+            # branch: main
+            commit: &commit e7805dc3448f28599e022dc7a0e58060dfdeeb9a
+        args:
+            owner: folke
+            repo: trouble.nvim
+            rev: *commit

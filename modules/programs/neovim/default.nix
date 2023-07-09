@@ -8,6 +8,7 @@ let
   inherit (builtins) toJSON;
   inherit (pkgs) stdenv;
 
+  inherit (config.modules.home) standalone;
   cfg = config.modules.programs.neovim;
   standalone = config.modules.home.standalone;
 
@@ -21,10 +22,7 @@ let
     in
     concatStringsSep "\n" (reverseList (trim (reverseList (trim lines))));
 
-  indent' = ind: lines:
-    map
-      (line: "${ind}${line}")
-      lines;
+  indent' = ind: map (line: "${ind}${line}");
 
   indent = ind: content:
     let
@@ -183,7 +181,7 @@ let
         priority = 1000;
         config = mkRawLua ''
           function()
-            vim.cmd [[colorscheme catppuccin]]
+            vim.cmd([[colorscheme catppuccin]])
           end
         '';
       })
@@ -212,11 +210,11 @@ let
 
           ${optionalString standalone (indent "  " ''
             -- Configure the plugin.
-            require("nvim-treesitter.configs").setup {
+            require("nvim-treesitter.configs").setup({
               ensure_installed = {
             ${concatMapStringsSep "\n" (lang: "    ${toLua lang},") treesitterLanguages}
               },
-            }
+            })
           '')}
           end
         '';
@@ -226,28 +224,37 @@ let
         init = mkRawLua ''
           function()
             vim.schedule(function()
-              vim.cmd [[silent! do FileType]]
+              vim.cmd([[silent! do FileType]])
             end, 0)
           end
         '';
         config = mkRawLua ''
           function()
+          ${optionalString (!standalone) (indent "  " ''
             local lspconfig = require("lspconfig")
 
+            -- Helpers
+            local patch = function(name, patch)
+              local cfg = require("lspconfig.server_configurations." .. name)
+
+              cfg.default_config = vim.tbl_extend("force", cfg.default_config, patch)
+            end
+
             -- Go
-            lspconfig.gopls.setup {
+            patch("gopls", {
               cmd = { ${toLua "${pkgs.gopls}/bin/gopls"} },
-            }
+            })
 
             -- Lua
-            lspconfig.lua_ls.setup {
-              cmd = { ${toLua "${pkgs.lua-language-server}/bin/lua-language-server"} }
-            }
+            patch("lua_ls", {
+              cmd = { ${toLua "${pkgs.lua-language-server}/bin/lua-language-server"} },
+            })
 
             -- Nix
-            lspconfig.rnix.setup {
+            patch("rnix", {
               cmd = { ${toLua "${pkgs.rnix-lsp}/bin/rnix-lsp"} },
-            }
+            })
+          '')}
           end
         '';
       })
@@ -269,6 +276,67 @@ let
       p.cmp-nvim-lsp.lazy
       p.cmp-buffer.lazy
       p.cmp-path.lazy
+
+      p.gitsigns-nvim.lazy
+
+      p.comment-nvim.lazy
+
+      p.nvim-tree-lua.lazy
+
+      p.which-key-nvim.lazy
+
+      p.lualine-nvim.lazy
+
+      p.bufferline-nvim.lazy
+
+      (p.null-ls-nvim.lazy.override {
+        config = mkRawLua ''
+          function()
+          ${optionalString (!standalone) (indent "  " ''
+            local null_ls = require("null-ls")
+
+            -- Helpers
+            local patch = function(kind, name, patch)
+              null_ls.builtins[kind][name] = null_ls.builtins[kind][name].with(patch)
+            end
+
+            -- Diagnostics
+            --- cspell
+            patch("diagnostics", "cspell", {
+              command = ${toLua "${pkgs.nodePackages.cspell}/bin/cspell"},
+            })
+
+            --- staticcheck
+            patch("diagnostics", "staticcheck", {
+              command = ${toLua "${pkgs.go-tools}/bin/staticcheck"},
+            })
+
+            --- statix
+            patch("diagnostics", "statix", {
+              command = ${toLua "${pkgs.statix}/bin/statix"},
+            })
+
+            -- Formatting
+            --- goimports
+            patch("formatting", "goimports", {
+              command = ${toLua "${pkgs.gotools}/bin/goimports"},
+            })
+
+            --- prettier
+            patch("formatting", "prettier", {
+              command = ${toLua "${pkgs.nodePackages.prettier}/bin/prettier"},
+            })
+
+            --- stylua
+            patch("formatting", "stylua", {
+              command = ${toLua "${pkgs.stylua}/bin/stylua"},
+            })
+          '')}
+          end
+        '';
+      })
+
+      p.trouble-nvim.lazy
     ];
 in
 
