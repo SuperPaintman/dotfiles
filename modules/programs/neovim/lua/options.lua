@@ -81,7 +81,7 @@ opt.ignorecase = true
 
 -- The value of this option influences when the last window will have a status
 -- line.
-opt.laststatus = 2 -- always
+opt.laststatus = 3 -- always and ONLY the last window
 
 -- Set default number of lines of the window.
 opt.lines = old_lines
