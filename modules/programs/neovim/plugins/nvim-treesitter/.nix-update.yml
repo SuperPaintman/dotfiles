@@ -56,6 +56,7 @@ packages:
                         "make",
                         "nix",
                         "org",
+                        "proto",
                         "python",
                         "query",
                         "rasi",

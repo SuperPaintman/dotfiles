@@ -159,6 +159,7 @@ let
     "lua"
     "make"
     "nix"
+    "proto"
     "python"
     "query"
     "regex"

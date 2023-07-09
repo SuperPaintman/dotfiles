@@ -333,6 +333,17 @@
     language = "org";
   };
 
+  tree-sitter-proto = {
+    pname = "tree-sitter-proto";
+    version = "0.0.0+rev=42d82fa";
+    src = fetchgit {
+      url = "https://github.com/mitchellh/tree-sitter-proto";
+      rev = "42d82fa18f8afe59b5fc0b16c207ee4f84cb185f";
+      sha256 = "sha256-cX+0YARIa9i8UymPPviyoj+Wh37AFYl9fsoNZMQXPgA=";
+    };
+    language = "proto";
+  };
+
   tree-sitter-python = {
     pname = "tree-sitter-python";
     version = "0.0.0+rev=36f9e33";
