@@ -9,4 +9,3 @@ buildTreesitterParser rec {
   '';
   generate = true;
 }
-
