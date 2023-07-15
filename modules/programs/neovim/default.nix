@@ -394,6 +394,10 @@ in
           source = ./lua/configs;
           recursive = true;
         };
+        "nvim/lua/modules" = {
+          source = ./lua/modules;
+          recursive = true;
+        };
         "nvim/lua/snippets" = {
           source = ./lua/snippets;
           recursive = true;

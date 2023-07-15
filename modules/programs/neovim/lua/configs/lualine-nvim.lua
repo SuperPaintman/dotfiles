@@ -1,5 +1,10 @@
 -- See: https://github.com/nvim-lualine/lualine.nvim
 --------------------------------------------------------------------------------
+-- Imports
+--------------------------------------------------------------------------------
+local autoformat = require("modules.autoformat")
+
+--------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
 local M = {}
@@ -236,6 +241,22 @@ M.config = function()
   insert_right({
     "filetype",
     color = { fg = colors.blue, gui = "bold" },
+    cond = function()
+      return not is_nvimtree_buffer()
+    end,
+  })
+
+  --- Autoformat.
+  insert_right({
+    const("󰧞"),
+    color = function()
+      local color = colors.text
+      if autoformat.enabled() then
+        color = colors.green
+      end
+
+      return { fg = color }
+    end,
     cond = function()
       return not is_nvimtree_buffer()
     end,
