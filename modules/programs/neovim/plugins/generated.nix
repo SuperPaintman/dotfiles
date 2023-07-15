@@ -1,6 +1,19 @@
 { fetchFromGitHub, ... }:
 
 {
+  alpha-nvim = {
+    pname = "alpha-nvim";
+    version = "0.0.0+rev=9e33db3";
+    src = fetchFromGitHub {
+      owner = "goolord";
+      repo = "alpha-nvim";
+      rev = "9e33db324b8bb7a147bce9ea5496686ee859461d";
+      sha256 = "sha256-DgKL4BgEVGSESxdBf8CbWMeAkcN/7vi1DuqIZVvmtlA=";
+    };
+    commit = "9e33db324b8bb7a147bce9ea5496686ee859461d";
+    plugin = "goolord/alpha-nvim";
+  };
+
   bufferline-nvim = {
     pname = "bufferline-nvim";
     version = "0.0.0+rev=2f391fd";
@@ -144,6 +157,19 @@
     plugin = "L3MON4D3/LuaSnip";
   };
 
+  neogit = {
+    pname = "neogit";
+    version = "0.0.0+rev=33016ad";
+    src = fetchFromGitHub {
+      owner = "NeogitOrg";
+      repo = "neogit";
+      rev = "33016ad20b92b7eb83d27880b4abfbce53b467ad";
+      sha256 = "sha256-53+k+nFsRjdQlX+f4ZPepbGQSGXBodN5OQsRY0T8puU=";
+    };
+    commit = "33016ad20b92b7eb83d27880b4abfbce53b467ad";
+    plugin = "NeogitOrg/neogit";
+  };
+
   null-ls-nvim = {
     pname = "null-ls-nvim";
     version = "0.0.0+rev=e45670a";
@@ -207,6 +233,19 @@
     };
     commit = "2b81a018a49f8e476341dfcb228b7b808baba68b";
     plugin = "nvim-treesitter/playground";
+  };
+
+  nvim-web-devicons = {
+    pname = "nvim-web-devicons";
+    version = "0.0.0+rev=9ab9b0b";
+    src = fetchFromGitHub {
+      owner = "nvim-tree";
+      repo = "nvim-web-devicons";
+      rev = "9ab9b0b894b2388a9dbcdee5f00ce72e25d85bf9";
+      sha256 = "sha256-lN8LUgQ0sJDMByFkUmfVy6h2EVPAP3hqrwqE0++XgMQ=";
+    };
+    commit = "9ab9b0b894b2388a9dbcdee5f00ce72e25d85bf9";
+    plugin = "nvim-tree/nvim-web-devicons";
   };
 
   plenary-nvim = {

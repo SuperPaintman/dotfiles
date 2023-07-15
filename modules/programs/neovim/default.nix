@@ -298,7 +298,14 @@ let
 
       p.comment-nvim.lazy
 
-      p.nvim-tree-lua.lazy
+      (p.nvim-tree-lua.lazy.override {
+        dependencies =
+          if standalone
+          then [
+            p.nvim-web-devicons.lazy.plugin
+          ]
+          else null;
+      })
 
       p.which-key-nvim.lazy
 
@@ -353,9 +360,29 @@ let
         '';
       })
 
-      p.trouble-nvim.lazy
+      (p.trouble-nvim.lazy.override {
+        dependencies =
+          if standalone
+          then [
+            p.nvim-web-devicons.lazy.plugin
+          ]
+          else null;
+      })
 
       p.luasnip.lazy
+
+      p.alpha-nvim.lazy
+
+      p.nvim-web-devicons.lazy
+
+      (p.neogit.lazy.override {
+        dependencies =
+          if standalone
+          then [
+            p.plenary-nvim.lazy.plugin
+          ]
+          else null;
+      })
     ];
 in
 

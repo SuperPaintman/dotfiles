@@ -222,3 +222,36 @@ packages:
             owner: L3MON4D3
             repo: LuaSnip
             rev: *commit
+
+    alpha-nvim:
+        type: github
+        extraAttrs:
+            plugin: goolord/alpha-nvim
+            # branch: main
+            commit: &commit 9e33db324b8bb7a147bce9ea5496686ee859461d
+        args:
+            owner: goolord
+            repo: alpha-nvim
+            rev: *commit
+
+    nvim-web-devicons:
+        type: github
+        extraAttrs:
+            plugin: nvim-tree/nvim-web-devicons
+            # branch: master
+            commit: &commit 9ab9b0b894b2388a9dbcdee5f00ce72e25d85bf9
+        args:
+            owner: nvim-tree
+            repo: nvim-web-devicons
+            rev: *commit
+
+    neogit:
+        type: github
+        extraAttrs:
+            plugin: NeogitOrg/neogit
+            # branch: master
+            commit: &commit 33016ad20b92b7eb83d27880b4abfbce53b467ad
+        args:
+            owner: NeogitOrg
+            repo: neogit
+            rev: *commit
