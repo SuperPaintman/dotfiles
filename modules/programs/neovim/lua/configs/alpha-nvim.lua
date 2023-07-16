@@ -19,6 +19,18 @@ local function restore_last_session()
   autosession.RestoreSession()
 end
 
+local function can_open_file_explorer()
+  local ok, _ = pcall(require, "nvim-tree.api")
+  return ok
+end
+
+local function open_file_explorer()
+  local nvimtree_api = require("nvim-tree.api")
+  nvimtree_api.tree.open({
+    current_window = true,
+  })
+end
+
 --- @param sc string
 --- @param txt string
 --- @param keybind string?
@@ -135,6 +147,19 @@ local function buttons()
       val,
       button("s", "  Restore last session", "", {
         callback = restore_last_session,
+        noremap = true,
+        silent = true,
+        nowait = true,
+      })
+    )
+  end
+
+  -- Open file explorer.
+  if can_open_file_explorer() then
+    table.insert(
+      val,
+      button("f", "  Open file explorer", "", {
+        callback = open_file_explorer,
         noremap = true,
         silent = true,
         nowait = true,
