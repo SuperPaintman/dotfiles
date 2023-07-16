@@ -380,9 +380,14 @@ let
           if standalone
           then [
             p.plenary-nvim.lazy.plugin
+            p.diffview-nvim.lazy.plugin
           ]
           else null;
       })
+
+      p.auto-session.lazy
+
+      p.diffview-nvim.lazy
     ];
 in
 

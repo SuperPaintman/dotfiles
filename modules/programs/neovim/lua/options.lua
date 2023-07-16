@@ -110,6 +110,28 @@ opt.number = true
 -- Minimal number of screen lines to keep above and below the cursor.
 opt.scrolloff = 10
 
+-- Changes the effect of the :mksession command.
+opt.sessionoptions = {
+  -- empty windows
+  "blank",
+  -- hidden and unloaded buffers, not just those in windows.
+  "buffers",
+  -- the current directory.
+  "curdir",
+  -- manually created folds, opened/closed folds and local fold options.
+  -- "folds",
+  -- options and mappings local to a window or buffer (not global values for local options).
+  -- "localoptions",
+  -- size of the Vim window: 'lines' and 'columns'.
+  "resize",
+  --all tab pages; without this only the current tab page is restored, so that you can make a session for each tab page separately.
+  "tabpages",
+  -- position of the whole Vim window.
+  "winpos",
+  -- window sizes.
+  "winsize",
+}
+
 -- Number of spaces to use for each step of (auto)indent.
 opt.shiftwidth = 2
 
@@ -154,8 +176,8 @@ opt.tabstop = 2
 
 -- Enables 24-bit RGB color in the TUI.
 if
-    (env.TERM or ""):sub(-1 * string.len("-256color")) == "-256color"
-    or env.COLORTERM == "truecolor"
+  (env.TERM or ""):sub(-1 * string.len("-256color")) == "-256color"
+  or env.COLORTERM == "truecolor"
 then
   opt.termguicolors = true
 end

@@ -14,6 +14,19 @@
     plugin = "goolord/alpha-nvim";
   };
 
+  auto-session = {
+    pname = "auto-session";
+    version = "0.0.0+rev=7afbb14";
+    src = fetchFromGitHub {
+      owner = "rmagatti";
+      repo = "auto-session";
+      rev = "7afbb149f87be279778689596c781882014f7eef";
+      sha256 = "sha256-bmNrQQnaA+c9DsSTChS87Ir9+xlhlue9yl4VmqXWaB8=";
+    };
+    commit = "7afbb149f87be279778689596c781882014f7eef";
+    plugin = "rmagatti/auto-session";
+  };
+
   bufferline-nvim = {
     pname = "bufferline-nvim";
     version = "0.0.0+rev=2f391fd";
@@ -116,6 +129,19 @@
     };
     commit = "3d22da7f8d72d3eafe1491a7f05ea775b930c481";
     plugin = "numToStr/Comment.nvim";
+  };
+
+  diffview-nvim = {
+    pname = "diffview-nvim";
+    version = "0.0.0+rev=766a4f2";
+    src = fetchFromGitHub {
+      owner = "sindrets";
+      repo = "diffview.nvim";
+      rev = "766a4f210e67e522659302dc6bd8a8d3b8c08c54";
+      sha256 = "sha256-UCESOnaVwRwKfK0WB0/woKc+3zr1vqBTMckSiUxD2Ls=";
+    };
+    commit = "766a4f210e67e522659302dc6bd8a8d3b8c08c54";
+    plugin = "sindrets/diffview.nvim";
   };
 
   gitsigns-nvim = {
