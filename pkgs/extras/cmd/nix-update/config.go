@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"text/template"
 
 	"gopkg.in/yaml.v3"
 )
@@ -19,6 +21,37 @@ type Package struct {
 	Args            PackageArgs            `yaml:"args"`
 	BuildInputs     []string               `yaml:"buildInputs"`
 	After           []*Command             `yaml:"after"`
+}
+
+func (p *Package) Preprocess() error {
+	// Args.
+	if p.Args != nil {
+		if err := p.Args.preprocess(p); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func preprocessPackageField(p *Package, field *string) error {
+	if field == nil {
+		return nil
+	}
+
+	tmpl, err := template.New("").Parse(*field)
+	if err != nil {
+		return fmt.Errorf("nix-update: failed to parse template: %w", err)
+	}
+
+	var buf bytes.Buffer
+	if err := tmpl.Execute(&buf, p); err != nil {
+		return fmt.Errorf("nix-update: failed to execute template: %w", err)
+	}
+
+	*field = buf.String()
+
+	return nil
 }
 
 func (p *Package) Version() string {
@@ -71,6 +104,13 @@ func (p *Package) UnmarshalYAML(value *yaml.Node) error {
 			}
 			args = &a
 
+		case PackageTypeURL:
+			var a PackageURLArgs
+			if err := pkg.Args.Decode(&a); err != nil {
+				return err
+			}
+			args = &a
+
 		default:
 			return fmt.Errorf("nix-update: unknown package type: %s", pkg.Type)
 		}
@@ -98,10 +138,12 @@ type PackageType string
 const (
 	PackageTypeGit    = "git"
 	PackageTypeGithub = "github"
+	PackageTypeURL    = "url"
 )
 
 type PackageArgs interface {
 	packageArgs()
+	preprocess(*Package) error
 }
 
 type PackageGitArgs struct {
@@ -111,6 +153,18 @@ type PackageGitArgs struct {
 
 func (*PackageGitArgs) packageArgs() {}
 
+func (a *PackageGitArgs) preprocess(p *Package) error {
+	if err := preprocessPackageField(p, &a.URL); err != nil {
+		return err
+	}
+
+	if err := preprocessPackageField(p, &a.Rev); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 type PackageGithubArgs struct {
 	Owner string `yaml:"owner"`
 	Repo  string `yaml:"repo"`
@@ -118,6 +172,36 @@ type PackageGithubArgs struct {
 }
 
 func (*PackageGithubArgs) packageArgs() {}
+
+func (a *PackageGithubArgs) preprocess(p *Package) error {
+	if err := preprocessPackageField(p, &a.Owner); err != nil {
+		return err
+	}
+
+	if err := preprocessPackageField(p, &a.Rev); err != nil {
+		return err
+	}
+
+	if err := preprocessPackageField(p, &a.Repo); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+type PackageURLArgs struct {
+	URL string `yaml:"url"`
+}
+
+func (*PackageURLArgs) packageArgs() {}
+
+func (a *PackageURLArgs) preprocess(p *Package) error {
+	if err := preprocessPackageField(p, &a.URL); err != nil {
+		return err
+	}
+
+	return nil
+}
 
 type CommandType string
 

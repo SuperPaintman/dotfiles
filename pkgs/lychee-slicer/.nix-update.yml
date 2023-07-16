@@ -1,0 +1,7 @@
+output: generated.nix
+packages:
+    lychee-slicer:
+        type: url
+        version: 5.2.2
+        args:
+            url: https://mango-lychee.nyc3.cdn.digitaloceanspaces.com/LycheeSlicer-{{ .Version }}.AppImage

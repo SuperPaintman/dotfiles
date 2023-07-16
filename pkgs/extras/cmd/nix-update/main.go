@@ -201,6 +201,11 @@ func (u *Updater) Update(ctx context.Context, dir, filename string) error {
 		}
 		u.knownPackages[id] = struct{}{}
 
+		// Preprocess the package.
+		if err := pkg.Preprocess(); err != nil {
+			return fmt.Errorf("nix-update: failed to preprocess %s package: %w", name, err)
+		}
+
 		if err := u.updatePackage(ctx, &gen, dir, name, pkg); err != nil {
 			return err
 		}
@@ -250,6 +255,9 @@ func (u *Updater) updatePackage(ctx context.Context, gen *generatedFile, dir, na
 
 	case PackageTypeGithub:
 		fetch, err = u.prefetchGithubPackage(ctx, pkg.Args.(*PackageGithubArgs))
+
+	case PackageTypeURL:
+		fetch, err = u.prefetchURLPackage(ctx, pkg.Args.(*PackageURLArgs))
 
 	default:
 		return fmt.Errorf("nix-update: unknown package type: %s", pkg.Type)
@@ -397,6 +405,35 @@ func (u *Updater) prefetchGithubPackage(ctx context.Context, a *PackageGithubArg
 
 	return &fetcher{
 		name: "fetchFromGitHub",
+		args: fetcherArgs,
+	}, nil
+}
+
+func (u *Updater) prefetchURLPackage(ctx context.Context, a *PackageURLArgs) (*fetcher, error) {
+	args := make([]string, 0, 8)
+	args = append(args, "fetchurl")
+	if a != nil {
+		if a.URL != "" {
+			args = append(args, "--arg", "url", strconv.Quote(a.URL))
+		}
+	}
+
+	hash, err := u.nixPrefetch(ctx, args)
+	if err != nil {
+		return nil, err
+	}
+
+	fetcherArgs := make([]string, 0, 4)
+	if a != nil {
+		if a.URL != "" {
+			fetcherArgs = append(fetcherArgs, fmt.Sprintf(`url = %q`, a.URL))
+		}
+	}
+
+	fetcherArgs = append(fetcherArgs, fmt.Sprintf(`sha256 = %q`, hash))
+
+	return &fetcher{
+		name: "fetchurl",
 		args: fetcherArgs,
 	}, nil
 }
