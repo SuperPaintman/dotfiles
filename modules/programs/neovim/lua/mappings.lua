@@ -57,23 +57,42 @@ local function add_mappings(prefix, group, safe)
   safe = safe or false
 
   if group.mappings ~= nil then
-    for key, mapping in pairs(group.mappings) do
-      if safe then
-        safe_add_mapping(
-          mapping[1],
-          prefix .. key,
-          mapping[2],
-          mapping[3],
-          mapping[4]
-        )
-      else
-        add_mapping(
-          mapping[1],
-          prefix .. key,
-          mapping[2],
-          mapping[3],
-          mapping[4]
-        )
+    for key, mappings in pairs(group.mappings) do
+      -- Ckeck if mappings has different modes.
+      mappings = mappings
+
+      local multiple = true
+      for _, mapping in ipairs(mappings) do
+        multiple = type(mapping) == "table"
+
+        if not multiple then
+          break
+        end
+      end
+
+      -- Normalize.
+      if not multiple then
+        mappings = { mappings }
+      end
+
+      for _, mapping in ipairs(mappings) do
+        if safe then
+          safe_add_mapping(
+            mapping[1],
+            prefix .. key,
+            mapping[2],
+            mapping[3],
+            mapping[4]
+          )
+        else
+          add_mapping(
+            mapping[1],
+            prefix .. key,
+            mapping[2],
+            mapping[3],
+            mapping[4]
+          )
+        end
       end
     end
   end
@@ -137,7 +156,18 @@ vim.g.maplocalleader = "\\"
 --------------------------------------------------------------------------------
 -- Mappings
 --------------------------------------------------------------------------------
--- Find
+-- Move lines.
+M.mappings["<M-j>"] = {
+  { "n", [[:move +1<CR>]] },
+  { "v", [[:move '>+1<CR>gv=gv]] },
+}
+M.mappings["<M-k>"] = {
+  { "n", [[:move -2<CR>]] },
+  { "v", [[:move -2<CR>gv=gv]] },
+}
+
+-- Leader
+--- Find
 M.groups.f = {
   name = "find",
   prefix = "<leader>f",
@@ -150,7 +180,7 @@ M.groups.f = {
   },
 }
 
--- Git
+--- Git
 M.groups.g = {
   name = "git",
   prefix = "<leader>g",
@@ -158,6 +188,15 @@ M.groups.g = {
     g = { "n", neogit.open(), "Open Neogit" },
   },
 }
+
+--- Yank
+M.mappings["<leader>y"] = { { "n", "v" }, [["+y]], "Yank to clipboard" }
+
+--- Put
+M.mappings["<leader>p"] =
+  { { "n", "v" }, [["+p]], "Put from clipboard after cursor" }
+M.mappings["<leader>P"] =
+  { { "n", "v" }, [["+P]], "Put from clipboard before cursot" }
 
 --------------------------------------------------------------------------------
 -- Register
