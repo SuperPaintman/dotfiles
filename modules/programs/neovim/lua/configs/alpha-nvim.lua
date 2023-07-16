@@ -80,7 +80,27 @@ local function logo()
     },
     opts = {
       position = "center",
-      hl = "Type",
+      hl = "Comment",
+    },
+  }
+end
+
+local cats = {
+  { [[ฅ^•ﻌ•^ฅ]] },
+  { [[(=^･ω･^=)]] },
+  { [[(=ච ω ච=)]] },
+  { [[(= ФェФ=)]] },
+}
+
+local function cat()
+  local idx = math.floor(#cats * math.random()) + 1
+
+  return {
+    type = "text",
+    val = cats[idx],
+    opts = {
+      position = "center",
+      hl = "Comment",
     },
   }
 end
@@ -98,7 +118,7 @@ local function header()
     },
     opts = {
       position = "center",
-      hl = "Type",
+      hl = "Comment",
     },
   }
 end
@@ -148,10 +168,13 @@ end
 M.config = function()
   require("alpha").setup({
     layout = {
-      { type = "padding", val = 1 },
+      { type = "padding", val = 10 },
       header(),
       { type = "padding", val = 1 },
+      cat(),
+      { type = "padding", val = 1 },
       buttons(),
+      { type = "padding", val = 10 },
       footer(),
     },
     opts = {
