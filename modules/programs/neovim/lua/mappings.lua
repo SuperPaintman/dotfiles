@@ -200,7 +200,7 @@ M.groups.g = {
   },
 }
 
--- Refactoring.
+--- Refactoring.
 M.groups.r = {
   name = "refactoring",
   prefix = "<leader>r",
