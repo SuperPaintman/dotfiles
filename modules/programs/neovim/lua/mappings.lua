@@ -156,6 +156,17 @@ vim.g.maplocalleader = "\\"
 --------------------------------------------------------------------------------
 -- Mappings
 --------------------------------------------------------------------------------
+-- Go to.
+M.mappings["gd"] = { "n", vim.lsp.buf.definition, "Go to the definition" }
+M.mappings["gD"] =
+  { "n", vim.lsp.buf.type_definition, "Go to the type definition" }
+M.mappings["gI"] =
+  { "n", vim.lsp.buf.implementation, "Go to the implementation" }
+M.mappings["gr"] = { "n", vim.lsp.buf.references, "Go to references" }
+
+-- Hover.
+M.mappings["H"] = { "n", vim.lsp.buf.hover, "Hover" }
+
 -- Move lines.
 M.mappings["<M-j>"] = {
   { "n", [[:move +1<CR>]] },
@@ -186,6 +197,15 @@ M.groups.g = {
   prefix = "<leader>g",
   mappings = {
     g = { "n", neogit.open(), "Open Neogit" },
+  },
+}
+
+-- Refactoring.
+M.groups.r = {
+  name = "refactoring",
+  prefix = "<leader>r",
+  mappings = {
+    r = { "n", vim.lsp.buf.rename, "Rename" },
   },
 }
 
