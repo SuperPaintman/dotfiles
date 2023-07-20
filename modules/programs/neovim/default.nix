@@ -146,6 +146,19 @@ let
     in
     "  {\n${indent "    " spec}\n  },";
 
+  formatLua = name: source: pkgs.runCommand name
+    {
+      inherit source;
+      buildInputs = with pkgs; [ stylua ];
+      passAsFile = [ "source" ];
+      allowSubstitutes = false;
+      preferLocalBuild = true;
+    }
+    ''
+      mv "$sourcePath" "$out"
+      stylua --config-path ${../../../.stylua.toml} "$out"
+    '';
+
   nativePlugins = pkgs.callPackage ./plugins {
     neovim = cfg.package;
   };
@@ -438,7 +451,7 @@ in
           source = ./lua/utils;
           recursive = true;
         };
-        "nvim/lua/lazyinit.lua".text = ''
+        "nvim/lua/lazyinit.lua".source = formatLua "nvim-lua-lazyinit.lua" ''
           --------------------------------------------------------------------------------
           -- Imports
           --------------------------------------------------------------------------------
