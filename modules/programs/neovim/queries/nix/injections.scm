@@ -1,3 +1,5 @@
+;; extends
+
 ;; Inject lua language into `mkRawLua` expressions:
 ;;     mkRawLua ''local a = 1''
 ;;                ^^^^^^^^^^^

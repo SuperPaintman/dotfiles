@@ -149,7 +149,7 @@ let
   formatLua = name: source: pkgs.runCommand name
     {
       inherit source;
-      buildInputs = with pkgs; [ stylua ];
+      nativeBuildInputs = with pkgs; [ stylua ];
       passAsFile = [ "source" ];
       allowSubstitutes = false;
       preferLocalBuild = true;
@@ -176,6 +176,7 @@ let
     "javascript"
     "json"
     "lua"
+    "luadoc"
     "make"
     "nix"
     "proto"

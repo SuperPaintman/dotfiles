@@ -3,6 +3,8 @@
 --------------------------------------------------------------------------------
 local M = {}
 
+local HOME = vim.env.HOME or ""
+
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
@@ -24,6 +26,11 @@ M.config = function()
   })
 
   -- Lua
+  local lua_ls_blacklist_runtime_files = {
+    -- Avoid duplicates with the dotfiles.
+    [vim.fs.normalize(HOME .. "/.config/nvim")] = true,
+  }
+
   lspconfig.lua_ls.setup({
     -- See: https://github.com/LuaLS/lua-language-server/wiki/Settings
     settings = {
@@ -35,9 +42,20 @@ M.config = function()
           globals = { "vim" },
         },
         workspace = {
-          -- Disables "Do you need to configure your work environment as".
+          -- Disable "Do you need to configure your work environment as".
           checkThirdParty = false,
-          library = vim.api.nvim_get_runtime_file("", true),
+          library = vim.tbl_filter(function(file)
+            return not lua_ls_blacklist_runtime_files[file]
+          end, vim.api.nvim_get_runtime_file("", true)),
+        },
+        semantic = {
+          enable = false,
+
+          -- Disable highlightning for type annotations.
+          annotation = false,
+
+          -- Disable highlightning for variables, fields, and parameters.
+          variable = false,
         },
         telemetry = {
           enable = false,
