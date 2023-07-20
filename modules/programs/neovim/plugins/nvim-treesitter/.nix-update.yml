@@ -10,7 +10,7 @@ packages:
             owner: nvim-treesitter
             repo: nvim-treesitter
             rev: *commit
-        buildInputs:
+        nativeBuildInputs:
             - jq
             - yj
             - lua51Packages.lua

@@ -14,13 +14,14 @@ type Config struct {
 }
 
 type Package struct {
-	Type            PackageType            `yaml:"type"`
-	Pname           string                 `yaml:"pname"`
-	VersionOverride string                 `yaml:"version"`
-	ExtraAttrs      map[string]interface{} `yaml:"extraAttrs"`
-	Args            PackageArgs            `yaml:"args"`
-	BuildInputs     []string               `yaml:"buildInputs"`
-	After           []*Command             `yaml:"after"`
+	Type              PackageType            `yaml:"type"`
+	Pname             string                 `yaml:"pname"`
+	VersionOverride   string                 `yaml:"version"`
+	ExtraAttrs        map[string]interface{} `yaml:"extraAttrs"`
+	Args              PackageArgs            `yaml:"args"`
+	BuildInputs       []string               `yaml:"buildInputs"`
+	NativeBuildInputs []string               `yaml:"nativeBuildInputs"`
+	After             []*Command             `yaml:"after"`
 }
 
 func (p *Package) Preprocess() error {
@@ -74,13 +75,14 @@ func (p *Package) Version() string {
 
 func (p *Package) UnmarshalYAML(value *yaml.Node) error {
 	pkg := struct {
-		Type        PackageType            `yaml:"type"`
-		Pname       string                 `yaml:"pname"`
-		Version     string                 `yaml:"version"`
-		ExtraAttrs  map[string]interface{} `yaml:"extraAttrs"`
-		Args        yaml.Node              `yaml:"args"`
-		BuildInputs []string               `yaml:"buildInputs"`
-		After       []*Command             `yaml:"after"`
+		Type              PackageType            `yaml:"type"`
+		Pname             string                 `yaml:"pname"`
+		Version           string                 `yaml:"version"`
+		ExtraAttrs        map[string]interface{} `yaml:"extraAttrs"`
+		Args              yaml.Node              `yaml:"args"`
+		BuildInputs       []string               `yaml:"buildInputs"`
+		NativeBuildInputs []string               `yaml:"nativeBuildInputs"`
+		After             []*Command             `yaml:"after"`
 	}{}
 
 	if err := value.Decode(&pkg); err != nil {

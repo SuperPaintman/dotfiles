@@ -529,6 +529,16 @@ func (u *Updater) runAfterScripts(ctx context.Context, name string, pkg *Package
 		w.WriteString("\n")
 	}
 
+	// Native build inputs.
+	if len(pkg.NativeBuildInputs) > 0 {
+		w.WriteString(`  nativeBuildInputs = map (name: lib.getAttrFromPath (lib.splitString "." name) pkgs) [` + "\n")
+		for _, bi := range pkg.NativeBuildInputs {
+			fmt.Fprintf(w, "    %q\n", bi)
+		}
+		w.WriteString("  ];\n")
+		w.WriteString("\n")
+	}
+
 	// Build Phase.
 	w.WriteString("  buildPhase = ''\n")
 
