@@ -1,9 +1,13 @@
+-- See: https://github.com/NeogitOrg/neogit
 --------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
 local M = {
   _initialized = false,
 }
+
+local autocmd = vim.api.nvim_create_autocmd
+local augroup = vim.api.nvim_create_augroup
 
 local cb = require("utils.mappings").create_callback_factory(
   M,
@@ -14,7 +18,31 @@ local cb = require("utils.mappings").create_callback_factory(
 -- Modules
 --------------------------------------------------------------------------------
 M.config = function()
-  require("neogit").setup({})
+  require("neogit").setup({
+    disable_hint = true,
+    -- TODO(SuperPaintman): move these signs into the icons config.
+    signs = {
+      section = { "", "" },
+      item = { "", "" },
+      hunk = { "", "" },
+    },
+  })
+
+  autocmd("BufEnter", {
+    group = augroup("ConfigsNeogitStatusOptions", { clear = true }),
+    pattern = "NeogitStatus",
+    callback = function()
+      local winid = vim.api.nvim_get_current_win()
+
+      -- Disable column highlighting.
+      vim.wo[winid].colorcolumn = false
+
+      -- Hide special characters.
+      vim.wo[winid].list = false
+      vim.wo[winid].listchars = false
+    end,
+  })
+
   M._initialized = true
 end
 
