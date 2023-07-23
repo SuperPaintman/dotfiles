@@ -3,6 +3,8 @@
 -- Imports
 --------------------------------------------------------------------------------
 local autoformat = require("modules.autoformat")
+-- TODO(SuperPaintman): Use links instead of colors.
+local colors = require("theme.palette").colors
 
 --------------------------------------------------------------------------------
 -- Init
@@ -13,35 +15,14 @@ local M = {}
 local SEP = "/"
 local HOME = vim.env.HOME or ""
 
--- TODO(SuperPaintman): Use colors from the theme.
--- See: https://github.com/catppuccin/nvim/blob/main/lua/catppuccin/palettes/mocha.lua
-local colors = {
-  rosewater = "#f5e0dc",
-  flamingo = "#f2cdcd",
-  pink = "#f5c2e7",
-  mauve = "#cba6f7",
-  red = "#f38ba8",
-  maroon = "#eba0ac",
-  peach = "#fab387",
-  yellow = "#f9e2af",
-  green = "#a6e3a1",
-  teal = "#94e2d5",
-  sky = "#89dceb",
-  sapphire = "#74c7ec",
-  blue = "#89b4fa",
-  lavender = "#b4befe",
-  text = "#cdd6f4",
-  subtext1 = "#bac2de",
-  subtext0 = "#a6adc8",
-  overlay2 = "#9399b2",
-  overlay1 = "#7f849c",
-  overlay0 = "#6c7086",
-  surface2 = "#585b70",
-  surface1 = "#45475a",
-  surface0 = "#313244",
-  base = "#1e1e2e",
-  mantle = "#181825",
-  crust = "#11111b",
+-- TODO(SuperPaintman): Use links instead of colors.
+local MODE_COLORS = {
+  normal = colors.blue,
+  insert = colors.green,
+  terminal = colors.green,
+  command = colors.yellow,
+  visual = colors.magenta,
+  replace = colors.red,
 }
 
 --------------------------------------------------------------------------------
@@ -118,38 +99,20 @@ local function has_lsp_server()
   return false
 end
 
-local function mode_color(theme)
-  if theme == nil then
-    theme = require("lualine.themes.auto")
-  end
-
+local function mode_color()
   local mode = require("lualine.highlight").get_mode_suffix()
   if mode == nil then
     return nil
   end
 
   mode = string.sub(mode, 2)
-
-  local mode_colors = theme[mode]
-  if mode_colors == nil then
-    return nil
-  end
-
-  local section_colors = mode_colors.a
-  if section_colors == nil then
-    return nil
-  end
-
-  return section_colors.bg
+  return MODE_COLORS[mode]
 end
 
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
 M.config = function()
-  -- Imports.
-  local theme = require("lualine.themes.auto")
-
   -- Init.
   local sections = {
     lualine_a = {},
@@ -197,7 +160,7 @@ M.config = function()
   insert_left({
     const(""),
     color = function()
-      return { fg = mode_color(theme) }
+      return { fg = mode_color() }
     end,
     padding = { right = 1 },
   })
@@ -250,7 +213,7 @@ M.config = function()
   insert_right({
     const("󰧞"),
     color = function()
-      local color = colors.text
+      local color = colors.foreground
       if autoformat.enabled() then
         color = colors.green
       end
@@ -322,9 +285,6 @@ M.config = function()
   -- Setup.
   require("lualine").setup({
     options = {
-      -- Theme.
-      theme = theme,
-
       -- Disable sections and component separators.
       component_separators = "",
       section_separators = "",
