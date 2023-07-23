@@ -130,13 +130,17 @@ M.setup = function(opts)
   ---- Constant.
   l("@constant.builtin", "Constant")
 
+  ---- Function.
+  l("@function.call", "Function")
+  l("@function.builtin", "Function")
+
+  ---- Punctuation.
+  h("@punctuation.special", { fg = palette.colors.violet })
+  l("@punctuation.delimiter.accessor", "Operator")
+
   ---- String.
   h("@string.special", { fg = palette.colors.violet })
   h("@string.escape", { fg = palette.colors.violet })
-
-  ---- Punctuation
-  h("@punctuation.special", { fg = palette.colors.violet })
-  l("@punctuation.delimiter.accessor", "Operator")
 
   -- Plugins.
   --- Gitsigns
