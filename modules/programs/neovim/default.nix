@@ -7,8 +7,10 @@ with lib;
 let
   inherit (builtins) toJSON;
   inherit (pkgs) stdenv;
+  inherit (pkgs.lib.x.colors) toHEXColor;
 
   inherit (config.modules.home) standalone;
+  inherit (config.modules.themes) theme;
   cfg = config.modules.programs.neovim;
 
   trimNewlines = content:
@@ -62,6 +64,15 @@ let
         else toJSON v;
     in
     toLuaValue v;
+
+  toLuaPalette = theme:
+    let
+      toLuaPaletteColor = color: toHEXColor color.color;
+      toLuaPaletteColors = mapAttrs (_: toLuaPaletteColor);
+    in
+    {
+      colors = toLuaPaletteColors theme.colors;
+    };
 
   # See: https://github.com/folke/lazy.nvim#-plugin-spec
   isPluginEnabled = { enabled ? null, ... }: enabled != false;
@@ -448,6 +459,19 @@ in
           source = ./lua/snippets;
           recursive = true;
         };
+        "nvim/lua/theme/init.lua".source = ./lua/theme/init.lua;
+        "nvim/lua/theme/palette.lua".source = formatLua "nvim-lua-theme-colors.lua" ''
+          --------------------------------------------------------------------------------
+          -- Init
+          --------------------------------------------------------------------------------
+          ---@class theme.palette.Module
+          local M = ${toLua (toLuaPalette theme)}
+
+          --------------------------------------------------------------------------------
+          -- Export
+          --------------------------------------------------------------------------------
+          return M
+        '';
         "nvim/lua/utils" = {
           source = ./lua/utils;
           recursive = true;

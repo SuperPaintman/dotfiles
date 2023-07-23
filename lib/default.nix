@@ -6,6 +6,9 @@ pkgs.lib.makeExtensible (self:
   in
   pkgs.lib // {
     x = {
+      # Colors.
+      colors = callLibs ./colors.nix;
+
       # Serialization.
       generators = callLibs ./generators.nix;
     };

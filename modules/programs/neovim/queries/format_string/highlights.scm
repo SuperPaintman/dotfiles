@@ -1,1 +1,1 @@
-(placeholder) @string.special
+(placeholder) @punctuation.special
