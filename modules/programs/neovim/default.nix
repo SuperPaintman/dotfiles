@@ -207,15 +207,15 @@ let
       p = nativePlugins;
     in
     [
-      (p.catppuccin.lazy.override {
-        lazy = false;
-        priority = 1000;
-        config = mkRawLua ''
-          function()
-            vim.cmd([[colorscheme catppuccin]])
-          end
-        '';
-      })
+      # (p.catppuccin.lazy.override {
+      #   lazy = false;
+      #   priority = 1000;
+      #   config = mkRawLua ''
+      #     function()
+      #       vim.cmd([[colorscheme catppuccin]])
+      #     end
+      #   '';
+      # })
 
       p.plenary-nvim.lazy
 

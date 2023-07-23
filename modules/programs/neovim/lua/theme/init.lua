@@ -86,7 +86,7 @@ M.setup = function(opts)
   h("Visual", { bg = palette.colors.base5 })
   h("VisualNOS", { bg = palette.colors.base5 })
 
-  h("SignColumn", {})
+  h("SignColumn", { bg = palette.colors.background })
 
   h("LineNr", { fg = palette.colors.base5 })
   h("CursorLineNr", { fg = palette.colors.cursor })
@@ -113,7 +113,7 @@ M.setup = function(opts)
   h("Character", { fg = palette.colors.green })
 
   --- Identifier.
-  h("Identifier", {})
+  h("Identifier", { fg = palette.colors.foreground })
   h("Function", { fg = palette.colors.blue })
 
   --- Statement.
@@ -124,7 +124,7 @@ M.setup = function(opts)
   h("Type", { fg = palette.colors.yellow })
 
   --- Special.
-  h("Special", {})
+  h("Special", { fg = palette.colors.foreground })
 
   --- Treesitter.
   ---- Constant.
@@ -152,30 +152,37 @@ M.setup = function(opts)
   h("NeogitObjectId", { fg = palette.colors.yellow })
   h("NeogitHunkHeader", { fg = palette.colors.violet })
   h("NeogitHunkHeaderHighlight", { fg = palette.colors.violet })
+  h("NeogitDiffContext", { bg = palette.colors.background })
+  h("NeogitDiffContextHighlight", { bg = palette.colors.base4 })
+  h("NeogitDiffAdd", { fg = palette.colors.green })
+  h("NeogitDiffAddHighlight", {
+    fg = palette.colors.green,
+    bg = palette.colors.base4,
+  })
+  h("NeogitDiffDelete", { fg = palette.colors.red })
+  h("NeogitDiffDeleteHighlight", {
+    fg = palette.colors.red,
+    bg = palette.colors.base4,
+  })
   h("NeogitNotificationInfo", { fg = palette.colors.green })
   h("NeogitNotificationWarning", { fg = palette.colors.yellow })
   h("NeogitNotificationError", { fg = palette.colors.red })
-  l("NeogitDiffAdd", "DiffAdd")
-  l("NeogitDiffDelete", "DiffDelete")
 
   --- NvimTree
   h("NvimTreeNormal", {
     fg = palette.colors.foreground,
     bg = palette.colors.base2,
   })
-  h("NvimTreeFolderName", {})
-  h("NvimTreeOpenedFolderName", {})
-  h("NvimTreeEmptyFolderName", {})
+  h("NvimTreeFolderName", { fg = palette.colors.foreground })
+  h("NvimTreeFolderIcon", { fg = palette.colors.foreground })
+  h("NvimTreeOpenedFolderName", { fg = palette.colors.foreground })
+  h("NvimTreeEmptyFolderName", { fg = palette.colors.foreground })
   h("NvimTreeWinSeparator", {
     fg = palette.colors.base2,
     bg = palette.colors.base2,
   })
-  h("NvimTreeSymlink", {
-    fg = palette.colors.violet,
-  })
-  h("NvimTreeExecFile", {
-    fg = palette.colors.green,
-  })
+  h("NvimTreeSymlink", { fg = palette.colors.violet })
+  h("NvimTreeExecFile", { fg = palette.colors.green })
   l("NvimTreeGitNew", "GitSignsAdd")
   l("NvimTreeGitDirty", "GitSignsChange")
   l("NvimTreeGitDeleted", "GitSignsDelete")
