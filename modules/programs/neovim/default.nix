@@ -444,11 +444,12 @@ in
 
       home.configFiles = {
         "nvim/init.lua".source = ./init.lua;
-        "nvim/lua/autocmds.lua".source = ./lua/autocmds.lua;
-        "nvim/lua/options.lua".source = ./lua/options.lua;
-        "nvim/lua/mappings.lua".source = ./lua/mappings.lua;
         "nvim/lua/configs" = {
           source = ./lua/configs;
+          recursive = true;
+        };
+        "nvim/lua/core" = {
+          source = ./lua/core;
           recursive = true;
         };
         "nvim/lua/modules" = {

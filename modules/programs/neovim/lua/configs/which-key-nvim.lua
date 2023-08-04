@@ -9,7 +9,7 @@ local M = {}
 M.config = function()
   local wk = require("which-key")
   wk.setup({})
-  require("mappings").which_key_register()
+  require("core.mappings").which_key_register()
 end
 
 --------------------------------------------------------------------------------
