@@ -6,13 +6,38 @@ local M = {}
 local HOME = vim.env.HOME or ""
 
 --------------------------------------------------------------------------------
+-- Helpers
+--------------------------------------------------------------------------------
+---@return table
+local function get_default_client_capabilities()
+  -- Default vim capabilities.
+  local capabilities = vim.lsp.protocol.make_client_capabilities()
+
+  -- Completion capabilities.
+  local ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
+  if ok then
+    capabilities = vim.tbl_deep_extend(
+      "force",
+      capabilities,
+      cmp_nvim_lsp.default_capabilities()
+    )
+  end
+
+  return capabilities
+end
+
+--------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
 M.config = function()
   local lspconfig = require("lspconfig")
 
+  local capabilities = get_default_client_capabilities()
+
   -- Go
   lspconfig.gopls.setup({
+    capabilities = capabilities,
+
     -- See: https://github.com/golang/tools/blob/master/gopls/doc/settings.md
     settings = {
       gopls = {
@@ -32,6 +57,8 @@ M.config = function()
   }
 
   lspconfig.lua_ls.setup({
+    capabilities = capabilities,
+
     -- See: https://github.com/LuaLS/lua-language-server/wiki/Settings
     settings = {
       Lua = {
@@ -65,7 +92,9 @@ M.config = function()
   })
 
   -- Nix
-  lspconfig.rnix.setup({})
+  lspconfig.rnix.setup({
+    capabilities = capabilities,
+  })
 end
 
 --------------------------------------------------------------------------------

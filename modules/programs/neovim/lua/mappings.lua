@@ -165,7 +165,7 @@ M.mappings["gI"] =
 M.mappings["gr"] = { "n", vim.lsp.buf.references, "Go to references" }
 
 -- Hover.
-M.mappings["H"] = { "n", vim.lsp.buf.hover, "Hover" }
+M.mappings["K"] = { "n", vim.lsp.buf.hover, "Hover" }
 
 -- Clear hlsearch.
 M.mappings["<Esc>"] = { "n", [[:nohlsearch<CR>:<Esc>]], "Clear hlsearch" }
