@@ -123,6 +123,20 @@ func (c *HSLA) Spin(amount float64) *HSLA {
 	return hsl
 }
 
+// Lighten increases the lightness of the HSLA color by the specified amount.
+func (c *HSLA) Lighten(amount float64) *HSLA {
+	hsl := c.clone()
+	hsl.l = boundFloat(0, c.l+amount, 1)
+	return hsl
+}
+
+// Darken reduces the lightness of the HSLA color by the specified amount.
+func (c *HSLA) Darken(amount float64) *HSLA {
+	hsl := c.clone()
+	hsl.l = boundFloat(0, c.l-amount, 1)
+	return hsl
+}
+
 // rgbToHSL converts a RGB color to a HSL color.
 func rgbToHSL(r, g, b uint8) (h, s, l float64) {
 	rr := float64(r) / 255

@@ -155,3 +155,103 @@ func TestHSLA_Spin(t *testing.T) {
 		})
 	}
 }
+
+func TestHSLA_Lighten(t *testing.T) {
+	tt := []struct {
+		hsla   *HSLA
+		amount float64
+		want   *HSLA
+	}{
+		{
+			hsla:   NewHSL(0, 1, 0.5),
+			amount: 0.2,
+			want:   NewHSL(0, 1, 0.7),
+		},
+		{
+			hsla:   NewHSL(0, 1, 0.5),
+			amount: 0.5,
+			want:   NewHSL(0, 1, 1),
+		},
+		{
+			hsla:   NewHSL(0, 1, 0.5),
+			amount: 0.7,
+			want:   NewHSL(0, 1, 1),
+		},
+		{
+			hsla:   NewHSL(0, 1, 0.5),
+			amount: -0.2,
+			want:   NewHSL(0, 1, 0.3),
+		},
+		{
+			hsla:   NewHSL(0, 1, 0.5),
+			amount: -0.5,
+			want:   NewHSL(0, 1, 0),
+		},
+		{
+			hsla:   NewHSL(0, 1, 0.5),
+			amount: -0.7,
+			want:   NewHSL(0, 1, 0),
+		},
+	}
+
+	for _, tc := range tt {
+		t.Run(tc.hsla.String(), func(t *testing.T) {
+			got := tc.hsla.Lighten(tc.amount).String()
+			want := tc.want.String()
+
+			if got != want {
+				t.Fatalf("HSLA.Lighten(%f) = %s, want = %s", tc.amount, got, want)
+			}
+		})
+	}
+}
+
+func TestHSLA_Darken(t *testing.T) {
+	tt := []struct {
+		hsla   *HSLA
+		amount float64
+		want   *HSLA
+	}{
+		{
+			hsla:   NewHSL(0, 1, 0.5),
+			amount: 0.2,
+			want:   NewHSL(0, 1, 0.3),
+		},
+		{
+			hsla:   NewHSL(0, 1, 0.5),
+			amount: 0.5,
+			want:   NewHSL(0, 1, 0),
+		},
+		{
+			hsla:   NewHSL(0, 1, 0.5),
+			amount: 0.7,
+			want:   NewHSL(0, 1, 0),
+		},
+		{
+			hsla:   NewHSL(0, 1, 0.5),
+			amount: -0.2,
+			want:   NewHSL(0, 1, 0.7),
+		},
+		{
+			hsla:   NewHSL(0, 1, 0.5),
+			amount: -0.5,
+			want:   NewHSL(0, 1, 1),
+		},
+		{
+			hsla:   NewHSL(0, 1, 0.5),
+			amount: -0.7,
+			want:   NewHSL(0, 1, 1),
+		},
+	}
+
+	for _, tc := range tt {
+		t.Run(tc.hsla.String(), func(t *testing.T) {
+			got := tc.hsla.Darken(tc.amount).String()
+			want := tc.want.String()
+
+			if got != want {
+				t.Fatalf("HSLA.Darken(%f) = %s, want = %s", tc.amount, got, want)
+			}
+		})
+	}
+}
