@@ -120,10 +120,26 @@ M.setup = function(opts)
       end,
       ---@param diagnostic module.diagnostic.Diagnostic
       suffix = function(diagnostic)
-        return diagnostic.user_data.orig_message
-          .. " ["
-          .. diagnostic.code
-          .. "]"
+        local suffix = diagnostic.user_data.orig_message
+
+        if diagnostic.code ~= nil or diagnostic.source ~= nil then
+          suffix = suffix .. " ["
+
+          if diagnostic.source ~= nil then
+            suffix = suffix .. diagnostic.source
+          end
+          if diagnostic.code ~= nil then
+            if diagnostic.source then
+              suffix = suffix .. ": "
+            end
+
+            suffix = suffix .. diagnostic.code
+          end
+
+          suffix = suffix .. "]"
+        end
+
+        return suffix
       end,
     },
   })

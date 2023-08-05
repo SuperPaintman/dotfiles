@@ -128,7 +128,11 @@ M.setup = function(opts)
 
   --- Treesitter.
   ---- Constant.
+  l("@constant", "Identifier")
   l("@constant.builtin", "Constant")
+
+  ---- Constructor.
+  l("@constructor.go", "Function")
 
   ---- Function.
   l("@function.call", "Function")
