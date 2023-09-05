@@ -279,6 +279,11 @@ let
               cfg.default_config = vim.tbl_extend("force", cfg.default_config, patch)
             end
 
+            -- C / C++
+            patch("clangd", {
+              cmd = { ${toLua "${pkgs.clang-tools}/bin/clangd"} },
+            })
+
             -- Go
             patch("gopls", {
               cmd = { ${toLua "${pkgs.gopls}/bin/gopls"} },

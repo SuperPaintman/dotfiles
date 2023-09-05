@@ -17,7 +17,7 @@ import (
 
 	"github.com/SuperPaintman/nice/colors"
 
-	"github.com/SuperPaintman/dotfiles/pkgs/fzf-extras/internal/commands"
+	"github.com/SuperPaintman/dotfiles/pkgs/extras/internal/commands"
 )
 
 var (

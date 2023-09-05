@@ -34,6 +34,14 @@ M.config = function()
 
   local capabilities = get_default_client_capabilities()
 
+  -- C / C++
+  local clangd_default_cmd =
+    require("lspconfig.server_configurations.clangd").default_config.cmd[1]
+  lspconfig.clangd.setup({
+    cmd = { clangd_default_cmd, "--background-index" },
+    capabilities = capabilities,
+  })
+
   -- Go
   lspconfig.gopls.setup({
     capabilities = capabilities,

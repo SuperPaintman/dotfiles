@@ -20,7 +20,7 @@ buildGoModule rec {
     "cmd/tmux-session-manager"
   ];
 
-  vendorSha256 = "sha256-oxn5DTeQ2SZWiJg2tzQ7WyXol3Io8g7noux51gjUpwA=";
+  vendorSha256 = "sha256-PD0i2QzinUAj1VkJkVyBiNy+eMoUreD4keG3rt0+ufc=";
 
   nativeBuildInputs = [
     makeWrapper
