@@ -139,6 +139,9 @@ M.setup = function(opts)
           suffix = suffix .. "]"
         end
 
+        suffix = string.gsub(suffix, "[\n\r]", " ")
+        suffix = string.gsub(suffix, "[ ]+", " ")
+
         return suffix
       end,
     },

@@ -298,6 +298,11 @@ let
             patch("rnix", {
               cmd = { ${toLua "${pkgs.rnix-lsp}/bin/rnix-lsp"} },
             })
+
+            -- Rust
+            patch("rust_analyzer", {
+              cmd = { ${toLua "${pkgs.rust-analyzer}/bin/rust-analyzer"} },
+            })
           '')}
           end
         '';

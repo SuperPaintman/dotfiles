@@ -103,6 +103,11 @@ M.config = function()
   lspconfig.rnix.setup({
     capabilities = capabilities,
   })
+
+  -- Rust
+  lspconfig.rust_analyzer.setup({
+    capabilities = capabilities,
+  })
 end
 
 --------------------------------------------------------------------------------
