@@ -277,3 +277,14 @@ packages:
             owner: sindrets
             repo: diffview.nvim
             rev: *commit
+
+    omnisharp-extended-lsp-nvim:
+        type: github
+        extraAttrs:
+            plugin: Hoffs/omnisharp-extended-lsp.nvim
+            # branch: main
+            commit: &commit 53edfb413a54c9e55dcddc9e9fa4977a897e4425
+        args:
+            owner: Hoffs
+            repo: omnisharp-extended-lsp.nvim
+            rev: *commit

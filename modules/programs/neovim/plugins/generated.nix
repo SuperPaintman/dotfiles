@@ -274,6 +274,19 @@
     plugin = "nvim-tree/nvim-web-devicons";
   };
 
+  omnisharp-extended-lsp-nvim = {
+    pname = "omnisharp-extended-lsp-nvim";
+    version = "0.0.0+rev=53edfb4";
+    src = fetchFromGitHub {
+      owner = "Hoffs";
+      repo = "omnisharp-extended-lsp.nvim";
+      rev = "53edfb413a54c9e55dcddc9e9fa4977a897e4425";
+      sha256 = "sha256-rVjsYeBlqY5vKOdhjxDmpm2kKYV6h9vjt8ToG+PEm7s=";
+    };
+    commit = "53edfb413a54c9e55dcddc9e9fa4977a897e4425";
+    plugin = "Hoffs/omnisharp-extended-lsp.nvim";
+  };
+
   plenary-nvim = {
     pname = "plenary-nvim";
     version = "0.0.0+rev=253d348";

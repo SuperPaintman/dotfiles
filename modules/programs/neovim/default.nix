@@ -177,6 +177,7 @@ let
   treesitterLanguages = [
     "bash"
     "c"
+    "c_sharp"
     "css"
     "diff"
     "dockerfile"
@@ -260,6 +261,12 @@ let
       p.nvim-treesitter-playground.lazy
 
       (p.nvim-lspconfig.lazy.override {
+        dependencies =
+          if standalone
+          then [
+            p.omnisharp-extended-lsp-nvim.lazy.plugin
+          ]
+          else null;
         init = mkRawLua ''
           function()
             vim.schedule(function()
@@ -282,6 +289,11 @@ let
             -- C / C++
             patch("clangd", {
               cmd = { ${toLua "${pkgs.clang-tools}/bin/clangd"} },
+            })
+
+            -- C#
+            patch("omnisharp", {
+              cmd = { ${toLua "${pkgs.omnisharp-roslyn}/bin/OmniSharp"} },
             })
 
             -- Go
@@ -307,6 +319,8 @@ let
           end
         '';
       })
+
+      p.omnisharp-extended-lsp-nvim.lazy
 
       (p.nvim-cmp.lazy.override {
         event = "InsertEnter";

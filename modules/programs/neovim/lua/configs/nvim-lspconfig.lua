@@ -31,8 +31,23 @@ end
 --------------------------------------------------------------------------------
 M.config = function()
   local lspconfig = require("lspconfig")
+  local util = require("lspconfig.util")
 
   local capabilities = get_default_client_capabilities()
+  local function create_on_attach(opts)
+    opts = vim.tbl_deep_extend("force", {
+      semantic = true,
+    }, opts or {})
+
+    local function on_attach(client, bufnr)
+      -- Disable semantic tokents.
+      if not opts.semantic then
+        client.server_capabilities.semanticTokensProvider = nil
+      end
+    end
+
+    return on_attach
+  end
 
   -- C / C++
   local clangd_default_cmd =
@@ -40,11 +55,23 @@ M.config = function()
   lspconfig.clangd.setup({
     cmd = { clangd_default_cmd, "--background-index" },
     capabilities = capabilities,
+    on_attach = create_on_attach({}),
+  })
+
+  -- C#
+  lspconfig.omnisharp.setup({
+    root_dir = util.root_pattern("*.sln", "*.csproj", "omnisharp.json"),
+    capabilities = capabilities,
+    on_attach = create_on_attach({ semantic = false }),
+    handlers = {
+      ["textDocument/definition"] = require("omnisharp_extended").handler,
+    },
   })
 
   -- Go
   lspconfig.gopls.setup({
     capabilities = capabilities,
+    on_attach = create_on_attach({}),
 
     -- See: https://github.com/golang/tools/blob/master/gopls/doc/settings.md
     settings = {
@@ -66,6 +93,7 @@ M.config = function()
 
   lspconfig.lua_ls.setup({
     capabilities = capabilities,
+    on_attach = create_on_attach({ semantic = false }),
 
     -- See: https://github.com/LuaLS/lua-language-server/wiki/Settings
     settings = {
@@ -102,11 +130,13 @@ M.config = function()
   -- Nix
   lspconfig.rnix.setup({
     capabilities = capabilities,
+    on_attach = create_on_attach({}),
   })
 
   -- Rust
   lspconfig.rust_analyzer.setup({
     capabilities = capabilities,
+    on_attach = create_on_attach({}),
   })
 end
 
