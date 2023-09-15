@@ -182,6 +182,7 @@ let
     "diff"
     "dockerfile"
     "gitignore"
+    "gdscript"
     "go"
     "html"
     "http"
@@ -379,6 +380,11 @@ let
               command = ${toLua "${pkgs.nodePackages.cspell}/bin/cspell"},
             })
 
+            --- gdlint  
+            patch("diagnostics", "gdlint", {
+              command = ${toLua "${pkgs.gdtoolkit}/bin/gdlint"},
+            })
+
             --- staticcheck
             patch("diagnostics", "staticcheck", {
               command = ${toLua "${pkgs.go-tools}/bin/staticcheck"},
@@ -390,6 +396,11 @@ let
             })
 
             -- Formatting
+            --- gdformat  
+            patch("formatting", "gdformat", {
+              command = ${toLua "${pkgs.gdtoolkit}/bin/gdformat"},
+            })
+
             --- goimports
             patch("formatting", "goimports", {
               command = ${toLua "${pkgs.gotools}/bin/goimports"},
