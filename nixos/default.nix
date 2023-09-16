@@ -286,6 +286,7 @@ in
 
     # Local bins.
     extras
+    godot_4
   ];
 
   # Programs.
