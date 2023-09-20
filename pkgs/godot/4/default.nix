@@ -2,6 +2,7 @@
 
 { stdenv
 , lib
+, callPackage
 , fetchFromGitHub
 , pkg-config
 , autoPatchelfHook
@@ -42,18 +43,27 @@ let
     if builtins.isString v
     then "${k}=${v}"
     else "${k}=${builtins.toJSON v}");
+
+  spine_godot = callPackage ./spine_godot.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "godot";
   version = "4.1.1";
   commitHash = "bd6af8e0ea69167dd0627f3bd54f9105bda0f8b5";
 
-  src = fetchFromGitHub {
-    owner = "godotengine";
-    repo = "godot";
-    rev = commitHash;
-    hash = "sha256-0CErsMTrBC/zYcabAtjYn8BWAZ1HxgozKdgiqdsn3q8=";
-  };
+  srcs = [
+    (fetchFromGitHub {
+      owner = "godotengine";
+      repo = "godot";
+      rev = commitHash;
+      hash = "sha256-0CErsMTrBC/zYcabAtjYn8BWAZ1HxgozKdgiqdsn3q8=";
+    })
+
+    # Custom modules.
+    spine_godot
+  ];
+
+  sourceRoot = "source";
 
   nativeBuildInputs = [
     pkg-config
@@ -109,6 +119,16 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     mkdir -p .git
     echo ${commitHash} > .git/HEAD
+
+    # Fix the source dir name.
+    cd ..
+    mv ${sourceRoot} godot
+    cd godot
+
+    # Change permissions of custom modules.
+    mv "../${spine_godot.name}" ../${spine_godot.pname}
+    chmod 755 "../${spine_godot.pname}"
+    find "../${spine_godot.pname}" -type d -exec chmod 755 {} \;
   '';
 
   sconsFlags = mkSconsFlagsFromAttrSet {
@@ -125,6 +145,11 @@ stdenv.mkDerivation rec {
     fontconfig = withFontconfig; # Use fontconfig for system fonts support
     udev = withUdev; # Use udev for gamepad connection callbacks
     touch = withTouch; # Enable touch events
+
+    # Custom modules.
+    custom_modules = lib.concatStringsSep "," [
+      "../${spine_godot.pname}"
+    ];
   };
 
   outputs = [ "out" "man" ];
