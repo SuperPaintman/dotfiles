@@ -7,15 +7,15 @@
 }:
 
 let
-  license = "...";
+  secret = import ./secret.nix;
 in
 
 stdenv.mkDerivation rec {
   name = "spine";
 
   src = fetchurl {
-    url = "https://eu.esotericsoftware.com/launcher/linux/${license}";
-    sha256 = "...";
+    url = "https://eu.esotericsoftware.com/launcher/linux/${secret.license}";
+    inherit (secret) sha256;
   };
 
   unpackPhase = ''
