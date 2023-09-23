@@ -44,7 +44,7 @@ let
     then "${k}=${v}"
     else "${k}=${builtins.toJSON v}");
 
-  spine_godot = callPackage ./spine_godot.nix { };
+  modules = callPackage ../modules { };
 in
 stdenv.mkDerivation rec {
   pname = "godot";
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     })
 
     # Custom modules.
-    spine_godot
+    modules.spine_godot
   ];
 
   sourceRoot = "source";
@@ -126,9 +126,9 @@ stdenv.mkDerivation rec {
     cd godot
 
     # Change permissions of custom modules.
-    mv "../${spine_godot.name}" ../${spine_godot.pname}
-    chmod 755 "../${spine_godot.pname}"
-    find "../${spine_godot.pname}" -type d -exec chmod 755 {} \;
+    mv "../${modules.spine_godot.name}" ../${modules.spine_godot.pname}
+    chmod 755 "../${modules.spine_godot.pname}"
+    find "../${modules.spine_godot.pname}" -type d -exec chmod 755 {} \;
   '';
 
   sconsFlags = mkSconsFlagsFromAttrSet {
@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
 
     # Custom modules.
     custom_modules = lib.concatStringsSep "," [
-      "../${spine_godot.pname}"
+      "../${modules.spine_godot.pname}"
     ];
   };
 
