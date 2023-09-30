@@ -382,7 +382,7 @@ let
 
             --- gdlint  
             patch("diagnostics", "gdlint", {
-              command = ${toLua "${pkgs.gdtoolkit}/bin/gdlint"},
+              command = ${toLua "${pkgs.gdtoolkit_4}/bin/gdlint"},
             })
 
             --- staticcheck
@@ -398,7 +398,7 @@ let
             -- Formatting
             --- gdformat  
             patch("formatting", "gdformat", {
-              command = ${toLua "${pkgs.gdtoolkit}/bin/gdformat"},
+              command = ${toLua "${pkgs.gdtoolkit_4}/bin/gdformat"},
             })
 
             --- goimports
@@ -479,6 +479,10 @@ in
 
       home.configFiles = {
         "nvim/init.lua".source = ./init.lua;
+        "nvim/ftplugin" = {
+          source = ./ftplugin;
+          recursive = true;
+        };
         "nvim/lua/configs" = {
           source = ./lua/configs;
           recursive = true;

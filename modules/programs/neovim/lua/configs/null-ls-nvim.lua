@@ -24,7 +24,7 @@ M.config = function()
       null_ls.builtins.diagnostics.statix,
 
       -- Formatting
-      -- null_ls.builtins.formatting.gdformat,
+      null_ls.builtins.formatting.gdformat,
       null_ls.builtins.formatting.goimports,
       null_ls.builtins.formatting.prettier,
       null_ls.builtins.formatting.stylua,
