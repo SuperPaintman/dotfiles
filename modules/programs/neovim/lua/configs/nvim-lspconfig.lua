@@ -60,12 +60,17 @@ M.config = function()
 
   -- C#
   lspconfig.omnisharp.setup({
-    root_dir = util.root_pattern("*.sln", "*.csproj", "omnisharp.json"),
     capabilities = capabilities,
     on_attach = create_on_attach({ semantic = false }),
     handlers = {
       ["textDocument/definition"] = require("omnisharp_extended").handler,
     },
+  })
+
+  -- GDscript
+  lspconfig.gdscript.setup({
+    capabilities = capabilities,
+    on_attach = create_on_attach({}),
   })
 
   -- Go
