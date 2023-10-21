@@ -287,6 +287,7 @@ in
     # Local bins.
     extras
     godot_4
+    gdsdecomp
   ];
 
   # Programs.

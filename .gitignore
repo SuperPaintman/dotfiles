@@ -5,8 +5,8 @@
 
 tmux/.tmux/sidebar/
 
-/result
-/result-*
+result
+result-*
 
 *.local
 *.local.*
