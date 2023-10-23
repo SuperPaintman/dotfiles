@@ -3,6 +3,7 @@
 --------------------------------------------------------------------------------
 local neogit = require("configs.neogit").mappings
 local telescope = require("configs.telescope-nvim").mappings
+local luasnip = require("configs.luasnip").mappings
 
 --------------------------------------------------------------------------------
 -- Init
@@ -178,6 +179,16 @@ M.mappings["<M-j>"] = {
 M.mappings["<M-k>"] = {
   { "n", [[:move -2<CR>]] },
   { "v", [[:move -2<CR>gv=gv]] },
+}
+
+-- Snippets.
+M.mappings["<C-j>"] = {
+  { "i", "s" },
+  luasnip.expand_or_jump(),
+}
+M.mappings["<C-k>"] = {
+  { "i", "s" },
+  luasnip.jump_back(),
 }
 
 -- Leader

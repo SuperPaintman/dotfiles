@@ -1,7 +1,14 @@
 --------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
-local M = {}
+local M = {
+  _initialized = false,
+}
+
+local cb = require("utils.mappings").create_callback_factory(
+  M,
+  "luasnip is not initialized"
+)
 
 --------------------------------------------------------------------------------
 -- Modules
@@ -21,11 +28,30 @@ M.config = function()
   -- See: https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md#config-reference
   for _, mod in ipairs({
     "snippets.all",
+    "snippets.gdscript",
     "snippets.go",
   }) do
     require(mod).setup()
   end
+
+  M._initialized = true
 end
+
+M.mappings = {
+  expand_or_jump = cb(function()
+    local luasnip = require("luasnip")
+    if luasnip.expand_or_jumpable() then
+      luasnip.expand_or_jump()
+    end
+  end),
+
+  jump_back = cb(function()
+    local luasnip = require("luasnip")
+    if luasnip.jumpable(-1) then
+      luasnip.jump(-1)
+    end
+  end),
+}
 
 --------------------------------------------------------------------------------
 -- Export

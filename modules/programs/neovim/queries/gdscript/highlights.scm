@@ -4,6 +4,9 @@
 (class_definition
   name: (name) @type) 
 
+(enum_definition
+  name: (name) @type)
+
 (signal_statement
   (name) @function)
 
