@@ -133,10 +133,17 @@ M.setup = function(opts)
 
   ---- Constructor.
   l("@constructor.go", "Function")
+  l("@constructor.gdscript", "Function")
 
   ---- Function.
   l("@function.call", "Function")
   l("@function.builtin", "Function")
+
+  ---- Attribute.
+  l("@attribute.gdscript", "Function")
+
+  ---- Type Qalifier.
+  l("@type.qualifier.gdscript", "@keyword")
 
   ---- Punctuation.
   h("@punctuation.special", { fg = palette.colors.violet })
