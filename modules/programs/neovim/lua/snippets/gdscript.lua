@@ -38,10 +38,13 @@ end
 M.setup = function()
   local ls = require("luasnip")
   local fmt = require("luasnip.extras.fmt").fmt
+  local postfix = require("luasnip.extras.postfix").postfix
 
   local s = ls.snippet
+  local sn = ls.snippet_node
   local t = ls.text_node
   local i = ls.insert_node
+  local d = ls.dynamic_node
 
   ls.add_snippets("gdscript", {
     -- Basic functions.
@@ -92,6 +95,30 @@ M.setup = function()
         }
       )
     ),
+
+    -- Postfix-based snippets.
+    postfix(".dbg!", {
+      d(1, function(_, parent)
+        local pm = parent.snippet.env.POSTFIX_MATCH
+
+        local nodes = {}
+        if pm == nil or pm == "" then
+          nodes["expr"] = i(1, "name")
+        else
+          nodes["expr"] = t(pm)
+        end
+
+        return sn(
+          nil,
+          fmt(
+            [[
+              print_debug("{expr} = ", {expr})
+            ]],
+            nodes
+          )
+        )
+      end),
+    }),
   })
 end
 
