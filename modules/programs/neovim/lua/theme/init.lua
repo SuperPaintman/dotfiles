@@ -194,6 +194,23 @@ M.setup = function(opts)
   l("NvimTreeGitNew", "GitSignsAdd")
   l("NvimTreeGitDirty", "GitSignsChange")
   l("NvimTreeGitDeleted", "GitSignsDelete")
+
+  -- NvimCmp
+  h("CmpItemKind", { bg = palette.colors.base3 })
+  h("CmpItemKindMethod", { bg = palette.colors.blue })
+  h("CmpItemKindFunction", { bg = palette.colors.blue })
+  h("CmpItemKindConstructor", { bg = palette.colors.blue })
+  h("CmpItemKindClass", { bg = palette.colors.yellow })
+  h("CmpItemKindInterface", { bg = palette.colors.yellow })
+  h("CmpItemKindModule", { bg = palette.colors.green })
+  h("CmpItemKindEnum", { bg = palette.colors.violet })
+  h("CmpItemKindKeyword", { bg = palette.colors.magenta })
+  h("CmpItemKindSnippet", { bg = palette.colors.red })
+  h("CmpItemKindEnumMember", { bg = palette.colors.violet })
+  h("CmpItemKindConstant", { bg = palette.colors.violet })
+  h("CmpItemKindStruct", { bg = palette.colors.yellow })
+  l("CmpDocNormal", "Pmenu")
+  l("CmpDocBorder", "VertSplit")
 end
 
 --------------------------------------------------------------------------------
