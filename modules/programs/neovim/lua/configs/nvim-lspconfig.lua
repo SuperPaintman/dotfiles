@@ -26,6 +26,89 @@ local function get_default_client_capabilities()
   return capabilities
 end
 
+local function patch_gdscript_documentation(content)
+  local result = {}
+  local lines = vim.split(content, "\n")
+
+  local last_empty_line = false
+  local in_codeblock = false
+
+  local process = function(line)
+    -- Ignore codeblocks.
+    if line == "`codeblocks`" or line == "`/codeblocks`" then
+      return
+    end
+
+    -- GDScript
+    if line == "`gdscript`" then
+      table.insert(result, "```gdscript")
+      return
+    end
+    if line == "`/gdscript`" then
+      table.insert(result, "```")
+      return
+    end
+
+    -- C#
+    if line == "`csharp`" then
+      table.insert(result, "```csharp")
+      return
+    end
+    if line == "`/csharp`" then
+      table.insert(result, "```")
+      return
+    end
+
+    -- Detect code blocks.
+    if string.match(line, "^\t") then
+      if not in_codeblock then
+        table.insert(result, "```gdscript")
+      end
+      line = string.gsub(line, "^\t", "")
+      table.insert(result, line)
+      in_codeblock = true
+      return
+    elseif in_codeblock then
+      table.insert(result, "```")
+      in_codeblock = false
+    end
+
+    -- Trim extra newlines.
+    if not in_codeblock and line == "" then
+      if last_empty_line then
+        return
+      end
+
+      last_empty_line = true
+      table.insert(result, line)
+      return
+    end
+
+    last_empty_line = false
+    table.insert(result, line)
+  end
+
+  for _, line in ipairs(lines) do
+    process(line)
+  end
+
+  -- Close the final code block.
+  if in_codeblock then
+    table.insert(result, "```")
+  end
+
+  return table.concat(result, "\n")
+end
+
+local function gdscript_hover_handler(err, result, ctx, config)
+  if err == nil and result.contents and result.contents.kind == "markdown" then
+    -- Patch the documentation.
+    result.contents.value = patch_gdscript_documentation(result.contents.value)
+  end
+
+  return vim.lsp.handlers["textDocument/hover"](err, result, ctx, config)
+end
+
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
@@ -87,6 +170,9 @@ M.config = function()
   lspconfig.gdscript.setup({
     capabilities = capabilities,
     on_attach = create_on_attach({}),
+    handlers = {
+      ["textDocument/hover"] = gdscript_hover_handler,
+    },
   })
 
   -- Go
