@@ -138,6 +138,16 @@ M.config = function()
       end,
     },
     window = {
+      completion = cmp.config.window.bordered({
+        border = ui.borders.thick(),
+        winhighlight = table.concat({
+          "Normal:Pmenu",
+          "FloatBorder:Pmenu",
+          "CursorLine:PmenuSel",
+          "Search:None",
+        }, ","),
+      }),
+
       documentation = cmp.config.window.bordered({
         border = ui.borders.thick("CmpDocBorder"),
         winhighlight = table.concat({
