@@ -157,6 +157,19 @@
     plugin = "lewis6991/gitsigns.nvim";
   };
 
+  lsp-signature-nvim = {
+    pname = "lsp-signature-nvim";
+    version = "0.0.0+rev=33250c8";
+    src = fetchFromGitHub {
+      owner = "ray-x";
+      repo = "lsp_signature.nvim";
+      rev = "33250c84c7a552daf28ac607d9d9e82f88cd0907";
+      sha256 = "sha256-UEgCImIGDFcyujwyN7GMs3NBcZiUNWQxygkMqZjJ7jE=";
+    };
+    commit = "33250c84c7a552daf28ac607d9d9e82f88cd0907";
+    plugin = "ray-x/lsp_signature.nvim";
+  };
+
   lualine-nvim = {
     pname = "lualine-nvim";
     version = "0.0.0+rev=442d2ab";

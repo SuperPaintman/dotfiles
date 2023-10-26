@@ -8,6 +8,7 @@ local f = string.format
 local M = {}
 
 local RELOADABLE = {
+  "configs.lsp_signature-nvim",
   "configs.luasnip",
   "configs.nvim-cmp",
 }

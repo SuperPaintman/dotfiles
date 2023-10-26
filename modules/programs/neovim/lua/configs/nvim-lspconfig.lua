@@ -31,7 +31,6 @@ end
 --------------------------------------------------------------------------------
 M.config = function()
   local lspconfig = require("lspconfig")
-  local util = require("lspconfig.util")
 
   local capabilities = get_default_client_capabilities()
   local function create_on_attach(opts)
@@ -39,11 +38,28 @@ M.config = function()
       semantic = true,
     }, opts or {})
 
+    local function create_on_attach_lsp_signature()
+      local ok, lsp_signature = pcall(require, "lsp_signature")
+      if not ok then
+        return function(_client, bufnr) end
+      end
+
+      return function(_client, bufnr)
+        lsp_signature.on_attach({}, bufnr)
+      end
+    end
+
+    local on_attach_lsp_signature = create_on_attach_lsp_signature()
+
     local function on_attach(client, bufnr)
       -- Disable semantic tokents.
       if not opts.semantic then
-        client.server_capabilities.semanticTokensProvider = nil
+        client.server_capabilities.semanticTokensProvider = {}
       end
+
+      -- Enable LSP signatures. We don't need to check the capabilities,
+      -- lsp_signature does it for us.
+      on_attach_lsp_signature(client, bufnr)
     end
 
     return on_attach

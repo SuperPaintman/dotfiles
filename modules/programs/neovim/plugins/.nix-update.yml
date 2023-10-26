@@ -288,3 +288,14 @@ packages:
             owner: Hoffs
             repo: omnisharp-extended-lsp.nvim
             rev: *commit
+
+    lsp-signature-nvim:
+        type: github
+        extraAttrs:
+            plugin: ray-x/lsp_signature.nvim
+            # branch: master
+            commit: &commit 33250c84c7a552daf28ac607d9d9e82f88cd0907
+        args:
+            owner: ray-x
+            repo: lsp_signature.nvim
+            rev: *commit

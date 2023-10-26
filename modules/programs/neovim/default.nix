@@ -321,6 +321,8 @@ let
         '';
       })
 
+      p.lsp-signature-nvim.lazy
+
       p.omnisharp-extended-lsp-nvim.lazy
 
       (p.nvim-cmp.lazy.override {

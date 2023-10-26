@@ -197,6 +197,7 @@ M.config = function()
       },
       {
         name = "nvim_lsp",
+        keyword_length = 2,
         entry_filter = function(entry, ctx)
           -- Disable auto completion if the cursor in a comment.
           if is_in_comment(ctx) and get_reason(ctx) ~= "manual" then
