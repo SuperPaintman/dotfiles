@@ -37,6 +37,15 @@ M.config = function()
   M._initialized = true
 end
 
+M.reload = function()
+  local luasnip = require("luasnip")
+  luasnip.cleanup()
+
+  local unload = require("utils.modules").unload
+  unload("^snippets%.", true)
+  M.config()
+end
+
 M.mappings = {
   expand_or_jump = cb(function()
     local luasnip = require("luasnip")

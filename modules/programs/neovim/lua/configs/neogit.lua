@@ -48,7 +48,7 @@ end
 
 M.mappings = {
   open = cb(function()
-    require("neogit").open()
+    require("neogit").open({})
   end),
 }
 

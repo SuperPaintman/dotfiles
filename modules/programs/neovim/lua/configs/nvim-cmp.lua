@@ -1,4 +1,9 @@
 --------------------------------------------------------------------------------
+-- Imports
+--------------------------------------------------------------------------------
+local ui = require("core.ui")
+
+--------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
 local M = {}
@@ -105,63 +110,6 @@ local function get_reason(ctx)
   return nil
 end
 
-local function border(hl_name)
-  -- TODO(SuperPaintman): Move this border style into a core package.
-  return {
-    { "▄", hl_name }, -- "╔"
-    { "▄", hl_name }, -- "═"
-    { "▄", hl_name }, -- "╗"
-    { "█", hl_name }, -- "║"
-    { "▀", hl_name }, -- "╝"
-    { "▀", hl_name }, -- "═"
-    { "▀", hl_name }, -- "╚"
-    { "█", hl_name }, -- "║"
-  }
-end
-
-local icons = {
-  Namespace = "󰌗",
-  Text = "󰉿",
-  Method = "󰆧",
-  Function = "󰆧",
-  Constructor = "",
-  Field = "󰜢",
-  Variable = "󰀫",
-  Class = "󰠱",
-  Interface = "",
-  Module = "",
-  Property = "󰜢",
-  Unit = "󰑭",
-  Value = "󰎠",
-  Enum = "",
-  Keyword = "󰌋",
-  Snippet = "",
-  Color = "󰏘",
-  File = "󰈚",
-  Reference = "󰈇",
-  Folder = "󰉋",
-  EnumMember = "",
-  Constant = "󰏿",
-  Struct = "󰙅",
-  Event = "",
-  Operator = "󰆕",
-  TypeParameter = "󰊄",
-  Table = "",
-  Object = "󰅩",
-  Tag = "",
-  Array = "",
-  Boolean = "",
-  Number = "",
-  Null = "󰟢",
-  String = "󰉿",
-  Calendar = "",
-  Watch = "󰥔",
-  Package = "",
-  Copilot = "",
-  Codeium = "",
-  TabNine = "",
-}
-
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
@@ -191,7 +139,7 @@ M.config = function()
     },
     window = {
       documentation = cmp.config.window.bordered({
-        border = border("CmpDocBorder"),
+        border = ui.borders.thick("CmpDocBorder"),
         winhighlight = table.concat({
           "Normal:CmpDocNormal",
           "FloatBorder:CmpDocBorder",
@@ -227,7 +175,7 @@ M.config = function()
     formatting = {
       fields = { "kind", "abbr", "menu" },
       format = function(_, item)
-        local icon = icons[item.kind]
+        local icon = ui.icons.cmp[item.kind]
         if icon ~= nil then
           item.kind = " " .. icon .. " "
         end
@@ -312,6 +260,12 @@ M.config = function()
       },
     }),
   })
+end
+
+M.reload = function()
+  local unload = require("utils.modules").unload
+  unload("core.ui")
+  M.config()
 end
 
 --------------------------------------------------------------------------------

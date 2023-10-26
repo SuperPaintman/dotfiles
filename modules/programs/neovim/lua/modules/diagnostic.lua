@@ -6,7 +6,7 @@
 --------------------------------------------------------------------------------
 -- Imports
 --------------------------------------------------------------------------------
-local icons = require("core.icons")
+local ui = require("core.ui")
 
 --------------------------------------------------------------------------------
 -- Init
@@ -22,23 +22,23 @@ local OK = 5
 local signs = {
   [vim.diagnostic.severity.ERROR] = {
     name = "DiagnosticSignError",
-    text = icons.diagnostic.Error,
+    text = ui.icons.diagnostic.Error,
   },
   [vim.diagnostic.severity.WARN] = {
     name = "DiagnosticSignWarn",
-    text = icons.diagnostic.Warn,
+    text = ui.icons.diagnostic.Warn,
   },
   [vim.diagnostic.severity.INFO] = {
     name = "DiagnosticSignInfo",
-    text = icons.diagnostic.Info,
+    text = ui.icons.diagnostic.Info,
   },
   [vim.diagnostic.severity.HINT] = {
     name = "DiagnosticSignHint",
-    text = icons.diagnostic.Hint,
+    text = ui.icons.diagnostic.Hint,
   },
   [OK] = {
     name = "DiagnosticSignOk",
-    text = icons.diagnostic.Ok,
+    text = ui.icons.diagnostic.Ok,
   },
 }
 
@@ -85,18 +85,8 @@ M.setup = function(opts)
 
     float = {
       style = "minimal",
-      -- TODO(SuperPaintman): Move this border style into a core package.
       -- TODO(SuperPaintman): Add a custom highlight group.
-      border = {
-        { "▄", "VertSplit" }, -- "╔"
-        { "▄", "VertSplit" }, -- "═"
-        { "▄", "VertSplit" }, -- "╗"
-        { "█", "VertSplit" }, -- "║"
-        { "▀", "VertSplit" }, -- "╝"
-        { "▀", "VertSplit" }, -- "═"
-        { "▀", "VertSplit" }, -- "╚"
-        { "█", "VertSplit" }, -- "║"
-      },
+      border = ui.borders.thick("VertSplit"),
       header = false,
       source = false,
       prefix = "",

@@ -203,19 +203,54 @@ M.setup = function(opts)
   l("NvimTreeGitDeleted", "GitSignsDelete")
 
   -- NvimCmp
-  h("CmpItemKind", { bg = palette.colors.base3 })
-  h("CmpItemKindMethod", { bg = palette.colors.blue })
-  h("CmpItemKindFunction", { bg = palette.colors.blue })
-  h("CmpItemKindConstructor", { bg = palette.colors.blue })
-  h("CmpItemKindClass", { bg = palette.colors.yellow })
-  h("CmpItemKindInterface", { bg = palette.colors.yellow })
-  h("CmpItemKindModule", { bg = palette.colors.green })
-  h("CmpItemKindEnum", { bg = palette.colors.violet })
-  h("CmpItemKindKeyword", { bg = palette.colors.magenta })
-  h("CmpItemKindSnippet", { bg = palette.colors.red })
-  h("CmpItemKindEnumMember", { bg = palette.colors.violet })
-  h("CmpItemKindConstant", { bg = palette.colors.violet })
-  h("CmpItemKindStruct", { bg = palette.colors.yellow })
+  h("CmpItemKind", { fg = palette.colors.white })
+  local cmp_item_kinds = {
+    Namespace = nil,
+    Text = nil,
+    Method = palette.colors.blue,
+    Function = palette.colors.blue,
+    Constructor = palette.colors.blue,
+    Field = nil,
+    Variable = nil,
+    Class = palette.colors.yellow,
+    Interface = palette.colors.yellow,
+    Module = palette.colors.green,
+    Property = nil,
+    Unit = nil,
+    Value = nil,
+    Enum = palette.colors.violet,
+    Keyword = palette.colors.magenta,
+    Snippet = palette.colors.red,
+    Color = nil,
+    File = nil,
+    Reference = nil,
+    Folder = nil,
+    EnumMember = palette.colors.violet,
+    Constant = palette.colors.violet,
+    Struct = palette.colors.yellow,
+    Event = nil,
+    Operator = nil,
+    TypeParameter = nil,
+    Table = nil,
+    Object = nil,
+    Tag = nil,
+    Array = nil,
+    Boolean = nil,
+    Number = nil,
+    Null = nil,
+    String = nil,
+    Calendar = nil,
+    Watch = nil,
+    Package = nil,
+    Copilot = nil,
+    Codeium = nil,
+    TabNine = nil,
+  }
+  for kind, color in pairs(cmp_item_kinds) do
+    if color ~= nil then
+      h("CmpItemKind" .. kind, { fg = color })
+    end
+  end
   l("CmpDocNormal", "Pmenu")
   l("CmpDocBorder", "VertSplit")
 end
