@@ -2,7 +2,6 @@
 -- Init
 --------------------------------------------------------------------------------
 local command = vim.api.nvim_create_user_command
-local print_error = vim.api.nvim_err_writeln
 local f = string.format
 
 local M = {}
@@ -12,6 +11,13 @@ local RELOADABLE = {
   "configs.luasnip",
   "configs.nvim-cmp",
 }
+
+--------------------------------------------------------------------------------
+-- Helpers
+--------------------------------------------------------------------------------
+local function error(msg)
+  vim.notify(msg, vim.log.levels.ERROR)
+end
 
 --------------------------------------------------------------------------------
 -- Modules
@@ -27,7 +33,7 @@ M.setup = function(opts)
   command("Reload", function(opts)
     local module_name = opts.fargs[1]
     if not vim.tbl_contains(RELOADABLE, module_name) then
-      print_error(f("Unknown module: %s", module_name))
+      error(f("Unknown module: %s", module_name))
       return
     end
 
@@ -43,12 +49,12 @@ M.setup = function(opts)
       elseif module.config ~= nil then
         module.config()
       else
-        print_error(f("Module %s cannot be reloaded", module_name))
+        error(f("Module %s cannot be reloaded", module_name))
         return
       end
     end)
     if not ok then
-      print_error(f("Failed to reload %s module: %s", module_name, err))
+      error(f("Failed to reload %s module: %s", module_name, err))
       return
     end
   end, {
