@@ -15,7 +15,7 @@ local RELOADABLE = {
 --------------------------------------------------------------------------------
 -- Helpers
 --------------------------------------------------------------------------------
-local function error(msg)
+local function vimerror(msg)
   vim.notify(msg, vim.log.levels.ERROR)
 end
 
@@ -33,7 +33,7 @@ M.setup = function(opts)
   command("Reload", function(opts)
     local module_name = opts.fargs[1]
     if not vim.tbl_contains(RELOADABLE, module_name) then
-      error(f("Unknown module: %s", module_name))
+      vimerror(f("Unknown module: %s", module_name))
       return
     end
 
@@ -49,12 +49,12 @@ M.setup = function(opts)
       elseif module.config ~= nil then
         module.config()
       else
-        error(f("Module %s cannot be reloaded", module_name))
+        vimerror(f("Module %s cannot be reloaded", module_name))
         return
       end
     end)
     if not ok then
-      error(f("Failed to reload %s module: %s", module_name, err))
+      vimerror(f("Failed to reload %s module: %s", module_name, err))
       return
     end
   end, {
