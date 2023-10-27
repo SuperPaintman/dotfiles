@@ -149,6 +149,7 @@ M.setup = function(opts)
   l("markdownH4Delimiter", "Title")
   l("markdownH5Delimiter", "Title")
   l("markdownH6Delimiter", "Title")
+  l("markdownRule", "Comment")
 
   ---- INI
   l("dosiniHeader", "configSection")
