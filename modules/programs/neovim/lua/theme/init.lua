@@ -63,6 +63,10 @@ M.setup = function(opts)
   vim.o.background = "dark"
   vim.g.colors_name = "theme"
 
+  -- Variables
+  h("configSection", { fg = palette.colors.red })
+  h("configKey", { fg = palette.colors.magenta })
+
   -- General
   h("Normal", {
     fg = palette.colors.foreground,
@@ -126,6 +130,37 @@ M.setup = function(opts)
   --- Special.
   h("Special", { fg = palette.colors.foreground })
 
+  --- Markup.
+  h("Title", { fg = palette.colors.red })
+
+  --- Languages
+  ---- Markdown
+  h("markdownBold", { fg = palette.colors.yellow, bold = true })
+  h("markdownItalic", { fg = palette.colors.yellow, italic = true })
+  h("markdownCode", { fg = palette.colors.magenta })
+  h("markdownCodeDelimiter", { fg = palette.colors.magenta })
+  h("markdownUrl", { fg = palette.colors.violet, underline = true })
+  l("markdownUrlDelimiter", "Normal")
+  l("markdownLinkText", "String")
+  l("markdownH1Delimiter", "Title")
+  l("markdownH2Delimiter", "Title")
+  l("markdownH3Delimiter", "Title")
+  l("markdownH4Delimiter", "Title")
+  l("markdownH5Delimiter", "Title")
+  l("markdownH6Delimiter", "Title")
+
+  ---- INI
+  l("dosiniHeader", "configSection")
+  l("dosiniLabel", "configKey")
+
+  ---- TOML
+  l("tomlTable", "configSection")
+  l("tomlKey", "configKey")
+
+  ---- GDResource
+  l("gdResourceSectionName", "configSection")
+  l("gdResourceAttributeName", "configKey")
+
   --- Treesitter.
   ---- Constant.
   l("@constant", "Identifier")
@@ -152,6 +187,12 @@ M.setup = function(opts)
   ---- String.
   h("@string.special", { fg = palette.colors.violet })
   h("@string.escape", { fg = palette.colors.violet })
+
+  ---- Label.
+  l("@label.json", "configKey")
+
+  ---- Field.
+  l("@field.yaml", "configKey")
 
   -- Plugins.
   --- Gitsigns
