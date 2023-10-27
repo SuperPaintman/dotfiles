@@ -296,6 +296,12 @@ M.setup = function(opts)
   end
   l("CmpDocNormal", "Pmenu")
   l("CmpDocBorder", "VertSplit")
+
+  -- BufferLine
+  l("BufferLineErrorSelected", "BufferLineBufferSelected")
+  l("BufferLineErrorDiagnosticSelected", "DiagnosticSignError")
+  l("BufferLineWarningSelected", "BufferLineBufferSelected")
+  l("BufferLineWarningDiagnosticSelected", "DiagnosticSignWarn")
 end
 
 --------------------------------------------------------------------------------
