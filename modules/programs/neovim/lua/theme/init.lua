@@ -93,7 +93,7 @@ M.setup = function(opts)
   h("SignColumn", { bg = palette.colors.background })
 
   h("LineNr", { fg = palette.colors.base5 })
-  h("CursorLineNr", { fg = palette.colors.cursor })
+  h("CursorLineNr", { fg = palette.colors.cursor, bold = true })
 
   h("VertSplit", { fg = palette.colors.base2 })
 
@@ -245,7 +245,7 @@ M.setup = function(opts)
   l("NvimTreeGitDirty", "GitSignsChange")
   l("NvimTreeGitDeleted", "GitSignsDelete")
 
-  -- NvimCmp
+  --- NvimCmp
   h("CmpItemKind", { fg = palette.colors.white })
   local cmp_item_kinds = {
     Namespace = nil,
@@ -297,11 +297,15 @@ M.setup = function(opts)
   l("CmpDocNormal", "Pmenu")
   l("CmpDocBorder", "VertSplit")
 
-  -- BufferLine
+  --- BufferLine
   l("BufferLineErrorSelected", "BufferLineBufferSelected")
   l("BufferLineErrorDiagnosticSelected", "DiagnosticSignError")
   l("BufferLineWarningSelected", "BufferLineBufferSelected")
   l("BufferLineWarningDiagnosticSelected", "DiagnosticSignWarn")
+
+  -- Modules.
+  --- ContextSigns.
+  h("ContextSign", { fg = palette.colors.base8 })
 end
 
 --------------------------------------------------------------------------------

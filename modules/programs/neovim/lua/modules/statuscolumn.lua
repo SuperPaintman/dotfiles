@@ -41,7 +41,7 @@ local function get_diagnostic_level(name)
   return 0
 end
 
----@return core.statuscolumn.Sign[]
+---@return modules.statuscolumn.Sign[]
 local function get_signs()
   if vim.g.statusline_winid == nil then
     return {}
@@ -75,6 +75,10 @@ M.setup = function(opts)
   end
 end
 
+M.reload = function()
+  M.setup({})
+end
+
 M.statuscolumn = function()
   local signs = get_signs()
 
@@ -95,18 +99,21 @@ M.statuscolumn = function()
     )
   end
 
-  ---@param sign core.statuscolumn.Sign
+  ---@param sign modules.statuscolumn.Sign
   local function insert_sign(sign)
     insert("%#" .. sign.texthl .. "#" .. sign.text .. "%*")
   end
 
   -- Find signs.
-  ---@type core.statuscolumn.Sign?
+  ---@type modules.statuscolumn.Sign?
   local diagnostic_sign = nil
   local diagnostic_level = 0
 
-  ---@type core.statuscolumn.Sign?
+  ---@type modules.statuscolumn.Sign?
   local git_sign = nil
+
+  ---@type modules.statuscolumn.Sign?
+  local context_sign = nil
 
   for _, sign in ipairs(signs) do
     if sign.name:find("^DiagnosticSign") then
@@ -118,6 +125,10 @@ M.statuscolumn = function()
     elseif sign.name:find("^GitSign") then
       if git_sign == nil then
         git_sign = sign
+      end
+    elseif sign.name == "ContextSign" then
+      if context_sign == nil then
+        context_sign = sign
       end
     else
       -- Debug.
@@ -141,7 +152,20 @@ M.statuscolumn = function()
   insert("%=")
 
   --- Line number.
+  local cur_line = unpack(vim.api.nvim_win_get_cursor(0))
+  local close_line_color = false
+  if vim.o.number and vim.v.lnum ~= cur_line then
+    if context_sign ~= nil then
+      insert("%#" .. context_sign.texthl .. "#")
+      close_line_color = true
+    end
+  end
+
   insert("%{&number ? (&relativenumber && v:relnum ? v:relnum : v:lnum) : ''}")
+
+  if close_line_color then
+    insert("%*")
+  end
 
   --- Padding.
   insert_padding("  ")
