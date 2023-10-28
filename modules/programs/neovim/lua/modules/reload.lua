@@ -7,6 +7,7 @@ local f = string.format
 local M = {}
 
 local RELOADABLE = {
+  "configs.indent-blankline-nvim",
   "configs.lsp_signature-nvim",
   "configs.luasnip",
   "configs.nvim-cmp",

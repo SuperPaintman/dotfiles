@@ -30,6 +30,7 @@ M.config = function()
     "snippets.all",
     "snippets.gdscript",
     "snippets.go",
+    "snippets.lua",
   }) do
     require(mod).setup()
   end

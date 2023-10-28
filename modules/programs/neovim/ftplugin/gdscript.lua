@@ -17,6 +17,7 @@ end
 set_local("expandtab", false)
 set_local("shiftwidth", 0)
 set_local("softtabstop", 0)
+set_local("tabstop", 4)
 set_local("suffixesadd", ".gd")
 set_local("comments", "b:#")
 set_local("commentstring", "# %s")
