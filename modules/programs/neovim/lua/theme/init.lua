@@ -175,6 +175,7 @@ M.setup = function(opts)
   ---- Function.
   l("@function.call", "Function")
   l("@function.builtin", "Function")
+  l("@function.macro", "Function")
 
   ---- Attribute.
   l("@attribute.gdscript", "Function")
@@ -185,6 +186,7 @@ M.setup = function(opts)
   ---- Punctuation.
   h("@punctuation.special", { fg = palette.colors.violet })
   l("@punctuation.delimiter.accessor", "Operator")
+  l("@punctuation.special.rust", "Operator")
 
   ---- String.
   h("@string.special", { fg = palette.colors.violet })
@@ -195,6 +197,11 @@ M.setup = function(opts)
 
   ---- Field.
   l("@field.yaml", "configKey")
+
+  -- LSP
+  --- Rust
+  l("@lsp.type.macro.rust", "@function.macro")
+  l("@lsp.type.enumMember.rust", "Type")
 
   -- Plugins.
   --- Gitsigns
