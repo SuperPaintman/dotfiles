@@ -175,6 +175,12 @@ M.config = function()
     },
   })
 
+  -- CSS
+  lspconfig.cssls.setup({
+    capabilities = capabilities,
+    on_attach = create_on_attach({}),
+  })
+
   -- Go
   lspconfig.gopls.setup({
     capabilities = capabilities,
@@ -190,6 +196,18 @@ M.config = function()
         },
       },
     },
+  })
+
+  -- HTML
+  lspconfig.html.setup({
+    capabilities = capabilities,
+    on_attach = create_on_attach({}),
+  })
+
+  -- JSON
+  lspconfig.jsonls.setup({
+    capabilities = capabilities,
+    on_attach = create_on_attach({}),
   })
 
   -- Lua

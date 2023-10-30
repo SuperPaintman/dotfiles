@@ -297,9 +297,24 @@ let
               cmd = { ${toLua "${pkgs.omnisharp-roslyn}/bin/OmniSharp"} },
             })
 
+            -- CSS
+            patch("cssls", {
+              cmd = { ${toLua "${pkgs.nodePackages.vscode-langservers-extracted}/bin/vscode-css-language-server"}, "--stdio" },
+            })
+
             -- Go
             patch("gopls", {
               cmd = { ${toLua "${pkgs.gopls}/bin/gopls"} },
+            })
+
+            -- HTML
+            patch("html", {
+              cmd = { ${toLua "${pkgs.nodePackages.vscode-langservers-extracted}/bin/vscode-html-language-server"}, "--stdio" },
+            })
+
+            -- JSON
+            patch("jsonls", {
+              cmd = { ${toLua "${pkgs.nodePackages.vscode-langservers-extracted}/bin/vscode-json-language-server"}, "--stdio" },
             })
 
             -- Lua
