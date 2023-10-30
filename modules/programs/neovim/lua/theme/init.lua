@@ -198,6 +198,9 @@ M.setup = function(opts)
   ---- Field.
   l("@field.yaml", "configKey")
 
+  ---- Text.
+  h("@text.uri", { fg = palette.colors.violet, underline = true })
+
   -- LSP
   --- Rust
   l("@lsp.type.macro.rust", "@function.macro")
