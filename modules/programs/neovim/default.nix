@@ -174,6 +174,8 @@ let
     neovim = cfg.package;
   };
 
+  jsonschemas = pkgs.callPackage ./jsonschemas { };
+
   treesitterLanguages = [
     "bash"
     "c"
@@ -335,6 +337,11 @@ let
             -- TOML
             patch("taplo", {
               cmd = { ${toLua "${pkgs.taplo}/bin/taplo"}, "lsp", "stdio" },
+            })
+
+            -- YAML
+            patch("yamlls", {
+              cmd = { ${toLua "${pkgs.nodePackages.yaml-language-server}/bin/yaml-language-server"}, "--stdio" },
             })
           '')}
           end
@@ -600,6 +607,8 @@ in
           source = ./queries;
           recursive = true;
         };
+      } // lib.optionalAttrs (!standalone) {
+        "nvim/jsonschemas".source = jsonschemas;
       };
     };
   };

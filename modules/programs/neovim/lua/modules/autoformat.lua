@@ -31,8 +31,12 @@ end
 M.defaults = {
   enabled = true,
   preferred = {
+    css = "null-ls", -- prettier
     go = "null-ls", -- goimports
+    html = "null-ls", -- prettier
+    json = "null-ls", -- prettier
     nix = "rnix",
+    yaml = "null-ls", -- prettier
     default = "null-ls",
   },
 }

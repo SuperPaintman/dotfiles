@@ -101,12 +101,36 @@ local function patch_gdscript_documentation(content)
 end
 
 local function gdscript_hover_handler(err, result, ctx, config)
-  if err == nil and result.contents and result.contents.kind == "markdown" then
+  if
+    err == nil
+    and result
+    and result.contents
+    and result.contents.kind == "markdown"
+  then
     -- Patch the documentation.
     result.contents.value = patch_gdscript_documentation(result.contents.value)
   end
 
   return vim.lsp.handlers["textDocument/hover"](err, result, ctx, config)
+end
+
+local function yamlls_hover_handler(err, result, ctx, config)
+  if
+    err == nil
+    and result
+    and result.contents
+    and result.contents.kind == "markdown"
+  then
+    result.contents.value = string.gsub(result.contents.value, "&emsp;", "")
+  end
+
+  return vim.lsp.handlers["textDocument/hover"](err, result, ctx, config)
+end
+
+---@param file string
+---@return string
+local function local_json_schema(file)
+  return vim.fs.normalize(HOME .. "/.config/nvim/jsonschemas/" .. file)
 end
 
 --------------------------------------------------------------------------------
@@ -277,6 +301,46 @@ M.config = function()
   lspconfig.taplo.setup({
     capabilities = capabilities,
     on_attach = create_on_attach({}),
+  })
+
+  -- YAML
+  lspconfig.yamlls.setup({
+    capabilities = capabilities,
+    on_attach = create_on_attach({}),
+    handlers = {
+      ["textDocument/hover"] = yamlls_hover_handler,
+    },
+
+    -- See: https://github.com/redhat-developer/yaml-language-server
+    settings = {
+      yaml = {
+        format = { enabled = false },
+        validate = true,
+        completion = true,
+        hover = true,
+        keyOrdering = false,
+
+        chemaStore = { enable = false },
+        schemas = {
+          -- See: https://www.schemastore.org/json/
+          --- Canonical.
+          [local_json_schema("json.schemastore.org/github-workflow.json")] = ".github/workflows/*.{yml,yaml}",
+          [local_json_schema("json.schemastore.org/github-action.json")] = ".github/action.{yml,yaml}",
+          [local_json_schema("json.schemastore.org/dependabot-2.0.json")] = ".github/dependabot.{yml,yaml}",
+          [local_json_schema(
+            "github.com/compose-spec/compose-spec/schema/compose-spec.json"
+          )] = "docker-compose.{yml,yaml}",
+
+          --- Custom.
+          [local_json_schema(
+            "github.com/OAI/OpenAPI-Specification/schemas/v3.1/schema.json"
+          )] = "spec.{yml,yaml}",
+        },
+      },
+
+      -- See: https://github.com/redhat-developer/vscode-redhat-telemetry#how-to-disable-telemetry-reporting
+      redhat = { telemetry = { enabled = false } },
+    },
   })
 end
 
