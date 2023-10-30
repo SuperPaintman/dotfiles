@@ -254,6 +254,12 @@ M.config = function()
       },
     },
   })
+
+  -- TOML
+  lspconfig.taplo.setup({
+    capabilities = capabilities,
+    on_attach = create_on_attach({}),
+  })
 end
 
 --------------------------------------------------------------------------------

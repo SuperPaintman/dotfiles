@@ -316,6 +316,11 @@ let
             patch("rust_analyzer", {
               cmd = { ${toLua "${pkgs.rust-analyzer}/bin/rust-analyzer"} },
             })
+
+            -- TOML
+            patch("taplo", {
+              cmd = { ${toLua "${pkgs.taplo}/bin/taplo"}, "lsp", "stdio" },
+            })
           '')}
           end
         '';
