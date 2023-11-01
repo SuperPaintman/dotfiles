@@ -206,6 +206,18 @@ M.setup = function(opts)
   l("@lsp.type.macro.rust", "@function.macro")
   l("@lsp.type.enumMember.rust", "Type")
 
+  -- Built-in Pluggins.
+  --- Help
+  l("helpSectionDelim", "markdownH1Delimiter")
+  l("healthHeadingChar", "markdownRule")
+  l("helpHeader", "markdownH2Delimiter")
+  l("helpCommand", "markdownCode")
+
+  --- Health
+  h("healthSuccess", { fg = palette.colors.green, bold = true })
+  h("healthWarning", { fg = palette.colors.yellow, bold = true })
+  h("healthError", { fg = palette.colors.red, bold = true })
+
   -- Plugins.
   --- Gitsigns
   h("GitSignsAdd", { fg = palette.colors.green })
