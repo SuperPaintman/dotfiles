@@ -18,8 +18,9 @@ unload("^utils%.", true)
 --------------------------------------------------------------------------------
 require("core.options")
 require("theme").setup({})
-require("modules")
-require("core.mappings")
-require("core.autocmds")
 
 require("lazyinit")
+
+require("core.mappings")
+require("core.autocmds")
+require("modules")
