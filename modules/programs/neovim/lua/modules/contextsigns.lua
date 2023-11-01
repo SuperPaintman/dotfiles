@@ -1,4 +1,9 @@
 --------------------------------------------------------------------------------
+-- Imports
+--------------------------------------------------------------------------------
+local utils = require("utils.utils")
+
+--------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
 local autocmd = vim.api.nvim_create_autocmd
@@ -672,26 +677,6 @@ local function init_treesitter()
   return true
 end
 
-local function debounce(ms, fn)
-  local running = false
-  local timer = vim.loop.new_timer()
-  local wrapper = function(...)
-    if running then
-      return
-    end
-    running = true
-
-    local argv = { ... }
-    timer:start(ms, 0, function()
-      timer:stop()
-      vim.schedule_wrap(fn)(unpack(argv))
-      running = false
-    end)
-  end
-
-  return wrapper, timer
-end
-
 local function create_updater(bufnr)
   local function updater()
     if not init_treesitter() then
@@ -756,11 +741,12 @@ M.defaults = {}
 ---@param opts? modules.contextsigns.Config
 M.setup = function(opts)
   -- Debounced debounced.
+  ---@type { [number]: { [1]: (fun(): nil), [2]: (fun(): nil) } }
   local debounced_updates = {}
 
   -- Define signs.
   if #vim.fn.sign_getdefined(SIGN_NAME) > 0 then
-    vim.fn.sign_undefine(SIGN_NAME)
+    vim.fn.sign_undefine({ SIGN_NAME })
   end
   vim.fn.sign_define(SIGN_NAME, {
     text = "|",
@@ -775,11 +761,12 @@ M.setup = function(opts)
     callback = function(e)
       local debounced = debounced_updates[e.buf]
       if debounced == nil then
-        debounced = { debounce(50, create_updater(e.buf)) }
+        debounced = { utils.debounce(create_updater(e.buf), 50) }
         debounced_updates[e.buf] = debounced
       end
 
-      debounced[1]()
+      local update = debounced[1]
+      update()
     end,
   })
 
@@ -788,7 +775,8 @@ M.setup = function(opts)
     callback = function(e)
       local debounced = debounced_updates[e.buf]
       if debounced ~= nil then
-        debounced[2]:stop()
+        local cancel = debounced[2]
+        cancel()
         debounced_updates[e.buf] = nil
       end
 
