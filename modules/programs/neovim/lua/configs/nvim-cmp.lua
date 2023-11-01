@@ -207,7 +207,6 @@ M.config = function()
       },
       {
         name = "nvim_lsp",
-        keyword_length = 2,
         entry_filter = function(entry, ctx)
           -- Disable auto completion if the cursor in a comment.
           if is_in_comment(ctx) and get_reason(ctx) ~= "manual" then
@@ -250,24 +249,24 @@ M.config = function()
       },
       {
         name = "luasnip",
-        entry_filter = function(entry, ctx)
-          if is_in_comment(ctx) then
-            -- Disable auto completion if the cursor in a comment.
-            if get_reason(ctx) == "manual" then
-              return true
-            end
-
-            -- Allow TODO-like macros.
-            local word = entry:get_word()
-            if word == "TODO" or word == "NOTE" or word == "FIX" then
-              return true
-            end
-
-            return false
-          end
-
-          return true
-        end,
+        -- entry_filter = function(entry, ctx)
+        --   if is_in_comment(ctx) then
+        --     -- Disable auto completion if the cursor in a comment.
+        --     if get_reason(ctx) == "manual" then
+        --       return true
+        --     end
+        --
+        --     -- Allow TODO-like macros.
+        --     local word = entry:get_word()
+        --     if word == "TODO" or word == "NOTE" or word == "FIX" then
+        --       return true
+        --     end
+        --
+        --     return false
+        --   end
+        --
+        --   return true
+        -- end,
       },
     }),
   })

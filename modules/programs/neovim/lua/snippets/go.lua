@@ -1,4 +1,5 @@
 -- See: https://github.com/L3MON4D3/LuaSnip/blob/master/DOC.md
+-- See: https://github.com/ray-x/go.nvim/blob/master/lua/go/snips.lua
 --------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
@@ -12,6 +13,7 @@ M.setup = function()
   local extras = require("luasnip.extras")
   local fmta = require("luasnip.extras.fmt").fmta
   local postfix = require("luasnip.extras.postfix").postfix
+  local conditions = require("snippets.conditions")
 
   local sn = ls.snippet_node
   local t = ls.text_node
@@ -46,6 +48,9 @@ M.setup = function()
           )
         )
       end),
+    }, {
+      condition = conditions.in_go_function * -conditions.in_comment,
+      show_condition = conditions.in_go_function * -conditions.in_comment,
     }),
 
     postfix(".append!", {
@@ -73,6 +78,9 @@ M.setup = function()
           )
         )
       end),
+    }, {
+      condition = conditions.in_go_function * -conditions.in_comment,
+      show_condition = conditions.in_go_function * -conditions.in_comment,
     }),
   })
 end

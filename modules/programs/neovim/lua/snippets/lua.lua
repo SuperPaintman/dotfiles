@@ -10,6 +10,7 @@ local M = {}
 M.setup = function()
   local ls = require("luasnip")
   local fmta = require("luasnip.extras.fmt").fmta
+  local conditions = require("snippets.conditions")
 
   local s = ls.snippet
   local i = ls.insert_node
@@ -29,7 +30,11 @@ M.setup = function()
           header = i(1, "Header"),
           i(2),
         }
-      )
+      ),
+      {
+        condition = conditions.in_lua_top_level,
+        show_condition = conditions.in_lua_top_level,
+      }
     ),
 
     s(
@@ -59,7 +64,11 @@ M.setup = function()
           name = i(1, "name"),
           i(2),
         }
-      )
+      ),
+      {
+        condition = conditions.in_lua_top_level,
+        show_condition = conditions.in_lua_top_level,
+      }
     ),
   })
 end

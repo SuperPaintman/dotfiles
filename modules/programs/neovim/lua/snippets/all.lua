@@ -29,6 +29,7 @@ end
 
 local function todo_snippet(tag)
   local ls = require("luasnip")
+  local conditions = require("snippets.conditions")
 
   local s = ls.snippet
   local sn = ls.snippet_node
@@ -51,6 +52,9 @@ local function todo_snippet(tag)
       return sn(nil, nodes)
     end),
     t("): "),
+  }, {
+    condition = conditions.in_comment,
+    show_condition = conditions.in_comment,
   })
 end
 

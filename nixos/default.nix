@@ -288,6 +288,7 @@ in
     extras
     godot_4
     gdsdecomp
+    spine
   ];
 
   # Programs.

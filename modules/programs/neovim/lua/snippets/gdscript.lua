@@ -10,6 +10,7 @@ local M = {}
 local function func_snippet(name, signature)
   local ls = require("luasnip")
   local fmt = require("luasnip.extras.fmt").fmt
+  local conditions = require("snippets.conditions")
 
   local s = ls.snippet
   local t = ls.text_node
@@ -28,7 +29,11 @@ local function func_snippet(name, signature)
         signature = t(signature),
         i(1, "pass"),
       }
-    )
+    ),
+    {
+      condition = -conditions.in_comment,
+      show_condition = -conditions.in_comment,
+    }
   )
 end
 
@@ -39,6 +44,7 @@ M.setup = function()
   local ls = require("luasnip")
   local fmt = require("luasnip.extras.fmt").fmt
   local postfix = require("luasnip.extras.postfix").postfix
+  local conditions = require("snippets.conditions")
 
   local s = ls.snippet
   local sn = ls.snippet_node
@@ -70,7 +76,11 @@ M.setup = function()
           base = i(2, "RefCounted"),
           i(3, "pass"),
         }
-      )
+      ),
+      {
+        condition = -conditions.in_comment,
+        show_condition = -conditions.in_comment,
+      }
     ),
 
     -- Var with getter/setter
@@ -93,7 +103,11 @@ M.setup = function()
         {
           repeat_duplicates = true,
         }
-      )
+      ),
+      {
+        condition = -conditions.in_comment,
+        show_condition = -conditions.in_comment,
+      }
     ),
 
     -- Postfix-based snippets.
@@ -118,6 +132,9 @@ M.setup = function()
           )
         )
       end),
+    }, {
+      condition = -conditions.in_comment,
+      show_condition = -conditions.in_comment,
     }),
   })
 end
