@@ -196,6 +196,19 @@
     plugin = "L3MON4D3/LuaSnip";
   };
 
+  neodev-nvim = {
+    pname = "neodev-nvim";
+    version = "0.0.0+rev=80487e4";
+    src = fetchFromGitHub {
+      owner = "folke";
+      repo = "neodev.nvim";
+      rev = "80487e4f7bfa11c2ef2a1b461963db019aad6a73";
+      sha256 = "sha256-cTK0InESf30wlDY/Qo7NkBXumG43rAoS/fE4jjRUK44=";
+    };
+    commit = "80487e4f7bfa11c2ef2a1b461963db019aad6a73";
+    plugin = "folke/neodev.nvim";
+  };
+
   neogit = {
     pname = "neogit";
     version = "0.0.0+rev=33016ad";

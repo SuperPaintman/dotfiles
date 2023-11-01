@@ -22,7 +22,7 @@ let
 
     installPhase = ''
       mkdir -p "$out"
-      for d in after autoload colors doc ftplugin lua plugin queries syntax; do
+      for d in after autoload colors doc ftplugin lua plugin queries syntax types; do
         if [ -d "$d" ]; then
           cp -r "$d" "$out/"
         fi

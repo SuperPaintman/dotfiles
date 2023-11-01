@@ -24,6 +24,17 @@ packages:
             repo: plenary.nvim
             rev: *commit
 
+    neodev-nvim:
+        type: github
+        extraAttrs:
+            plugin: folke/neodev.nvim
+            # branch: main
+            commit: &commit 80487e4f7bfa11c2ef2a1b461963db019aad6a73
+        args:
+            owner: folke
+            repo: neodev.nvim
+            rev: *commit
+
     telescope-nvim:
         type: github
         extraAttrs:

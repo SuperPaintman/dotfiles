@@ -226,6 +226,8 @@ let
 
       p.plenary-nvim.lazy
 
+      p.neodev-nvim.lazy
+
       (p.telescope-nvim.lazy.override {
         dependencies =
           if standalone
