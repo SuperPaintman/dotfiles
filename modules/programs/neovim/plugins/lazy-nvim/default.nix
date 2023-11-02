@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-no-helptags-update.patch
+    ./0002-no-git-and-fs-manipulations.patch
   ];
 
   buildPhase = ''
