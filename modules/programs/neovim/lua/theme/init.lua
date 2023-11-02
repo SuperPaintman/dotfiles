@@ -201,6 +201,14 @@ M.setup = function(opts)
   ---- Text.
   h("@text.uri", { fg = palette.colors.violet, underline = true })
 
+  ---- Diff.
+  h("@function.diff", { fg = palette.colors.magenta })
+  h("@attribute.diff", { fg = palette.colors.violet })
+  h("@text.diff.add", { fg = palette.colors.green })
+  h("@text.diff.delete", { fg = palette.colors.red })
+  h("@constant.diff", { fg = palette.colors.yellow })
+  l("@text.diff.index", "Comment")
+
   -- LSP
   --- Rust
   l("@lsp.type.macro.rust", "@function.macro")
@@ -234,12 +242,12 @@ M.setup = function(opts)
   h("NeogitHunkHeaderHighlight", { fg = palette.colors.violet })
   h("NeogitDiffContext", { bg = palette.colors.background })
   h("NeogitDiffContextHighlight", { bg = palette.colors.base4 })
-  h("NeogitDiffAdd", { fg = palette.colors.green })
+  l("NeogitDiffAdd", "@text.diff.add")
   h("NeogitDiffAddHighlight", {
     fg = palette.colors.green,
     bg = palette.colors.base4,
   })
-  h("NeogitDiffDelete", { fg = palette.colors.red })
+  l("NeogitDiffDelete", "@text.diff.delete")
   h("NeogitDiffDeleteHighlight", {
     fg = palette.colors.red,
     bg = palette.colors.base4,
