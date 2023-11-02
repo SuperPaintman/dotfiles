@@ -136,6 +136,12 @@ end
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
+M.dependencies = {
+  "hrsh7th/cmp-nvim-lsp",
+  "ray-x/lsp_signature.nvim",
+  "Hoffs/omnisharp-extended-lsp.nvim",
+}
+
 M.config = function()
   local lspconfig = require("lspconfig")
 

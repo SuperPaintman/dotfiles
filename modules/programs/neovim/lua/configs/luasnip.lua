@@ -13,6 +13,8 @@ local cb = require("utils.mappings").create_callback_factory(
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
+M.lazy = true
+
 M.config = function()
   local luasnip = require("luasnip")
 

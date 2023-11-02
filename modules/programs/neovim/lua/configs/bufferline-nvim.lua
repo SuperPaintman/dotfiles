@@ -72,6 +72,10 @@ end
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
+M.dependencies = {
+  "nvim-tree/nvim-web-devicons",
+}
+
 M.config = function()
   local bufferline = require("bufferline")
 

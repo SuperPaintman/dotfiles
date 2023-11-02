@@ -13,6 +13,31 @@ let
   inherit (config.modules.themes) theme;
   cfg = config.modules.programs.neovim;
 
+  mkNeovimEnv = { dependencies ? [ ] }: stdenv.mkDerivation {
+    name = "neovim-env";
+
+    dontUnpack = true;
+
+    installPhase =
+      let
+        links = flatten (map
+          (dep:
+            if isDerivation dep
+            then ''ln -s "${dep}/bin"/* "$out/bin"/''
+            else
+              map
+                (bin: ''ln -s "${dep.package}/bin/${bin}" "$out/bin/${bin}"'')
+                dep.bins
+          )
+          dependencies);
+      in
+      ''
+        mkdir -p "$out/bin"
+
+        ${concatStringsSep "\n" links}
+      '';
+  };
+
   trimNewlines = content:
     let
       lines = splitString "\n" content;
@@ -74,39 +99,17 @@ let
       colors = toLuaPaletteColors theme.colors;
     };
 
-  # See: https://github.com/folke/lazy.nvim#-plugin-spec
-  isPluginEnabled = { enabled ? null, ... }: enabled != false;
-
-  filterPlugins = filter isPluginEnabled;
-
-  formatPlugin =
+  formatPluginLuaLock =
     { plugin ? null
     , dir ? null
     , url ? null
     , name ? null
-    , dev ? null
-    , lazy ? null
-    , enabled ? null
-    , cond ? null
-    , dependencies ? null
-    , init ? null
-    , opts ? null
-    , config ? null
-    , main ? null
-    , build ? null
     , branch ? null
     , tag ? null
     , commit ? null
     , version ? null
     , pin ? true
-    , submodules ? null
-    , event ? null
-    , cmd ? null
-    , ft ? null
-    , keys ? null
-    , module ? null
-    , priority ? null
-    , optional ? null
+    , submodules ? false
     , ...
     }:
     let
@@ -117,45 +120,23 @@ let
           pipe plugin [
             (splitString "/")
             last
-            (replaceStrings [ "." ] [ "-" ])
-            toLower
+            (replaceStrings [ " " ] [ "_" ])
           ];
-
-      configWrapper = mkRawLua ''
-        require_optional_config(${toLua name'}, ${toLua config})
-      '';
 
       spec = concatStringsSep "\n" ([ ]
         ++ lib.optional (plugin != null) "${toLua plugin},"
         ++ lib.optional (dir != null) "dir = ${toLua dir},"
         ++ lib.optional (url != null) "url = ${toLua url},"
         ++ lib.optional (name' != null) "name = ${toLua name'},"
-        ++ lib.optional (dev != null) "dev = ${toLua dev},"
-        ++ lib.optional (lazy != null) "lazy = ${toLua lazy},"
-        ++ lib.optional (enabled != null) "enabled = ${toLua enabled},"
-        ++ lib.optional (cond != null) "cond = ${toLua cond},"
-        ++ lib.optional (dependencies != null) "dependencies = ${toLua dependencies},"
-        ++ lib.optional (init != null) "init = ${toLua init},"
-        ++ lib.optional (opts != null) "opts = ${toLua opts},"
-        ++ [ "config = ${toLua (if isBool config then config else configWrapper)}," ]
-        ++ lib.optional (main != null) "main = ${toLua main},"
-        ++ lib.optional (build != null) "build = ${toLua build},"
         ++ lib.optional (branch != null) "branch = ${toLua branch},"
         ++ lib.optional (tag != null) "tag = ${toLua tag},"
         ++ lib.optional (commit != null) "commit = ${toLua commit},"
         ++ lib.optional (version != null) "version = ${toLua version},"
         ++ lib.optional (pin != null) "pin = ${toLua pin},"
         ++ lib.optional (submodules != null) "submodules = ${toLua submodules},"
-        ++ lib.optional (event != null) "event = ${toLua event},"
-        ++ lib.optional (cmd != null) "cmd = ${toLua cmd},"
-        ++ lib.optional (ft != null) "ft = ${toLua ft},"
-        ++ lib.optional (keys != null) "keys = ${toLua keys},"
-        ++ lib.optional (module != null) "module = ${toLua module},"
-        ++ lib.optional (priority != null) "priority = ${toLua priority},"
-        ++ lib.optional (optional != null) "optional = ${toLua optional},"
       );
     in
-    "  {\n${indent "    " spec}\n  },";
+    "  [${toLua plugin}] = {\n${indent "    " spec}\n  },";
 
   formatLua = name: source: pkgs.runCommand name
     {
@@ -214,275 +195,89 @@ let
       p = nativePlugins;
     in
     [
-      # (p.catppuccin.lazy.override {
-      #   lazy = false;
-      #   priority = 1000;
-      #   config = mkRawLua ''
-      #     function()
-      #       vim.cmd([[colorscheme catppuccin]])
-      #     end
-      #   '';
-      # })
-
+      # Common libraries and utils.
       p.plenary-nvim.lazy
-
       p.neodev-nvim.lazy
+      p.nvim-web-devicons.lazy
 
-      (p.telescope-nvim.lazy.override {
-        dependencies =
-          if standalone
-          then [
-            p.plenary-nvim.lazy.plugin
-          ]
-          else null;
-      })
+      # Telescope.
+      p.telescope-nvim.lazy
 
+      # TreeSitter.
       ((nativePlugins.nvim-treesitter.withParsers
         (p:
           (map (lang: p."tree-sitter-${lang}") treesitterLanguages)
           ++ [
             p.tree-sitter-format_string
           ]
-        )).lazy.override {
-        config = mkRawLua ''
-          function()
-          ${optionalString (!standalone) (indent "  " ''
-            -- Disable compiling languages from source code.
-            require("nvim-treesitter.install").compilers = {
-              -- Alternatively, you can enable the compilers here.
-              -- ${toLua "${stdenv.cc}/bin/cc"}
-            }
-          '')}
-
-          ${optionalString standalone (indent "  " ''
-            -- Configure the plugin.
-            require("nvim-treesitter.configs").setup({
-              ensure_installed = {
-            ${concatMapStringsSep "\n" (lang: "    ${toLua lang},") treesitterLanguages}
-              },
-            })
-          '')}
-          end
-        '';
-      })
-
+        )).lazy.override { })
       p.nvim-treesitter-playground.lazy
 
-      (p.nvim-lspconfig.lazy.override {
-        dependencies =
-          if standalone
-          then [
-            p.omnisharp-extended-lsp-nvim.lazy.plugin
-          ]
-          else null;
-        init = mkRawLua ''
-          function()
-            vim.schedule(function()
-              vim.cmd([[silent! do FileType]])
-            end, 0)
-          end
-        '';
-        config = mkRawLua ''
-          function()
-          ${optionalString (!standalone) (indent "  " ''
-            local lspconfig = require("lspconfig")
-
-            -- Helpers
-            local patch = function(name, patch)
-              local cfg = require("lspconfig.server_configurations." .. name)
-
-              cfg.default_config = vim.tbl_extend("force", cfg.default_config, patch)
-            end
-
-            -- C / C++
-            patch("clangd", {
-              cmd = { ${toLua "${pkgs.clang-tools}/bin/clangd"} },
-            })
-
-            -- C#
-            patch("omnisharp", {
-              cmd = { ${toLua "${pkgs.omnisharp-roslyn}/bin/OmniSharp"} },
-            })
-
-            -- CSS
-            patch("cssls", {
-              cmd = { ${toLua "${pkgs.nodePackages.vscode-langservers-extracted}/bin/vscode-css-language-server"}, "--stdio" },
-            })
-
-            -- Go
-            patch("gopls", {
-              cmd = { ${toLua "${pkgs.gopls}/bin/gopls"} },
-            })
-
-            -- HTML
-            patch("html", {
-              cmd = { ${toLua "${pkgs.nodePackages.vscode-langservers-extracted}/bin/vscode-html-language-server"}, "--stdio" },
-            })
-
-            -- JSON
-            patch("jsonls", {
-              cmd = { ${toLua "${pkgs.nodePackages.vscode-langservers-extracted}/bin/vscode-json-language-server"}, "--stdio" },
-            })
-
-            -- Lua
-            patch("lua_ls", {
-              cmd = { ${toLua "${pkgs.lua-language-server}/bin/lua-language-server"} },
-            })
-
-            -- Nix
-            patch("rnix", {
-              cmd = { ${toLua "${pkgs.rnix-lsp}/bin/rnix-lsp"} },
-            })
-
-            -- Rust
-            patch("rust_analyzer", {
-              cmd = { ${toLua "${pkgs.rust-analyzer}/bin/rust-analyzer"} },
-            })
-
-            -- TOML
-            patch("taplo", {
-              cmd = { ${toLua "${pkgs.taplo}/bin/taplo"}, "lsp", "stdio" },
-            })
-
-            -- YAML
-            patch("yamlls", {
-              cmd = { ${toLua "${pkgs.nodePackages.yaml-language-server}/bin/yaml-language-server"}, "--stdio" },
-            })
-          '')}
-          end
-        '';
-      })
-
+      # LSP.
+      p.nvim-lspconfig.lazy
       p.lsp-signature-nvim.lazy
-
       p.omnisharp-extended-lsp-nvim.lazy
+      p.null-ls-nvim.lazy
 
-      (p.nvim-cmp.lazy.override {
-        event = "InsertEnter";
-        dependencies =
-          if standalone
-          then [
-            p.cmp-nvim-lua.lazy.plugin
-            p.cmp-nvim-lsp.lazy.plugin
-            p.cmp-buffer.lazy.plugin
-            p.cmp-path.lazy.plugin
-            p.cmp_luasnip.lazy.plugin
-            p.luasnip.lazy.plugin
-          ]
-          else null;
-      })
-
+      # Completion.
+      p.nvim-cmp.lazy
       p.cmp-nvim-lua.lazy
       p.cmp-nvim-lsp.lazy
       p.cmp-buffer.lazy
       p.cmp-path.lazy
       p.cmp_luasnip.lazy
 
-      p.gitsigns-nvim.lazy
-
-      p.comment-nvim.lazy
-
-      (p.nvim-tree-lua.lazy.override {
-        dependencies =
-          if standalone
-          then [
-            p.nvim-web-devicons.lazy.plugin
-          ]
-          else null;
-      })
-
-      p.which-key-nvim.lazy
-
-      p.lualine-nvim.lazy
-
-      p.bufferline-nvim.lazy
-
-      (p.null-ls-nvim.lazy.override {
-        config = mkRawLua ''
-          function()
-          ${optionalString (!standalone) (indent "  " ''
-            local null_ls = require("null-ls")
-
-            -- Helpers
-            local patch = function(kind, name, patch)
-              null_ls.builtins[kind][name] = null_ls.builtins[kind][name].with(patch)
-            end
-
-            -- Diagnostics
-            --- cspell
-            patch("diagnostics", "cspell", {
-              command = ${toLua "${pkgs.nodePackages.cspell}/bin/cspell"},
-            })
-
-            --- gdlint  
-            patch("diagnostics", "gdlint", {
-              command = ${toLua "${pkgs.gdtoolkit_4}/bin/gdlint"},
-            })
-
-            --- staticcheck
-            patch("diagnostics", "staticcheck", {
-              command = ${toLua "${pkgs.go-tools}/bin/staticcheck"},
-            })
-
-            --- statix
-            patch("diagnostics", "statix", {
-              command = ${toLua "${pkgs.statix}/bin/statix"},
-            })
-
-            -- Formatting
-            --- gdformat  
-            patch("formatting", "gdformat", {
-              command = ${toLua "${pkgs.gdtoolkit_4}/bin/gdformat"},
-            })
-
-            --- goimports
-            patch("formatting", "goimports", {
-              command = ${toLua "${pkgs.gotools}/bin/goimports"},
-            })
-
-            --- prettier
-            patch("formatting", "prettier", {
-              command = ${toLua "${pkgs.nodePackages.prettier}/bin/prettier"},
-            })
-
-            --- stylua
-            patch("formatting", "stylua", {
-              command = ${toLua "${pkgs.stylua}/bin/stylua"},
-            })
-          '')}
-          end
-        '';
-      })
-
-      (p.trouble-nvim.lazy.override {
-        dependencies =
-          if standalone
-          then [
-            p.nvim-web-devicons.lazy.plugin
-          ]
-          else null;
-      })
-
+      # Snippets.
       p.luasnip.lazy
 
-      p.alpha-nvim.lazy
+      # Git.
+      p.gitsigns-nvim.lazy
+      p.neogit.lazy
+      p.diffview-nvim.lazy
 
-      p.nvim-web-devicons.lazy
+      # Editing.
+      p.comment-nvim.lazy
 
-      (p.neogit.lazy.override {
-        dependencies =
-          if standalone
-          then [
-            p.plenary-nvim.lazy.plugin
-            p.diffview-nvim.lazy.plugin
-          ]
-          else null;
-      })
-
+      # Sessions.
       p.auto-session.lazy
 
-      p.diffview-nvim.lazy
+      # UI.
+      p.nvim-tree-lua.lazy
+      p.which-key-nvim.lazy
+      p.lualine-nvim.lazy
+      p.bufferline-nvim.lazy
+      p.trouble-nvim.lazy
+      p.alpha-nvim.lazy # Dashboard.
     ];
+
+  nixEnv = mkNeovimEnv {
+    dependencies = with pkgs; [
+      # Common.
+      git
+
+      # LSP-Config
+      { package = clang-tools; bins = [ "clangd" ]; } # C / C++
+      { package = omnisharp-roslyn; bins = [ "OmniSharp" ]; } # C#
+      { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-css-language-server" ]; } # CSS
+      { package = gopls; bins = [ "gopls" ]; } # Go
+      { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-html-language-server" ]; } # HTML
+      { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-json-language-server" ]; } # JSON
+      { package = lua-language-server; bins = [ "lua-language-server" ]; } # Lua
+      { package = rnix-lsp; bins = [ "rnix-lsp" ]; } # Nix
+      { package = rust-analyzer; bins = [ "rust-analyzer" ]; } # Rust
+      { package = taplo; bins = [ "taplo" ]; } # TOML
+      { package = nodePackages.yaml-language-server; bins = [ "yaml-language-server" ]; } # YAML
+
+      # Null-ls
+      { package = nodePackages.cspell; bins = [ "cspell" ]; }
+      { package = gdtoolkit_4; bins = [ "gdlint" "gdformat" ]; }
+      { package = go-tools; bins = [ "staticcheck" ]; }
+      { package = gotools; bins = [ "goimports" ]; }
+      { package = statix; bins = [ "statix" ]; }
+      { package = nodePackages.prettier; bins = [ "prettier" ]; }
+      { package = stylua; bins = [ "stylua" ]; }
+    ];
+  };
 in
 
 {
@@ -541,6 +336,7 @@ in
           ---@class theme.palette.Module
           local M = ${toLua (toLuaPalette theme)}
 
+
           --------------------------------------------------------------------------------
           -- Export
           --------------------------------------------------------------------------------
@@ -550,64 +346,25 @@ in
           source = ./lua/utils;
           recursive = true;
         };
-        "nvim/lua/lazyinit.lua".source = formatLua "nvim-lua-lazyinit.lua" ''
-          --------------------------------------------------------------------------------
-          -- Imports
-          --------------------------------------------------------------------------------
-          local is_available = require("utils.modules").is_available
-
-
+        "nvim/lua/lazylock.lua".source = formatLua "nvim-lua-lazylock.lua" ''
           --------------------------------------------------------------------------------
           -- Init
           --------------------------------------------------------------------------------
+          vim.opt.path:prepend(${toLua "${nixEnv}/bin"})
+          vim.env.PATH = ${toLua "${nixEnv}/bin"} .. ":" .. vim.env.PATH
           vim.opt.rtp:prepend(${toLua nativePlugins.lazy-nvim})
 
-
-          --------------------------------------------------------------------------------
-          -- Helpers
-          --------------------------------------------------------------------------------
-          local require_optional_config = function(name, config)
-            return function(plugin, opts)
-              opts = opts or {}
-
-              local run_default = true
-
-              -- Run the inline configuration.
-              if config ~= nil then
-                config(plugin, opts)
-                run_default = false
-              end
-
-              -- Run the configuration from file.
-              if is_available("configs." .. name) then
-                local mod = require("configs." .. name)
-                if mod and type(mod.config) == "function" then
-                  mod.config(plugin, opts)
-                  run_default = false
-                end
-              end
-
-              -- Run the default configuration.
-              if run_default then
-                local main = require("lazy.core.loader").get_main(plugin)
-                if main and is_available(main) then
-                  local mod = require(main)
-                  if mod and type(mod.setup) == "function" then
-                    mod.setup(opts)
-                  end
-                end
-              end
-            end
-          end
+          local M = {
+          ${concatMapStringsSep "\n" formatPluginLuaLock plugins}
+          }
 
 
           --------------------------------------------------------------------------------
-          -- Setup
+          -- Export
           --------------------------------------------------------------------------------
-          require("lazy").setup({
-          ${concatMapStringsSep "\n" formatPlugin (filterPlugins plugins)}
-          }, {})
+          return M
         '';
+        "nvim/lua/lazyinit.lua".source = ./lua/lazyinit.lua;
         "nvim/queries" = {
           source = ./queries;
           recursive = true;

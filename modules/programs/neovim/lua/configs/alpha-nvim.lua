@@ -190,6 +190,12 @@ end
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
+M.dependencies = {
+  "nvim-tree/nvim-web-devicons",
+  "rmagatti/auto-session",
+  "nvim-tree/nvim-tree.lua",
+}
+
 M.config = function()
   require("alpha").setup({
     layout = {

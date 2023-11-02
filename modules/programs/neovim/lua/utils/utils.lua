@@ -5,6 +5,45 @@
 local M = {}
 
 --------------------------------------------------------------------------------
+-- Table
+--------------------------------------------------------------------------------
+---@generic T1
+---@generic T2
+---@param left T1[]
+---@param right T2[]
+---@return (T1 | T2)[]
+M.concat = function(left, right)
+  local res = {}
+
+  for _, item in ipairs(left) do
+    table.insert(res, item)
+  end
+
+  for _, item in ipairs(right) do
+    table.insert(res, item)
+  end
+
+  return res
+end
+
+---@generic T
+---@param tbl T[]
+---@return T[]
+M.uniq = function(tbl)
+  local res = {}
+  local seen = {}
+
+  for _, item in ipairs(tbl) do
+    if not seen[item] then
+      seen[item] = true
+      table.insert(res, item)
+    end
+  end
+
+  return res
+end
+
+--------------------------------------------------------------------------------
 -- Function
 --------------------------------------------------------------------------------
 ---@generic T: fun(...): nil

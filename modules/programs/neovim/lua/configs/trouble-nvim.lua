@@ -6,6 +6,10 @@ local M = {}
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
+M.dependencies = {
+  "nvim-tree/nvim-web-devicons",
+}
+
 M.config = function()
   require("trouble").setup({
     -- Disable devicons for filenames.

@@ -6,6 +6,10 @@ local M = {}
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
+M.dependencies = {
+  "nvim-tree/nvim-web-devicons",
+}
+
 M.config = function()
   local api = require("nvim-tree.api")
 
