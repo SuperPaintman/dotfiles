@@ -129,7 +129,7 @@ let
         ++ lib.optional (plugin != null) "${toLua plugin},"
         ++ lib.optional (dir != null) "dir = ${toLua dir},"
         ++ lib.optional (url != null) "url = ${toLua url},"
-        ++ lib.optional (name != null) "name = ${toLua name},"
+        ++ lib.optional (name' != null) "name = ${toLua name'},"
         ++ lib.optional (dev != null) "dev = ${toLua dev},"
         ++ lib.optional (lazy != null) "lazy = ${toLua lazy},"
         ++ lib.optional (enabled != null) "enabled = ${toLua enabled},"
