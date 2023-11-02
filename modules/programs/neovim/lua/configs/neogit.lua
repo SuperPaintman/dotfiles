@@ -3,7 +3,7 @@
 -- Init
 --------------------------------------------------------------------------------
 local M = {
-  _initialized = false,
+  _initialized = true, -- TODO(SuperPaintman): remove it.
 }
 
 local autocmd = vim.api.nvim_create_autocmd
@@ -23,6 +23,10 @@ M.dependencies = {
   "sindrets/diffview.nvim", -- optional
   -- "ibhagwan/fzf-lua", -- optional
 }
+
+M.lazy = true
+
+M.cmd = "Neogit"
 
 M.config = function()
   require("neogit").setup({
@@ -55,6 +59,8 @@ end
 
 M.mappings = {
   open = cb(function()
+    -- TODO(SuperPaintman): add a helper for lazy loading.
+    require("lazy").load({ plugins = { "neogit" }, wait = true })
     require("neogit").open({})
   end),
 }
