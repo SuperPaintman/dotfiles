@@ -255,12 +255,7 @@ setup({
   { "nvim-tree/nvim-web-devicons", opts = {}, lazy = true },
 
   -- Telescope.
-  {
-    "nvim-telescope/telescope.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-  },
+  "nvim-telescope/telescope.nvim",
 
   -- TreeSitter.
   {

@@ -227,6 +227,12 @@ M.setup = function(opts)
   h("healthError", { fg = palette.colors.red, bold = true })
 
   -- Plugins.
+  --- Telescope
+  l("TelescopeNormal", "Pmenu")
+  l("TelescopeSelection", "PmenuSel")
+  l("TelescopeBorder", "Pmenu")
+  h("TelescopeTitle", { bold = true })
+
   --- Gitsigns
   h("GitSignsAdd", { fg = palette.colors.green })
   h("GitSignsChange", { fg = palette.colors.yellow })

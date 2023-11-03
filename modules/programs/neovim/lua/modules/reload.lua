@@ -11,6 +11,7 @@ local RELOADABLE = {
   "configs.lsp_signature-nvim",
   "configs.luasnip",
   "configs.nvim-cmp",
+  "configs.telescope-nvim",
 
   "modules.statuscolumn",
   "modules.contextsigns",
