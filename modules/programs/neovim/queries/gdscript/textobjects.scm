@@ -10,30 +10,27 @@
   . ","? @_end)
   (#make-range! "parameter.outer" @parameter.inner @_end))
 
-((arguments
+(arguments
   . ["(" ","] @_start
-  (_) @parameter.inner
+  (_) @parameter.inner @parameter.outer
   . ")" @_end)
-  (#make-range! "parameter.outer" @_start @parameter.inner @_end))
 
 ((parameters
   (_) @parameter.inner
   . ","? @_end)
   (#make-range! "parameter.outer" @parameter.inner @_end))
 
-((parameters
+(parameters
   . ["(" ","] @_start
-  (_) @parameter.inner
+  (_) @parameter.inner @parameter.outer
   . ")" @_end)
-  (#make-range! "parameter.outer" @_start @parameter.inner @_end))
 
 ((array
   (_) @parameter.inner
   . ","? @_end)
   (#make-range! "parameter.outer" @parameter.inner @_end))
 
-((array
+(array
   . ["[" ","] @_start
-  (_) @parameter.inner
+  (_) @parameter.inner @parameter.outer
   . "]" @_end)
-  (#make-range! "parameter.outer" @_start @parameter.inner @_end))
