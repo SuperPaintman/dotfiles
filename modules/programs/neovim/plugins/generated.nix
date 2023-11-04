@@ -302,14 +302,14 @@
 
   nvim-treesitter-textobjects = {
     pname = "nvim-treesitter-textobjects";
-    version = "0.0.0+rev=e69a504";
+    version = "0.0.0+rev=52f1f32";
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter-textobjects";
-      rev = "e69a504baf2951d52e1f1fbb05145d43f236cbf1";
-      sha256 = "sha256-WZ+Fs4JdVKb5H0biSKMFrEYA5N7EcqpOwA4huU/Qvjw=";
+      rev = "52f1f3280d9092bfaee5c45be5962fabee3d9654";
+      sha256 = "sha256-UqderGoFad6tIny3pn38mB2XibA0dzxUVWNBYmsxAMw=";
     };
-    commit = "e69a504baf2951d52e1f1fbb05145d43f236cbf1";
+    commit = "52f1f3280d9092bfaee5c45be5962fabee3d9654";
     plugin = "nvim-treesitter/nvim-treesitter-textobjects";
   };
 
