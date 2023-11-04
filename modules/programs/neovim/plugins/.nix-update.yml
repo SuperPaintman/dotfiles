@@ -58,6 +58,17 @@ packages:
             repo: nvim-lspconfig
             rev: *commit
 
+    lspsaga-nvim:
+        type: github
+        extraAttrs:
+            plugin: nvimdev/lspsaga.nvim
+            # branch: main
+            commit: &commit 7ebd0cc5923c81516c1c050fc9aea70bec23fd02
+        args:
+            owner: nvimdev
+            repo: lspsaga.nvim
+            rev: *commit
+
     nvim-cmp:
         type: github
         extraAttrs:

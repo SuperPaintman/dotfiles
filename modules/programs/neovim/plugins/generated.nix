@@ -170,6 +170,19 @@
     plugin = "ray-x/lsp_signature.nvim";
   };
 
+  lspsaga-nvim = {
+    pname = "lspsaga-nvim";
+    version = "0.0.0+rev=7ebd0cc";
+    src = fetchFromGitHub {
+      owner = "nvimdev";
+      repo = "lspsaga.nvim";
+      rev = "7ebd0cc5923c81516c1c050fc9aea70bec23fd02";
+      sha256 = "sha256-VF7zuxxHVs0uSDNGzswrBsKSmATC7byyEG+LZSEwTxM=";
+    };
+    commit = "7ebd0cc5923c81516c1c050fc9aea70bec23fd02";
+    plugin = "nvimdev/lspsaga.nvim";
+  };
+
   lualine-nvim = {
     pname = "lualine-nvim";
     version = "0.0.0+rev=442d2ab";

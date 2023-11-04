@@ -339,6 +339,12 @@ M.setup = function(opts)
   l("BufferLineWarningSelected", "BufferLineBufferSelected")
   l("BufferLineWarningDiagnosticSelected", "DiagnosticSignWarn")
 
+  --- LSP Saga
+  l("SagaTitle", "Pmenu")
+  l("SagaBorder", "VertSplit")
+  l("SagaNormal", "Pmenu")
+  l("RenameNormal", "Pmenu")
+
   -- Modules.
   --- ContextSigns.
   h("ContextSign", { fg = palette.colors.base8 })

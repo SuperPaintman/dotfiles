@@ -216,6 +216,7 @@ let
 
       # LSP.
       p.nvim-lspconfig.lazy
+      p.lspsaga-nvim.lazy
       p.lsp-signature-nvim.lazy
       p.omnisharp-extended-lsp-nvim.lazy
       p.null-ls-nvim.lazy

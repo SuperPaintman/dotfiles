@@ -110,6 +110,9 @@ M.statuscolumn = function()
   local diagnostic_level = 0
 
   ---@type modules.statuscolumn.Sign?
+  local code_action_sign = nil
+
+  ---@type modules.statuscolumn.Sign?
   local git_sign = nil
 
   ---@type modules.statuscolumn.Sign?
@@ -121,6 +124,10 @@ M.statuscolumn = function()
       if diagnostic_sign == nil or level > diagnostic_level then
         diagnostic_sign = sign
         diagnostic_level = level
+      end
+    elseif sign.name == "SagaLightBulb" then
+      if code_action_sign == nil then
+        code_action_sign = sign
       end
     elseif sign.name:find("^GitSign") then
       if git_sign == nil then
@@ -144,6 +151,8 @@ M.statuscolumn = function()
   --- Diagnostic signs.
   if diagnostic_sign ~= nil then
     insert_sign(diagnostic_sign)
+  elseif code_action_sign ~= nil then
+    insert_sign(code_action_sign)
   else
     insert_padding("   ")
   end

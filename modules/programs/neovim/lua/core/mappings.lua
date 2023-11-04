@@ -4,6 +4,7 @@
 local neogit = require("configs.neogit").mappings
 local telescope = require("configs.telescope-nvim").mappings
 local luasnip = require("configs.luasnip").mappings
+local lspsaga = require("configs.lspsaga-nvim").mappings
 
 --------------------------------------------------------------------------------
 -- Init
@@ -219,7 +220,8 @@ M.groups.r = {
   name = "refactoring",
   prefix = "<leader>r",
   mappings = {
-    r = { "n", vim.lsp.buf.rename, "Rename" },
+    r = { "n", lspsaga.rename(), "Rename" },
+    a = { "n", lspsaga.code_action(), "Code Action" },
   },
 }
 

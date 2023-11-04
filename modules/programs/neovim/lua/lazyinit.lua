@@ -285,6 +285,7 @@ setup({
       end)
     end,
   },
+  "nvimdev/lspsaga.nvim",
   "ray-x/lsp_signature.nvim",
   { "Hoffs/omnisharp-extended-lsp.nvim", lazy = true }, -- Patches for C# LSP.
   "jose-elias-alvarez/null-ls.nvim",
