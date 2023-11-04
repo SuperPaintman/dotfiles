@@ -82,6 +82,64 @@ M.setup = function()
       condition = conditions.in_go_function * -conditions.in_comment,
       show_condition = conditions.in_go_function * -conditions.in_comment,
     }),
+
+    postfix(".lock!", {
+      d(1, function(_, parent)
+        local pm = parent.snippet.env.POSTFIX_MATCH
+
+        local nodes = {}
+        if pm == nil or pm == "" then
+          nodes["mutex"] = i(1, "mutex")
+          nodes["mutex_same"] = rep(1)
+        else
+          nodes["mutex"] = t(pm)
+          nodes["mutex_same"] = t(pm)
+        end
+
+        return sn(
+          nil,
+          fmta(
+            [[
+              <mutex>.Lock()
+              defer <mutex_same>.Unlock()
+            ]],
+            nodes
+          )
+        )
+      end),
+    }, {
+      condition = conditions.in_go_function * -conditions.in_comment,
+      show_condition = conditions.in_go_function * -conditions.in_comment,
+    }),
+
+    postfix(".rlock!", {
+      d(1, function(_, parent)
+        local pm = parent.snippet.env.POSTFIX_MATCH
+
+        local nodes = {}
+        if pm == nil or pm == "" then
+          nodes["mutex"] = i(1, "mutex")
+          nodes["mutex_same"] = rep(1)
+        else
+          nodes["mutex"] = t(pm)
+          nodes["mutex_same"] = t(pm)
+        end
+
+        return sn(
+          nil,
+          fmta(
+            [[
+              <mutex>.RLock()
+              defer <mutex_same>.RUnlock()
+            ]],
+            nodes
+          )
+        )
+      end),
+    }, {
+      condition = conditions.in_go_function * -conditions.in_comment,
+      show_condition = conditions.in_go_function * -conditions.in_comment,
+    }),
   })
 end
 
