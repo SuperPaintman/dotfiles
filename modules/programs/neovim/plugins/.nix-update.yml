@@ -223,6 +223,17 @@ packages:
             repo: playground
             rev: *commit
 
+    nvim-treesitter-textobjects:
+        type: github
+        extraAttrs:
+            plugin: nvim-treesitter/nvim-treesitter-textobjects
+            # branch: master
+            commit: &commit e69a504baf2951d52e1f1fbb05145d43f236cbf1
+        args:
+            owner: nvim-treesitter
+            repo: nvim-treesitter-textobjects
+            rev: *commit
+
     luasnip:
         type: github
         extraAttrs:

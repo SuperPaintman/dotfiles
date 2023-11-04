@@ -204,14 +204,15 @@ let
       p.telescope-nvim.lazy
 
       # TreeSitter.
-      ((nativePlugins.nvim-treesitter.withParsers
+      (nativePlugins.nvim-treesitter.withParsers
         (p:
           (map (lang: p."tree-sitter-${lang}") treesitterLanguages)
           ++ [
             p.tree-sitter-format_string
           ]
-        )).lazy.override { })
+        )).lazy
       p.nvim-treesitter-playground.lazy
+      p.nvim-treesitter-textobjects.lazy
 
       # LSP.
       p.nvim-lspconfig.lazy

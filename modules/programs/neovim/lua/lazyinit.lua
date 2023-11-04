@@ -267,11 +267,14 @@ setup({
   },
   {
     "nvim-treesitter/playground",
+    name = "nvim-treesitter-playground",
+    lazy = true,
     dependencies = {
       "nvim-treesitter/nvim-treesitter",
     },
     cmd = "TSPlaygroundToggle",
   },
+  { "nvim-treesitter/nvim-treesitter-textobjects", lazy = true },
 
   -- LSP.
   {
