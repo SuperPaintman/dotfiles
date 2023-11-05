@@ -267,6 +267,8 @@ let
       { package = lua-language-server; bins = [ "lua-language-server" ]; } # Lua
       { package = rnix-lsp; bins = [ "rnix-lsp" ]; } # Nix
       { package = rust-analyzer; bins = [ "rust-analyzer" ]; } # Rust
+      { package = terraform-ls; bins = [ "terraform-ls" ]; } # Terraform
+      { package = tflint; bins = [ "tflint" ]; } # Terraform
       { package = taplo; bins = [ "taplo" ]; } # TOML
       { package = nodePackages.yaml-language-server; bins = [ "yaml-language-server" ]; } # YAML
 

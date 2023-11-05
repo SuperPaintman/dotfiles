@@ -214,6 +214,10 @@ M.setup = function(opts)
   l("@lsp.type.macro.rust", "@function.macro")
   l("@lsp.type.enumMember.rust", "Type")
 
+  --- Terraform
+  l("@lsp.type.type.terraform", "@keyword")
+  l("@lsp.type.enumMember.terraform", "@string")
+
   -- Built-in Pluggins.
   --- Help
   l("helpSectionDelim", "markdownH1Delimiter")

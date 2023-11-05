@@ -303,6 +303,17 @@ M.config = function()
     },
   })
 
+  -- Terraform.
+  lspconfig.terraformls.setup({
+    capabilities = capabilities,
+    on_attach = create_on_attach({ semantic = false }),
+  })
+
+  lspconfig.tflint.setup({
+    capabilities = capabilities,
+    on_attach = create_on_attach({}),
+  })
+
   -- TOML
   lspconfig.taplo.setup({
     capabilities = capabilities,

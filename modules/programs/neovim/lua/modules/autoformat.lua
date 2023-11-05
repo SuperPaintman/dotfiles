@@ -36,6 +36,7 @@ M.defaults = {
     html = "null-ls", -- prettier
     json = "null-ls", -- prettier
     nix = "rnix",
+    terraform = "terraformls",
     yaml = "null-ls", -- prettier
     default = "null-ls",
   },
