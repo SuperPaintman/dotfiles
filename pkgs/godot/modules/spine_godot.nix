@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "EsotericSoftware";
     repo = "spine-runtimes";
-    rev = "b83ee23be8c0de65c66c3c1ff2ea50b6d0efbee2";
-    hash = "sha256-e7+FUVi+soTer8uhF32bGXmar69VTrejyQt0HqLwgN4=";
+    rev = "d12431d72cb49f322d8c4812fe17377df2bde1b0";
+    hash = "sha256-si7ZxBUosOrqQ3hNaj/kABc4MIr3ZCqT/dhG5uCcpdU=";
   };
 
   phases = [ "unpackPhase" "installPhase" ];
