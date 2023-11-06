@@ -15,13 +15,20 @@ M.config = function()
 
   require("nvim-tree").setup({
     filters = {
-      custom = { "^\\.git$" },
+      custom = {
+        "^\\.git$", -- Git.
+        "^node_modules$", -- Node.
+      },
     },
     disable_netrw = true,
     sync_root_with_cwd = true,
     view = {
       width = 40,
       preserve_window_proportions = true,
+    },
+    git = {
+      enable = true,
+      ignore = false,
     },
     renderer = {
       -- Hide the root folder label.
