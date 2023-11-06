@@ -144,6 +144,7 @@ M.dependencies = {
 
 M.config = function()
   local lspconfig = require("lspconfig")
+  local lspconfig_util = require("lspconfig.util")
 
   local capabilities = get_default_client_capabilities()
   local function create_on_attach(opts)
@@ -289,6 +290,12 @@ M.config = function()
   -- })
 
   lspconfig.nixd.setup({
+    root_dir = function(fname)
+      return lspconfig_util.root_pattern(unpack({ ".nixd.json", "flake.nix" }))(
+        fname
+      )
+      -- or lspconfig_util.find_git_ancestor(fname)
+    end,
     capabilities = capabilities,
     on_attach = create_on_attach({}),
   })
