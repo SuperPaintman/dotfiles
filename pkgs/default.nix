@@ -11,6 +11,7 @@ rec {
   godot = godot_3;
   godot_3 = callPackage ./godot/3 { };
   godot_4 = callPackage ./godot/4 { };
+  nixd = callPackage ./nixd { };
   spine = callPackage ./spine { };
   wtk = callPackage ./wtk { };
 }
