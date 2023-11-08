@@ -25,6 +25,7 @@
 , speechd
 , fontconfig
 , udev
+, withDebugSymbols ? true
 , withPlatform ? "linuxbsd"
 , withTarget ? "editor"
 , withPrecision ? "single"
@@ -131,9 +132,11 @@ stdenv.mkDerivation rec {
     find "../${modules.spine_godot.pname}" -type d -exec chmod 755 {} \;
   '';
 
+  # See: https://docs.godotengine.org/en/4.1/contributing/development/compiling/introduction_to_the_buildsystem.html
   sconsFlags = mkSconsFlagsFromAttrSet {
     # Options from 'SConstruct'
     production = true; # Set defaults to build Godot for use in production
+    debug_symbols = withDebugSymbols;
     platform = withPlatform;
     target = withTarget;
     precision = withPrecision; # Floating-point precision level
@@ -168,6 +171,8 @@ stdenv.mkDerivation rec {
     cp icon.svg "$out/share/icons/hicolor/scalable/apps/godot.svg"
     cp icon.png "$out/share/icons/godot.png"
   '';
+
+  dontStrip = withDebugSymbols;
 
   meta = with lib; {
     homepage = "https://godotengine.org";
