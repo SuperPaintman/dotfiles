@@ -315,6 +315,18 @@ M.config = function()
     },
   })
 
+  -- Svelte.
+  lspconfig.svelte.setup({
+    capabilities = capabilities,
+    on_attach = create_on_attach({}),
+  })
+
+  -- TypeScript / JavaScript.
+  lspconfig.tsserver.setup({
+    capabilities = capabilities,
+    on_attach = create_on_attach({}),
+  })
+
   -- Terraform.
   lspconfig.terraformls.setup({
     capabilities = capabilities,
