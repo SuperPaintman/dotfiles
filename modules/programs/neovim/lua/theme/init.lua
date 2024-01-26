@@ -218,6 +218,12 @@ M.setup = function(opts)
   l("@lsp.type.type.terraform", "@keyword")
   l("@lsp.type.enumMember.terraform", "@string")
 
+  --- JavaScript
+  l("@preproc.javascript", "String")
+
+  --- TypeScript
+  l("@preproc.typescript", "String")
+
   -- Built-in Pluggins.
   --- Help
   l("helpSectionDelim", "markdownH1Delimiter")

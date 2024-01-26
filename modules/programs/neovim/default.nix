@@ -173,6 +173,8 @@ let
     "html"
     "http"
     "javascript"
+    "typescript"
+    "tsx"
     "json"
     "lua"
     "luadoc"

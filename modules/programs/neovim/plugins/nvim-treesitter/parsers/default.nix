@@ -7,7 +7,8 @@
 let
   inherit (pkgs) callPackage newScope;
 
-  buildTreesitterParser = callPackage <nixpkgs/pkgs/development/tools/parsing/tree-sitter/grammar.nix> { };
+  buildTreesitterParser' = callPackage <nixpkgs/pkgs/development/tools/parsing/tree-sitter/grammar.nix> { };
+  buildTreesitterParser = lib.makeOverridable buildTreesitterParser';
 
   generated = import ./generated.nix { inherit (pkgs) fetchgit; };
   generatedParsers = lib.mapAttrs
@@ -18,6 +19,11 @@ let
   callTreesitterParserPackage = newScope { inherit buildTreesitterParser; };
 in
 
-generatedParsers // {
+generatedParsers
+// (with generatedParsers; {
+  tree-sitter-typescript = tree-sitter-typescript.override { generate = false; };
+  tree-sitter-tsx = tree-sitter-tsx.override { generate = false; };
+})
+  // {
   tree-sitter-format_string = callTreesitterParserPackage ./tree-parser-format_string { };
 }
