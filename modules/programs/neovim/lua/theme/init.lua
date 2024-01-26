@@ -223,6 +223,8 @@ M.setup = function(opts)
 
   --- TypeScript
   l("@preproc.typescript", "String")
+  l("@constructor.typescript", "Function")
+  l("@type.qualifier.typescript", "@keyword")
 
   -- Built-in Pluggins.
   --- Help
