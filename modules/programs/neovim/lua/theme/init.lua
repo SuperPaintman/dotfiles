@@ -226,6 +226,10 @@ M.setup = function(opts)
   l("@constructor.typescript", "Function")
   l("@type.qualifier.typescript", "@keyword")
 
+  --- Zig
+  l("@type.qualifier.zig", "@keyword") -- const, var, volatile, allowzero, noalias
+  l("@attribute.zig", "@keyword") -- comptime, export, extern, inline, noinline, packed, pub, threadlocal
+
   -- Built-in Pluggins.
   --- Help
   l("helpSectionDelim", "markdownH1Delimiter")

@@ -383,6 +383,12 @@ M.config = function()
       redhat = { telemetry = { enabled = false } },
     },
   })
+
+  -- Zig
+  lspconfig.zls.setup({
+    capabilities = capabilities,
+    on_attach = create_on_attach({ semantic = false }),
+  })
 end
 
 --------------------------------------------------------------------------------
