@@ -226,6 +226,12 @@ M.setup = function(opts)
   l("@constructor.typescript", "Function")
   l("@type.qualifier.typescript", "@keyword")
 
+  --- TreeSitter Query
+  l("@variable.query", "@type")
+  l("@punctuation.special.query", "@keyword")
+  l("@type.query", "Constant")
+  -- l("@constant.query", "Constant")
+
   --- Zig
   l("@type.qualifier.zig", "@keyword") -- const, var, volatile, allowzero, noalias
   l("@attribute.zig", "@keyword") -- comptime, export, extern, inline, noinline, packed, pub, threadlocal
