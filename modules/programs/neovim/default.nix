@@ -277,7 +277,7 @@ let
       { package = nodePackages.typescript-language-server; bins = [ "typescript-language-server" ]; } # TypeScript / JavaScript
       { package = taplo; bins = [ "taplo" ]; } # TOML
       { package = nodePackages.yaml-language-server; bins = [ "yaml-language-server" ]; } # YAML
-      { package = unstable.zls; bins = [ "zls" ]; } # Zig
+      { package = local.zls; bins = [ "zls" ]; } # Zig
 
       # Null-ls
       { package = nodePackages.cspell; bins = [ "cspell" ]; }

@@ -225,7 +225,7 @@ in
     unstable.protobuf
     unstable.protoc-gen-go
     unstable.protoc-gen-go-grpc
-    unstable.zig
+    localPkgs.zig
 
     # Docker.
     docker

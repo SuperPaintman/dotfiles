@@ -39,6 +39,14 @@ with pkgs; rec {
 
   rustup-openssl = callPackage ./development/tools/rust/rustup-openssl { };
 
+  zig_0_11 = callPackage ./development/compilers/zig/0.11.nix {
+    llvmPackages = llvmPackages_16;
+  };
+
+  zig = zig_0_11;
+
+  zls = callPackage ./development/tools/language-servers/zls { inherit zig_0_11; };
+
   # Games.
   anki-desktop = callPackage ./games/anki-desktop { };
 
