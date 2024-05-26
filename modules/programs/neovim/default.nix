@@ -296,6 +296,14 @@ let
       pkgs.bubblewrap-copilot
     ];
   };
+
+  nativeExtensions = pkgs.rustPlatform.buildRustPackage {
+    name = "nvim-native-extensiosn";
+
+    src = ./extensions;
+
+    cargoLock.lockFile = ./extensions/Cargo.lock;
+  };
 in
 
 {
