@@ -347,6 +347,12 @@ in
           recursive = true;
         };
         "nvim/lua/theme/init.lua".source = ./lua/theme/init.lua;
+        "nvim/lua/init-native-extensions.lua".source = formatLua "nvim-lua-init-native-extensions.lua" ''
+          package.cpath = table.concat({
+            ${toLua "${nativeExtensions}/lib/lib?.so"},
+            package.cpath,
+          }, ";")
+        '';
         "nvim/lua/theme/palette.lua".source = formatLua "nvim-lua-theme-colors.lua" ''
           --------------------------------------------------------------------------------
           -- Init

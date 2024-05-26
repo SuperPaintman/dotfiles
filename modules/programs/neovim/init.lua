@@ -18,6 +18,7 @@ unload("^utils%.", true)
 --------------------------------------------------------------------------------
 math.randomseed(os.time())
 
+require("init-native-extensions")
 require("core.options")
 require("theme").setup({})
 

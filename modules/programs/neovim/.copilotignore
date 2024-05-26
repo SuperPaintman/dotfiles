@@ -1,0 +1,10 @@
+# Ignore all files by default.
+/*
+
+# Allow the following files.
+!*.lua
+!*.nix
+!*.scm
+!*.sh
+!*.rs
+!*.toml
