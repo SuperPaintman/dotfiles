@@ -7,6 +7,7 @@
 , branch ? null
 , commit ? null
 , installPhase ? null
+, patches ? [ ]
 , passthru ? { }
 }:
 
@@ -18,7 +19,7 @@ let
     newSelf // { override = mkOverride newSelf; };
 
   self = stdenv.mkDerivation {
-    inherit pname version src;
+    inherit pname version src patches;
 
     installPhase = ''
       mkdir -p "$out"

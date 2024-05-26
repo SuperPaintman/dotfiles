@@ -246,6 +246,10 @@ let
       # Sessions.
       p.auto-session.lazy
 
+      # AI.
+      p.copilot-lua.lazy
+      p.copilot-cmp.lazy
+
       # UI.
       p.nvim-tree-lua.lazy
       p.which-key-nvim.lazy
@@ -287,6 +291,9 @@ let
       { package = statix; bins = [ "statix" ]; }
       { package = nodePackages.prettier; bins = [ "prettier" ]; }
       { package = stylua; bins = [ "stylua" ]; }
+
+      # Copilot
+      pkgs.bubblewrap-copilot
     ];
   };
 in

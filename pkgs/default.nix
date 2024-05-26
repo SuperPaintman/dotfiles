@@ -5,6 +5,7 @@ let
 in
 
 rec {
+  bubblewrap-copilot = callPackage ./bubblewrap-copilot { };
   extras = callPackage ./extras { };
   gdsdecomp = callPackage ./gdsdecomp { };
   gdtoolkit_4 = callPackage ./gdtoolkit/4 { };

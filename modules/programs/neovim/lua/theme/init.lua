@@ -343,7 +343,7 @@ M.setup = function(opts)
     Calendar = nil,
     Watch = nil,
     Package = nil,
-    Copilot = nil,
+    Copilot = palette.colors.blue,
     Codeium = nil,
     TabNine = nil,
   }

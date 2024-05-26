@@ -46,7 +46,7 @@ M.icons = {
     Calendar = "",
     Watch = "󰥔",
     Package = "",
-    Copilot = "",
+    Copilot = "",
     Codeium = "",
     TabNine = "",
   },

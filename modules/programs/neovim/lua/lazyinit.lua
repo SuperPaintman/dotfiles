@@ -312,6 +312,10 @@ setup({
   -- Sessions.
   "rmagatti/auto-session",
 
+  -- AI.
+  "zbirenbaum/copilot.lua",
+  { "zbirenbaum/copilot-cmp", opts = {}, lazy = true },
+
   -- UI.
   "nvim-tree/nvim-tree.lua",
   "folke/which-key.nvim",

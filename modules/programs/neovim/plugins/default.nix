@@ -21,5 +21,16 @@ in
 
 generatedPlugins // {
   lazy-nvim = callPackage ./lazy-nvim { inherit neovim; };
+
   nvim-treesitter = callPackage ./nvim-treesitter { inherit neovim; };
+
+  copilot-lua = generatedPlugins.copilot-lua.override {
+    installPhase = installDirs [
+      "copilot" # JS and WASM files.
+    ];
+
+    patches = [
+      ./copilot-lua/0001-copilot-custom-distributions.patch
+    ];
+  };
 }

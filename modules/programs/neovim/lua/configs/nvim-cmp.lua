@@ -120,6 +120,7 @@ M.dependencies = {
   "hrsh7th/cmp-path",
   "saadparwaiz1/cmp_luasnip",
   "L3MON4D3/LuaSnip",
+  "zbirenbaum/copilot-cmp",
 }
 
 M.event = "InsertEnter"
@@ -279,6 +280,7 @@ M.config = function()
         --   return true
         -- end,
       },
+      { name = "copilot" },
     }),
   })
 end

@@ -82,21 +82,9 @@ local function is_nvimtree_buffer()
 end
 
 local function has_lsp_server()
-  local clients = vim.lsp.get_active_clients()
-  if #clients <= 0 then
-    return false
-  end
-
-  local filetype = vim.api.nvim_buf_get_option(0, "filetype")
-
-  for _, client in ipairs(clients) do
-    local filetypes = client.config.filetypes
-    if filetypes and vim.fn.index(filetypes, filetype) ~= -1 then
-      return true
-    end
-  end
-
-  return false
+  local bufnr = vim.api.nvim_get_current_buf()
+  local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+  return #clients > 0
 end
 
 local function mode_color()
@@ -107,6 +95,64 @@ local function mode_color()
 
   mode = string.sub(mode, 2)
   return MODE_COLORS[mode]
+end
+
+local function create_hl(tag, options, color)
+  local highlight = require("lualine.highlight")
+
+  local hl =
+    highlight.create_component_highlight_group(color, tag, options, false)
+
+  return highlight.component_format_highlight(hl)
+end
+
+local function lazy_hl(tag, color)
+  local hl = nil
+  return function(options)
+    if hl == nil then
+      hl = create_hl(tag, options, color)
+    end
+    return hl
+  end
+end
+
+local function indicator(status, fmt, color)
+  if type(fmt) == "table" then
+    local fmt_on = fmt.on
+    local fmt_off = fmt.off
+    fmt = function(enabled)
+      if enabled then
+        return fmt_on
+      else
+        return fmt_off
+      end
+    end
+  end
+
+  if type(color) == "table" then
+    local color_on = lazy_hl("indicator_on", color.on)
+    local color_off = lazy_hl("indicator_off", color.off)
+    color = function(enabled)
+      if enabled then
+        return color_on
+      else
+        return color_off
+      end
+    end
+  end
+
+  return function(self)
+    local hl = nil
+    local text = ""
+    if status(self) then
+      hl = color(true)(self.options)
+      text = fmt(true)
+    else
+      hl = color(false)(self.options)
+      text = fmt(false)
+    end
+    return hl .. text
+  end
 end
 
 --------------------------------------------------------------------------------
@@ -211,15 +257,28 @@ M.config = function()
 
   --- Autoformat.
   insert_right({
-    const("󰧞"),
-    color = function()
-      local color = colors.foreground
-      if autoformat.enabled() then
-        color = colors.green
-      end
-
-      return { fg = color }
+    indicator(
+      autoformat.enabled,
+      { on = "", off = "" },
+      { on = { fg = colors.green }, off = { fg = colors.red } }
+    ),
+    cond = function()
+      return not is_nvimtree_buffer()
     end,
+  })
+
+  -- Copilot.
+  insert_right({
+    indicator(
+      function()
+        local bufnr = vim.api.nvim_get_current_buf()
+        local clients =
+          vim.lsp.get_active_clients({ bufnr = bufnr, name = "copilot" })
+        return #clients > 0
+      end,
+      { on = "", off = "" },
+      { on = { fg = colors.green }, off = { fg = colors.red } }
+    ),
     cond = function()
       return not is_nvimtree_buffer()
     end,
@@ -228,13 +287,12 @@ M.config = function()
   -- Lsp servers.
   insert_right({
     function()
-      local filetype = vim.api.nvim_buf_get_option(0, "filetype")
-      local clients = vim.lsp.get_active_clients()
+      local bufnr = vim.api.nvim_get_current_buf()
+      local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
 
       local names = {}
       for _, client in ipairs(clients) do
-        local filetypes = client.config.filetypes
-        if filetypes and vim.fn.index(filetypes, filetype) ~= -1 then
+        if client.name ~= "copilot" then
           table.insert(names, client.name)
         end
       end
