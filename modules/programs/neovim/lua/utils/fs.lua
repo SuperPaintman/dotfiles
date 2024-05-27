@@ -80,6 +80,8 @@ end
 -- Functions
 --------------------------------------------------------------------------------
 
+--- Read file and return its content as an array of lines.
+---
 ---@param filename string
 ---@return string[]
 function M.read(filename)
@@ -101,6 +103,11 @@ function M.read(filename)
   return lines
 end
 
+--- Creates an iterator that returns the ancestors of a path.
+---
+--- If the `inclusive` parameter is set to `true`, the top-level path will be
+--- included.
+---
 ---@param root string
 ---@param inclusive boolean?
 ---@return fun(): number, string
