@@ -14,3 +14,5 @@
 (color_value) @constant.builtin
 
 (unit) @constant.unit
+
+(plain_value) @string
