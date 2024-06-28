@@ -47,6 +47,11 @@ local function l(group, link, opts)
   h(group, opts)
 end
 
+---@param group string
+local function unset(group)
+  h(group, {})
+end
+
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
@@ -209,7 +214,7 @@ M.setup = function(opts)
   h("@constant.diff", { fg = palette.colors.yellow })
   l("@text.diff.index", "Comment")
 
-  -- LSP
+  -- Language Specific / Treesitter / LSP
   --- Rust
   l("@lsp.type.macro.rust", "@function.macro")
   l("@lsp.type.enumMember.rust", "Type")
@@ -225,6 +230,43 @@ M.setup = function(opts)
   l("@preproc.typescript", "String")
   l("@constructor.typescript", "Function")
   l("@type.qualifier.typescript", "@keyword")
+
+  --- HTML
+  h("@tag.html", { fg = palette.colors.red })
+  h("@tag.attribute.html", { fg = palette.colors.yellow })
+  l("@operator.html", "@text.html")
+  h("@text.uri.html", { fg = palette.colors.green, underline = true })
+  l("@text.title.html", "@text.html")
+  l("@text.title.1.html", "@text.html")
+  l("@text.title.2.html", "@text.html")
+  l("@text.title.3.html", "@text.html")
+  l("@text.title.4.html", "@text.html")
+  l("@text.title.5.html", "@text.html")
+  l("@text.title.6.html", "@text.html")
+
+  --- CSS
+  h("@type.selector.css", { fg = palette.colors.red })
+  l("@type.selector.tag.css", "@type.selector.css")
+  l("@type.selector.id.css", "@type.selector.css")
+  l("@type.selector.class.css", "@type.selector.css")
+  h("@property.name.css", { fg = palette.colors.yellow })
+  h("@constant.unit.css", { fg = palette.colors.red })
+  unset("@property.css")
+  unset("@punctuation.delimiter.css")
+
+  --- Svelte
+  l("@tag.svelte", "@tag.html")
+  l("@tag.attribute.svelte", "@tag.attribute.html")
+  l("@operator.svelte", "@text.svelte")
+  l("@text.uri.svelte", "@text.uri.html")
+  l("@text.title.svelte", "@text.title.html")
+  l("@text.title.1.svelte", "@text.title.1.html")
+  l("@text.title.2.svelte", "@text.title.2.html")
+  l("@text.title.3.svelte", "@text.title.3.html")
+  l("@text.title.4.svelte", "@text.title.4.html")
+  l("@text.title.5.svelte", "@text.title.5.html")
+  l("@text.title.6.svelte", "@text.title.6.html")
+  l("@lsp.type.class.svelte", "@tag.svelte")
 
   --- TreeSitter Query
   l("@variable.query", "@type")
