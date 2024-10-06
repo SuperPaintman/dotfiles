@@ -317,6 +317,23 @@ in
     bluetooth = {
       package = pkgs.bluezFull;
     };
+
+    printers = {
+      ensureDefaultPrinter = "PastaPrinter";
+      ensurePrinters = [
+        {
+          name = "PastaPrinter";
+          description = "Xerox(R) B230 Printer";
+          # deviceUri = "http://<ip>:631/";
+          deviceUri = "ipp://<ip>:631/ipp/print";
+          model = "drv:///sample.drv/generic.ppd";
+          ppdOptions = {
+            PageSize = "A4";
+            ColorModel = "Gray";
+          };
+        }
+      ];
+    };
   };
 
   # Services.
@@ -480,6 +497,11 @@ in
   services.blueman.enable = true;
 
   services.upower.enable = true;
+
+  services.printing = {
+    enable = true;
+    drivers = with pkgs; [ gutenprint ];
+  };
 
   services.openvpn.servers =
     # Merge servicers into one set.
