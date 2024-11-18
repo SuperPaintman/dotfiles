@@ -268,7 +268,7 @@ let
       { package = clang-tools; bins = [ "clangd" ]; } # C / C++
       { package = omnisharp-roslyn; bins = [ "OmniSharp" ]; } # C#
       { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-css-language-server" ]; } # CSS
-      { package = gopls; bins = [ "gopls" ]; } # Go
+      { package = unstable.gopls; bins = [ "gopls" ]; } # Go
       { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-html-language-server" ]; } # HTML
       { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-json-language-server" ]; } # JSON
       { package = lua-language-server; bins = [ "lua-language-server" ]; } # Lua
