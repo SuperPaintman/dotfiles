@@ -103,7 +103,7 @@
     xserver = {
       videoDrivers = [ "nvidia" ];
       dpi = 96;
-      screenSection = lib.optionalString (config.hardware.nvidia.prime.sync.enable) ''
+      screenSection = lib.optionalString config.hardware.nvidia.prime.sync.enable ''
         Option         "metamodes" "nvidia-auto-select +0+0 {ForceFullCompositionPipeline=On}"
         Option         "AllowIndirectGLXProtocol" "off"
         Option         "TripleBuffer" "on"
@@ -112,15 +112,19 @@
       # Display manager.
       displayManager =
         let
+          # Primary - the laptop display.
+          # Secondary - the external display.
           xrandrCommands = with pkgs; ''
+            # Detect displays.
+            DISPLAY_PRIMARY='eDP-1'
+            DISPLAY_SECONDARY='DP-1'
             if ${xorg.xrandr}/bin/xrandr --query 2>&1 | grep '^eDP-1-1 connected' 2>&1 > /dev/null; then
               DISPLAY_PRIMARY='eDP-1-1'
               DISPLAY_SECONDARY='DP-1-1'
-            else
-              DISPLAY_PRIMARY='eDP-1'
-              DISPLAY_SECONDARY='DP-1'
             fi
 
+            # Detect display modes.
+            DISPLAY_PRIMARY_MODE='1920x1080'
             DISPLAY_SECONDARY_MODE=""
             if ${xorg.xrandr}/bin/xrandr --query 2>&1 | grep "^$DISPLAY_SECONDARY connected" 2>&1 > /dev/null; then
               DISPLAY_SECONDARY_MODE="$(${xorg.xrandr}/bin/xrandr --query 2>&1 | grep "^$DISPLAY_SECONDARY connected" -A1 | tail -n1 | awk '{print $1}')"
@@ -130,15 +134,22 @@
               DISPLAY_SECONDARY_MODE='1920x1080'
             fi
 
+            # Detect display positions.
+            DISPLAY_PRIMARY_POS='0x0'
             DISPLAY_SECONDARY_POS='1920x0'
             if [ "$DISPLAY_SECONDARY_MODE" = '3840x2160' ]; then
               DISPLAY_SECONDARY_POS="1920x$((1080 / 2 * -1))"
             fi
 
-            # Primary left.
+            # Turn off the secondary display because sometimes it stays black 
+            # after waking up.
             ${xorg.xrandr}/bin/xrandr \
-              --output "$DISPLAY_PRIMARY" --primary --mode 1920x1080 --pos 0x0 \
-              --output "$DISPLAY_SECONDARY" --mode "$DISPLAY_SECONDARY_MODE" --pos "$DISPLAY_SECONDARY_POS"
+              --output "$DISPLAY_SECONDARY" --off
+
+            # Setup the displays.
+            ${xorg.xrandr}/bin/xrandr \
+              --output "$DISPLAY_PRIMARY"   --primary  --mode "$DISPLAY_PRIMARY_MODE"    --pos "$DISPLAY_PRIMARY_POS" \
+              --output "$DISPLAY_SECONDARY"            --mode "$DISPLAY_SECONDARY_MODE"  --pos "$DISPLAY_SECONDARY_POS"
           '';
 
           xinputToggleTouchpadCommand = with pkgs; writeShellScript "xinput-toggle-touchpad" ''
