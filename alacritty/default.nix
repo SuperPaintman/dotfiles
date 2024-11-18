@@ -1,7 +1,7 @@
 { macOSOnly, ... }:
 {
-  ".config/alacritty/alacritty.yml".source = ./alacritty.yml;
-  ".config/alacritty/default.yml".source = ./default.yml;
-  ".config/alacritty/colors.yml".source = ./colors.yml;
-  ".config/alacritty/macos.yml".source = (macOSOnly ./macos.yml);
+  ".config/alacritty/alacritty.toml".source = ./alacritty.toml;
+  ".config/alacritty/default.toml".source = ./default.toml;
+  ".config/alacritty/colors.toml".source = ./colors.toml;
+  ".config/alacritty/macos.toml".source = macOSOnly ./macos.toml;
 }

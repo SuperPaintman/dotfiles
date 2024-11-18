@@ -48,7 +48,7 @@ in
     # Editors.
     vim
     unstable.neovim
-    unstable.neovide
+    # unstable.neovide
     emacs
     unstable.vscode
     # (

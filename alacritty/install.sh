@@ -11,12 +11,12 @@ EXIT_CODE=0
 
 source "$ROOT/../common.sh"
 
-link $@ "$ROOT/alacritty.yml" "$HOME/.config/alacritty/alacritty.yml" || { EXIT_CODE="$?"; }
-link $@ "$ROOT/colors.yml" "$HOME/.config/alacritty/colors.yml" || { EXIT_CODE="$?"; }
-link $@ "$ROOT/default.yml" "$HOME/.config/alacritty/default.yml" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/alacritty.toml" "$HOME/.config/alacritty/alacritty.toml" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/colors.toml" "$HOME/.config/alacritty/colors.toml" || { EXIT_CODE="$?"; }
+link $@ "$ROOT/default.toml" "$HOME/.config/alacritty/default.toml" || { EXIT_CODE="$?"; }
 
 if is_osx; then
-    link $@ "$ROOT/macos.yml" "$HOME/.config/alacritty/macos.yml" || { EXIT_CODE="$?"; }
+    link $@ "$ROOT/macos.toml" "$HOME/.config/alacritty/macos.toml" || { EXIT_CODE="$?"; }
 fi
 
 exit "$EXIT_CODE"

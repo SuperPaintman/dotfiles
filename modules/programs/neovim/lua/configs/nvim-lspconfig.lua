@@ -179,6 +179,28 @@ M.config = function()
     return on_attach
   end
 
+  vim.api.nvim_create_autocmd("LspAttach", {
+    group = vim.api.nvim_create_augroup("ForceLspConfig", { clear = true }),
+    desc = "Force LSP config (call on_attach function)",
+    callback = function(ev)
+      local bufnr = ev.buf
+      local client = vim.lsp.get_client_by_id(ev.data.client_id)
+
+      local ok, err = pcall(function()
+        if type(client.config._on_attach) == "function" then
+          client.config._on_attach(client, bufnr)
+        end
+      end)
+      if not ok then
+        vim.api.nvim_notify(
+          "nvim-lspconfig: failed to call on_attach: " .. (err or ""),
+          vim.log.levels.ERROR,
+          {}
+        )
+      end
+    end,
+  })
+
   -- C / C++
   local clangd_default_cmd =
     require("lspconfig.server_configurations.clangd").default_config.cmd[1]
@@ -297,7 +319,7 @@ M.config = function()
       -- or lspconfig_util.find_git_ancestor(fname)
     end,
     capabilities = capabilities,
-    on_attach = create_on_attach({}),
+    on_attach = create_on_attach({ semantic = false }),
   })
 
   -- Rust
@@ -318,7 +340,7 @@ M.config = function()
   -- Svelte.
   lspconfig.svelte.setup({
     capabilities = capabilities,
-    on_attach = create_on_attach({}),
+    on_attach = create_on_attach({ semantic = false }),
   })
 
   -- TypeScript / JavaScript.

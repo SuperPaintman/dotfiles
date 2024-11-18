@@ -102,7 +102,7 @@ in
     })
     (self: super: {
       nixVersions = super.nixVersions // {
-        inherit (unstable.nixVersions) nix_2_16; # For Nixd
+        inherit (unstable.nixVersions) nix_2_18; # For Nixd
       };
     })
   ];
@@ -141,7 +141,7 @@ in
     # Editors.
     vim
     unstable.neovim
-    unstable.neovide
+    # unstable.neovide
     emacs
     (
       vscode-with-extensions.override {

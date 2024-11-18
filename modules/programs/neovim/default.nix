@@ -273,7 +273,7 @@ let
       { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-json-language-server" ]; } # JSON
       { package = lua-language-server; bins = [ "lua-language-server" ]; } # Lua
       { package = rnix-lsp; bins = [ "rnix-lsp" ]; } # Nix
-      { package = nixd; bins = [ "nixd" ]; } # Nix
+      { package = unstable.nixd; bins = [ "nixd" ]; } # Nix
       { package = rust-analyzer; bins = [ "rust-analyzer" ]; } # Rust
       { package = nodePackages.svelte-language-server; bins = [ "svelteserver" ]; } # Svelte
       { package = terraform-ls; bins = [ "terraform-ls" ]; } # Terraform
