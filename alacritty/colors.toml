@@ -1,27 +1,30 @@
+# This file is generated; DO NOT EDIT.
+
+[colors]
 [colors.primary]
 background = "#282c34"
 foreground = "#DFDFDF"
 
 [colors.cursor]
-cursor = "#DFDFDF"
 text = "#5b6268"
+cursor = "#DFDFDF"
 
 [colors.normal]
 black = "#1b2229"
-blue = "#51afef"
-cyan = "#46d9ff"
-green = "#98be65"
-magenta = "#c678dd"
 red = "#ff6c6b"
-white = "#dfdfdf"
+green = "#98be65"
 yellow = "#ecbe7b"
+blue = "#51afef"
+magenta = "#c678dd"
+cyan = "#46d9ff"
+white = "#dfdfdf"
 
 [colors.bright]
 black = "#4E555C"
-blue = "#6AC8FF"
-cyan = "#5FF2FF"
-green = "#B1D77E"
-magenta = "#DF91F6"
 red = "#FF8584"
-white = "#F8F8F8"
+green = "#B1D77E"
 yellow = "#FFD794"
+blue = "#6AC8FF"
+magenta = "#DF91F6"
+cyan = "#5FF2FF"
+white = "#F8F8F8"

@@ -1,6 +1,0 @@
-# See: https://github.com/alacritty/alacritty/blob/master/alacritty.yml .
-
-import:
-    - /home/superpaintman/.config/alacritty/default.yml
-    - /home/superpaintman/.config/alacritty/colors.yml
-    # - /home/superpaintman/.config/alacritty/macos.yml

@@ -19,6 +19,7 @@ const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const glob = require('glob');
 const yaml = require('js-yaml');
+const toml = require('smol-toml');
 const tinycolor = require('tinycolor2');
 const Handlebars = require('handlebars');
 
@@ -200,6 +201,12 @@ Handlebars.registerHelper({
   },
   yaml(value) {
     return yaml.dump(value, { indent: 4 });
+  },
+  toml(value) {
+    return toml.stringify(value);
+  },
+  wrap(field, value) {
+    return { [field]: value };
   },
   lua: toLua
 });
