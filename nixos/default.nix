@@ -100,11 +100,6 @@ in
       local = localPkgs;
       home-manager = pkgs.callPackage home-manager { };
     })
-    (self: super: {
-      nixVersions = super.nixVersions // {
-        inherit (unstable.nixVersions) nix_2_18; # For Nixd
-      };
-    })
   ];
 
   # Environment.
