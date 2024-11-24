@@ -17,6 +17,7 @@ M.setup = function()
 
   local sn = ls.snippet_node
   local t = ls.text_node
+  local s = ls.snippet
   local i = ls.insert_node
   local d = ls.dynamic_node
   local rep = extras.rep
@@ -140,6 +141,41 @@ M.setup = function()
       condition = conditions.in_go_function * -conditions.in_comment,
       show_condition = conditions.in_go_function * -conditions.in_comment,
     }),
+
+    s(
+      "!main",
+      fmta(
+        [[
+          package main
+
+          import (
+            "context"
+            "log"
+          )
+
+          func main() {
+            ctx := context.Background()
+
+            if err := run(ctx); err != nil {
+              log.Fatalf("Failed to run: %s", err)
+            }
+          }
+
+          func run(ctx context.Context) error {
+            <>
+
+            return nil
+          }
+        ]],
+        {
+          i(1),
+        }
+      ),
+      {
+        condition = conditions.in_go_top_level,
+        show_condition = conditions.in_go_top_level,
+      }
+    ),
   })
 end
 
