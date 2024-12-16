@@ -138,6 +138,10 @@ M.setup = function(opts)
   --- Markup.
   h("Title", { fg = palette.colors.red })
 
+  -- Quick Fix.
+  h("qfFileName", { fg = palette.colors.yellow })
+  h("qfLineNr", { fg = palette.colors.magenta })
+
   --- Languages
   ---- Markdown
   h("markdownBold", { fg = palette.colors.yellow, bold = true })
