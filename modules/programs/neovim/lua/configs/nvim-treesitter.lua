@@ -1,9 +1,24 @@
 --------------------------------------------------------------------------------
+-- Imports
+--------------------------------------------------------------------------------
+local buffers = require("utils.buffers")
+
+--------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
 local set = vim.keymap.set
 
 local M = {}
+
+--------------------------------------------------------------------------------
+-- Helpers
+--------------------------------------------------------------------------------
+
+---@param size number
+---@return string
+local function human_readable_size(size)
+  return math.floor(size / 1024) .. " KiB"
+end
 
 --------------------------------------------------------------------------------
 -- Modules
@@ -18,6 +33,24 @@ M.config = function()
   require("nvim-treesitter.configs").setup({
     highlight = {
       enable = true,
+      disable = function(_, bufnr)
+        local max_size = 256 * 1024 -- 256 KiB
+
+        local size, ok = buffers.file_size(bufnr)
+        if ok and size > max_size then
+          vim.api.nvim_notify(
+            "Disable Treesitter highlight, file is too large: "
+              .. human_readable_size(size)
+              .. " > "
+              .. human_readable_size(max_size),
+            vim.log.levels.WARN,
+            {}
+          )
+          return true
+        end
+
+        return false -- TODO(SuperPaintman): check non-file buffers as well.
+      end,
     },
     playground = {
       enable = true,
