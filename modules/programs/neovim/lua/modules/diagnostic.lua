@@ -75,11 +75,38 @@ M.setup = function(opts)
     -- Use underline for diagnostics.
     underline = true,
     -- Use virtual text for diagnostics.
-    virtual_text = false,
+    virtual_text = {
+      ---@param diagnostic module.diagnostic.Diagnostic
+      format = function(diagnostic)
+        local fmt = diagnostic.message
+
+        if diagnostic.code ~= nil or diagnostic.source ~= nil then
+          fmt = fmt .. " ["
+
+          if diagnostic.source ~= nil then
+            fmt = fmt .. diagnostic.source
+          end
+          if diagnostic.code ~= nil then
+            if diagnostic.source then
+              fmt = fmt .. ": "
+            end
+
+            fmt = fmt .. diagnostic.code
+          end
+
+          fmt = fmt .. "]"
+        end
+
+        fmt = string.gsub(fmt, "[\n\r]", " ")
+        fmt = string.gsub(fmt, "[ ]+", " ")
+
+        return fmt
+      end,
+    },
     -- Use signs for diagnostics.
     signs = true,
     -- Update diagnostics in Insert mode.
-    update_in_insert = true,
+    update_in_insert = false,
     -- Sort diagnostics by severity.
     severity_sort = true,
 
@@ -138,13 +165,13 @@ M.setup = function(opts)
   })
 
   -- Add the "auto-hover".
-  autocmd("CursorHold", {
-    group = augroup("DiagnosticAutoHover", { clear = true }),
-    desc = "Auto opening of the diagnostic float window",
-    callback = function()
-      vim.diagnostic.open_float()
-    end,
-  })
+  -- autocmd("CursorHold", {
+  --   group = augroup("DiagnosticAutoHover", { clear = true }),
+  --   desc = "Auto opening of the diagnostic float window",
+  --   callback = function()
+  --     vim.diagnostic.open_float()
+  --   end,
+  -- })
 end
 
 --------------------------------------------------------------------------------
