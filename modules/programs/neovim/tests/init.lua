@@ -22,6 +22,14 @@ if false then
 
   ---@type fun(want: any, got: any)
   assert.same = assert.same
+
+  ---@type fun(cb: fun())
+  assert.has_error = assert.has_error
+
+  assert.has_no = {
+    ---@type fun(cb: fun())
+    errors = assert.has_no.errors,
+  }
 end
 
 --------------------------------------------------------------------------------
