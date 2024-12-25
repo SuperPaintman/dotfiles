@@ -225,6 +225,17 @@ M.groups.r = {
   },
 }
 
+--- Treeview / nvim-tree
+M.groups.t = {
+  name = "tree",
+  prefix = "<leader>t",
+  mappings = {
+    t = { "n", [[:NvimTreeToggle<CR>]], "Toggle" },
+    f = { "n", [[:NvimTreeFindFile<CR>]], "Find file" },
+    r = { "n", [[:NvimTreeRefresh<CR>]], "Refresh" },
+  },
+}
+
 --- Yank
 M.mappings["<leader>y"] = { { "n", "v" }, [["+y]], "Yank to clipboard" }
 
