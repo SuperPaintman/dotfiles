@@ -108,10 +108,28 @@ M.setup = function(opts)
   h("PmenuSbar", { bg = palette.colors.base2 })
   h("PmenuThumb", { bg = palette.colors.base5 })
 
+  h("Folded", {
+    fg = palette.colors.base5,
+    bg = colors.mix(palette.colors.base2, palette.colors.base3, 0.5),
+  })
+
   -- Diff
-  h("DiffAdd", { fg = palette.colors.green })
-  h("DiffChange", { fg = palette.colors.yellow })
-  h("DiffDelete", { fg = palette.colors.red })
+  h("DiffAdd", {
+    fg = palette.colors.green,
+    bg = colors.mix(palette.colors.background, palette.colors.green, 0.15),
+  })
+  h("DiffChange", {
+    fg = palette.colors.yellow,
+    bg = colors.mix(palette.colors.background, palette.colors.yellow, 0.15),
+  })
+  h("DiffText", {
+    fg = palette.colors.yellow,
+    bg = colors.mix(palette.colors.background, palette.colors.yellow, 0.3),
+  })
+  h("DiffDelete", {
+    fg = palette.colors.red,
+    bg = colors.mix(palette.colors.background, palette.colors.red, 0.15),
+  })
 
   -- Quick Fix.
   h("qfFileName", { fg = palette.colors.yellow })
@@ -235,8 +253,8 @@ M.setup = function(opts)
   ---- Diff.
   h("@function.diff", { fg = palette.colors.magenta })
   h("@attribute.diff", { fg = palette.colors.violet })
-  h("@text.diff.add", { fg = palette.colors.green })
-  h("@text.diff.delete", { fg = palette.colors.red })
+  l("@text.diff.add", "DiffAdd")
+  l("@text.diff.delete", "DiffDelete")
   h("@constant.diff", { fg = palette.colors.yellow })
   l("@text.diff.index", "Comment")
 
@@ -338,15 +356,15 @@ M.setup = function(opts)
   h("NeogitHunkHeaderHighlight", { fg = palette.colors.violet })
   h("NeogitDiffContext", { bg = palette.colors.background })
   h("NeogitDiffContextHighlight", { bg = palette.colors.base4 })
-  l("NeogitDiffAdd", "@text.diff.add")
+  l("NeogitDiffAdd", "DiffAdd")
   h("NeogitDiffAddHighlight", {
     fg = palette.colors.green,
-    bg = palette.colors.base4,
+    bg = colors.mix(palette.colors.base4, palette.colors.green, 0.15),
   })
-  l("NeogitDiffDelete", "@text.diff.delete")
+  l("NeogitDiffDelete", "DiffDelete")
   h("NeogitDiffDeleteHighlight", {
     fg = palette.colors.red,
-    bg = palette.colors.base4,
+    bg = colors.mix(palette.colors.base4, palette.colors.red, 0.15),
   })
   h("NeogitNotificationInfo", { fg = palette.colors.green })
   h("NeogitNotificationWarning", { fg = palette.colors.yellow })
