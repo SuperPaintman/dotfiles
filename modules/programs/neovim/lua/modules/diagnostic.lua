@@ -76,6 +76,8 @@ M.setup = function(opts)
     underline = true,
     -- Use virtual text for diagnostics.
     virtual_text = {
+      prefix = " " .. ui.icons.diagnostic.Virtual .. " ",
+      suffix = " ",
       ---@param diagnostic module.diagnostic.Diagnostic
       format = function(diagnostic)
         local fmt = diagnostic.message

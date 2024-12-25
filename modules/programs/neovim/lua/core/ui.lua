@@ -57,6 +57,7 @@ M.icons = {
     Info = "",
     Hint = "",
     Ok = "󰄳",
+    Virtual = "󱓻",
   },
 }
 

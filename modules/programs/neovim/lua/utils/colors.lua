@@ -4,6 +4,17 @@
 local M = {}
 
 --------------------------------------------------------------------------------
+-- Helpers
+--------------------------------------------------------------------------------
+---@param v number
+---@param min number
+---@param max number
+---@return number
+local function clamp(v, min, max)
+  return math.max(min, math.min(max, v))
+end
+
+--------------------------------------------------------------------------------
 -- Classes
 --------------------------------------------------------------------------------
 
@@ -33,9 +44,9 @@ function RGB.new(r, g, b)
     g = bit.band(bit.rshift(n, 8), 0xFF)
     b = bit.band(n, 0xFF)
   else
-    r = math.floor(r)
-    g = math.floor(g)
-    b = math.floor(b)
+    r = clamp(math.floor(r), 0, 255)
+    g = clamp(math.floor(g), 0, 255)
+    b = clamp(math.floor(b), 0, 255)
   end
 
   ---@type utils.colors.RGB
@@ -58,6 +69,37 @@ end
 ---@return string
 function RGB:to_hex()
   return string.format("#%02X%02X%02X", self.r, self.g, self.b)
+end
+
+--- Mixes two RGB colors by a given amount (0 to 1).
+--- @param color utils.colors.RGB
+--- @param amount number
+--- @return utils.colors.RGB
+function RGB:mix(color, amount)
+  amount = clamp(amount, 0, 1)
+
+  local r = (color.r - self.r) * amount + self.r
+  local g = (color.g - self.g) * amount + self.g
+  local b = (color.b - self.b) * amount + self.b
+
+  return RGB.new(r, g, b)
+end
+
+--------------------------------------------------------------------------------
+-- Functions
+--------------------------------------------------------------------------------
+--- Mixes two colors by a given amount (0 to 1).
+--- @param color1 string
+--- @param color2 string
+--- @param amount number
+--- @return string
+function M.mix(color1, color2, amount)
+  local c1 = RGB.new(color1)
+  local c2 = RGB.new(color2)
+
+  local c = c1:mix(c2, amount)
+
+  return c:to_hex()
 end
 
 --------------------------------------------------------------------------------

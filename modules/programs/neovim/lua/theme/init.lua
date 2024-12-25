@@ -2,6 +2,7 @@
 -- Imports
 --------------------------------------------------------------------------------
 local palette = require("theme.palette")
+local colors = require("utils.colors")
 
 --------------------------------------------------------------------------------
 -- Types
@@ -112,6 +113,31 @@ M.setup = function(opts)
   h("DiffChange", { fg = palette.colors.yellow })
   h("DiffDelete", { fg = palette.colors.red })
 
+  -- Quick Fix.
+  h("qfFileName", { fg = palette.colors.yellow })
+  h("qfLineNr", { fg = palette.colors.magenta })
+
+  -- Diagnostic
+  h("DiagnosticVirtualTextError", {
+    fg = palette.colors.darkRed,
+    bg = colors.mix(palette.colors.background, palette.colors.darkRed, 0.15),
+  })
+
+  h("DiagnosticVirtualTextWarn", {
+    fg = palette.colors.darkYellow,
+    bg = colors.mix(palette.colors.background, palette.colors.darkYellow, 0.15),
+  })
+
+  h("DiagnosticVirtualTextInfo", {
+    fg = palette.colors.foreground,
+    bg = colors.mix(palette.colors.background, palette.colors.foreground, 0.15),
+  })
+
+  h("DiagnosticVirtualTextHint", {
+    fg = palette.colors.blue,
+    bg = colors.mix(palette.colors.background, palette.colors.blue, 0.15),
+  })
+
   -- Sytax
   --- Comment.
   h("Comment", { fg = palette.colors.base6 })
@@ -137,10 +163,6 @@ M.setup = function(opts)
 
   --- Markup.
   h("Title", { fg = palette.colors.red })
-
-  -- Quick Fix.
-  h("qfFileName", { fg = palette.colors.yellow })
-  h("qfLineNr", { fg = palette.colors.magenta })
 
   --- Languages
   ---- Markdown
