@@ -20,6 +20,31 @@ local signs = {
 --------------------------------------------------------------------------------
 -- Helpers
 --------------------------------------------------------------------------------
+---@param pin boolean
+local function set_pin(pin)
+  local bufferline_ui = require("bufferline.ui")
+  local state = require("bufferline.state")
+  local commands = require("bufferline.commands")
+  local groups = require("bufferline.groups")
+
+  local _, element = commands.get_current_element_index(state)
+  if not element then
+    return
+  end
+
+  if pin then
+    if not groups._is_pinned(element) then
+      groups.add_element("pinned", element)
+    end
+  else
+    if groups._is_pinned(element) then
+      groups.remove_element("pinned", element)
+    end
+  end
+
+  bufferline_ui.refresh()
+end
+
 local function close_not_pinned()
   local bufferline_ui = require("bufferline.ui")
   local state = require("bufferline.state")
@@ -113,6 +138,12 @@ M.config = function()
     },
   })
 
+  command("BufferLinePin", function(opts)
+    set_pin(true)
+  end, {})
+  command("BufferLineUnpin", function(opts)
+    set_pin(false)
+  end, {})
   command("BufferLineCloseNotPinned", function(opts)
     close_not_pinned()
   end, {})

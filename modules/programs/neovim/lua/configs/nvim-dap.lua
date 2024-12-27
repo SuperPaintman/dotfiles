@@ -11,6 +11,7 @@ local M = {}
 
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
+local command = vim.api.nvim_create_user_command
 
 local signs = {
   {
@@ -36,6 +37,13 @@ local signs = {
     numhl = "DapStoppedLineNr",
   },
 }
+
+--------------------------------------------------------------------------------
+-- Helpers
+--------------------------------------------------------------------------------
+local function add_to_jumplist()
+  vim.cmd([[normal! m']]) -- Add the current position to the jump list.
+end
 
 --------------------------------------------------------------------------------
 -- Adapters
@@ -161,6 +169,7 @@ M.config = function()
     })
   end
 
+  -- Set window-specific configs.
   autocmd("BufEnter", {
     group = augroup("ConfigsNvimDapUIOptions", { clear = true }),
     pattern = "DAP Scopes",
@@ -175,6 +184,16 @@ M.config = function()
       vim.wo[winid].listchars = false
     end,
   })
+
+  -- Patch the DapToggleBreakpoint command.
+  --
+  -- In addition to adding a breakpoint, it pins the buffer, and adds
+  -- the location to the jump list.
+  command("DapToggleBreakpoint", function()
+    dap.toggle_breakpoint()
+    vim.cmd([[silent! BufferLinePin]])
+    add_to_jumplist()
+  end, { nargs = 0 })
 
   -- Adapters.
   --- Go.
@@ -204,6 +223,19 @@ M.config = function()
   dap.listeners.before.event_exited["dapui_config"] = function()
     dapui.close({ layout = layout_sidebar })
     -- dapui.close({ layout = layout_repl })
+  end
+
+  -- Add locations to the jumplist.
+  for _, event in pairs({
+    "event_initialized",
+    "continue", -- Continue.
+    "event_continued", -- Step Over.
+    "stepIn", -- Step Into.
+    "stepOut", -- Step Out.
+  }) do
+    dap.listeners.after[event]["jumplist"] = function()
+      add_to_jumplist()
+    end
   end
 
   require("nvim-dap-virtual-text").setup({
