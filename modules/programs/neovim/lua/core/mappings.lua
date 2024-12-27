@@ -205,7 +205,7 @@ M.groups.d = {
     q = { "n", [[:DapTerminate<CR>]], "Quit / Terminate" },
     r = { "n", [[:DapRestartFrame<CR>]], "Restart frame" },
 
-    n = { "n", [[:DapContinue<CR>]], "Next / Continue" },
+    n = { "n", [[:DapSmartContinue<CR>]], "Next / Continue" },
 
     -- NOTE(SuperPaintman): here we mimic the Vim movements.
     l = { "n", [[:DapStepInto<CR>]], "Step into" }, -- ->
