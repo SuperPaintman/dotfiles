@@ -3,6 +3,7 @@
 -- Imports
 --------------------------------------------------------------------------------
 local ui = require("core.ui")
+local fs = require("utils.fs")
 
 --------------------------------------------------------------------------------
 -- Init
@@ -37,6 +38,9 @@ local signs = {
     numhl = "DapStoppedLineNr",
   },
 }
+
+---@type (fun(bufnr: number, configs: dap.Configuration[]): dap.Configuration[])?
+local config_filter = nil
 
 --------------------------------------------------------------------------------
 -- Helpers
@@ -123,6 +127,76 @@ local function setup_adapter_go(dap)
   }
 end
 
+---@param bufnr number
+---@param configs dap.Configuration[]
+---@return dap.Configuration[]
+local function smart_config_filter_go(bufnr, configs)
+  local fullname = vim.api.nvim_buf_get_name(bufnr)
+  local basename = vim.fs.basename(fullname)
+
+  local is_module = fs.find_ancestor(fullname, { "go.mod" }) ~= nil
+  local is_test_file = string.match(basename, "_test%.go$") ~= nil
+
+  local best_option = ""
+  if is_module then
+    if is_test_file then
+      best_option = "Debug Test"
+    else
+      best_option = "Debug"
+    end
+  else
+    if is_test_file then
+      best_option = "Debug Test File"
+    else
+      best_option = "Debug File"
+    end
+  end
+
+  -- TODO(SuperPaintman):
+  --     Run the test under the cursor.
+  --
+  --     See: https://github.com/golang/vscode-go/blob/5e506ea7347210ea5003a87f929394b299102962/extension/src/goTest.ts#L275-L275
+  --     See: https://github.com/golang/vscode-go/blob/5e506ea7347210ea5003a87f929394b299102962/extension/src/testUtils.ts#L250-L250
+
+  if best_option ~= "" then
+    for _, config in ipairs(configs) do
+      if config.name == best_option then
+        return { config }
+      end
+    end
+  end
+
+  return configs
+end
+
+---@param bufnr number
+---@param configs dap.Configuration[]
+---@return dap.Configuration[]
+local function smart_config_filter(bufnr, configs)
+  local filetype = vim.bo[bufnr].filetype
+  if filetype == "go" then
+    return smart_config_filter_go(bufnr, configs)
+  else
+    return configs
+  end
+end
+
+local function smart_continue(dap)
+  if not dap then
+    dap = require("dap")
+  end
+
+  -- Check if we already have an active / stopped session.
+  local session = dap.session()
+  if session then
+    config_filter = nil
+  else
+    config_filter = smart_config_filter
+  end
+
+  dap.continue()
+end
+
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
@@ -153,6 +227,9 @@ M.cmd = {
   "DapShowLog",
   "DapEval",
   "DapNew",
+
+  -- Custom.
+  "DapSmartContinue",
 }
 
 M.config = function()
@@ -184,6 +261,41 @@ M.config = function()
       vim.wo[winid].listchars = false
     end,
   })
+
+  -- Patch the configs providers.
+  --
+  -- Add config filtering to support smart continue.
+  local orig_dap_global = dap.providers.configs["dap.global"]
+  dap.providers.configs["dap.global"] = function(bufnr, ...)
+    local configurations = orig_dap_global(bufnr, ...)
+
+    if config_filter then
+      configurations = config_filter(bufnr, configurations)
+    end
+
+    return configurations
+  end
+
+  local orig_dap_launch_json = dap.providers.configs["dap.launch.json"]
+  dap.providers.configs["dap.launch.json"] = function(bufnr, ...)
+    local configurations = orig_dap_launch_json(bufnr, ...)
+
+    if config_filter then
+      configurations = config_filter(bufnr, configurations)
+    end
+
+    return configurations
+  end
+
+  -- Add custom commands.
+  command("DapSmartContinue", function()
+    smart_continue(dap)
+  end, { nargs = 0 })
+
+  command("DapContinue", function()
+    config_filter = nil
+    dap.continue()
+  end, { nargs = 0 })
 
   -- Patch the DapToggleBreakpoint command.
   --
