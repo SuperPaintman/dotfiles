@@ -287,6 +287,45 @@
     plugin = "hrsh7th/nvim-cmp";
   };
 
+  nvim-dap = {
+    pname = "nvim-dap";
+    version = "0.0.0+rev=04ce47f";
+    src = fetchFromGitHub {
+      owner = "mfussenegger";
+      repo = "nvim-dap";
+      rev = "04ce47fc5a6ef2b717f33c320fc003091cebac40";
+      sha256 = "sha256-evpP8qAtNuEL1EVUVoCB+PQ1Mmn08FJuufkwnOT+oTg=";
+    };
+    commit = "04ce47fc5a6ef2b717f33c320fc003091cebac40";
+    plugin = "mfussenegger/nvim-dap";
+  };
+
+  nvim-dap-ui = {
+    pname = "nvim-dap-ui";
+    version = "0.0.0+rev=f7d75cc";
+    src = fetchFromGitHub {
+      owner = "rcarriga";
+      repo = "nvim-dap-ui";
+      rev = "f7d75cca202b52a60c520ec7b1ec3414d6e77b0f";
+      sha256 = "sha256-cMpJJ2npriAFajLw1SEyDMjKUBFVFvYBr4dmFKoZyKw=";
+    };
+    commit = "f7d75cca202b52a60c520ec7b1ec3414d6e77b0f";
+    plugin = "rcarriga/nvim-dap-ui";
+  };
+
+  nvim-dap-virtual-text = {
+    pname = "nvim-dap-virtual-text";
+    version = "0.0.0+rev=df66808";
+    src = fetchFromGitHub {
+      owner = "theHamsta";
+      repo = "nvim-dap-virtual-text";
+      rev = "df66808cd78b5a97576bbaeee95ed5ca385a9750";
+      sha256 = "sha256-WvxJrOIE7gwZ9c1Ok8ysEDUjBS/34vMM4EmWcRqps0I=";
+    };
+    commit = "df66808cd78b5a97576bbaeee95ed5ca385a9750";
+    plugin = "theHamsta/nvim-dap-virtual-text";
+  };
+
   nvim-lspconfig = {
     pname = "nvim-lspconfig";
     version = "0.0.0+rev=0011c43";
@@ -298,6 +337,19 @@
     };
     commit = "0011c435282f043a018e23393cae06ed926c3f4a";
     plugin = "neovim/nvim-lspconfig";
+  };
+
+  nvim-nio = {
+    pname = "nvim-nio";
+    version = "0.0.0+rev=a428f30";
+    src = fetchFromGitHub {
+      owner = "nvim-neotest";
+      repo = "nvim-nio";
+      rev = "a428f309119086dc78dd4b19306d2d67be884eee";
+      sha256 = "sha256-i6imNTb1xrfBlaeOyxyIwAZ/+o6ew9C4/z34a7/BgFg=";
+    };
+    commit = "a428f309119086dc78dd4b19306d2d67be884eee";
+    plugin = "nvim-neotest/nvim-nio";
   };
 
   nvim-tree-lua = {

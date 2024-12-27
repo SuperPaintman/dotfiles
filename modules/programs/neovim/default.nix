@@ -202,6 +202,7 @@ let
       p.plenary-nvim.lazy
       p.neodev-nvim.lazy
       p.nvim-web-devicons.lazy
+      p.nvim-nio.lazy # Required by nvim-dap-ui
 
       # Telescope.
       p.telescope-nvim.lazy
@@ -234,6 +235,11 @@ let
 
       # Snippets.
       p.luasnip.lazy
+
+      # Debugger.
+      p.nvim-dap.lazy
+      p.nvim-dap-ui.lazy
+      p.nvim-dap-virtual-text.lazy
 
       # Git.
       p.gitsigns-nvim.lazy

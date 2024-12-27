@@ -41,6 +41,44 @@ local function get_diagnostic_level(name)
   return 0
 end
 
+---@param name string
+---@return number
+local function get_debugger_level(name)
+  if name == "DapStopped" then
+    return 5
+  end
+
+  if name == "DapBreakpointRejected" then
+    return 4
+  end
+
+  if name == "DapBreakpointCondition" then
+    return 3
+  end
+
+  if name == "DapBreakpoint" then
+    return 2
+  end
+
+  if name == "DapLogPoint" then
+    return 1
+  end
+
+  return 0
+end
+
+---@param name string
+---@return boolean
+local function is_debugger_sign(name)
+  return (
+    name == "DapStopped"
+    or name == "DapBreakpointRejected"
+    or name == "DapBreakpointCondition"
+    or name == "DapBreakpoint"
+    or name == "DapLogPoint"
+  )
+end
+
 ---@return modules.statuscolumn.Sign[]
 local function get_signs()
   if vim.g.statusline_winid == nil then
@@ -113,6 +151,10 @@ M.statuscolumn = function()
   local code_action_sign = nil
 
   ---@type modules.statuscolumn.Sign?
+  local debugger_sign = nil
+  local debugger_level = 0
+
+  ---@type modules.statuscolumn.Sign?
   local git_sign = nil
 
   ---@type modules.statuscolumn.Sign?
@@ -128,6 +170,12 @@ M.statuscolumn = function()
     elseif sign.name == "SagaLightBulb" then
       if code_action_sign == nil then
         code_action_sign = sign
+      end
+    elseif is_debugger_sign(sign.name) then
+      local level = get_debugger_level(sign.name)
+      if debugger_sign == nil or level > debugger_level then
+        debugger_sign = sign
+        debugger_level = level
       end
     elseif sign.name:find("^GitSign") then
       if git_sign == nil then
@@ -155,6 +203,12 @@ M.statuscolumn = function()
     insert_sign(code_action_sign)
   else
     insert_padding("   ")
+  end
+
+  --- Debugger.
+  if debugger_sign then
+    insert_sign(debugger_sign)
+    insert_padding(" ")
   end
 
   -- Right side.

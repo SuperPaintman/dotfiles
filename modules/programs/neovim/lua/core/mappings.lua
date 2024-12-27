@@ -193,6 +193,28 @@ M.mappings["<C-k>"] = {
 }
 
 -- Leader
+--- Debug
+M.groups.d = {
+  name = "debug",
+  prefix = "<leader>d",
+  mappings = {
+    -- NOTE(SuperPaintman):
+    --     `b` could be a bit more logical, but `d` is more convenient.
+    d = { "n", [[:DapToggleBreakpoint<CR>]], "Toggle breakpoint" },
+    D = { "n", [[:DapClearBreakpoints<CR>]], "Delete breakpoints" },
+    q = { "n", [[:DapTerminate<CR>]], "Quit / Terminate" },
+    r = { "n", [[:DapRestartFrame<CR>]], "Restart frame" },
+
+    n = { "n", [[:DapContinue<CR>]], "Next / Continue" },
+
+    -- NOTE(SuperPaintman): here we mimic the Vim movements.
+    l = { "n", [[:DapStepInto<CR>]], "Step into" }, -- ->
+    h = { "n", [[:DapStepOut<CR>]], "Step out" }, -- <-
+    j = { "n", [[:DapStepOver<CR>]], "Step over" }, -- v
+    -- k = { "n", ???, "Step back" }, -- ^
+  },
+}
+
 --- Find
 M.groups.f = {
   name = "find",

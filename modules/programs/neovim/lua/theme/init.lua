@@ -101,7 +101,8 @@ M.setup = function(opts)
   h("LineNr", { fg = palette.colors.base5 })
   h("CursorLineNr", { fg = palette.colors.cursor, bold = true })
 
-  h("VertSplit", { fg = palette.colors.base2 })
+  -- h("VertSplit", { fg = palette.colors.base2 })
+  h("VertSplit", { fg = palette.colors.base1, bg = palette.colors.base2 }) -- Looks better with other dark windows.
 
   h("Pmenu", { bg = palette.colors.base2 })
   h("PmenuSel", { bg = palette.colors.base4 })
@@ -453,9 +454,109 @@ M.setup = function(opts)
   l("SagaNormal", "Pmenu")
   l("RenameNormal", "Pmenu")
 
+  --- Nvim DAP
+  h("DapBreakpoint", { fg = palette.colors.red })
+  l("DapBreakpointCondition", "DapBreakpoint")
+  l("DapBreakpointRejected", "DapBreakpoint")
+  l("DapLogPoint", "DapBreakpoint")
+  h("DapStopped", {
+    fg = palette.colors.red,
+    bg = colors.mix(palette.colors.background, palette.colors.red, 0.15),
+  })
+  h("DapStoppedLine", {
+    bg = colors.mix(palette.colors.background, palette.colors.red, 0.15),
+  })
+  h("DapStoppedLineNr", {
+    fg = palette.colors.red,
+    bg = colors.mix(palette.colors.background, palette.colors.red, 0.15),
+  })
+
+  h("DapUINormal", {
+    fg = palette.colors.foreground,
+    bg = palette.colors.base2,
+  })
+  l("DapUINormalNC", "DapUINormal")
+  -- l("DapUIEndofBuffer", "DapUINormal")
+  l("DapUIBreakpointsLine", "LineNr")
+  h("DapUICurrentFrameName", {
+    fg = palette.colors.foreground,
+    bold = true,
+  })
+  h("DapUIValue", {
+    fg = palette.colors.foreground,
+  })
+  h("DapUIModifiedValue", {
+    fg = palette.colors.violet,
+    bg = colors.mix(palette.colors.base2, palette.colors.violet, 0.15),
+    bold = true,
+  })
+
+  h("DapUIDecoration", {
+    fg = palette.colors.base5,
+  })
+
+  l("DapUIType", "Type")
+  l("DapUISource", "Type")
+  l("DapUILineNumber", "String")
+  h("DapUIWatchesEmpty", {
+    fg = palette.colors.red,
+  })
+  h("DapUIWatchesError", {
+    fg = palette.colors.red,
+  })
+  h("DapUIWatchesValue", {
+    fg = palette.colors.green,
+  })
+
+  h("DapUIScope", {
+    fg = palette.colors.magenta,
+    bold = true,
+  })
+  l("DapUIBreakpointsPath", "DapUIScope")
+  l("DapUIStoppedThread", "DapUIScope")
+  l("DapUIThread", "DapUIScope")
+
+  h("DapUIPlayPause", {
+    fg = palette.colors.green,
+    bold = true,
+  })
+  h("DapUIStop", {
+    fg = palette.colors.red,
+    bold = true,
+  })
+  l("DapUIRestart", "DapUIPlayPause")
+  l("DapUIStepOut", "DapUIPlayPause")
+  l("DapUIStepBack", "DapUIPlayPause")
+  l("DapUIStepInto", "DapUIPlayPause")
+  l("DapUIStepOver", "DapUIPlayPause")
+
+  l("DapUIPlayPauseNC", "DapUIPlayPause")
+  l("DapUIRestartNC", "DapUIPlayPauseNC")
+  l("DapUIStepBackNC", "DapUIPlayPauseNC")
+  l("DapUIStepIntoNC", "DapUIPlayPauseNC")
+  l("DapUIStepOutNC", "DapUIPlayPauseNC")
+  l("DapUIStepOverNC", "DapUIPlayPauseNC")
+  l("DapUIStopNC", "DapUIStop")
+
+  h("NvimDapVirtualText", {
+    fg = palette.colors.magenta,
+    bg = colors.mix(palette.colors.background, palette.colors.magenta, 0.15),
+  })
+
   -- Modules.
   --- ContextSigns.
   h("ContextSign", { fg = palette.colors.base8 })
+end
+
+M.reload = function()
+  local unload = require("utils.modules").unload
+  unload("theme.palette")
+
+  palette = require("theme.palette")
+
+  M.setup({
+    clear = false,
+  })
 end
 
 --------------------------------------------------------------------------------

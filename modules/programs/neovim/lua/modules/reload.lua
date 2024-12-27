@@ -17,6 +17,8 @@ local RELOADABLE = {
 
   "modules.statuscolumn",
   "modules.contextsigns",
+
+  "theme",
 }
 
 --------------------------------------------------------------------------------

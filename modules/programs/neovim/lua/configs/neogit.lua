@@ -1,5 +1,10 @@
 -- See: https://github.com/NeogitOrg/neogit
 --------------------------------------------------------------------------------
+-- Imports
+--------------------------------------------------------------------------------
+local ui = require("core.ui")
+
+--------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
 local M = {
@@ -31,10 +36,9 @@ M.cmd = "Neogit"
 M.config = function()
   require("neogit").setup({
     disable_hint = true,
-    -- TODO(SuperPaintman): move these signs into the icons config.
     signs = {
-      section = { "", "" },
-      item = { "", "" },
+      section = { ui.icons.common.Collapsed, ui.icons.common.Expanded },
+      item = { ui.icons.common.Collapsed, ui.icons.common.Expanded },
       hunk = { "", "" },
     },
   })

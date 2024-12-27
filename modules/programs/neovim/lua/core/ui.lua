@@ -8,6 +8,11 @@ local M = {}
 -- Modules
 --------------------------------------------------------------------------------
 M.icons = {
+  common = {
+    Collapsed = "",
+    Expanded = "",
+  },
+
   cmp = {
     Namespace = "󰌗",
     Text = "󰉿",
@@ -58,6 +63,14 @@ M.icons = {
     Hint = "",
     Ok = "󰄳",
     Virtual = "󱓻",
+  },
+
+  debugger = {
+    Breakpoint = "",
+    BreakpointCondition = "",
+    BreakpointRejected = "",
+    Logpoint = "",
+    Stopped = "",
   },
 }
 

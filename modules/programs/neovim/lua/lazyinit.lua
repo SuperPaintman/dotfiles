@@ -301,6 +301,9 @@ setup({
   -- Snippets.
   "L3MON4D3/LuaSnip",
 
+  -- Debugger.
+  "mfussenegger/nvim-dap",
+
   -- Git.
   { "lewis6991/gitsigns.nvim", opts = {}, event = "VeryLazy" },
   "NeogitOrg/neogit",

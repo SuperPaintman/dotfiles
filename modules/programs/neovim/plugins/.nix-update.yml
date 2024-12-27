@@ -354,3 +354,51 @@ packages:
             owner: zbirenbaum
             repo: copilot-cmp
             rev: *commit
+
+
+    nvim-nio:
+        type: github
+        extraAttrs:
+            plugin: nvim-neotest/nvim-nio
+            # branch: master
+            # version: v1.10.0
+            commit: &commit a428f309119086dc78dd4b19306d2d67be884eee
+        args:
+            owner: nvim-neotest
+            repo: nvim-nio
+            rev: *commit
+
+    nvim-dap:
+        type: github
+        extraAttrs:
+            plugin: mfussenegger/nvim-dap
+            # branch: master
+            # version: 0.9.0
+            commit: &commit 04ce47fc5a6ef2b717f33c320fc003091cebac40
+        args:
+            owner: mfussenegger
+            repo: nvim-dap
+            rev: *commit
+
+    nvim-dap-ui:
+        type: github
+        extraAttrs:
+            plugin: rcarriga/nvim-dap-ui
+            # branch: master
+            # version: v4.0.0
+            commit: &commit f7d75cca202b52a60c520ec7b1ec3414d6e77b0f
+        args:
+            owner: rcarriga
+            repo: nvim-dap-ui
+            rev: *commit
+
+    nvim-dap-virtual-text:
+        type: github
+        extraAttrs:
+            plugin: theHamsta/nvim-dap-virtual-text
+            # branch: master
+            commit: &commit df66808cd78b5a97576bbaeee95ed5ca385a9750
+        args:
+            owner: theHamsta
+            repo: nvim-dap-virtual-text
+            rev: *commit
