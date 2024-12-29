@@ -46,6 +46,40 @@ end
 --------------------------------------------------------------------------------
 -- Function
 --------------------------------------------------------------------------------
+--- Returns a function that invokes f only once and returns the value returned
+--- by f.
+---@generic T
+---@param f fun(): T
+---@return fun(): T
+M.once = function(f)
+  local initialized = false
+  local valid = false
+  local value = nil
+  local err = nil
+
+  return function()
+    if initialized then
+      if valid then
+        return value
+      else
+        error(err)
+      end
+    end
+
+    initialized = true
+    local ok, v = pcall(f)
+    if ok then
+      valid = true
+      value = v
+      return v
+    else
+      valid = false
+      err = v
+      error(v)
+    end
+  end
+end
+
 ---@generic T: fun(...): nil
 ---@param f T
 ---@param wait number?

@@ -77,7 +77,8 @@ M.icons = {
 M.borders = {
   thick = function(hl_name)
     if hl_name == nil then
-      hl_name = "VertSplit"
+      -- hl_name = "VertSplit"
+      hl_name = "UIBordersThick"
     end
 
     return {

@@ -114,8 +114,7 @@ M.setup = function(opts)
 
     float = {
       style = "minimal",
-      -- TODO(SuperPaintman): Add a custom highlight group.
-      border = ui.borders.thick("VertSplit"),
+      border = ui.borders.thick(),
       header = false,
       source = false,
       prefix = "",

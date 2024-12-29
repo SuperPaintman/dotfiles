@@ -20,6 +20,9 @@ if false then
   ---@type fun(v: any)
   assert.is_nil = assert.is_nil
 
+  ---@type fun(v: any)
+  assert.is_not_nil = assert.is_not_nil
+
   ---@type fun(want: any, got: any)
   assert.same = assert.same
 

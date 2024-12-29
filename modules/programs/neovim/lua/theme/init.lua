@@ -103,6 +103,8 @@ M.setup = function(opts)
 
   -- h("VertSplit", { fg = palette.colors.base2 })
   h("VertSplit", { fg = palette.colors.base1, bg = palette.colors.base2 }) -- Looks better with other dark windows.
+  h("UIBorders", { fg = palette.colors.base2 })
+  l("UIBordersThick", "UIBorders")
 
   h("Pmenu", { bg = palette.colors.base2 })
   h("PmenuSel", { bg = palette.colors.base4 })
@@ -440,7 +442,7 @@ M.setup = function(opts)
     end
   end
   l("CmpDocNormal", "Pmenu")
-  l("CmpDocBorder", "VertSplit")
+  l("CmpDocBorder", "UIBorders")
 
   --- BufferLine
   l("BufferLineErrorSelected", "BufferLineBufferSelected")
@@ -450,7 +452,7 @@ M.setup = function(opts)
 
   --- LSP Saga
   l("SagaTitle", "Pmenu")
-  l("SagaBorder", "VertSplit")
+  l("SagaBorder", "UIBorders")
   l("SagaNormal", "Pmenu")
   l("RenameNormal", "Pmenu")
 
