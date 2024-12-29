@@ -4,6 +4,7 @@
 --------------------------------------------------------------------------------
 local ui = require("core.ui")
 local fs = require("utils.fs")
+local languages = require("utils.languages")
 
 --------------------------------------------------------------------------------
 -- Init
@@ -50,68 +51,6 @@ local config_filter = nil
 --------------------------------------------------------------------------------
 local function add_to_jumplist()
   vim.cmd([[normal! m']]) -- Add the current position to the jump list.
-end
-
-local function init_treesitter()
-  if vim.treesitter == nil then
-    return false
-  end
-
-  if ts_utils == nil then
-    local ok, pkg = pcall(require, "nvim-treesitter.ts_utils")
-    if not ok then
-      return false
-    end
-    ts_utils = pkg
-  end
-
-  if ts_locals == nil then
-    local ok, pkg = pcall(require, "nvim-treesitter.locals")
-    if not ok then
-      return false
-    end
-    ts_locals = pkg
-  end
-
-  return true
-end
-
-local treesitter_go_query_is_set = false
-local function set_treesitter_go_query()
-  if treesitter_go_query_is_set then
-    return
-  end
-
-  treesitter_go_query_is_set = true
-  if vim.treesitter == nil then
-    return
-  end
-
-  vim.treesitter.query.set(
-    "go",
-    "nvim_dap_go_function_name",
-    [[ 
-      [
-        (function_declaration name: (_) @name)
-      ]
-    ]]
-  )
-end
-
----@param bufnr number
----@return TSNode[]
-local function get_scope_tree_at_cursor(bufnr)
-  if not init_treesitter() then
-    return {}
-  end
-
-  local cursor_node = ts_utils.get_node_at_cursor(0, true)
-  if cursor_node == nil then
-    return {}
-  end
-
-  local scope = ts_locals.get_scope_tree(cursor_node, bufnr)
-  return scope
 end
 
 --------------------------------------------------------------------------------
@@ -224,20 +163,12 @@ local function smart_config_filter_go(bufnr, configs)
   --     See: https://github.com/golang/vscode-go/blob/5e506ea7347210ea5003a87f929394b299102962/extension/src/goTest.ts#L275-L275
   --     See: https://github.com/golang/vscode-go/blob/5e506ea7347210ea5003a87f929394b299102962/extension/src/testUtils.ts#L250-L250
 
-  set_treesitter_go_query()
-  local scope = get_scope_tree_at_cursor(bufnr)
-  local query = (vim.fn.has("nvim-0.9") == 1)
-    and vim.treesitter.query.get("go", "nvim_dap_go_function_name")
-
   local function_name = ""
-  if query then
-    for _, node in ipairs(scope) do
-      if node:type() == "function_declaration" then
-        for _, n in query:iter_captures(node, 0) do
-          function_name = vim.treesitter.get_node_text(n, 0)
-          break
-        end
-      end
+  local winnr = vim.api.nvim_get_current_win()
+  if winnr and vim.api.nvim_win_get_buf(winnr) == bufnr then
+    local name = languages.go.function_name_at_cursor(winnr, { top = true })
+    if name ~= nil then
+      function_name = name
     end
   end
 

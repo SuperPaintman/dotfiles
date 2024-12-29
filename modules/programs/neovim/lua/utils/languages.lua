@@ -41,7 +41,7 @@ function go.function_node_at_cursor(winnr, options)
   return node
 end
 
-local query_go_function_name = treesitter.lazy_query_parse(
+local query_go_function_or_method_name = treesitter.lazy_query_parse(
   "go",
   [[
     [
@@ -65,8 +65,6 @@ function go.function_name_at_cursor(winnr, options)
     top = false,
   }, options or {})
 
-  local bufnr = vim.api.nvim_win_get_buf(winnr)
-
   local node = go.function_node_at_cursor(winnr, {
     top = options.top,
   })
@@ -78,11 +76,12 @@ function go.function_name_at_cursor(winnr, options)
     return nil
   end
 
-  local query = query_go_function_name()
+  local query = query_go_function_or_method_name()
   if query == nil then
     return nil
   end
 
+  local bufnr = vim.api.nvim_win_get_buf(winnr)
   local node_start, _, node_stop, _ = node:range()
   for i, n in query:iter_captures(node, winnr, node_start, node_stop + 1) do
     local capture = query.captures[i]
