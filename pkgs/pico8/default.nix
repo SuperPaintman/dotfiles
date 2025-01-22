@@ -1,30 +1,7 @@
 # See: https://nixos.wiki/wiki/PICO-8
-{ stdenv, buildFHSUserEnv, runtimeShell }:
+{ stdenv, steam-run, runtimeShell }:
 
 let 
-  fhs = buildFHSUserEnv {
-    name = "pico8-fhs";
-    targetPkgs = pkgs: (with pkgs; [
-      xorg.libX11
-      xorg.libXext
-      xorg.libXcursor
-      xorg.libXinerama
-      xorg.libXi
-      xorg.libXrandr
-      xorg.libXScrnSaver
-      xorg.libXxf86vm
-      xorg.libxcb
-      xorg.libXrender
-      xorg.libXfixes
-      xorg.libXau
-      xorg.libXdmcp
-      alsa-lib
-      udev
-      wget
-    ]);
-    runScript = "bash -c 'exec $@' $@";
-  };
-
   pico8HomeDir = "$HOME/.local/share/pico8";
 in
 
@@ -60,7 +37,7 @@ stdenv.mkDerivation {
       exit 1
     fi
 
-    exec "${fhs}/bin/pico8-fhs" "${pico8HomeDir}/pico8" "$@"
+    exec "${steam-run}/bin/steam-run" "${pico8HomeDir}/pico8" "$@"
     EOF
     chmod +x "$out/bin/pico8"
   '';
