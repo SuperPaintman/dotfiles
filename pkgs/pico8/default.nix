@@ -1,16 +1,27 @@
 # See: https://nixos.wiki/wiki/PICO-8
-{ stdenv, steam-run, runtimeShell }:
+{ stdenv, lib, fetchurl, steam-run, runtimeShell, copyDesktopItems, makeDesktopItem }:
 
 let 
+  pico8Icon = fetchurl {
+    url = "https://www.lexaloffle.com/gfx/p8b_pico8.png";
+    sha256 = "sha256-yKrwe8ewBO4c2mvx8aoQDGA9HIlqbOoy6TlhZkqAx+o=";
+  };
+
   pico8HomeDir = "$HOME/.local/share/pico8";
 in
 
 stdenv.mkDerivation {
   name = "pico8";
 
+  nativeBuildInputs = [
+    copyDesktopItems
+  ];
+
   phases = [ "installPhase" ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/bin"
 
     cat <<'EOF' > "$out/bin/pico8"
@@ -40,6 +51,43 @@ stdenv.mkDerivation {
     exec "${steam-run}/bin/steam-run" "${pico8HomeDir}/pico8" "$@"
     EOF
     chmod +x "$out/bin/pico8"
+
+    runHook postInstall
   '';
+
+  desktopItems = [(makeDesktopItem {
+    name = "pico8";
+    desktopName = "PICO-8";
+    keywords = [
+      "Game"
+      "Retro"
+      "Development"
+    ];
+    exec = "pico8";
+    terminal = false;
+    type = "Application";
+    icon = pico8Icon;
+    # icon = "pico8";
+    categories = [
+      "Development"
+      "IDE"
+      "Game"
+    ];
+    startupNotify = true;
+    actions = {
+      "Windowed" = {
+        name = "Open windowed";
+        exec = "pico8 -windowed 1";
+      };
+    };
+  })];
+
+  meta = {
+    description = "PICO-8 is a fantasy console for making, sharing and playing tiny games and other computer programs.";
+    homepage = "https://www.lexaloffle.com/pico-8.php";
+    license = lib.licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    mainProgram = "pico8";
+  };
 }
 

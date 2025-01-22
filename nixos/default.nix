@@ -290,6 +290,7 @@ in
     godot_4
     gdsdecomp
     spine
+    pico8
   ];
 
   # Programs.
