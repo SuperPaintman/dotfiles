@@ -559,7 +559,14 @@ in
   };
 
   # Virtualisation.
-  virtualisation.docker.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    daemon = {
+      settings = {
+        insecure-registries = [ "gitea.local" ];
+      };
+    };
+  };
   virtualisation.libvirtd.enable = true;
 
   # Users.
