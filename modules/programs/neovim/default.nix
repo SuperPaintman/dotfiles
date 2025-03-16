@@ -280,14 +280,14 @@ let
       { package = lua-language-server; bins = [ "lua-language-server" ]; } # Lua
       { package = rnix-lsp; bins = [ "rnix-lsp" ]; } # Nix
       { package = unstable.nixd; bins = [ "nixd" ]; } # Nix
-      { package = rust-analyzer; bins = [ "rust-analyzer" ]; } # Rust
+      { package = unstable.rust-analyzer; bins = [ "rust-analyzer" ]; } # Rust
       { package = nodePackages.svelte-language-server; bins = [ "svelteserver" ]; } # Svelte
       { package = terraform-ls; bins = [ "terraform-ls" ]; } # Terraform
       { package = tflint; bins = [ "tflint" ]; } # Terraform
       { package = nodePackages.typescript-language-server; bins = [ "typescript-language-server" ]; } # TypeScript / JavaScript
       { package = taplo; bins = [ "taplo" ]; } # TOML
       { package = nodePackages.yaml-language-server; bins = [ "yaml-language-server" ]; } # YAML
-      { package = local.zls; bins = [ "zls" ]; } # Zig
+      { package = unstable.zls; bins = [ "zls" ]; } # Zig
 
       # Null-ls
       { package = nodePackages.cspell; bins = [ "cspell" ]; }
