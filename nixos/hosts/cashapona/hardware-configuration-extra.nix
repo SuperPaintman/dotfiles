@@ -35,10 +35,16 @@
   };
 
   # Enable swap on luks
-  boot.initrd.luks.devices."luks-31aaaf27-77c1-49d4-a230-d921d67dd983" = {
-    device = "/dev/disk/by-uuid/31aaaf27-77c1-49d4-a230-d921d67dd983";
-    keyFile = "/crypto_keyfile.bin";
-  };
+  # 
+  # We don't use swap anymore.
+  #
+  # boot.initrd.luks.devices."luks-31aaaf27-77c1-49d4-a230-d921d67dd983" = {
+  #   device = "/dev/disk/by-uuid/31aaaf27-77c1-49d4-a230-d921d67dd983";
+  #   keyFile = "/crypto_keyfile.bin";
+  # };
+
+  # Disable swap devices.
+  swapDevices = lib.mkForce [ ];
 
   # Networking.
   networking = {
