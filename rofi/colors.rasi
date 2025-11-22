@@ -25,3 +25,6 @@
     color-foreground-light: #ECECEC; /* TODO(SuperPaintman): move it into config. */
     color-background-light: #333842; /* TODO(SuperPaintman): move it into config. */
 }
+
+/* vi: ft=sass
+ */

@@ -1,16 +1,14 @@
 @import "~/.config/rofi/colors.rasi"
 
 * {
-    background-color: @color-background;
-    text-color: @color-foreground;
-
     color-border: @color-blue;
-
-    font: "sans 16";
 }
 
 #window {
     padding: 11;
+
+    background-color: @color-background;
+    text-color: @color-foreground;
 
     border: 1;
     border-radius: 4;
@@ -26,10 +24,15 @@
     children: [inputbar, message, listview];
 }
 
-#inputbar {
-    padding: 11;
+#textbox {
+  background-color: @color-red;
+  text-color: @color-foreground;
 
-    border-radius: 3;
+  border-radius: 4;
+}
+
+#inputbar {
+    border-radius: 4;
 
     background-color: @color-background-light;
 
@@ -41,46 +44,57 @@
 }
 
 #entry {
-    font: "sans 28";
-}
+    padding: 11 11;
 
-#prompt {
-    padding: 2 10;
-    margin: 6 2;
-
-    border-radius: 2;
-
-    background-color: @color-magenta;
-
-    font: "sans 12";
-
+    text-color: @color-foreground;
+    font: "sans 14";
     vertical-align: 0.5;
 }
 
 #listview {
     // margin-top.
-    margin: 11 0 0;
+    margin: 5 0 0;
 
     spacing: 0;
+
+    scrollbar: false;
+}
+
+#scrollbar {
+    background-color: @color-background-light;
 }
 
 #element {
     padding: 11;
-    margin: 0;
 
-    border: 1 0 0 0;
+    border: 0 0 0 0;
+    border-radius: 4;
     border-color: @color-background-light;
 
     font: "sans 14";
+
+    children: [element-icon, element-text];
 }
 
-#element.selected {
+#element.normal.normal,
+element.normal.urgent,
+element.normal.active,
+element.alternate.normal,
+element.alternate.urgent,
+element.alternate.active {
+    background-color: @color-background;
+    text-color: @color-foreground;
+}
+
+#element.selected.normal,
+element.selected.urgent,
+element.selected.active {
     background-color: @color-background-light;
 }
 
 #element-icon {
     size: 24;
-    padding: 0 6 0 0;
+    margin: 0 6 0 0;
 }
 
 #element-text {
@@ -89,21 +103,26 @@
 }
 
 #mode-switcher {
-    margin: 6 3;
+    margin: 6 6;
 
-    border-radius: 2;
+    border-radius: 4;
 
     background-color: @color-background;
 }
 
 #button {
-    padding: 3 11;
-    // border-radius: 2;
-    width: 80;
+    margin: 2 2;
+    width: 120;
 
-    font: "sans 10";
+    text-color: @color-foreground;
+    font: "sans 12";
 }
 
 #button.selected {
     background-color: @color-magenta;
+
+    border-radius: 4;
 }
+
+/* vi: ft=sass
+ */
