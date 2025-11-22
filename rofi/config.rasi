@@ -7,7 +7,7 @@ configuration {
     show-icons: true;
     icon-theme: "Paper";
 
-    font: "sans 16";
+    font: "sans 14";
 
     fixed-num-lines: false;
 

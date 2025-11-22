@@ -84,12 +84,18 @@ element.alternate.urgent,
 element.alternate.active {
     background-color: @color-background;
     text-color: @color-foreground;
+
+    // border: 1;
+    // border-color: @color-background;
 }
 
 #element.selected.normal,
 element.selected.urgent,
 element.selected.active {
     background-color: @color-background-light;
+
+    // border: 1;
+    // border-color: @color-blue;
 }
 
 #element-icon {
