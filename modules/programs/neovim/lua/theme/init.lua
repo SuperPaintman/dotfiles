@@ -206,6 +206,16 @@ M.setup = function(opts)
   l("markdownH5Delimiter", "Title")
   l("markdownH6Delimiter", "Title")
   l("markdownRule", "Comment")
+  l("@markup.italic.markdown_inline", "markdownItalic")
+  l("@markup.strong.markdown_inline", "markdownBold")
+  h("@markup.list.markdown", { fg = palette.colors.magenta })
+  -- h("@markup.list.checked.markdown", { fg = palette.colors.magenta }) -- TODO(Aleksandr Krivoshchekov): highligh only the marker.
+  h("@markup.raw.markdown_inline", { fg = palette.colors.magenta })
+  l("@markup.link.label.markdown_inline", "@text.uri.html")
+  h("@markup.link.url.markdown_inline", { fg = palette.colors.violet })
+  l("@markup.link.label.markdown", "@markup.link.label.markdown_inline")
+  l("@markup.link.url.markdown", "@markup.link.url.markdown_inline")
+  h("@markup.strikethrough.markdown_inline", { fg = palette.colors.yellow, strikethrough = true })
 
   ---- INI
   l("dosiniHeader", "configSection")
@@ -214,10 +224,15 @@ M.setup = function(opts)
   ---- TOML
   l("tomlTable", "configSection")
   l("tomlKey", "configKey")
+  l("tomlKeyDq", "tomlKey")
+  l("tomlKeySq", "tomlKey")
 
   ---- GDResource
   l("gdResourceSectionName", "configSection")
   l("gdResourceAttributeName", "configKey")
+
+  ---- ZSH
+  l("zshFunction", "Function")
 
   --- Treesitter.
   ---- Constant.
@@ -251,11 +266,19 @@ M.setup = function(opts)
   ---- Label.
   l("@label.json", "configKey")
 
+  ---- Property.
+  -- l("@property", "configKey")
+  l("@property.json", "configKey")
+  l("@property.yaml", "@property.json")
+
   ---- Field.
   l("@field.yaml", "configKey")
 
   ---- Text.
   h("@text.uri", { fg = palette.colors.violet, underline = true })
+
+  ---- Type.
+  l("@type.builtin", "@type")
 
   ---- Diff.
   h("@function.diff", { fg = palette.colors.magenta })
@@ -294,6 +317,13 @@ M.setup = function(opts)
   l("@text.title.4.html", "@text.html")
   l("@text.title.5.html", "@text.html")
   l("@text.title.6.html", "@text.html")
+  l("@markup.heading.html", "@text.html")
+  l("@markup.heading.1.html", "@text.html")
+  l("@markup.heading.2.html", "@text.html")
+  l("@markup.heading.3.html", "@text.html")
+  l("@markup.heading.4.html", "@text.html")
+  l("@markup.heading.5.html", "@text.html")
+  l("@markup.heading.6.html", "@text.html")
 
   --- CSS
   h("@type.selector.css", { fg = palette.colors.red })
