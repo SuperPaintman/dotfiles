@@ -2,7 +2,7 @@
 
 with pkgs; rec {
   sumneko.lua = callPackage ./lua {
-    inherit (unstable) sumneko-lua-language-server;
+    inherit (unstable) lua-language-server;
   };
 
   themes = {

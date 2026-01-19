@@ -29,6 +29,23 @@
     options dell-smm-hwmon restricted=0 force=1
   '';
 
+  # TMP.
+  # Save disk during Nix builds.
+  boot.tmp = {
+    useTmpfs = true;
+    tmpfsSize = "50%"; # Cashapona has 64Gi RAM.
+    # Options:
+    #     mountConfig.Options = lib.concatStringsSep "," [
+    #       "mode=1777"
+    #       "strictatime"
+    #       "rw"
+    #       "nosuid"
+    #       "nodev"
+    #       "size=${toString cfg.tmpfsSize}"
+    #       "huge=${cfg.tmpfsHugeMemoryPages}"
+    #     ];
+  };
+
   # Setup keyfile
   boot.initrd.secrets = {
     "/crypto_keyfile.bin" = null;
@@ -53,18 +70,18 @@
     interfaces.wlp59s0.useDHCP = true;
   };
 
-  # Sound.
-  sound.enable = true;
-
   # Hardware.
   hardware = {
+    alsa = {
+      enable = false;
+    };
+
     pulseaudio = {
       enable = true;
     };
 
     opengl = {
       enable = true;
-      driSupport = true;
       driSupport32Bit = true;
 
       # Intel CPI.
@@ -84,6 +101,8 @@
     # Intel CPU.
     # See: https://github.com/NixOS/nixos-hardware/blob/master/common/cpu/intel/default.nix
     # cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+    nvidia.open = false;
 
     nvidia.prime = {
       # TODO(SuperPaintman): works not so well, display shows artifacts.
@@ -106,6 +125,8 @@
 
   # Services.
   services = {
+    pipewire.enable = false;
+
     xserver = {
       videoDrivers = [ "nvidia" ];
       dpi = 96;

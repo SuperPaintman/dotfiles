@@ -29,14 +29,14 @@
 
   bufferline-nvim = {
     pname = "bufferline-nvim";
-    version = "0.0.0+rev=2f391fd";
+    version = "0.0.0+rev=655133c";
     src = fetchFromGitHub {
       owner = "akinsho";
       repo = "bufferline.nvim";
-      rev = "2f391fde91b9c3876eee359ee24cc352050e5e48";
-      sha256 = "sha256-e+TaXvZI+nfnK3gFoLK5ffwsm6B+15YCeehnoISK4mE=";
+      rev = "655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3";
+      sha256 = "sha256-ae4MB6+6v3awvfSUWlau9ASJ147ZpwuX1fvJdfMwo1Q=";
     };
-    commit = "2f391fde91b9c3876eee359ee24cc352050e5e48";
+    commit = "655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3";
     plugin = "akinsho/bufferline.nvim";
   };
 
@@ -211,14 +211,14 @@
 
   lualine-nvim = {
     pname = "lualine-nvim";
-    version = "0.0.0+rev=442d2ab";
+    version = "0.0.0+rev=e545924";
     src = fetchFromGitHub {
       owner = "nvim-lualine";
       repo = "lualine.nvim";
-      rev = "442d2ab757b4de6bc492186ff76ffed9746d772b";
-      sha256 = "sha256-Ho0TM+pHEz5KYs0KIFTDLbLKY/O9/Fx0YWuZZVpUwEw=";
+      rev = "e5459241bde5949305b9583bb4eedf322a2a8e7c";
+      sha256 = "sha256-dh/5ph4javntGGMAmwYFBo9dr8iD0JyA3W/lmFJr1fc=";
     };
-    commit = "442d2ab757b4de6bc492186ff76ffed9746d772b";
+    commit = "e5459241bde5949305b9583bb4eedf322a2a8e7c";
     plugin = "nvim-lualine/lualine.nvim";
   };
 
@@ -250,28 +250,28 @@
 
   neogit = {
     pname = "neogit";
-    version = "0.0.0+rev=33016ad";
+    version = "0.0.0+rev=d8bf910";
     src = fetchFromGitHub {
       owner = "NeogitOrg";
       repo = "neogit";
-      rev = "33016ad20b92b7eb83d27880b4abfbce53b467ad";
-      sha256 = "sha256-53+k+nFsRjdQlX+f4ZPepbGQSGXBodN5OQsRY0T8puU=";
+      rev = "d8bf9102692250193b855acd9025a826f1af2729";
+      sha256 = "sha256-BBre2HyecQp1TlhJEWbkUpeu5Y4urZVgVf4dqU7RQT0=";
     };
-    commit = "33016ad20b92b7eb83d27880b4abfbce53b467ad";
+    commit = "d8bf9102692250193b855acd9025a826f1af2729";
     plugin = "NeogitOrg/neogit";
   };
 
-  null-ls-nvim = {
-    pname = "null-ls-nvim";
-    version = "0.0.0+rev=e45670a";
+  none-ls-nvim = {
+    pname = "none-ls-nvim";
+    version = "0.0.0+rev=e2cbdcb";
     src = fetchFromGitHub {
-      owner = "jose-elias-alvarez";
-      repo = "null-ls.nvim";
-      rev = "e45670abdcda293282b7a00d0e2f7d473e7d6251";
-      sha256 = "sha256-s7jPzm9Skt/eubfvtfzRazSJsdeyZgPnJSSzNLsUbSM=";
+      owner = "nvimtools";
+      repo = "none-ls.nvim";
+      rev = "e2cbdcb986e35461db9c6d9ba98f45bd272ac913";
+      sha256 = "sha256-5He67+EJ6da+jKLtuksozL8fc/SWigkzGdcY5nr6QFg=";
     };
-    commit = "e45670abdcda293282b7a00d0e2f7d473e7d6251";
-    plugin = "jose-elias-alvarez/null-ls.nvim";
+    commit = "e2cbdcb986e35461db9c6d9ba98f45bd272ac913";
+    plugin = "nvimtools/none-ls.nvim";
   };
 
   nvim-cmp = {
@@ -380,14 +380,14 @@
 
   nvim-treesitter-textobjects = {
     pname = "nvim-treesitter-textobjects";
-    version = "0.0.0+rev=52f1f32";
+    version = "0.0.0+rev=5ca4aaa";
     src = fetchFromGitHub {
       owner = "nvim-treesitter";
       repo = "nvim-treesitter-textobjects";
-      rev = "52f1f3280d9092bfaee5c45be5962fabee3d9654";
-      sha256 = "sha256-UqderGoFad6tIny3pn38mB2XibA0dzxUVWNBYmsxAMw=";
+      rev = "5ca4aaa6efdcc59be46b95a3e876300cfead05ef";
+      sha256 = "sha256-lf+AwSu96iKO1vWWU2D7jWHGfjXkbX9R2CX3gMZaD4M=";
     };
-    commit = "52f1f3280d9092bfaee5c45be5962fabee3d9654";
+    commit = "5ca4aaa6efdcc59be46b95a3e876300cfead05ef";
     plugin = "nvim-treesitter/nvim-treesitter-textobjects";
   };
 

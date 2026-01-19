@@ -164,7 +164,7 @@ let
     "css"
     "diff"
     "dockerfile"
-    "gitignore"
+    # "gitignore" # BROKEN
     "gdscript"
     "go"
     "gomod"
@@ -223,7 +223,7 @@ let
       p.lspsaga-nvim.lazy
       p.lsp-signature-nvim.lazy
       p.omnisharp-extended-lsp-nvim.lazy
-      p.null-ls-nvim.lazy
+      p.none-ls-nvim.lazy
 
       # Completion.
       p.nvim-cmp.lazy
@@ -271,23 +271,25 @@ let
       git
 
       # LSP-Config
+      { package = arduino-cli; bins = [ "arduino-cli" ]; } # Arduino
+      { package = arduino-language-server; bins = [ "arduino-language-server" ]; } # Arduino
       { package = clang-tools; bins = [ "clangd" ]; } # C / C++
       { package = omnisharp-roslyn; bins = [ "OmniSharp" ]; } # C#
       { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-css-language-server" ]; } # CSS
-      { package = unstable.gopls; bins = [ "gopls" ]; } # Go
+      # { package = gopls; bins = [ "gopls" ]; } # Go
       { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-html-language-server" ]; } # HTML
       { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-json-language-server" ]; } # JSON
       { package = lua-language-server; bins = [ "lua-language-server" ]; } # Lua
-      { package = rnix-lsp; bins = [ "rnix-lsp" ]; } # Nix
-      { package = unstable.nixd; bins = [ "nixd" ]; } # Nix
-      { package = unstable.rust-analyzer; bins = [ "rust-analyzer" ]; } # Rust
+      # { package = rnix-lsp; bins = [ "rnix-lsp" ]; } # Nix
+      # { package = nixd; bins = [ "nixd" ]; } # Nix
+      { package = rust-analyzer; bins = [ "rust-analyzer" ]; } # Rust
       { package = nodePackages.svelte-language-server; bins = [ "svelteserver" ]; } # Svelte
       { package = terraform-ls; bins = [ "terraform-ls" ]; } # Terraform
       { package = tflint; bins = [ "tflint" ]; } # Terraform
       { package = nodePackages.typescript-language-server; bins = [ "typescript-language-server" ]; } # TypeScript / JavaScript
       { package = taplo; bins = [ "taplo" ]; } # TOML
       { package = nodePackages.yaml-language-server; bins = [ "yaml-language-server" ]; } # YAML
-      { package = unstable.zls; bins = [ "zls" ]; } # Zig
+      { package = zls; bins = [ "zls" ]; } # Zig
 
       # Null-ls
       { package = nodePackages.cspell; bins = [ "cspell" ]; }

@@ -46,7 +46,11 @@ let
 
     installPhase = ''
       mkdir -p "$out"
-      cp -r {autoload,doc,lua,plugin,queries} $out
+      for d in after autoload colors doc ftplugin lua plugin queries syntax types; do
+        if [ -d "$d" ]; then
+          cp -r "$d" "$out/$d"
+        fi
+      done
     '';
 
     dontBuild = true;

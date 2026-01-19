@@ -14,14 +14,14 @@ local function supports_format(client)
   -- client.server_capabilities.documentFormattingProvider
 
   if
-    client.config
-    and client.config.capabilities
-    and client.config.capabilities.documentFormattingProvider == false
+      client.config
+      and client.config.capabilities
+      and client.config.capabilities.documentFormattingProvider == false
   then
     return false
   end
   return client.supports_method("textDocument/formatting")
-    or client.supports_method("textDocument/rangeFormatting")
+      or client.supports_method("textDocument/rangeFormatting")
 end
 
 --------------------------------------------------------------------------------
@@ -31,8 +31,8 @@ end
 M.defaults = {
   enabled = true,
   preferred = {
-    css = "null-ls", -- prettier
-    go = "null-ls", -- goimports
+    css = "null-ls",  -- prettier
+    go = "null-ls",   -- goimports
     html = "null-ls", -- prettier
     json = "null-ls", -- prettier
     nix = "nixd",
@@ -75,7 +75,7 @@ M.format = function(opts)
     preferred = M.options.preferred[filetype] or M.options.preferred.default
   end
 
-  local clients = vim.lsp.get_active_clients({ bufnr = buf })
+  local clients = vim.lsp.get_clients({ bufnr = buf })
 
   -- Find the client id.
   local available_id = nil
@@ -144,7 +144,7 @@ M.setup = function(opts)
       end
 
       local buf = vim.api.nvim_get_current_buf()
-      local clients = vim.lsp.get_active_clients({ bufnr = buf })
+      local clients = vim.lsp.get_clients({ bufnr = buf })
 
       clients = vim.tbl_filter(supports_format, clients)
 

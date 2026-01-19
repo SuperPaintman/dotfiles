@@ -25,7 +25,8 @@ configuration {
     kb-remove-to-eol: ""; // Default `Control+k`.
     kb-remove-char-back: "BackSpace"; // Default `Control+h`.
 
-    kb-cancel: "Escape,Control+bracketleft,Control+c";
+    // kb-cancel: "Escape,Control+bracketleft,Control+c";
+    kb-cancel: "Escape,Control+bracketleft";
 }
 
 @import "~/.config/rofi/theme.rasi"

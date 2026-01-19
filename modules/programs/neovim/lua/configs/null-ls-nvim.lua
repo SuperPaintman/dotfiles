@@ -15,7 +15,7 @@ M.config = function()
     sources = {
       -- Diagnostics
       -- null_ls.builtins.diagnostics.cspell,
-      null_ls.builtins.diagnostics.gdlint,
+      -- null_ls.builtins.diagnostics.gdlint,
       null_ls.builtins.diagnostics.staticcheck.with({
         cwd = helpers.cache.by_bufnr(function(params)
           return utils.root_pattern("go.work", "go.mod", ".git")(params.bufname)

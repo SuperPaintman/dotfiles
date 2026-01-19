@@ -9,8 +9,10 @@ import (
 )
 
 type Config struct {
-	Output   string              `json:"output"`
+	Output   string              `yaml:"output"`
 	Packages map[string]*Package `yaml:"packages"`
+	Warnings []string            `yaml:"warnings"`
+	Errors   []string            `yaml:"errors"`
 }
 
 type Package struct {
@@ -119,13 +121,14 @@ func (p *Package) UnmarshalYAML(value *yaml.Node) error {
 	}
 
 	*p = Package{
-		Type:            pkg.Type,
-		Pname:           pkg.Pname,
-		VersionOverride: pkg.Version,
-		ExtraAttrs:      pkg.ExtraAttrs,
-		Args:            args,
-		BuildInputs:     pkg.BuildInputs,
-		After:           pkg.After,
+		Type:              pkg.Type,
+		Pname:             pkg.Pname,
+		VersionOverride:   pkg.Version,
+		ExtraAttrs:        pkg.ExtraAttrs,
+		Args:              args,
+		BuildInputs:       pkg.BuildInputs,
+		NativeBuildInputs: pkg.NativeBuildInputs,
+		After:             pkg.After,
 	}
 
 	return nil

@@ -52,7 +52,7 @@ if is_osx; then
             "ansible" \
             "fd" \
             "lf" \
-            "exa" \
+            "eza" \
             "fzf" \
             "koekeishiya/formulae/skhd" \
             "koekeishiya/formulae/yabai"; do

@@ -1,4 +1,9 @@
-NIXOS_VERSION := 23.05
+export GIT_SSH_COMMAND = $(shell echo "ssh -i $(HOME)/.ssh/id_ed25519")
+
+SUDO := sudo \
+	--preserve-env=GIT_SSH_COMMAND
+
+NIXOS_VERSION := 25.05
 
 NIX_LOCAL_PACKAGES := $(shell nix eval --raw \
 	'( \
@@ -87,19 +92,23 @@ nixos-upgrade-unstable: nixos-update-unstable nixos-switch
 
 .PHONY: nixos-update
 nixos-update: nixos-channels
-	sudo nix-channel --update
+	$(SUDO) nix-channel --update
 
 .PHONY: nixos-update-unstable
 nixos-update-unstable: nixos-channels
-	sudo nix-channel --update nixos-unstable
+	$(SUDO) nix-channel --update nixos-unstable
 
 .PHONY: nixos-switch
 nixos-switch:
-	sudo nixos-rebuild switch
+	$(SUDO) nixos-rebuild switch
 
 .PHONY: nixos-build
 nixos-build:
-	nixos-rebuild build
+	$(SUDO) nixos-rebuild build
+
+.PHONY: nixos-build-debug
+nixos-build-debug:
+	$(SUDO) nixos-rebuild build --max-jobs 1
 
 .PHONY: $(addprefix nixos-build-pkgs-, $(NIX_LOCAL_PACKAGES))
 $(addprefix nixos-build-pkgs-, $(NIX_LOCAL_PACKAGES)): nixos-build-pkgs-%:
@@ -120,15 +129,15 @@ nixos-dry-build:
 
 .PHONY: nixos-gc
 nixos-gc:
-	sudo nix-collect-garbage -d
+	$(SUDO) nix-collect-garbage -d
 
 # Add NixOS channels.
 # See: https://nixos.org/nixos/manual/index.html#sec-upgrading .
 .PHONY: nixos-channels
 nixos-channels:
-	sudo nix-channel --add "https://nixos.org/channels/nixos-$(NIXOS_VERSION)" nixos
-	sudo nix-channel --add "https://nixos.org/channels/nixos-unstable" nixos-unstable
-	sudo nix-channel --list
+	$(SUDO) nix-channel --add "https://nixos.org/channels/nixos-$(NIXOS_VERSION)" nixos
+	$(SUDO) nix-channel --add "https://nixos.org/channels/nixos-unstable" nixos-unstable
+	$(SUDO) nix-channel --list
 
 .PHONY: nixos-uninstall-users-packages
 nixos-uninstall-users-packages:

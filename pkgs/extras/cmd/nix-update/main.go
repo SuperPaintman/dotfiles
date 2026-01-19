@@ -3,13 +3,18 @@ package main
 import (
 	"bufio"
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"errors"
 	"fmt"
 	"io"
 	"log"
+	"maps"
 	"os"
 	"os/exec"
 	"path"
 	"path/filepath"
+	"slices"
 	"sort"
 	"strconv"
 	"strings"
@@ -191,10 +196,35 @@ func (u *Updater) Update(ctx context.Context, dir, filename string) error {
 		return fmt.Errorf("nix-update: failed to unmarshal config file: %w", err)
 	}
 
+	for _, w := range config.Warnings {
+		log.Printf("Config warning: %s", w)
+	}
+
+	if len(config.Errors) > 0 {
+		var errs []error
+		for _, e := range config.Errors {
+			errs = append(errs, fmt.Errorf("config error: %s", e))
+		}
+		return errors.Join(errs...)
+	}
+
+	if len(config.Errors) > 0 {
+		var errs []error
+		for _, e := range config.Errors {
+			errs = append(errs, fmt.Errorf("config error: %s", e))
+		}
+		return errors.Join(errs...)
+	}
+
 	// Update the packages.
 	var gen generatedFile
 
-	for name, pkg := range config.Packages {
+	packages := slices.Sorted(maps.Keys(config.Packages))
+
+	var pkgNr int
+	for _, name := range packages {
+		pkg := config.Packages[name]
+		pkgNr++
 		id := packageID{filename: absFilename, name: name}
 		if _, ok := u.knownPackages[id]; ok {
 			continue
@@ -206,6 +236,7 @@ func (u *Updater) Update(ctx context.Context, dir, filename string) error {
 			return fmt.Errorf("nix-update: failed to preprocess %s package: %w", name, err)
 		}
 
+		log.Printf("Processing package %s (%d/%d)", name, pkgNr, len(config.Packages))
 		if err := u.updatePackage(ctx, &gen, dir, name, pkg); err != nil {
 			return err
 		}
@@ -242,8 +273,6 @@ type fetcher struct {
 }
 
 func (u *Updater) updatePackage(ctx context.Context, gen *generatedFile, dir, name string, pkg *Package) error {
-	log.Printf("Processing package %s", name)
-
 	// Prefetch package.
 	var (
 		fetch *fetcher
@@ -251,13 +280,13 @@ func (u *Updater) updatePackage(ctx context.Context, gen *generatedFile, dir, na
 	)
 	switch pkg.Type {
 	case PackageTypeGit:
-		fetch, err = u.prefetchGitPackage(ctx, pkg.Args.(*PackageGitArgs))
+		fetch, err = u.prefetchGitPackage(ctx, dir, pkg.Args.(*PackageGitArgs))
 
 	case PackageTypeGithub:
-		fetch, err = u.prefetchGithubPackage(ctx, pkg.Args.(*PackageGithubArgs))
+		fetch, err = u.prefetchGithubPackage(ctx, dir, pkg.Args.(*PackageGithubArgs))
 
 	case PackageTypeURL:
-		fetch, err = u.prefetchURLPackage(ctx, pkg.Args.(*PackageURLArgs))
+		fetch, err = u.prefetchURLPackage(ctx, dir, pkg.Args.(*PackageURLArgs))
 
 	default:
 		return fmt.Errorf("nix-update: unknown package type: %s", pkg.Type)
@@ -327,7 +356,7 @@ func (u *Updater) updatePackage(ctx context.Context, gen *generatedFile, dir, na
 	return nil
 }
 
-func (u *Updater) prefetchGitPackage(ctx context.Context, a *PackageGitArgs) (*fetcher, error) {
+func (u *Updater) prefetchGitPackage(ctx context.Context, dir string, a *PackageGitArgs) (*fetcher, error) {
 	args := make([]string, 0, 8)
 	args = append(args, "fetchgit")
 	if a != nil {
@@ -340,7 +369,7 @@ func (u *Updater) prefetchGitPackage(ctx context.Context, a *PackageGitArgs) (*f
 		}
 	}
 
-	hash, err := u.nixPrefetch(ctx, args)
+	hash, err := u.nixPrefetch(ctx, dir, args)
 	if err != nil {
 		return nil, err
 	}
@@ -364,7 +393,7 @@ func (u *Updater) prefetchGitPackage(ctx context.Context, a *PackageGitArgs) (*f
 	}, nil
 }
 
-func (u *Updater) prefetchGithubPackage(ctx context.Context, a *PackageGithubArgs) (*fetcher, error) {
+func (u *Updater) prefetchGithubPackage(ctx context.Context, dir string, a *PackageGithubArgs) (*fetcher, error) {
 	args := make([]string, 0, 8)
 	args = append(args, "fetchFromGitHub")
 	if a != nil {
@@ -381,7 +410,7 @@ func (u *Updater) prefetchGithubPackage(ctx context.Context, a *PackageGithubArg
 		}
 	}
 
-	hash, err := u.nixPrefetch(ctx, args)
+	hash, err := u.nixPrefetch(ctx, dir, args)
 	if err != nil {
 		return nil, err
 	}
@@ -409,7 +438,7 @@ func (u *Updater) prefetchGithubPackage(ctx context.Context, a *PackageGithubArg
 	}, nil
 }
 
-func (u *Updater) prefetchURLPackage(ctx context.Context, a *PackageURLArgs) (*fetcher, error) {
+func (u *Updater) prefetchURLPackage(ctx context.Context, dir string, a *PackageURLArgs) (*fetcher, error) {
 	args := make([]string, 0, 8)
 	args = append(args, "fetchurl")
 	if a != nil {
@@ -418,7 +447,7 @@ func (u *Updater) prefetchURLPackage(ctx context.Context, a *PackageURLArgs) (*f
 		}
 	}
 
-	hash, err := u.nixPrefetch(ctx, args)
+	hash, err := u.nixPrefetch(ctx, dir, args)
 	if err != nil {
 		return nil, err
 	}
@@ -438,9 +467,42 @@ func (u *Updater) prefetchURLPackage(ctx context.Context, a *PackageURLArgs) (*f
 	}, nil
 }
 
-func (u *Updater) nixPrefetch(ctx context.Context, args []string) (string, error) {
+func (u *Updater) nixPrefetch(ctx context.Context, dir string, args []string) (string, error) {
+	// Cache here.
+	if err := os.MkdirAll(path.Join(dir, ".nix-update-cache"), 0755); err != nil {
+		return "", fmt.Errorf("failed to create nix-update cache: %w", err)
+	}
+
+	// Try to read from cache.
+	hasher := sha256.New()
+	for _, arg := range args {
+		if _, err := hasher.Write([]byte(arg)); err != nil {
+			return "", fmt.Errorf("failed to hash args: %w", err)
+		}
+	}
+	argshash := hex.EncodeToString(hasher.Sum(nil))
+
+	cachefile := path.Join(dir, ".nix-update-cache", "nix-prefetch-"+argshash+".txt")
+
+	if cached, err := os.ReadFile(cachefile); err == nil {
+		return strings.TrimSpace(string(cached)), nil
+	}
+
+	hash, err := u.nixPrefetchWithoutCache(ctx, args)
+	if err != nil {
+		return "", err
+	}
+
+	if err := os.WriteFile(cachefile, []byte(hash), 0644); err != nil {
+		log.Printf("Failed to write nix-prefetch to cache: %s", err)
+	}
+
+	return hash, nil
+}
+
+func (u *Updater) nixPrefetchWithoutCache(ctx context.Context, args []string) (string, error) {
 	cmd := exec.CommandContext(ctx, "nix-prefetch", args...)
-	// cmd.Stderr = os.Stderr
+	cmd.Stderr = os.Stderr
 
 	out, err := cmd.Output()
 	if err != nil {
@@ -574,12 +636,17 @@ func (u *Updater) runAfterScripts(ctx context.Context, name string, pkg *Package
 		return nil, fmt.Errorf("nix-update: failed to write content to temp nix file: %w", err)
 	}
 
+	// func() {
+	// 	content, _ := os.ReadFile(tmpfilename)
+	// 	fmt.Printf("content:\n%s\n", content)
+	// }()
+
 	// Run nix-build.
 	cmd := exec.CommandContext(ctx, "nix-build",
 		"--no-out-link",
 		tmpfilename,
 	)
-	// cmd.Stderr = os.Stderr
+	cmd.Stderr = os.Stderr
 
 	out, err := cmd.Output()
 	if err != nil {

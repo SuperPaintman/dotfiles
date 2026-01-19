@@ -3,7 +3,7 @@
 , makeWrapper
 , fzf
 , fd
-, exa
+, eza
 , zoxide
 , tmux
 , nix-prefetch
@@ -20,7 +20,7 @@ buildGoModule rec {
     "cmd/tmux-session-manager"
   ];
 
-  vendorSha256 = "sha256-PD0i2QzinUAj1VkJkVyBiNy+eMoUreD4keG3rt0+ufc=";
+  vendorHash = "sha256-PD0i2QzinUAj1VkJkVyBiNy+eMoUreD4keG3rt0+ufc=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -31,7 +31,7 @@ buildGoModule rec {
       --prefix PATH ':' ${lib.makeBinPath [
         fzf
         fd
-        exa
+        eza
         zoxide
         tmux
       ]}

@@ -48,6 +48,27 @@ if false then
   end
 end
 
+---@class utils.treesitter.TreesitterParsers
+if false then
+  ---@class utils.treesitter.TreesitterParsers
+  local TreesitterParsers = {}
+
+  ---@param bufnr integer?
+  ---@param lang string?
+  ---@return LanguageTree?
+  ---@diagnostic disable-next-line
+  function TreesitterParsers.get_parser(bufnr, lang)
+    error("unimplemented")
+  end
+
+  ---@param bufnr integer?
+  ---@return TSNode
+  ---@diagnostic disable-next-line
+  function TreesitterParsers.get_tree_root(bufnr)
+    error("unimplemented")
+  end
+end
+
 --------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
@@ -107,6 +128,10 @@ M.utils = _get_ts_utils
 ---@type fun(): utils.treesitter.TreesitterLocals?
 local _get_ts_locals = optional_require("nvim-treesitter.locals")
 M.locals = _get_ts_locals
+
+---@type fun(): utils.treesitter.TreesitterParsers?
+local _get_ts_parsers = optional_require("nvim-treesitter.parsers")
+M.parsers = _get_ts_parsers
 
 ---@param lang string
 ---@param query string

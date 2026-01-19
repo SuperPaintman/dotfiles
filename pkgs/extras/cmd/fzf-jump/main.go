@@ -166,7 +166,7 @@ func main() {
 		ANSI:    true,
 		Exit0:   true,
 		Nth:     "2..",
-		Preview: `exa -la --color=always $(sh -c 'echo {-1}')`,
+		Preview: `eza -la --color=always $(sh -c 'echo {-1}')`,
 	}
 
 	results, err := fzf.Run(ctx, &input)

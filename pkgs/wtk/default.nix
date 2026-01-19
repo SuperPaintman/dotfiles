@@ -7,5 +7,5 @@ buildGoModule rec {
 
   subPackages = [ "cmd/wtk" ];
 
-  vendorSha256 = "sha256-gIP8xjK4+R0hKMFExevdnpS3LUNBwctBUJQlAA1AaIE=";
+  vendorHash = "sha256-gIP8xjK4+R0hKMFExevdnpS3LUNBwctBUJQlAA1AaIE=";
 }

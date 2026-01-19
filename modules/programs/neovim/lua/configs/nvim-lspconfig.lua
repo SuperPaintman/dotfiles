@@ -102,10 +102,10 @@ end
 
 local function gdscript_hover_handler(err, result, ctx, config)
   if
-    err == nil
-    and result
-    and result.contents
-    and result.contents.kind == "markdown"
+      err == nil
+      and result
+      and result.contents
+      and result.contents.kind == "markdown"
   then
     -- Patch the documentation.
     result.contents.value = patch_gdscript_documentation(result.contents.value)
@@ -116,10 +116,10 @@ end
 
 local function yamlls_hover_handler(err, result, ctx, config)
   if
-    err == nil
-    and result
-    and result.contents
-    and result.contents.kind == "markdown"
+      err == nil
+      and result
+      and result.contents
+      and result.contents.kind == "markdown"
   then
     result.contents.value = string.gsub(result.contents.value, "&emsp;", "")
   end
@@ -201,9 +201,15 @@ M.config = function()
     end,
   })
 
+  -- Arduino
+  lspconfig.arduino_language_server.setup({
+    -- capabilities = capabilities,
+    on_attach = create_on_attach({}),
+  })
+
   -- C / C++
   local clangd_default_cmd =
-    require("lspconfig.server_configurations.clangd").default_config.cmd[1]
+      require("lspconfig.server_configurations.clangd").default_config.cmd[1]
   lspconfig.clangd.setup({
     cmd = { clangd_default_cmd, "--background-index" },
     capabilities = capabilities,
@@ -220,13 +226,13 @@ M.config = function()
   })
 
   -- GDscript
-  lspconfig.gdscript.setup({
-    capabilities = capabilities,
-    on_attach = create_on_attach({}),
-    handlers = {
-      ["textDocument/hover"] = gdscript_hover_handler,
-    },
-  })
+  -- lspconfig.gdscript.setup({
+  --   capabilities = capabilities,
+  --   on_attach = create_on_attach({}),
+  --   handlers = {
+  --     ["textDocument/hover"] = gdscript_hover_handler,
+  --   },
+  -- })
 
   -- CSS
   lspconfig.cssls.setup({
@@ -311,16 +317,16 @@ M.config = function()
   --   on_attach = create_on_attach({}),
   -- })
 
-  lspconfig.nixd.setup({
-    root_dir = function(fname)
-      return lspconfig_util.root_pattern(unpack({ ".nixd.json", "flake.nix" }))(
-        fname
-      )
-      -- or lspconfig_util.find_git_ancestor(fname)
-    end,
-    capabilities = capabilities,
-    on_attach = create_on_attach({ semantic = false }),
-  })
+  -- lspconfig.nixd.setup({
+  --   root_dir = function(fname)
+  --     return lspconfig_util.root_pattern(unpack({ ".nixd.json", "flake.nix" }))(
+  --       fname
+  --     )
+  --     -- or lspconfig_util.find_git_ancestor(fname)
+  --   end,
+  --   capabilities = capabilities,
+  --   on_attach = create_on_attach({ semantic = false }),
+  -- })
 
   -- Rust
   lspconfig.rust_analyzer.setup({

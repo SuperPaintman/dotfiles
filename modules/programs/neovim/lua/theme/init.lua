@@ -168,6 +168,9 @@ M.setup = function(opts)
   h("String", { fg = palette.colors.green })
   h("Character", { fg = palette.colors.green })
 
+  -- Operator.
+  h("Operator", { fg = palette.colors.magenta })
+
   --- Identifier.
   h("Identifier", { fg = palette.colors.foreground })
   h("Function", { fg = palette.colors.blue })
@@ -323,7 +326,7 @@ M.setup = function(opts)
 
   --- Zig
   l("@type.qualifier.zig", "@keyword") -- const, var, volatile, allowzero, noalias
-  l("@attribute.zig", "@keyword") -- comptime, export, extern, inline, noinline, packed, pub, threadlocal
+  l("@attribute.zig", "@keyword")      -- comptime, export, extern, inline, noinline, packed, pub, threadlocal
 
   -- Built-in Pluggins.
   --- Help

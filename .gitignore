@@ -27,3 +27,5 @@ compile_commands.json
 
 # Secrets.
 /secrets
+
+.nix-update-cache/

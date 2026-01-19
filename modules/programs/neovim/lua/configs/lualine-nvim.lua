@@ -83,7 +83,7 @@ end
 
 local function has_lsp_server()
   local bufnr = vim.api.nvim_get_current_buf()
-  local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+  local clients = vim.lsp.get_clients({ bufnr = bufnr })
   return #clients > 0
 end
 
@@ -101,7 +101,7 @@ local function create_hl(tag, options, color)
   local highlight = require("lualine.highlight")
 
   local hl =
-    highlight.create_component_highlight_group(color, tag, options, false)
+      highlight.create_component_highlight_group(color, tag, options, false)
 
   return highlight.component_format_highlight(hl)
 end
@@ -273,7 +273,7 @@ M.config = function()
       function()
         local bufnr = vim.api.nvim_get_current_buf()
         local clients =
-          vim.lsp.get_active_clients({ bufnr = bufnr, name = "copilot" })
+            vim.lsp.get_clients({ bufnr = bufnr, name = "copilot" })
         return #clients > 0
       end,
       { on = "", off = "" },
@@ -288,7 +288,7 @@ M.config = function()
   insert_right({
     function()
       local bufnr = vim.api.nvim_get_current_buf()
-      local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+      local clients = vim.lsp.get_clients({ bufnr = bufnr })
 
       local names = {}
       for _, client in ipairs(clients) do

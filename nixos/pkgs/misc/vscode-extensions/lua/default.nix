@@ -1,4 +1,4 @@
-{ lib, vscode-utils, makeWrapper, sumneko-lua-language-server }:
+{ lib, vscode-utils, makeWrapper, lua-language-server }:
 
 vscode-utils.buildVscodeMarketplaceExtension rec {
   mktplcRef = {
@@ -17,7 +17,7 @@ vscode-utils.buildVscodeMarketplaceExtension rec {
     rm $out/share/vscode/extensions/sumneko.lua/server/bin/Linux/lua-language-server
 
     makeWrapper \
-      "${sumneko-lua-language-server}/bin/lua-language-server" \
+      "${lua-language-server}/bin/lua-language-server" \
       "$out/share/vscode/extensions/sumneko.lua/server/bin/Linux/lua-language-server"
   '';
 }

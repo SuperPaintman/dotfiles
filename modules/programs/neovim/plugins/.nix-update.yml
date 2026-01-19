@@ -184,7 +184,7 @@ packages:
         extraAttrs:
             plugin: nvim-lualine/lualine.nvim
             # branch: master
-            commit: &commit 442d2ab757b4de6bc492186ff76ffed9746d772b
+            commit: &commit e5459241bde5949305b9583bb4eedf322a2a8e7c
         args:
             owner: nvim-lualine
             repo: lualine.nvim
@@ -195,21 +195,21 @@ packages:
         extraAttrs:
             plugin: akinsho/bufferline.nvim
             # branch: main
-            commit: &commit 2f391fde91b9c3876eee359ee24cc352050e5e48
+            commit: &commit 655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3
         args:
             owner: akinsho
             repo: bufferline.nvim
             rev: *commit
 
-    null-ls-nvim:
+    none-ls-nvim:
         type: github
         extraAttrs:
-            plugin: jose-elias-alvarez/null-ls.nvim
+            plugin: nvimtools/none-ls.nvim
             # branch: main
-            commit: &commit e45670abdcda293282b7a00d0e2f7d473e7d6251
+            commit: &commit e2cbdcb986e35461db9c6d9ba98f45bd272ac913
         args:
-            owner: jose-elias-alvarez
-            repo: null-ls.nvim
+            owner: nvimtools
+            repo: none-ls.nvim
             rev: *commit
 
     trouble-nvim:
@@ -239,7 +239,7 @@ packages:
         extraAttrs:
             plugin: nvim-treesitter/nvim-treesitter-textobjects
             # branch: master
-            commit: &commit 52f1f3280d9092bfaee5c45be5962fabee3d9654
+            commit: &commit 5ca4aaa6efdcc59be46b95a3e876300cfead05ef
         args:
             owner: nvim-treesitter
             repo: nvim-treesitter-textobjects
@@ -283,7 +283,7 @@ packages:
         extraAttrs:
             plugin: NeogitOrg/neogit
             # branch: master
-            commit: &commit 33016ad20b92b7eb83d27880b4abfbce53b467ad
+            commit: &commit d8bf9102692250193b855acd9025a826f1af2729
         args:
             owner: NeogitOrg
             repo: neogit

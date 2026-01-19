@@ -158,10 +158,10 @@ local function normalize_spec(spec)
   -- Opts.
   if spec.opts ~= nil or config.opts ~= nil then
     if
-      spec.opts
-      and config.opts
-      and type(spec.opts) == "table"
-      and type(config.opts) == "table"
+        spec.opts
+        and config.opts
+        and type(spec.opts) == "table"
+        and type(config.opts) == "table"
     then
       local left = spec.opts
       ---@cast left table
@@ -250,9 +250,9 @@ end
 --------------------------------------------------------------------------------
 setup({
   -- Common libraries and utils.
-  { "nvim-lua/plenary.nvim", lazy = true },
+  { "nvim-lua/plenary.nvim",       lazy = true },
   "folke/neodev.nvim",
-  { "nvim-tree/nvim-web-devicons", opts = {}, lazy = true },
+  { "nvim-tree/nvim-web-devicons", opts = {},  lazy = true },
 
   -- Telescope.
   "nvim-telescope/telescope.nvim",
@@ -287,15 +287,15 @@ setup({
   },
   "nvimdev/lspsaga.nvim",
   "ray-x/lsp_signature.nvim",
-  { "Hoffs/omnisharp-extended-lsp.nvim", lazy = true }, -- Patches for C# LSP.
-  "jose-elias-alvarez/null-ls.nvim",
+  { "Hoffs/omnisharp-extended-lsp.nvim",           lazy = true }, -- Patches for C# LSP.
+  "nvimtools/none-ls.nvim",                                       -- null-ls
 
   -- Completion.
   "hrsh7th/nvim-cmp",
-  { "hrsh7th/cmp-nvim-lua", lazy = true },
-  { "hrsh7th/cmp-nvim-lsp", lazy = true },
-  { "hrsh7th/cmp-buffer", lazy = true },
-  { "hrsh7th/cmp-path", lazy = true },
+  { "hrsh7th/cmp-nvim-lua",     lazy = true },
+  { "hrsh7th/cmp-nvim-lsp",     lazy = true },
+  { "hrsh7th/cmp-buffer",       lazy = true },
+  { "hrsh7th/cmp-path",         lazy = true },
   { "saadparwaiz1/cmp_luasnip", lazy = true },
 
   -- Snippets.
@@ -307,10 +307,10 @@ setup({
   -- Git.
   { "lewis6991/gitsigns.nvim", opts = {}, event = "VeryLazy" },
   "NeogitOrg/neogit",
-  { "sindrets/diffview.nvim", opts = {}, lazy = true },
+  { "sindrets/diffview.nvim",  opts = {}, lazy = true },
 
   -- Editing.
-  { "numToStr/Comment.nvim", opts = {} },
+  { "numToStr/Comment.nvim",   opts = {} },
 
   -- Sessions.
   "rmagatti/auto-session",

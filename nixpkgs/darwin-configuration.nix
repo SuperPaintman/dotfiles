@@ -36,7 +36,7 @@ in
     lsof
 
     # Replacements for basic utils.
-    exa # ls
+    eza # ls
     bat # cat
     fd # find
 

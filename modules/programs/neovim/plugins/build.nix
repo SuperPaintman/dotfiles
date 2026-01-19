@@ -25,7 +25,7 @@ let
       mkdir -p "$out"
       for d in after autoload colors doc ftplugin lua plugin queries syntax types; do
         if [ -d "$d" ]; then
-          cp -r "$d" "$out/"
+          cp -r "$d" "$out/$d"
         fi
       done
     '' + lib.optionalString (installPhase != null) installPhase;

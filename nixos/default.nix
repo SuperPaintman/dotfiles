@@ -23,8 +23,8 @@ let
 
   home-manager = builtins.fetchGit {
     url = "https://github.com/rycee/home-manager.git";
-    rev = "33ccc5c28572d200f1e8d93fccba17e084e5f587";
-    ref = "release-23.05";
+    rev = "f21d9167782c086a33ad53e2311854a8f13c281e";
+    ref = "release-25.05";
   };
 
   unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
@@ -110,7 +110,7 @@ in
     curl
     atop
     htop
-    unstable.btop
+    btop
     git
     jq
     zip
@@ -124,7 +124,7 @@ in
     upower
 
     # Replacements for basic utils.
-    exa # ls
+    eza # ls
     bat # cat
     fd # find
 
@@ -135,8 +135,8 @@ in
 
     # Editors.
     vim
-    unstable.neovim
-    # unstable.neovide
+    neovim
+    # neovide
     emacs
     (
       vscode-with-extensions.override {
@@ -157,12 +157,12 @@ in
     chromium
 
     # Messengers.
-    unstable.tdesktop # Telegram.
-    unstable.discord
-    skypeforlinux
+    telegram-desktop # Telegram.
+    discord
+    # skypeforlinux
 
     # Terminals.
-    unstable.alacritty
+    alacritty
     xst
 
     # Compilers, interpreters and dev packages.
@@ -174,15 +174,16 @@ in
     llvm
     ccls
     # go
-    localPkgs.go_1_18beta1
+    # localPkgs.go_1_18beta1
+    localPkgs.go_1_25
     gotools
-    # unstable.gopls
+    # gopls
     localPkgs.gopls
     godef
     go-outline
     gomodifytags
     impl
-    unstable.delve
+    delve
     nodejs
     # python
     (
@@ -194,16 +195,16 @@ in
     )
     ruby
     localPkgs.rustup-openssl
-    unstable.rust-analyzer
+    rust-analyzer
     # ghc
     # stack
     # haskellPackages.brittany
     # elmPackages.elm
     dart
-    unstable.flutter
+    flutter
     shfmt
     nixpkgs-fmt
-    rnix-lsp
+    # rnix-lsp
     terraform-lsp
     arduino
     # localPkgs.difftastic
@@ -217,10 +218,10 @@ in
     )
     localPkgs.fennel
     localPkgs.fnlfmt
-    unstable.protobuf
-    unstable.protoc-gen-go
-    unstable.protoc-gen-go-grpc
-    localPkgs.zig
+    protobuf
+    protoc-gen-go
+    protoc-gen-go-grpc
+    zig
 
     # Docker.
     docker
@@ -231,11 +232,11 @@ in
 
     # Server configuration utils.
     ansible
-    unstable.terraform
+    terraform
     awscli2 # Unified tool to manage your AWS services.
 
     # Games.
-    unstable.steam
+    steam
 
     # Misc.
     (polybar.override { pulseSupport = true; })
@@ -247,27 +248,27 @@ in
     (rofi.override {
       plugins = [
         pkgs.rofi-emoji
-        localPkgs.rofi-blocks
+        # localPkgs.rofi-blocks
       ];
     })
     feh # Image viewer.
     arandr # Visual front end for XRandR.
     pavucontrol # PulseAudio Volume Control.
-    dbeaver # Universal SQL client.
+    dbeaver-bin # Universal SQL client.
     obs-studio # Streaming and recording program.
     audacity # Sound editor with graphical UI.
     scrot # A command-line screen capture utility.
     libnotify # A library that sends desktop notifications to a notification daemon.
     localPkgs._1password # 1Password command-line tool.
     # localPkgs.gh # GitHub CLI tool.
-    unstable.anki-bin # Spaced repetition flashcard program
-    (localPkgs.anki-desktop.override { anki-bin = unstable.anki-bin; }) # Spaced repetition flashcard program.
+    anki-bin # Spaced repetition flashcard program
+    (localPkgs.anki-desktop.override { anki-bin = anki-bin; }) # Spaced repetition flashcard program.
     wally-cli # CLI flashing tool for ZSA Moonlander.
     mu
     mutt # CLI email client.
     notmuch
     neomutt # CLI email client with some extras.
-    unstable.prusa-slicer # Prusa Slicer.
+    prusa-slicer # Prusa Slicer.
     openscad # 3D parametric model compiler.
     freecad
 
@@ -287,9 +288,9 @@ in
 
     # Local bins.
     extras
-    godot_4
-    gdsdecomp
-    spine
+    # godot_4
+    # gdsdecomp
+    # spine
     pico8
   ];
 
@@ -311,7 +312,7 @@ in
     };
 
     bluetooth = {
-      package = pkgs.bluezFull;
+      package = pkgs.bluez;
     };
 
     printers = {
@@ -320,8 +321,7 @@ in
         {
           name = "PastaPrinter";
           description = "Xerox(R) B230 Printer";
-          # deviceUri = "http://<ip>:631/";
-          deviceUri = "ipp://<ip>:631/ipp/print";
+          deviceUri = "ipp://192.168.16.57:631/ipp/print";
           model = "drv:///sample.drv/generic.ppd";
           ppdOptions = {
             PageSize = "A4";
@@ -339,8 +339,8 @@ in
     exportConfiguration = true;
 
     # Keyboard.
-    layout = lib.concatStringsSep "," [ "us" "ru" ];
-    xkbOptions = lib.concatStringsSep "," [
+    xkb.layout = lib.concatStringsSep "," [ "us" "ru" ];
+    xkb.options = lib.concatStringsSep "," [
       "caps:escape" # Caps Lock as Escape.
       "grp:alt_shift_toggle" # Toggle layout.
       "grp_led:caps" # Use led as indicator.
@@ -374,7 +374,7 @@ in
 
     desktopManager = {
       xterm.enable = false;
-      plasma5.enable = true;
+      plasma6.enable = true;
     };
 
     windowManager.awesome =
@@ -527,16 +527,16 @@ in
   # Services: custom / mine.
   # services.monitroid.enable = true;
 
-  services.rclone = {
-    enable = true;
-
-    users.superpaintman = {
-      mounts.google-drive = {
-        remote = "Google Drive";
-        mountPoint = "~/GoogleDrive";
-      };
-    };
-  };
+  # services.rclone = {
+  #   enable = true;
+  #
+  #   users.superpaintman = {
+  #     mounts.google-drive = {
+  #       remote = "Google Drive";
+  #       mountPoint = "~/GoogleDrive";
+  #     };
+  #   };
+  # };
 
   # Systemd.
   systemd.services = {
@@ -759,7 +759,7 @@ in
           }
         ];
 
-        home.stateVersion = "23.05";
+        home.stateVersion = "25.05";
       };
 
       root = {
@@ -769,7 +769,7 @@ in
           batFiles
         ];
 
-        home.stateVersion = "23.05";
+        home.stateVersion = "25.05";
       };
     }
   );
@@ -779,7 +779,7 @@ in
     fontDir.enable = true;
     enableGhostscriptFonts = true;
 
-    fonts = with pkgs; [
+    packages = with pkgs; [
       ubuntu_font_family
       dejavu_fonts
       fira-code
@@ -787,7 +787,7 @@ in
       siji
       jetbrains-mono
       # helvetica-neue-lt-std
-      (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+      nerd-fonts.jetbrains-mono
     ];
 
     fontconfig.defaultFonts = {

@@ -10,7 +10,10 @@ if can bat; then
 fi
 
 # `ls`.
-if can exa; then
+if can eza; then
+    # Replace `ls` with `eza`.
+    alias ls='eza --color=auto'
+elif can exa; then
     # Replace `ls` with `exa`.
     alias ls='exa --color=auto'
 elif can gls; then
@@ -90,9 +93,9 @@ if can lfcd; then
 fi
 
 # `ls`.
-alias ll='ls -alFh --group-directories-first'
+alias ll='ls -alh --group-directories-first'
 alias la='ls -ah --group-directories-first'
-alias l='ls -Fh --group-directories-first'
+alias l='ls -h --group-directories-first'
 
 # `df`.
 alias dfh='df -h --total'
