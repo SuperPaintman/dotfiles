@@ -23,9 +23,9 @@ local cb = require("utils.mappings").create_callback_factory(
 -- Modules
 --------------------------------------------------------------------------------
 M.dependencies = {
-  "nvim-lua/plenary.nvim", -- required
+  "nvim-lua/plenary.nvim",         -- required
   "nvim-telescope/telescope.nvim", -- optional
-  "sindrets/diffview.nvim", -- optional
+  "sindrets/diffview.nvim",        -- optional
   -- "ibhagwan/fzf-lua", -- optional
 }
 
@@ -50,11 +50,11 @@ M.config = function()
       local winid = vim.api.nvim_get_current_win()
 
       -- Disable column highlighting.
-      vim.wo[winid].colorcolumn = false
+      vim.wo[winid].colorcolumn = ""
 
       -- Hide special characters.
       vim.wo[winid].list = false
-      vim.wo[winid].listchars = false
+      vim.wo[winid].listchars = ""
     end,
   })
 
@@ -65,7 +65,7 @@ M.mappings = {
   open = cb(function()
     -- TODO(SuperPaintman): add a helper for lazy loading.
     require("lazy").load({ plugins = { "neogit" }, wait = true })
-    require("neogit").open({})
+    require("neogit").open({ kind = "tab" })
   end),
 }
 
