@@ -126,6 +126,7 @@
   # Services.
   services = {
     pipewire.enable = false;
+    pulseaudio.enable = true;
 
     xserver = {
       videoDrivers = [ "nvidia" ];

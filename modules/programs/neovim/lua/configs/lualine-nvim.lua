@@ -177,6 +177,17 @@ M.config = function()
     lualine_z = {},
   }
 
+  local theme = {}
+  for _, mode in ipairs({ "visual", "replace", "inactive", "normal", "insert" }) do
+    theme[mode] = {}
+    for _, component in ipairs({ "a", "b", "c", "x", "y", "z" }) do
+      theme[mode][component] = {
+        fg = colors.foreground,
+        bg = colors.base2,
+      }
+    end
+  end
+
   -- Helpers.
   local function insert_section(component, section)
     if section == nil then
@@ -346,6 +357,7 @@ M.config = function()
       -- Disable sections and component separators.
       component_separators = "",
       section_separators = "",
+      theme = theme,
     },
     sections = sections,
     inactive_sections = inactive_sections,

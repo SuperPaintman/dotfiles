@@ -18,6 +18,7 @@ local colors = require("utils.colors")
 
 ---@class theme.palette.LOpts
 ---@field default? boolean
+---@field link? string
 
 --------------------------------------------------------------------------------
 -- Init
