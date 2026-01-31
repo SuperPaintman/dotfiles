@@ -1,3 +1,0 @@
-{
-  ".sbt".source = ./.sbt;
-}

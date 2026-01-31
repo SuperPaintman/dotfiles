@@ -34,7 +34,6 @@ imports ([
   ./polybar
   ./prettier
   ./rofi
-  ./sbt
   ./skhd
   ./vim
   ./vscode
