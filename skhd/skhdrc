@@ -7,19 +7,19 @@ ctrl + shift - c : kill "$(yabai -m query --windows --window | jq -re '.pid')"
 ctrl - return : open -n -a "Alacritty"
 
 # Open a new editor window.
-ctrl - e : ~/bin/em
+# ctrl - e : ~/bin/em
 
 # Show Spotlight / Alfred.
 ctrl - r : open -a "Alfred 3"
 
 # Open a new personal todo in org capture
-ctrl + cmd + alt - t : ~/bin/org "t"
+# ctrl + cmd + alt - t : ~/bin/org "t"
 
 # Open a new personal note in org capture
-ctrl + cmd + alt - n : ~/bin/org "n"
+# ctrl + cmd + alt - n : ~/bin/org "n"
 
 # Open a new personal journal item in org capture
-ctrl + cmd + alt - j : ~/bin/org "j"
+# ctrl + cmd + alt - j : ~/bin/org "j"
 
 # Focus on the browser.
 ctrl + alt - b : open -a "Yandex"

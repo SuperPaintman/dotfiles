@@ -49,7 +49,6 @@ in
     vim
     unstable.neovim
     # unstable.neovide
-    emacs
     unstable.vscode
     # (
     #   unstable.vscode-with-extensions.override {

@@ -23,7 +23,6 @@ imports ([
   ./cargo
   ./ctags
   ./discord
-  ./doom
   ./git
   ./gtk
   ./htop

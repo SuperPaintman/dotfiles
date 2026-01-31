@@ -139,7 +139,6 @@ in
     vim
     neovim
     # neovide
-    emacs
     (
       vscode-with-extensions.override {
         vscodeExtensions = import ../vscode/extensions.nix args;
@@ -511,7 +510,6 @@ in
         vpnConfigs
     );
 
-  services.emacs.enable = true;
   services.udev.packages = [
     # Add rules for Moonlander.
     # See: https://github.com/zsa/wally/wiki/Linux-install
@@ -752,7 +750,6 @@ in
           batFiles
           {
             ".dotfiles".source = mkSymlink "/home/superpaintman/Projects/github.com/SuperPaintman/dotfiles";
-            "Org".source = mkSymlink "/home/superpaintman/Projects/github.com/SuperPaintman/Org";
           }
         ];
 
