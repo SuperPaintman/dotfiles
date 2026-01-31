@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-HOOKS="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
-
-. "$HOOKS/common/before.sh"
-
-exit 0
