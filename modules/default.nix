@@ -10,6 +10,7 @@ in
   # Imports.
   imports = [
     ./themes
+    ./programs/alacritty
     ./programs/fzf
     ./programs/neovim
     ./programs/tmux
