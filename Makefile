@@ -45,7 +45,7 @@ SHELL_FILES := \
 			done \
 		} && \
 		\
-		find ./bin/bin ./rofi/modes ./scripts ./git/.git-global/hooks \
+		find ./bin/bin ./rofi/modes ./scripts \
 			-type f \
 			-and -not -path './bin/bin/neofetch' \
 			-and -not -path './bin/bin/styles' | \

@@ -211,7 +211,6 @@ in
           # C
           ## Checkout
           co = "checkout";
-          cob = "checkout -b";
 
           ## Commit
           c = "commit";
@@ -230,8 +229,6 @@ in
           # D
           ## Diff
           d = "diff";
-          di = "diff --color-words";
-          # ds = !git difftool -y -x '"diff -W $(tput cols) -y"' | colordiff | less
 
           # F
           ## Fetch
@@ -243,15 +240,37 @@ in
 
           # L
           ## Logs
-          l = "log --graph --all --abbrev-commit --date=relative --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'";
-          ls = "log --graph --all --abbrev-commit --stat --date=relative --pretty=format:'%Cred%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset'";
-          lo = "log --graph --all --decorate=auto";
-          lol = "log --graph --all --decorate=auto --pretty=oneline";
+          l = let
+            # See: https://git-scm.com/docs/pretty-formats
+            hash = "%h";
+            ref = "%d";
+            subject = "%s";
+            relative-commit-date = "%cr";
+            author-name = "%an";
+            c = color: "%C(${color})";
+            cr = c "reset";
+
+            format = concatStringsSep "" [
+              "${c "yellow"}${hash}${cr}"
+              " -"
+              "${c "auto"}${ref}${cr}"
+              " ${subject} "
+              "${c "green"}(${relative-commit-date})${cr}"
+              " "
+              "${c "bold blue"}<${author-name}>${cr}"
+            ];
+          in concatStringsSep " " [
+            "log"
+            "--graph"
+            "--all"
+            "--abbrev-commit"
+            "--date=relative"
+            "--pretty=format:${escapeShellArg format}"
+          ];
 
           # M
           ## Merge
           m = "merge --no-ff";
-          noff = "merge --no-ff";
 
           # P
           ## Push
