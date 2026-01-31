@@ -1,8 +1,0 @@
-# See: https://alacritty.org/config-alacritty.html
-
-[general]
-import = [
-  "/home/superpaintman/.config/alacritty/default.toml",
-  "/home/superpaintman/.config/alacritty/colors.toml",
-  # "/home/superpaintman/.config/alacritty/macos.toml",
-]

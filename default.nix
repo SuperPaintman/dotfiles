@@ -15,7 +15,7 @@ let
   );
 in
 imports ([
-  ./alacritty
+  # ./alacritty # Migrated to modules.
   ./ansible
   ./awesome
   ./bash

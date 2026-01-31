@@ -71,6 +71,7 @@ in
     };
 
     programs = {
+      alacritty.enable = true;
       fzf.enable = true;
       neovim.enable = true;
       tmux.enable = true;
@@ -160,10 +161,6 @@ in
     telegram-desktop # Telegram.
     discord
     # skypeforlinux
-
-    # Terminals.
-    alacritty
-    xst
 
     # Compilers, interpreters and dev packages.
     gnumake
