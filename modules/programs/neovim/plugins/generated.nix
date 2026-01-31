@@ -107,14 +107,14 @@
 
   cmp_luasnip = {
     pname = "cmp_luasnip";
-    version = "0.0.0+rev=1809552";
+    version = "0.0.0+rev=98d9cb5";
     src = fetchFromGitHub {
       owner = "saadparwaiz1";
       repo = "cmp_luasnip";
-      rev = "18095520391186d634a0045dacaa346291096566";
-      sha256 = "sha256-Z5SPy3j2oHFxJ7bK8DP8Q/oRyLEMlnWyIfDaQcNVIS0=";
+      rev = "98d9cb5c2c38532bd9bdb481067b20fea8f32e90";
+      sha256 = "sha256-86lKQPPyqFz8jzuLajjHMKHrYnwW6+QOcPyQEx6B+gw=";
     };
-    commit = "18095520391186d634a0045dacaa346291096566";
+    commit = "98d9cb5c2c38532bd9bdb481067b20fea8f32e90";
     plugin = "saadparwaiz1/cmp_luasnip";
   };
 
@@ -224,14 +224,14 @@
 
   luasnip = {
     pname = "luasnip";
-    version = "0.0.0+rev=a658ae2";
+    version = "0.0.0+rev=74ff7c5";
     src = fetchFromGitHub {
       owner = "L3MON4D3";
       repo = "LuaSnip";
-      rev = "a658ae2906344a1d2b9c507738e585cf68e685c7";
-      sha256 = "sha256-tH1VINoPuzdDrNuvFkV3sOiRcUCVDChR7bYbrAao2bk=";
+      rev = "74ff7c54f50f9fb5c4a5ed019c809f0d7f40af21";
+      sha256 = "sha256-K/+uamc6N8cF5B8xajG8rzH0X7eLdjXXINEzhQTTbcc=";
     };
-    commit = "a658ae2906344a1d2b9c507738e585cf68e685c7";
+    commit = "74ff7c54f50f9fb5c4a5ed019c809f0d7f40af21";
     plugin = "L3MON4D3/LuaSnip";
   };
 
@@ -276,14 +276,14 @@
 
   nvim-cmp = {
     pname = "nvim-cmp";
-    version = "0.0.0+rev=2743dd9";
+    version = "0.0.0+rev=d78fb3b";
     src = fetchFromGitHub {
       owner = "hrsh7th";
       repo = "nvim-cmp";
-      rev = "2743dd989e9b932e1b4813a4927d7b84272a14e2";
-      sha256 = "sha256-nK+RmsrAFxo0ZrpaIdFe/24kwfE7wjYMqf9u917yYo4=";
+      rev = "d78fb3b64eedb701c9939f97361c06483af575e0";
+      sha256 = "sha256-gUgvcZQCb8NB5xSv5Wft0FLFgHoTkk59fJ2QWEJcxU8=";
     };
-    commit = "2743dd989e9b932e1b4813a4927d7b84272a14e2";
+    commit = "d78fb3b64eedb701c9939f97361c06483af575e0";
     plugin = "hrsh7th/nvim-cmp";
   };
 

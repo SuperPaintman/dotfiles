@@ -74,7 +74,7 @@ packages:
         extraAttrs:
             plugin: hrsh7th/nvim-cmp
             # branch: main
-            commit: &commit 2743dd989e9b932e1b4813a4927d7b84272a14e2
+            commit: &commit d78fb3b64eedb701c9939f97361c06483af575e0
         args:
             owner: hrsh7th
             repo: nvim-cmp
@@ -129,7 +129,7 @@ packages:
         extraAttrs:
             plugin: saadparwaiz1/cmp_luasnip
             # branch: master
-            commit: &commit 18095520391186d634a0045dacaa346291096566
+            commit: &commit 98d9cb5c2c38532bd9bdb481067b20fea8f32e90
         args:
             owner: saadparwaiz1
             repo: cmp_luasnip
@@ -250,7 +250,7 @@ packages:
         extraAttrs:
             plugin: L3MON4D3/LuaSnip
             # branch: master
-            commit: &commit a658ae2906344a1d2b9c507738e585cf68e685c7
+            commit: &commit 74ff7c54f50f9fb5c4a5ed019c809f0d7f40af21
         args:
             owner: L3MON4D3
             repo: LuaSnip
