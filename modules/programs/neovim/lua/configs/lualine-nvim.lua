@@ -34,15 +34,12 @@ local function const(v)
   end
 end
 
-local _filepath_cache = {}
 -- TODO(SuperPaintman): Add colors.
-local function filepath()
-  local path = vim.fn.expand("%")
-
-  local cached = _filepath_cache[path]
-  if cached ~= nil then
-    return cached
-  end
+--- @param path string
+--- @param short? boolean
+--- @return string
+local function recompute_filepath(path, short)
+  short = short or false
 
   -- Normalize path.
   path = vim.fs.normalize(path)
@@ -55,6 +52,10 @@ local function filepath()
       end
       path = "~" .. path
     end
+  end
+
+  if not short then
+    return path
   end
 
   -- Fishify path.
@@ -71,7 +72,21 @@ local function filepath()
     end
   end
 
-  local res = table.concat(parts, SEP)
+  return table.concat(parts, SEP)
+end
+
+local _filepath_cache = {}
+local function filepath()
+  local path = vim.fn.expand("%")
+
+  local cached = _filepath_cache[path]
+  if cached ~= nil then
+    return cached
+  end
+
+
+  local short = false
+  local res = recompute_filepath(path, short)
   _filepath_cache[path] = res
   return res
 end
