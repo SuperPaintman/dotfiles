@@ -12,6 +12,7 @@ in
     ./themes
     ./programs/alacritty
     ./programs/fzf
+    ./programs/lf
     ./programs/neovim
     ./programs/tmux
   ];

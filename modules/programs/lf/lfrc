@@ -1,0 +1,42 @@
+# See: https://github.com/gokcehan/lf/blob/master/doc.md#settings
+
+# When this option is enabled, directory sizes show the number of items inside 
+# instead of the total size of the directory.
+set dircounts true
+
+# Show hidden files.
+set hidden true
+
+# Show icons before each item in the list.
+set icons false
+
+# Show previews of files and directories at the rightmost pane.
+set preview true
+
+# Set the path of a previewer file to filter the content of regular files
+# for previewing.
+# set previewer <set-via-nixos>
+
+# Format string of the prompt shown in the top line.
+set promptfmt
+
+# Key bindings.
+map <c-h> set hidden!
+# Same as `<c-h>`.
+map <bs> set hidden! 
+map <enter> open
+map <c-c> quit
+map e edit
+
+# Commands.
+cmd edit ${{
+  "$EDITOR" "$f"
+}}
+
+# Aliases.
+cmd q quit
+cmd q! quit
+cmd qa quit
+cmd qa! quit
+
+cmd e edit

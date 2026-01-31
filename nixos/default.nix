@@ -73,6 +73,7 @@ in
     programs = {
       alacritty.enable = true;
       fzf.enable = true;
+      lf.enable = true;
       neovim.enable = true;
       tmux.enable = true;
     };
@@ -239,7 +240,6 @@ in
     (polybar.override { pulseSupport = true; })
     entr # Run arbitrary commands when files change.
     tldr # Simple man pages.
-    lf # Terminal file manager.
     ripgrep # A utility that combines the usability of The Silver Searcher with the raw speed of grep.
     # Window switcher, application launcher and dmenu replacement.
     (rofi.override {
