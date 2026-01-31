@@ -21,7 +21,6 @@ imports ([
   ./bash
   ./bin
   ./cargo
-  ./ctags
   ./discord
   ./git
   ./gtk
