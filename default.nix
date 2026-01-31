@@ -27,7 +27,6 @@ imports ([
   ./git
   ./gtk
   ./htop
-  ./lein
   # ./lf # Migrated to modules.
   ./neofetch
   ./nixpkgs
