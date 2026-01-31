@@ -185,11 +185,10 @@ in
         user = {
           email = "SuperPaintmanDeveloper@gmail.com";
           name = "Aleksandr Krivoshchekov";
-          signingkey = "~/.ssh/id_ed25519.pub";
+          signingkey = "276C05A283B13321";
         };
         github.user = "SuperPaintman";
 
-        gpg.format = "ssh";
         commit.gpgsign = true;
 
         color.ui = true;
