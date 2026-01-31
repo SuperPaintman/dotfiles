@@ -22,7 +22,7 @@ imports ([
   ./bin
   ./cargo
   ./discord
-  ./git
+  # ./git # Migrated to modules.
   ./gtk
   ./htop
   # ./lf # Migrated to modules.
