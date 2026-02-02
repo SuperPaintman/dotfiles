@@ -78,6 +78,11 @@ in
       neovim.enable = true;
       tmux.enable = true;
     };
+
+    shell = {
+      bash.enable = true;
+      zsh.enable = true;
+    };
   };
   # / EXPERIMENTAL
 

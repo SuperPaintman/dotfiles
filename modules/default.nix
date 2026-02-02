@@ -16,6 +16,9 @@ in
     ./programs/lf
     ./programs/neovim
     ./programs/tmux
+    ./shell
+    ./shell/bash
+    ./shell/zsh
   ];
 
   # Options.

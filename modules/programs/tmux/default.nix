@@ -19,6 +19,8 @@ let
   inherit (config.modules.home) standalone;
   cfg = config.modules.programs.tmux;
 
+  TMUX_HOME = "$XDG_CONFIG_HOME/tmux";
+
   includeFile' =
     { TMUX_HOME
     , standalone ? false
@@ -36,8 +38,8 @@ let
       source-file "${path}"
     '';
   includeFile = includeFile' {
+    inherit TMUX_HOME;
     inherit standalone;
-    inherit (config.environment.variables) TMUX_HOME;
   };
 
   style = { fg ? "", bg ? "", bold ? false }:
@@ -195,7 +197,7 @@ in
       users.packages = [ cfg.package ];
 
       environment.variables = {
-        TMUX_HOME = "$XDG_CONFIG_HOME/tmux";
+        inherit TMUX_HOME;
       };
 
       home.configFiles = {
