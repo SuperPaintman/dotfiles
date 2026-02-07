@@ -40,7 +40,7 @@ in
   };
 
   # Config.
-  config = mkIf cfg.enable rec {
+  config = mkIf cfg.enable {
     modules = {
       users.packages = [ cfg.package ];
 
@@ -48,7 +48,7 @@ in
         LF_ICONS = "$XDG_CONFIG_HOME/lf/icons";
       };
 
-      shell.bash.extraFunctions = ''
+      shell.functions = ''
         lfcd() {
           local tmp
           local dir
@@ -73,8 +73,8 @@ in
           fi
         }
       '';
-      shell.zsh.extraFunctions = modules.shell.bash.extraFunctions;
 
+      # TODO(SuperPaintman): delete this block, once migrated to shell.variables. 
       environment.variables = {
         LF_ICONS = "$XDG_CONFIG_HOME/lf/icons";
       };

@@ -300,6 +300,12 @@ in
       modules = {
         users.packages = [ cfg.package ];
 
+        shell.aliases = {
+          g = "git";
+          gl = "git l";
+          gs = "git s";
+        };
+
         home.files = {
           ".gitconfig".text = generators.toGitINI {
             # include.path = "$XDG_CONFIG_HOME/git/gitconfig";

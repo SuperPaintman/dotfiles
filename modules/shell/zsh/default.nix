@@ -29,22 +29,19 @@ in
     };
 
     variables = common.options.variables;
-    extraVariables = mkOption {
-      type = lines;
-      default = "";
-      description = ''
-        Shell script code called after variables.
-      '';
-    };
+    extras.variables = common.lib.mkExtraOption "variables" { };
 
     aliases = common.options.aliases;
-    extraAliases = mkOption {
+    extras.aliases = common.lib.mkExtraOption "aliases" { };
+
+    functions = mkOption {
       type = lines;
       default = "";
       description = ''
-        Shell script code called after aliases.
+        Shell functions.
       '';
     };
+    extras.functions = common.lib.mkExtraOption "functions" { };
   };
 
   # Config.
@@ -54,6 +51,7 @@ in
       modules.shell.zsh = {
         variables = mapAttrs (n: mkDefault) config.modules.shell.variables;
         aliases = mapAttrs (n: mkDefault) config.modules.shell.aliases;
+        functions = config.modules.shell.functions;
       };
     }
 
@@ -68,18 +66,28 @@ in
             executable = true;
             text = ''
               # shellcheck disable=SC2148 # No shebang.
+              # shellcheck disable=SC2120
 
               ################################################################################
               # Variables.
               ################################################################################
+              ${cfg.extras.variables.before}
               ${common.lib.mkExporedShEnvVars cfg.variables}
-              ${cfg.extraVariables}
+              ${cfg.extras.variables.after}
 
               ################################################################################
               # Aliases.
               ################################################################################
+              ${cfg.extras.aliases.before}
               ${common.lib.mkShAliases cfg.aliases}
-              ${cfg.extraAliases}
+              ${cfg.extras.aliases.after}
+
+              ################################################################################
+              # Functions.
+              ################################################################################
+              ${cfg.extras.functions.before}
+              ${cfg.functions}
+              ${cfg.extras.functions.after}
             '';
             checkPhase = ''
               # Verify syntax checking by parsing a script without running

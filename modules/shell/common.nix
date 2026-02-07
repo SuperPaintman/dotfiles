@@ -48,7 +48,7 @@ in
     };
   };
 
-  lib = {
+  lib = rec {
     mkExporedShEnvVars = vars:
       let
         HOME = vars.HOME or null;
@@ -74,6 +74,7 @@ in
         ];
       in ''
         ${stringOrPlaceholder "# export HOME" (HOME != null) (mkExport "HOME" HOME)}
+        ${concatStringsSep "\n" exportedVars}
         ${stringOrPlaceholder "# export PATH" (PATH != null && PATH != "" && (length (toList PATH)) > 0) ''
           if [ -z "''${__DOTFILES_ORIG_PATH_DONE:-}" ]; then
             export __DOTFILES_ORIG_PATH_DONE=1
@@ -81,7 +82,6 @@ in
           fi
           export PATH="${concatStringsSep ":" (toList PATH)}''${__DOTFILES_ORIG_PATH:+:"$__DOTFILES_ORIG_PATH"}"
         ''}
-        ${concatStringsSep "\n" exportedVars}
       '';
 
     mkShAliases = aliases: pipe aliases [
@@ -89,5 +89,18 @@ in
       (mapAttrsToList (n: v: "alias -- ${n}=${escapeShellArg v}"))
       (concatStringsSep "\n")
     ];
+
+    mkExtraOption' = name: order: opts: with types; mkOption {
+      type = lines;
+      default = "";
+      description = ''
+        Shell script code called ${order} the ${name} block.
+      '';
+    } // opts;
+
+    mkExtraOption = name: opts: {
+      before = mkExtraOption' name "before" opts;
+      after = mkExtraOption' name "after" opts;
+    };
   };
 }

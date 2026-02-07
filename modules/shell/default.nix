@@ -14,6 +14,14 @@ in
     variables = common.options.variables;
 
     aliases = common.options.aliases;
+
+    functions = mkOption {
+      type = lines;
+      default = "";
+      description = ''
+        Shell functions.
+      '';
+    };
   };
 
   # Config.
@@ -26,7 +34,7 @@ in
           which
         ];
 
-        shell.bash.extraVariables = let
+        shell.bash.extras.variables.after = let
           out = pkgs.runCommand "dircolors" { } ''
             eval "$(${pkgs.coreutils}/bin/dircolors -b)"
             echo -n "$LS_COLORS" > "$out"
@@ -35,11 +43,11 @@ in
           # dircolors -b
           export LS_COLORS=${escapeShellArg (builtins.readFile out)}
         '';
-        shell.zsh.extraVariables = shell.bash.extraVariables;
+        shell.zsh.extras.variables.after = shell.bash.extras.variables.after;
       };
     })
 
-    {
+    (rec {
       # Default variables.
       modules.shell.variables = {
         PATH = [ ];
@@ -67,7 +75,13 @@ in
 
         where = "which";
       };
-    }
+
+      modules.shell.functions = ''
+        :q() {
+          exit 0
+        }
+      '';
+    })
   ];
 }
 

@@ -56,6 +56,33 @@ in
     modules = {
       users.packages = [ cfg.package ];
 
+      shell.variables = {
+        FZF_DEFAULT_COMMAND = "fd --type f"; # TODO(SuperPaintman): check if fd is installed.
+
+        FZF_DEFAULT_OPTS = formatOptions {
+          # Color.
+          # See: https://github.com/junegunn/fzf/wiki/Color-schemes#color-configuration
+          color = {
+            hl = "blue";
+            "hl+" = "bright-blue";
+            prompt = "blue";
+            pointer = "red";
+            marker = "bright-red";
+            border = "bright-black";
+            info = "bright-yellow";
+            header = "bright-black";
+            spinner = "green";
+          };
+
+          # Bind.
+          bind = {
+            "ctrl-h" = "preview-up";
+            "ctrl-l" = "preview-down";
+          };
+        };
+      };
+
+      # TODO(SuperPaintman): delete this block, once migrated to shell.variables. 
       environment.variables = {
         FZF_DEFAULT_COMMAND = "fd --type f"; # TODO(SuperPaintman): check if fd is installed.
 

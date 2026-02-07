@@ -196,6 +196,11 @@ in
     modules = {
       users.packages = [ cfg.package ];
 
+      shell.variables = {
+        inherit TMUX_HOME;
+      };
+
+      # TODO(SuperPaintman): delete this block, once migrated to shell.variables. 
       environment.variables = {
         inherit TMUX_HOME;
       };
