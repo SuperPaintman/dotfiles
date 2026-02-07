@@ -36,9 +36,9 @@ in
     lsof
 
     # Replacements for basic utils.
-    eza # ls
-    bat # cat
-    fd # find
+    # eza # ls
+    # bat # cat
+    # fd # find
 
     # Shells.
     bash
@@ -46,8 +46,8 @@ in
     zsh
 
     # Editors.
-    vim
-    unstable.neovim
+    # vim
+    # unstable.neovim
     # unstable.neovide
     unstable.vscode
     # (

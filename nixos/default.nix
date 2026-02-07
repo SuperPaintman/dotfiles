@@ -72,6 +72,9 @@ in
 
     programs = {
       alacritty.enable = true;
+      bat.enable = true;
+      essential.enable = true;
+      essential.desktop.enable = true;
       fzf.enable = true;
       git.enable = true;
       lf.enable = true;
@@ -132,9 +135,9 @@ in
     upower
 
     # Replacements for basic utils.
-    eza # ls
-    bat # cat
-    fd # find
+    # eza # ls
+    # bat # cat
+    # fd # find
 
     # Shells.
     bash
@@ -142,8 +145,8 @@ in
     zsh
 
     # Editors.
-    vim
-    neovim
+    # vim
+    # neovim
     # neovide
     (
       vscode-with-extensions.override {
@@ -728,19 +731,19 @@ in
           }
           { };
 
-      batFiles = {
-        ".config/bat/themes/SuperPaintman/SuperPaintman.tmTheme" = {
-          source = themes.applications.textmate.writeTextmateThemeFile {
-            name = "SuperPaintman";
-            author = "SuperPaintman";
-            semanticClass = "theme.dark.superpaintman";
-            uuid = "ad17b280-ee9e-11ec-a8bd-43d0ce50926a";
-          };
-          onChange = ''
-            ${pkgs.bat}/bin/bat cache --build
-          '';
-        };
-      };
+      # batFiles = {
+      #   ".config/bat/themes/SuperPaintman/SuperPaintman.tmTheme" = {
+      #     source = themes.applications.textmate.writeTextmateThemeFile {
+      #       name = "SuperPaintman";
+      #       author = "SuperPaintman";
+      #       semanticClass = "theme.dark.superpaintman";
+      #       uuid = "ad17b280-ee9e-11ec-a8bd-43d0ce50926a";
+      #     };
+      #     onChange = ''
+      #       ${pkgs.bat}/bin/bat cache --build
+      #     '';
+      #   };
+      # };
     in
     {
       superpaintman = {
@@ -753,7 +756,7 @@ in
         home.file = lib.mkMerge [
           files
           firefoxFiles
-          batFiles
+          # batFiles
           {
             ".dotfiles".source = mkSymlink "/home/superpaintman/Projects/github.com/SuperPaintman/dotfiles";
           }
@@ -766,7 +769,7 @@ in
         home.file = lib.mkMerge [
           files
           firefoxFiles
-          batFiles
+          # batFiles
         ];
 
         home.stateVersion = "25.05";

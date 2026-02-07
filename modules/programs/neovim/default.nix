@@ -13,6 +13,8 @@ let
   inherit (config.modules.themes) theme;
   cfg = config.modules.programs.neovim;
 
+  mkBin = package: name: if standalone then name else "${package}/bin/${name}";
+
   mkNeovimEnv = { dependencies ? [ ] }: stdenv.mkDerivation {
     name = "neovim-env";
 
@@ -339,6 +341,18 @@ in
   config = mkIf cfg.enable {
     modules = {
       users.packages = [ cfg.package ];
+
+      shell.variables = {
+        EDITOR = mkOverride 800 (mkBin cfg.package "nvim");
+      };
+
+      shell.aliases = {
+        # Higher priority than "vim".
+        nvim = mkOverride 800 null;
+        vim = mkOverride 800 (mkBin cfg.package "nvim");
+        vi = mkOverride 800 (mkBin cfg.package "nvim");
+        v = mkOverride 800 (mkBin cfg.package "nvim");
+      };
 
       home.configFiles = {
         "nvim/init.lua".source = ./init.lua;

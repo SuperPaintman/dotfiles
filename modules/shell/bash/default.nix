@@ -60,9 +60,8 @@ in
         users.packages = [ cfg.package ];
 
         home.configFiles = {
-          # TODO(SuperPaintman): use real file.
-          "bash2/bashrc".source = pkgs.writeTextFile {
-            name = ".bashrc";
+          "bash/bashrc.sh".source = pkgs.writeTextFile {
+            name = "bashrc.sh";
             executable = true;
             text = ''
               # shellcheck disable=SC2148 # No shebang.

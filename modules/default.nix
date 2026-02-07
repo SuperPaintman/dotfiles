@@ -11,6 +11,8 @@ in
   imports = [
     ./themes
     ./programs/alacritty
+    ./programs/bat
+    ./programs/essential
     ./programs/fzf
     ./programs/git
     ./programs/lf
@@ -82,6 +84,15 @@ in
           The set of files to link into the user's XDG data home.
         '';
       };
+
+      activation = mkOption {
+        type = attrsOf lines;
+        default = { };
+        description = ''
+          The activation scripts blocks to run when activating a Home Manager
+          generation.
+        '';
+      };
     };
 
     # Environment.
@@ -123,6 +134,7 @@ in
         (name: _: nameValuePair cfg.users.users.${name}.name {
           home = {
             file = mkAliasDefinitions options.modules.home.files;
+            activation = mkAliasDefinitions options.modules.home.activation;
             stateVersion = config.system.stateVersion;
           };
           xdg = {

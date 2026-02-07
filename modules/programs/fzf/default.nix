@@ -19,7 +19,10 @@
 with lib;
 
 let
+  inherit (config.modules.home) standalone;
   cfg = config.modules.programs.fzf;
+
+  mkBin = package: name: if standalone then name else "${package}/bin/${name}";
 
   formatOptionArgs = args: concatStringsSep "," (mapAttrsToList
     (name: value: "${name}:${value}")
@@ -57,7 +60,7 @@ in
       users.packages = [ cfg.package ];
 
       shell.variables = {
-        FZF_DEFAULT_COMMAND = "fd --type f"; # TODO(SuperPaintman): check if fd is installed.
+        FZF_DEFAULT_COMMAND = "${mkBin pkgs.fd "fd"} --type f";
 
         FZF_DEFAULT_OPTS = formatOptions {
           # Color.
@@ -84,7 +87,7 @@ in
 
       # TODO(SuperPaintman): delete this block, once migrated to shell.variables. 
       environment.variables = {
-        FZF_DEFAULT_COMMAND = "fd --type f"; # TODO(SuperPaintman): check if fd is installed.
+        FZF_DEFAULT_COMMAND = "${mkBin pkgs.fd "fd"} --type f";
 
         FZF_DEFAULT_OPTS = formatOptions {
           # Color.
