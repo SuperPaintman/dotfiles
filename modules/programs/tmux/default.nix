@@ -189,6 +189,14 @@ in
         The tmux package to use.
       '';
     };
+
+    extraConfig = mkOption {
+      type = lines;
+      default = "";
+      description = ''
+        Extra configuration for tmux.
+      '';
+    };
   };
 
   # Config.
@@ -212,6 +220,7 @@ in
           ${includeFile "key-bindings-extra.conf"}
           ${includeFile "theme.conf"}
           ${includeFile "plugins.conf"}
+          ${includeFile "extra.conf"}
         '';
         "tmux/options.conf".source = ./options.conf;
         "tmux/key-bindings.conf".source = ./key-bindings.conf;
@@ -341,6 +350,7 @@ in
             run-shell ${tmux-thumbs}/bin/tmux-thumbs.tmux
           ''}
         '';
+        "tmux/extra.conf".text = cfg.extraConfig;
       };
     };
   };

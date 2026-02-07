@@ -37,6 +37,14 @@ in
         The lf package to use.
       '';
     };
+
+    extraConfig = mkOption {
+      type = lines;
+      default = "";
+      description = ''
+        Extra configuration for LF.
+      '';
+    };
   };
 
   # Config.
@@ -92,6 +100,9 @@ in
             # files for previewing.
             set previewer ${lfpreview}/bin/lfpreview
           ''
+          ++ [
+            cfg.extraConfig
+          ]
         );
 
         # TODO(SuperPaintman): enable icons later.

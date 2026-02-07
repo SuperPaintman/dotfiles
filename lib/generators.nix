@@ -3,8 +3,10 @@
 with lib;
 
 rec {
+  /* */
   mkWTKKeyBinding = keys: description: { inherit keys description; };
 
+  /* */
   toWTKConfig = groups:
     let
       normalizeWTKConfig = groups:

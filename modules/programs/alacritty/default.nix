@@ -35,6 +35,14 @@ in
         The alacritty package to use.
       '';
     };
+
+    extraConfig = mkOption {
+      type = attrs;
+      default = { };
+      description = ''
+        Extra configuration for Alacritty.
+      '';
+    };
   };
 
   # Config.
@@ -50,6 +58,8 @@ in
               "~/.config/alacritty/colors.toml"
             ] ++ optionals pkgs.stdenv.isDarwin [
               "~/.config/alacritty/macos.toml"
+            ] ++ [
+              "~/.config/extra.toml"
             ];
 
             # Live config reload (changes require restart).
@@ -170,6 +180,7 @@ in
             { key = "Left"; mods = "Command"; chars = "\\u001B[1;5D"; }
           ];
         };
+        "alacritty/extra.toml".source = toml.generate "extra.toml" cfg.extraConfig;
       };
     };
   };

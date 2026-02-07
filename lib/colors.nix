@@ -32,5 +32,6 @@ let
 in
 
 rec {
+  /* */
   toHEXColor = color: "#${toHEXColorChannel color.r}${toHEXColorChannel color.g}${toHEXColorChannel color.b}";
 }
