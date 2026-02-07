@@ -22,7 +22,7 @@ in
     enable = mkOption {
       type = bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Whenever to configure `alacritty`.
       '';
     };
@@ -31,7 +31,7 @@ in
       type = package;
       default = pkgs.alacritty;
       defaultText = literalExpression "pkgs.alacritty";
-      description = mdDoc ''
+      description = ''
         The alacritty package to use.
       '';
     };

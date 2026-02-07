@@ -143,7 +143,7 @@ in
     enable = mkOption {
       type = bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Whenever to configure `git`.
       '';
     };
@@ -152,7 +152,7 @@ in
       type = package;
       default = pkgs.git;
       defaultText = literalExpression "pkgs.git";
-      description = mdDoc ''
+      description = ''
         The git package to use.
       '';
     };

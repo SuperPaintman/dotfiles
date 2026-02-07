@@ -14,7 +14,7 @@ in
     enable = mkOption {
       type = bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Whenever to configure `zsh`.
       '';
     };
@@ -23,7 +23,7 @@ in
       type = package;
       default = pkgs.zsh;
       defaultText = literalExpression "pkgs.zsh";
-      description = mdDoc ''
+      description = ''
         The zsh package to use.
       '';
     };

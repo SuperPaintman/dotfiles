@@ -36,7 +36,7 @@ in
     enable = mkOption {
       type = bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Whenever to configure `fzf`.
       '';
     };
@@ -45,7 +45,7 @@ in
       type = package;
       default = pkgs.fzf;
       defaultText = literalExpression "pkgs.fzf";
-      description = mdDoc ''
+      description = ''
         The fzf package to use.
       '';
     };

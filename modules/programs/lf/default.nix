@@ -24,7 +24,7 @@ in
     enable = mkOption {
       type = bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Whenever to configure `lf`.
       '';
     };
@@ -33,16 +33,47 @@ in
       type = package;
       default = pkgs.lf;
       defaultText = literalExpression "pkgs.lf";
-      description = mdDoc ''
+      description = ''
         The lf package to use.
       '';
     };
   };
 
   # Config.
-  config = mkIf cfg.enable {
+  config = mkIf cfg.enable rec {
     modules = {
       users.packages = [ cfg.package ];
+
+      shell.variables = {
+        LF_ICONS = "$XDG_CONFIG_HOME/lf/icons";
+      };
+
+      shell.bash.extraFunctions = ''
+        lfcd() {
+          local tmp
+          local dir
+
+          tmp="$(umask 077 && mktemp)"
+          lf -last-dir-path="$tmp" "$@"
+          if [ -f "$tmp" ]; then
+            dir="$(cat "$tmp")"
+            rm -f "$tmp"
+            if [ -d "$dir" ] && [ "$dir" != "$(pwd)" ]; then
+              builtin cd "$dir" || return "$?"
+            fi
+          fi
+        }
+
+        cd() {
+          if [ "$#" = 0 ]; then
+            lfcd
+          else
+            # shellcheck disable=SC2068 # We need to re-split elements.
+            builtin cd $@ || return "$?"
+          fi
+        }
+      '';
+      shell.zsh.extraFunctions = modules.shell.bash.extraFunctions;
 
       environment.variables = {
         LF_ICONS = "$XDG_CONFIG_HOME/lf/icons";

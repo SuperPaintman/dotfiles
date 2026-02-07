@@ -14,7 +14,7 @@ in
     enable = mkOption {
       type = bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Whenever to configure `bash`.
       '';
     };
@@ -23,7 +23,7 @@ in
       type = package;
       default = pkgs.bashInteractive;
       defaultText = literalExpression "pkgs.bashInteractive";
-      description = mdDoc ''
+      description = ''
         The bash package to use.
       '';
     };

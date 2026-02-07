@@ -320,7 +320,7 @@ in
     enable = mkOption {
       type = bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Whenever to configure `neovim`.
       '';
     };
@@ -329,7 +329,7 @@ in
       type = package;
       default = pkgs.neovim;
       defaultText = literalExpression "pkgs.neovim";
-      description = mdDoc ''
+      description = ''
         The neovim package to use.
       '';
     };

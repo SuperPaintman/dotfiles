@@ -176,7 +176,7 @@ in
     enable = mkOption {
       type = bool;
       default = false;
-      description = mdDoc ''
+      description = ''
         Whenever to configure `tmux`.
       '';
     };
@@ -185,7 +185,7 @@ in
       type = package;
       default = pkgs.tmux;
       defaultText = literalExpression "pkgs.tmux";
-      description = mdDoc ''
+      description = ''
         The tmux package to use.
       '';
     };

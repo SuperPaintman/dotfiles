@@ -19,7 +19,7 @@ in
         ]);
       in attrsOf (nullOr vars);
       default = { };
-      description = mdDoc ''
+      description = ''
         The set of environment variables used in shell.
       '';
       apply =

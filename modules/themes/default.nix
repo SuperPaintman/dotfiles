@@ -278,7 +278,7 @@ in
     theme = mkOption {
       type = oneOf [ str (submodule themeOptions) ];
       default = "superpaintman";
-      description = mkDoc ''
+      description = ''
         The theme to use.
       '';
       apply = v:
@@ -290,7 +290,7 @@ in
     themes = mkOption {
       type = attrsOf (submodule themeOptions);
       default = { };
-      description = mkDoc ''
+      description = ''
         The set of available themes.
       '';
     };

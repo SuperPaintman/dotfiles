@@ -33,7 +33,7 @@ in
         apply = v: mapAttrs
           (name: value: { inherit name; } // value)
           v;
-        description = mdDoc ''
+        description = ''
           Additional user accounts to be created automatically by the system.
         '';
       };
@@ -41,7 +41,7 @@ in
       packages = mkOption {
         type = listOf package;
         default = [ ];
-        description = mdDoc ''
+        description = ''
           The set of packages that should be made available to each user.
         '';
       };
@@ -54,7 +54,7 @@ in
       standalone = mkOption {
         type = bool;
         default = false;
-        description = mdDoc ''
+        description = ''
           Whenever to generate all dotfiles in the standalone (portable) mode.
         '';
       };
@@ -62,7 +62,7 @@ in
       files = mkOption {
         type = attrs;
         default = { };
-        description = mdDoc ''
+        description = ''
           The set of files to link into the user home.
         '';
       };
@@ -70,7 +70,7 @@ in
       configFiles = mkOption {
         type = attrs;
         default = { };
-        description = mdDoc ''
+        description = ''
           The set of files to link into the user's XDG configuration home.
         '';
       };
@@ -78,7 +78,7 @@ in
       dataFiles = mkOption {
         type = attrs;
         default = { };
-        description = mdDoc ''
+        description = ''
           The set of files to link into the user's XDG data home.
         '';
       };
@@ -91,7 +91,7 @@ in
       variables = mkOption {
         type = attrs;
         default = { };
-        description = mdDoc ''
+        description = ''
           The set of environment variables used in the global environment.
         '';
       };
