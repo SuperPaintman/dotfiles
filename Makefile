@@ -200,6 +200,10 @@ test-lua:
 test-nix:
 	./nixos/test/run.sh
 
+# Docs.
+result-docs: docs/default.nix
+	nix-build -E 'with import <nixos> {}; (callPackage $^ {})' -o $@
+
 # Autocomplete.
 qmk/compile_commands.json:
 	$(MAKE) -C qmk compile_commands.json
