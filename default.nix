@@ -29,7 +29,7 @@ imports ([
   ./neofetch
   ./nixpkgs
   ./npm
-  ./nvim
+  # ./nvim
   ./polybar
   ./prettier
   ./rofi
