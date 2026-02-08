@@ -91,6 +91,12 @@ in
         gopls.package = localPkgs.gopls;
       };
       javascript.enable = true;
+      rust = {
+        enable = true;
+
+        # TODO(SuperPaintman): patch in overlays.
+        rustup.package = localPkgs.rustup-openssl;
+      };
     };
 
     shell = {
@@ -211,8 +217,8 @@ in
       )
     )
     ruby
-    localPkgs.rustup-openssl
-    rust-analyzer
+    # localPkgs.rustup-openssl
+    # rust-analyzer
     # ghc
     # stack
     # haskellPackages.brittany

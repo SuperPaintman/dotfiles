@@ -23,8 +23,10 @@ rec {
   /* */
   mkAllFakeHomeWrapper' = fakeHome: package: mkWrapper' "fake-home" package { } ''
     for bin in "$out/bin/"* ; do
-      wrapProgram "$bin" \
-        --run 'export HOME="''${XDG_FAKE_HOME:-$HOME}"'
+      if [ -f "$bin" ]; then
+        wrapProgram "$bin" \
+          --run 'export HOME="''${XDG_FAKE_HOME:-$HOME}"'
+      fi
     done
   '';
 

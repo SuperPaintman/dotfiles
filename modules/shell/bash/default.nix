@@ -289,6 +289,33 @@ in
           };
         };
 
+        home.files = {
+          # TODO(SuperPaintman): delete later.
+          # Backword compatability until files are migrated.
+          ".bash_profile.migration".text = ''
+            ################################################################################
+            # Variables.
+            ################################################################################
+            ${cfg.extras.variables.before}
+            ${common.lib.mkExporedShEnvVars cfg.variables}
+            ${cfg.extras.variables.after}
+
+            ################################################################################
+            # Aliases.
+            ################################################################################
+            ${cfg.extras.aliases.before}
+            ${common.lib.mkShAliases cfg.aliases}
+            ${cfg.extras.aliases.after}
+
+            ################################################################################
+            # Functions.
+            ################################################################################
+            ${cfg.extras.functions.before}
+            ${cfg.functions}
+            ${cfg.extras.functions.after}
+          '';
+        };
+
         home.activation.bashXDGDirs = ''
           if [ ! -d "$XDG_DATA_HOME/bash" ]; then
             mkdir "$XDG_DATA_HOME/bash"

@@ -20,7 +20,7 @@ imports ([
   ./awesome
   ./bash
   ./bin
-  ./cargo
+  # ./cargo
   ./discord
   # ./git # Migrated to modules.
   ./gtk

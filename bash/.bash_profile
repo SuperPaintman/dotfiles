@@ -51,6 +51,9 @@ if [ -f ~/.bash/aliases.sh ]; then source ~/.bash/aliases.sh; fi
 # Theme.
 if [ -f ~/.bash/theme.sh ]; then source ~/.bash/theme.sh; fi
 
+# Backword compatability until files are migrated.
+if [ -f ~/.bash_profile.migration ]; then source ~/.bash_profile.migration; fi
+
 # Local (If we have one).
 if [ -f ~/.bash_profile.local ]; then source ~/.bash_profile.local; fi
 

@@ -24,6 +24,7 @@ in
 
     ./development/go
     ./development/javascript
+    ./development/rust
 
     ./shell
     ./shell/bash
