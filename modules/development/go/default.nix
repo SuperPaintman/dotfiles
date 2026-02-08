@@ -21,7 +21,7 @@ in
       type = bool;
       default = false;
       description = ''
-        Whenever to enable go.
+        Whenever to enable Go.
       '';
     };
 
@@ -30,7 +30,7 @@ in
       default = pkgs.go;
       defaultText = literalExpression "pkgs.go";
       description = ''
-        The go package to use.
+        The Go package to use.
       '';
     };
 

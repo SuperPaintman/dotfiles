@@ -23,9 +23,12 @@ in
     ./programs/tmux
 
     ./development/cc
+    ./development/dart
     ./development/go
     ./development/javascript
+    ./development/ruby
     ./development/rust
+    ./development/zig
 
     ./shell
     ./shell/bash

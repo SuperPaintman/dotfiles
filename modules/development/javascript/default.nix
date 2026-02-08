@@ -8,6 +8,10 @@ let
 
   mkBin = package: name: if standalone then name else "${package}/bin/${name}";
 
+  # See: https://nodejs.org/download/release/v4.7.1/docs/api/repl.html#repl_environment_variable_options
+  NODE_REPL_HISTORY = "$XDG_STATE_HOME/node/repl_history"; # Default: ~/.node_repl_history
+  NODE_REPL_HISTORY_SIZE = 2000; # Default: 1000
+
   # See: https://docs.npmjs.com/cli/v8/using-npm/config#npmrc-files
   NPM_CONFIG_USERCONFIG = "$XDG_CONFIG_HOME/npm/npmrc";
 
@@ -173,6 +177,8 @@ in
 
         shell.variables = {
           inherit 
+            NODE_REPL_HISTORY
+            NODE_REPL_HISTORY_SIZE
             NPM_CONFIG_USERCONFIG
             YARN_CACHE_FOLDER
             ;
@@ -220,6 +226,12 @@ in
           #     Prettier just goes up the path until it finds a config.
           ".prettierrc.yaml".text = generators.toYAML { } cfg.prettier.config;
         };
+
+        home.activation.nodeXDGDirs = ''
+          if [ ! -d "$XDG_STATE_HOME/node" ]; then
+            mkdir "$XDG_STATE_HOME/node"
+          fi
+        '';
       };
     })
   ];

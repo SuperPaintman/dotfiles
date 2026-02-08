@@ -84,6 +84,8 @@ in
 
     development = {
       cc.enable = true;
+      dart.enable = false;
+      dart.flutter.enable = false;
       go = {
         enable = true;
 
@@ -92,12 +94,14 @@ in
         gopls.package = localPkgs.gopls;
       };
       javascript.enable = true;
+      ruby.enable = false;
       rust = {
         enable = true;
 
         # TODO(SuperPaintman): patch in overlays.
         rustup.package = localPkgs.rustup-openssl;
       };
+      zig.enable = true;
     };
 
     shell = {
@@ -217,15 +221,15 @@ in
         ]
       )
     )
-    ruby
+    # ruby
     # localPkgs.rustup-openssl
     # rust-analyzer
     # ghc
     # stack
     # haskellPackages.brittany
     # elmPackages.elm
-    dart
-    flutter
+    # dart
+    # flutter
     shfmt
     nixpkgs-fmt
     # rnix-lsp
@@ -245,7 +249,7 @@ in
     protobuf
     protoc-gen-go
     protoc-gen-go-grpc
-    zig
+    # zig
 
     # Docker.
     docker
