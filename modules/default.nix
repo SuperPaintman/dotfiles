@@ -22,6 +22,7 @@ in
     ./programs/neovim
     ./programs/tmux
 
+    ./development/cc
     ./development/go
     ./development/javascript
     ./development/rust

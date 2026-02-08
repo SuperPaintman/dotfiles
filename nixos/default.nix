@@ -83,6 +83,7 @@ in
     };
 
     development = {
+      cc.enable = true;
       go = {
         enable = true;
 
@@ -190,12 +191,12 @@ in
 
     # Compilers, interpreters and dev packages.
     gnumake
-    clang
-    clang-tools
-    gcc
-    cmake
-    llvm
-    ccls
+    # clang
+    # clang-tools
+    # gcc
+    # cmake
+    # llvm
+    # ccls
     # go
     # localPkgs.go_1_18beta1
     # localPkgs.go_1_25

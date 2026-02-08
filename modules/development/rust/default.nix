@@ -11,6 +11,7 @@ let
   toml = pkgs.formats.toml { };
 
   CARGO_HOME = "$XDG_DATA_HOME/cargo";
+  RUSTUP_HOME = "$XDG_DATA_HOME/rustup";
 in
 
 {
@@ -68,7 +69,10 @@ in
         ];
 
         shell.variables = {
-          inherit CARGO_HOME;
+          inherit
+            CARGO_HOME
+            RUSTUP_HOME
+            ;
 
           PATH = [ "${CARGO_HOME}/bin" ];
         };
