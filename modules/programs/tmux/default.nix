@@ -7,13 +7,13 @@
 # TODO(SuperPaintman):
 # - [ ] Attach to the previous session when the current one is closed.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, libx, pkgs, ... }:
 
 with lib;
 
 let
-  inherit (pkgs.lib.x.colors) toHEXColor;
-  inherit (pkgs.lib.x.generators) mkWTKKeyBinding toWTKConfig;
+  inherit (libx.colors) toHEXColor;
+  inherit (libx.generators) mkWTKKeyBinding toWTKConfig;
 
   inherit (config.modules.themes) theme;
   inherit (config.modules.home) standalone;

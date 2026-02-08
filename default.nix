@@ -28,10 +28,10 @@ imports ([
   # ./lf # Migrated to modules.
   ./neofetch
   ./nixpkgs
-  ./npm
+  # ./npm
   # ./nvim
   ./polybar
-  ./prettier
+  # ./prettier
   ./rofi
   ./skhd
   ./vim
@@ -40,7 +40,7 @@ imports ([
   ./xmodmap
   ./xresources
   ./yabai
-  ./yarn
+  # ./yarn
   ./zsh
 ] ++ (
   if pathExists ./secrets

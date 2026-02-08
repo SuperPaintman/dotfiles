@@ -90,6 +90,7 @@ in
         package = localPkgs.go_1_25; 
         gopls.package = localPkgs.gopls;
       };
+      javascript.enable = true;
     };
 
     shell = {
@@ -200,7 +201,7 @@ in
     # gomodifytags
     # impl
     # delve
-    nodejs
+    # nodejs
     # python
     (
       python3.withPackages (
@@ -224,7 +225,7 @@ in
     terraform-lsp
     arduino
     # localPkgs.difftastic
-    nodePackages.prettier
+    # nodePackages.prettier
     (
       luajit.withPackages (
         packages: [

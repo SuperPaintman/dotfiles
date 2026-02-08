@@ -1,3 +1,0 @@
-{
-  ".npmrc".source = ./.npmrc;
-}

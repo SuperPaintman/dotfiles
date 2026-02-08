@@ -78,7 +78,7 @@ in
     # gomodifytags
     # impl
     # unstable.delve
-    nodejs
+    # nodejs
     python
     # (
     #   python3.withPackages (

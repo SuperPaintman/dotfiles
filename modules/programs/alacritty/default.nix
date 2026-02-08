@@ -2,12 +2,12 @@
 # See: https://github.com/alacritty/alacritty
 # See: https://wiki.archlinux.org/title/Alacritty
 
-{ config, lib, pkgs, ... }:
+{ config, lib, libx, pkgs, ... }:
 
 with lib;
 
 let
-  inherit (pkgs.lib.x.colors) toHEXColor;
+  inherit (libx.colors) toHEXColor;
 
   inherit (config.modules.themes) theme;
   inherit (config.modules.home) standalone;

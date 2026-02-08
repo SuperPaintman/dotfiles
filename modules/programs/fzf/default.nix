@@ -14,7 +14,7 @@
 # TODO(SuperPaintman):
 #     Add FZF completions and key bindings.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, libx, pkgs, ... }:
 
 with lib;
 
@@ -58,28 +58,19 @@ in
   config = mkIf cfg.enable {
     modules = {
       users.packages = [ 
-        cfg.package
+        # cfg.package
 
         # Completions.
         # NOTE(SuperPaintman): that should be patched in the package.
-        (pkgs.stdenv.mkDerivation rec {
-          pname = "fzf-completion";
-          version = cfg.package.version;
-
+        (libx.builders.mkWrapper cfg.package {
           nativeBuildInputs = [ pkgs.installShellFiles ];
+        } ''
+          cp "$("${cfg.package}/bin/fzf-share")/completion.bash" fzf.bash
+          installShellCompletion fzf.bash
 
-          dontUnpack = true;
-          dontBuild = true;
-          dontFixup = true;
-
-          installPhase = ''
-            cp "$("${cfg.package}/bin/fzf-share")/completion.bash" fzf.bash
-            installShellCompletion fzf.bash
-
-            cp "$("${cfg.package}/bin/fzf-share")/completion.zsh" fzf.zsh
-            installShellCompletion fzf.zsh
-          '';
-        })
+          cp "$("${cfg.package}/bin/fzf-share")/completion.zsh" fzf.zsh
+          installShellCompletion fzf.zsh
+        '')
       ];
 
       shell.variables = {

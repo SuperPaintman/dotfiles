@@ -62,7 +62,7 @@ let
   mkNixDoc = category: file: pkgs.runCommand "nixdoc_${category}.json" { } ''
     ${pkgs.nixdoc}/bin/nixdoc \
       --file ${file} \
-      --prefix "lib.x" \
+      --prefix "libx" \
       --category ${escapeShellArg category} \
       --description "" \
       --json-output \
@@ -80,6 +80,6 @@ pkgs.runCommand "docs" { } ''
 
   ${concatMapStringsSep "\n"
     (category: ''cp ${mkNixDoc category ../lib/${category}.nix} "$out/functions/${category}.json"'')
-    [ "colors" "generators" ]
+    [ "builders" "colors" "generators" ]
   }
 ''

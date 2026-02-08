@@ -9,6 +9,8 @@ in
 {
   # Imports.
   imports = [
+    ./lib.nix
+
     ./themes
 
     ./programs/alacritty
@@ -21,6 +23,7 @@ in
     ./programs/tmux
 
     ./development/go
+    ./development/javascript
 
     ./shell
     ./shell/bash
@@ -89,6 +92,14 @@ in
         '';
       };
 
+      fakeFiles = mkOption {
+        type = attrs;
+        default = { };
+        description = ''
+          The set of files to link into the user's XDG fake home.
+        '';
+      };
+
       activation = mkOption {
         type = attrsOf lines;
         default = { };
@@ -134,19 +145,33 @@ in
     home-manager = {
       useUserPackages = true;
 
-      users = mapAttrs'
-        (name: _: nameValuePair cfg.users.users.${name}.name {
-          home = {
-            file = mkAliasDefinitions options.modules.home.files;
-            activation = mkAliasDefinitions options.modules.home.activation;
-            stateVersion = config.system.stateVersion;
-          };
-          xdg = {
-            configFile = mkAliasDefinitions options.modules.home.configFiles;
-            dataFile = mkAliasDefinitions options.modules.home.dataFiles;
-          };
-        })
-        cfg.users.users;
+      users = mkMerge [
+        # Files and XDG files.
+        (mapAttrs'
+          (name: _: nameValuePair cfg.users.users.${name}.name {
+            home = {
+              file = mkAliasDefinitions options.modules.home.files;
+              activation = mkAliasDefinitions options.modules.home.activation;
+              stateVersion = config.system.stateVersion;
+            };
+            xdg = {
+              configFile = mkAliasDefinitions options.modules.home.configFiles;
+              dataFile = mkAliasDefinitions options.modules.home.dataFiles;
+            };
+          })
+          cfg.users.users)
+
+        # Non-standard XDG files.
+        (mapAttrs'
+          (name: _: nameValuePair cfg.users.users.${name}.name {
+            home = {
+              file = mapAttrs'
+                (k: v: nameValuePair ".local/user/${k}" v)
+                cfg.home.fakeFiles;
+            };
+          })
+          cfg.users.users)
+      ];
     };
 
     # Environment.
@@ -158,6 +183,9 @@ in
       XDG_CONFIG_HOME = "$HOME/.config";
       XDG_DATA_HOME = "$HOME/.local/share";
       XDG_STATE_HOME = "$HOME/.local/state";
+
+      # Non-standard XDG dirs.
+      XDG_FAKE_HOME = "$HOME/.local/user";
 
       # See: https://github.com/Homebrew/brew/blob/master/docs/Analytics.md#opting-out
       HOMEBREW_NO_ANALYTICS = "1";

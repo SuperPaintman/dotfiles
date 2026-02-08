@@ -1,13 +1,13 @@
 # See: https://github.com/nix-community/home-manager/blob/master/modules/programs/neovim.nix
 
-{ config, lib, pkgs, ... }:
+{ config, lib, libx, pkgs, ... }:
 
 with lib;
 
 let
   inherit (builtins) toJSON;
   inherit (pkgs) stdenv;
-  inherit (pkgs.lib.x.colors) toHEXColor;
+  inherit (libx.colors) toHEXColor;
 
   inherit (config.modules.home) standalone;
   inherit (config.modules.themes) theme;
