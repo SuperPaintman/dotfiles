@@ -82,6 +82,16 @@ in
       tmux.enable = true;
     };
 
+    development = {
+      go = {
+        enable = true;
+
+        # TODO(SuperPaintman): patch in overlays.
+        package = localPkgs.go_1_25; 
+        gopls.package = localPkgs.gopls;
+      };
+    };
+
     shell = {
       bash.enable = true;
       zsh.enable = true;
@@ -181,15 +191,15 @@ in
     ccls
     # go
     # localPkgs.go_1_18beta1
-    localPkgs.go_1_25
-    gotools
+    # localPkgs.go_1_25
+    # gotools
     # gopls
-    localPkgs.gopls
-    godef
-    go-outline
-    gomodifytags
-    impl
-    delve
+    # localPkgs.gopls
+    # godef
+    # go-outline
+    # gomodifytags
+    # impl
+    # delve
     nodejs
     # python
     (

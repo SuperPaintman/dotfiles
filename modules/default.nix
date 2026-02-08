@@ -10,6 +10,7 @@ in
   # Imports.
   imports = [
     ./themes
+
     ./programs/alacritty
     ./programs/bat
     ./programs/essential
@@ -18,6 +19,9 @@ in
     ./programs/lf
     ./programs/neovim
     ./programs/tmux
+
+    ./development/go
+
     ./shell
     ./shell/bash
     ./shell/zsh

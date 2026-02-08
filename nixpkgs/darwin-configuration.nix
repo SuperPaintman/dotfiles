@@ -70,7 +70,7 @@ in
     # cmake
     # llvm
     # ccls
-    go
+    # go
     # gotools
     # unstable.gopls
     # godef
@@ -110,8 +110,8 @@ in
 
     # Misc.
     tldr # Simple man pages.
-    lf # Terminal file manager.
-    fzf # A command-line fuzzy finder written in Go.
+    # lf # Terminal file manager.
+    # fzf # A command-line fuzzy finder written in Go.
     ripgrep # A utility that combines the usability of The Silver Searcher with the raw speed of grep.
     mu
     mutt # CLI email client.
