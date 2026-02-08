@@ -8,6 +8,8 @@ let
   inherit (config.modules.home) standalone;
   cfg = config.modules.programs.git;
 
+  mkBin = package: name: if standalone then name else "${package}/bin/${name}";
+
   mkGitHook = name: text: let 
     before = ''
       GIT_DIR="''${GIT_DIR:-"$(git rev-parse --show-toplevel)"}"
@@ -296,9 +298,21 @@ in
         url."git@github.com:".insteadOf = "https://github.com/";
       };
     }
-    (mkIf cfg.enable {
+    (mkIf cfg.enable rec {
       modules = {
         users.packages = [ cfg.package ];
+
+        shell.variables = {
+          GIT_EXTERNAL_DIFF = mkDefault (
+            if standalone then null else "${pkgs.difftastic}/bin/difft"
+          );
+        };
+        shell.bash.extras.variables.after = optionalString standalone ''
+          if ! which difft > /dev/null 2>&1; then
+            export GIT_EXTERNAL_DIFF='difft'
+          fi
+        '';
+        shell.zsh.extras.variables.after = modules.shell.bash.extras.variables.after;
 
         shell.aliases = {
           g = "git";

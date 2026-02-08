@@ -57,7 +57,30 @@ in
   # Config.
   config = mkIf cfg.enable {
     modules = {
-      users.packages = [ cfg.package ];
+      users.packages = [ 
+        cfg.package
+
+        # Completions.
+        # NOTE(SuperPaintman): that should be patched in the package.
+        (pkgs.stdenv.mkDerivation rec {
+          pname = "fzf-completion";
+          version = cfg.package.version;
+
+          nativeBuildInputs = [ pkgs.installShellFiles ];
+
+          dontUnpack = true;
+          dontBuild = true;
+          dontFixup = true;
+
+          installPhase = ''
+            cp "$("${cfg.package}/bin/fzf-share")/completion.bash" fzf.bash
+            installShellCompletion fzf.bash
+
+            cp "$("${cfg.package}/bin/fzf-share")/completion.zsh" fzf.zsh
+            installShellCompletion fzf.zsh
+          '';
+        })
+      ];
 
       shell.variables = {
         FZF_DEFAULT_COMMAND = "${mkBin pkgs.fd "fd"} --type f";
@@ -84,6 +107,29 @@ in
           };
         };
       };
+
+      shell.bash.keyBindings = let
+        out = pkgs.runCommand "fzf-key-bindings.bash" { } ''
+          cp "$("${cfg.package}/bin/fzf-share")/key-bindings.bash" "$out"
+        '';
+      in 
+        if standalone then ''
+          if ! which fzf-share > /dev/null 2>&1; then
+            source "$(fzf-share)/completion.bash"
+          fi
+        ''
+        else builtins.readFile out;
+      shell.zsh.keyBindings = let
+        out = pkgs.runCommand "fzf-key-bindings.zsh" { } ''
+          cp "$("${cfg.package}/bin/fzf-share")/key-bindings.zsh" "$out"
+        '';
+      in 
+        if standalone then ''
+          if ! which fzf-share > /dev/null 2>&1; then
+            source "$(fzf-share)/completion.zsh"
+          fi
+        ''
+        else builtins.readFile out;
 
       # TODO(SuperPaintman): delete this block, once migrated to shell.variables. 
       environment.variables = {

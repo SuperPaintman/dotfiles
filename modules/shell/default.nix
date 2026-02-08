@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.modules.shell;
 
-  common = import ./common.nix { inherit lib; };
+  common = pkgs.callPackage ./common.nix { inherit config; };
 in
 
 {
@@ -31,6 +31,14 @@ in
       PATH = [ ];
 
       EDITOR = mkDefault "vi";
+
+      # See: https://unix.stackexchange.com/a/2904
+      CLICOLOR = mkDefault "1";
+
+      # See: https://github.com/Homebrew/brew/blob/master/docs/Analytics.md#opting-out
+      HOMEBREW_NO_ANALYTICS = mkDefault "1";
+
+      NIX_BUILD_SHELL = mkDefault "bash";
     }
     # XDG_*
     // filterAttrs (n: v: hasPrefix "XDG_" n) config.environment.variables;

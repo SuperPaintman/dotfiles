@@ -1,8 +1,12 @@
-{ lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
 let
+  inherit (config.modules.home) standalone;
+
+  mkBin = package: name: if standalone then name else "${package}/bin/${name}";
+
   stringOrPlaceholder = placeholder: cond: text:
     if cond then text
     else placeholder;
@@ -45,6 +49,14 @@ in
         flip pipe [
           (filterAttrs (n: v: v != null))
         ];
+    };
+
+    keyBindings = mkOption {
+      type = lines;
+      default = "";
+      description = ''
+        The list of key bindings.
+      '';
     };
   };
 
@@ -102,5 +114,142 @@ in
       before = mkExtraOption' name "before" opts;
       after = mkExtraOption' name "after" opts;
     };
+
+    mkTheme = shell: let 
+      colors.normal = let 
+        # mkBash = c: "\\[\\033[${c}m\\]";
+        mkBash = c: "\\033[${c}m";
+        mkZSH = c: "%{$fg[${c}]}%";
+      in {
+        red = { bash = mkBash "00;31"; zsh = mkZSH "red"; };
+        green = { bash = mkBash "00;32"; zsh = mkZSH "green"; };
+        yellow = { bash = mkBash "00;33"; zsh = mkZSH "yellow"; };
+        blue = { bash = mkBash "00;34"; zsh = mkZSH "blue"; };
+        reset = { bash = mkBash "00"; zsh = "%{$reset_color%}"; };
+      };
+      colors.bright = let 
+        # mkBash = c: "\\[\\033[${c}m\\]";
+        mkBash = c: "\\033[${c}m";
+        mkZSH = c: "%{$fg_bold[${c}]}%";
+      in {
+        red = { bash = mkBash "01;31"; zsh = mkZSH "red"; };
+        green = { bash = mkBash "01;32"; zsh = mkZSH "green"; };
+        yellow = { bash = mkBash "01;33"; zsh = mkZSH "yellow"; };
+        blue = { bash = mkBash "01;34"; zsh = mkZSH "blue"; };
+        reset = { bash = mkBash "00"; zsh = "%{$reset_color%}"; };
+      };
+
+      var = name: "__DOTFILES_THEME_${name}";
+      shVar = name: "\${${var name}}";
+
+      mkColorNormal = color: colors.normal.${color}.${shell};
+      mkColorBright = color: colors.bright.${color}.${shell};
+      c = mkColorNormal;
+      cb = mkColorBright;
+
+      # placeholders = {
+      #   username = { bash = "\\u"; zsh = "%n"; };
+      #   hostname = { bash = "\\h"; zsh = "%m"; };
+      # };
+      #
+      # mkPlaceholder = name: placeholders.${name}.${shell};
+      # p = mkPlaceholder;
+
+      parts = {
+        username = "${cb "green"}${shVar "USERNAME"}${c "reset"}";
+        hostname = "${cb "green"}${shVar "HOSTNAME"}${c "reset"}";
+        pwd = "${c "red"}$(__dotfiles_theme_fish_pwd)${c "reset"}";
+        status = "${shVar "USER_COLOR"}${shVar "USER_CARET"}${c "reset"}";
+      };
+    in ''
+      export ${var "USERNAME"}="$(whoami)"
+      export ${var "HOSTNAME"}="$(hostname)"
+      export ${var "USER_CARET"}='$'
+      export ${var "USER_COLOR"}='${c "green"}'
+      if [ "''${UID:-1000}" = "0" ]; then
+        export ${var "USER_CARET"}='#'
+        export ${var "USER_COLOR"}='${c "red"}'
+      fi
+
+      __dotfiles_theme_exit_code() {
+        if [ "$1" -gt 0 ]; then
+          echo " [${cb "red"}$1${c "reset"}]"
+        else
+          echo ""
+        fi
+      }
+
+      __dotfiles_theme_fish_pwd() {
+        echo "$(pwd | ${mkBin pkgs.perl "perl"} -pe '
+        BEGIN {
+            binmode STDIN,  ":encoding(UTF-8)";
+            binmode STDOUT, ":encoding(UTF-8)";
+        }; s|^$ENV{HOME}|~|g; s|/([^/.])[^/]*(?=/)|/$1|g; s|/\.([^/])[^/]*(?=/)|/.$1|g
+        ')"
+      }
+
+      export ${var "TIMER_START"}=""
+      __dotfiles_theme_timer_start() {
+        if [ "''${${var "TIMER_START"}:-}x" = "x" ]; then
+          export ${var "TIMER_START"}="''${SECONDS}"
+          # export ${var "TIMER_START"}="$(date +'%s%3N')"
+        fi
+      }
+      trap __dotfiles_theme_timer_start DEBUG
+
+      export ${var "TIMER_ELAPSED"}=""
+      __dotfiles_theme_timer_stop() {
+        local timer_stop="$SECONDS"
+        # local timer_stop="$(date +'%s%3N')"
+
+        export ${var "TIMER_ELAPSED"}="$((timer_stop - ${var "TIMER_START"}))"
+        export ${var "TIMER_START"}=""
+      }
+      PROMPT_COMMAND=__dotfiles_theme_timer_stop
+
+      __dotfiles_theme_timer() {
+        echo " ${c "blue"}${shVar "TIMER_ELAPSED"}s${c "reset"}"
+      }
+
+      __dotfiles_theme_time() {
+        date +'${c "yellow"}%H:%M:%S${c "reset"}'
+      }
+
+      __dotfiles_theme_shell_level_deep() {
+        if [ "''${TMUX:-}x" != "x" ] ; then
+          test "''${SHLVL:-1}" -gt 2
+        else
+          test "''${SHLVL:-1}" -gt 1
+        fi
+      }
+
+      __dotfiles_theme_shell_level() {
+        if __dotfiles_theme_shell_level_deep; then
+          echo " ${cb "blue"}${c "reset"}"
+        fi
+      }
+
+      __dotfiles_theme_prompt_left() {
+        local exitcode="$?"
+        echo -e "${concatStringsSep "" [
+          parts.username
+          "@"
+          parts.hostname
+          " "
+          parts.pwd
+          ''$(__dotfiles_theme_shell_level)''
+          ''$(__dotfiles_theme_exit_code "$exitcode")''
+          " "
+          ''$(__dotfiles_theme_time)''
+          " "
+          ''$(__dotfiles_theme_timer)''
+          " "
+          parts.status
+          " "
+        ]}"
+      }
+
+      export PS1='$(__dotfiles_theme_prompt_left)'
+    '';
   };
 }

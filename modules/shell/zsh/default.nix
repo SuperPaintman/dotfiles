@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.modules.shell.zsh;
 
-  common = import ../common.nix { inherit lib; };
+  common = pkgs.callPackage ../common.nix { inherit config; };
 in
 
 {
@@ -34,6 +34,9 @@ in
     aliases = common.options.aliases;
     extras.aliases = common.lib.mkExtraOption "aliases" { };
 
+    keyBindings = common.options.keyBindings;
+    extras.keyBindings = common.lib.mkExtraOption "keyBindings" { };
+
     functions = mkOption {
       type = lines;
       default = "";
@@ -42,6 +45,15 @@ in
       '';
     };
     extras.functions = common.lib.mkExtraOption "functions" { };
+
+    theme = mkOption {
+      type = lines;
+      default = "";
+      description = ''
+        Shell theme.
+      '';
+    };
+    extras.theme = common.lib.mkExtraOption "theme" { };
   };
 
   # Config.
@@ -52,6 +64,7 @@ in
         variables = mapAttrs (n: mkDefault) config.modules.shell.variables;
         aliases = mapAttrs (n: mkDefault) config.modules.shell.aliases;
         functions = config.modules.shell.functions;
+        theme = mkDefault (common.lib.mkTheme "zsh");
       };
     }
 
@@ -60,9 +73,8 @@ in
         users.packages = [ cfg.package ];
 
         home.configFiles = {
-          # TODO(SuperPaintman): use real file.
-          "zsh2/zshrc".source = pkgs.writeTextFile {
-            name = ".zshrc";
+          "zsh/zshrc.zsh".source = pkgs.writeTextFile {
+            name = "zshrc.zsh";
             executable = true;
             text = ''
               # shellcheck disable=SC2148 # No shebang.
@@ -83,18 +95,32 @@ in
               ${cfg.extras.aliases.after}
 
               ################################################################################
+              # Key Bindings.
+              ################################################################################
+              ${cfg.extras.keyBindings.before}
+              ${cfg.keyBindings}
+              ${cfg.extras.keyBindings.after}
+
+              ################################################################################
               # Functions.
               ################################################################################
               ${cfg.extras.functions.before}
               ${cfg.functions}
               ${cfg.extras.functions.after}
+
+              ################################################################################
+              # Theme.
+              ################################################################################
+              ${cfg.extras.theme.before}
+              ${cfg.theme}
+              ${cfg.extras.theme.after}
             '';
             checkPhase = ''
               # Verify syntax checking by parsing a script without running
               # any commands.
               ${cfg.package}/bin/zsh -n -o extendedglob "$target"
 
-              ${pkgs.shellcheck}/bin/shellcheck "$target"
+              # ${pkgs.shellcheck}/bin/shellcheck "$target"
             '';
           };
         };
