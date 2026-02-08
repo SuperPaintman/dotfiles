@@ -315,9 +315,9 @@ in
         shell.zsh.extras.variables.after = modules.shell.bash.extras.variables.after;
 
         shell.aliases = {
-          g = "git";
-          gl = "git l";
-          gs = "git s";
+          g = mkBin cfg.package "git";
+          gl = "${mkBin cfg.package "git"} l";
+          gs = "${mkBin cfg.package "git"} s";
         };
 
         home.files = {
