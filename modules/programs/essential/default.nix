@@ -88,11 +88,14 @@ in
       modules = {
         users.packages = with pkgs; [ 
           xclip
+          xdg-utils
         ];
 
         shell.aliases = {
           pbcopy = "${mkBin pkgs.gnugrep "xclip"} -selection clipboard";
           pbpaste = "${mkBin pkgs.gnugrep "xclip"} -selection clipboard -o";
+
+          open = mkBin pkgs.xdg-utils "xdg-open";
         };
       };
     })
