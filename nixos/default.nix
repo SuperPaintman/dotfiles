@@ -19,7 +19,7 @@ in
 let
   localPkgs = pkgs.callPackage ./pkgs { };
 
-  themes = pkgs.callPackage ../themes { };
+  # themes = pkgs.callPackage ../themes { };
 
   home-manager = builtins.fetchGit {
     url = "https://github.com/rycee/home-manager.git";
