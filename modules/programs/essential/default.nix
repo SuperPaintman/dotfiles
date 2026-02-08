@@ -42,9 +42,20 @@ in
           tree
           which
           gnugrep # grep, fgrep, egrep
+          bind # dig
+          lsof
+
+          wget
+          curl
+          htop
+
           vim
+          jq
+
           eza
+          jq
           fd
+          ripgrep
         ];
 
         shell.variables = {
@@ -67,6 +78,8 @@ in
           vim = mkOverride 900 null;
           vi = mkOverride 900 (mkBin pkgs.vim "vim");
           v = mkOverride 900 (mkBin pkgs.vim "vim");
+
+          wget = ''${mkBin pkgs.wget "wget"} --hsts-file="$XDG_DATA_HOME/wget-hsts"'';
 
           ls = "${mkBin pkgs.eza "eza"} --color=auto";
         };

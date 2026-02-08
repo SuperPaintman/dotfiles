@@ -116,21 +116,21 @@ in
   # Environment.
   environment.systemPackages = with pkgs; lib.lists.flatten [
     # Basic packages.
-    coreutils
-    wget
-    curl
+    # coreutils
+    # wget
+    # curl
     atop
-    htop
+    # htop
     btop
-    git
-    jq
+    # git
+    # jq
     zip
     unzip
     unrar
-    xclip
+    # xclip
     bind # dig
     wirelesstools
-    lsof
+    # lsof
     brightnessctl
     upower
 
@@ -248,7 +248,7 @@ in
     (polybar.override { pulseSupport = true; })
     entr # Run arbitrary commands when files change.
     tldr # Simple man pages.
-    ripgrep # A utility that combines the usability of The Silver Searcher with the raw speed of grep.
+    # ripgrep # A utility that combines the usability of The Silver Searcher with the raw speed of grep.
     # Window switcher, application launcher and dmenu replacement.
     (rofi.override {
       plugins = [
