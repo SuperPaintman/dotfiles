@@ -84,15 +84,21 @@ in
 
           (map ({ name, value, ... }: mkExport name value))
         ];
+
+        # Prioritize PATH set by nis-shell, if IN_NIX_SHELL is set.
       in ''
         ${stringOrPlaceholder "# export HOME" (HOME != null) (mkExport "HOME" HOME)}
         ${concatStringsSep "\n" exportedVars}
         ${stringOrPlaceholder "# export PATH" (PATH != null && PATH != "" && (length (toList PATH)) > 0) ''
-          if [ -z "''${__DOTFILES_ORIG_PATH_DONE:-}" ]; then
-            export __DOTFILES_ORIG_PATH_DONE=1
+          if [ -z "''${__DOTFILES_ORIG_PATH_DONE:-}" ] || [ "''${__DOTFILES_ORIG_PATH_DONE:-}" -ne "''${SHLVL:-0}" ]; then
+            export __DOTFILES_ORIG_PATH_DONE="''${SHLVL:-0}"
             export __DOTFILES_ORIG_PATH="''${PATH:-}"
           fi
-          export PATH="${concatStringsSep ":" (toList PATH)}''${__DOTFILES_ORIG_PATH:+:"$__DOTFILES_ORIG_PATH"}"
+          if [ -z "''${IN_NIX_SHELL:-}" ]; then
+            export PATH="${concatStringsSep ":" (toList PATH)}''${__DOTFILES_ORIG_PATH:+:"$__DOTFILES_ORIG_PATH"}"
+          else
+            export PATH="''${__DOTFILES_ORIG_PATH:+"$__DOTFILES_ORIG_PATH":}${concatStringsSep ":" (toList PATH)}"
+          fi
         ''}
       '';
 
