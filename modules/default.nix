@@ -20,6 +20,7 @@ in
     ./programs/git
     ./programs/lf
     ./programs/neovim
+    ./programs/rofi
     ./programs/tmux
 
     ./development/cc

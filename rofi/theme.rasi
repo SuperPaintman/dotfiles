@@ -54,6 +54,7 @@
 #listview {
     // margin-top.
     margin: 5 0 0;
+    border: none;
 
     spacing: 0;
 
