@@ -129,7 +129,9 @@ in
           "window"
           "drun"
           "emoji"
-          "other:~/.config/rofi/modes/other"
+          # "other:~/.config/rofi/modes/other"
+          # "other:/home/superpaintman/Projects/github.com/SuperPaintman/dotfiles/pkgs/extras/rofi-modes"
+          "other:${pkgs.extras}/bin/rofi-modes"
         ];
 
         show-icons = true;

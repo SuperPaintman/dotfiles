@@ -17,6 +17,7 @@ buildGoModule rec {
   subPackages = [
     "cmd/fzf-jump"
     "cmd/nix-update"
+    "cmd/rofi-modes"
     "cmd/tmux-session-manager"
   ];
 
