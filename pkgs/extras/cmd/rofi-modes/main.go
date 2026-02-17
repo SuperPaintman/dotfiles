@@ -79,7 +79,7 @@ func main() {
 		mode = StateModeMain
 	}
 
-	colorBase4 := ParseRofiColor(os.Getenv("ROFI_CUSTOM_COLOR_BASE4"))
+	colorBase6 := ParseRofiColor(os.Getenv("ROFI_CUSTOM_COLOR_BASE6"))
 
 	// Debug rofi.
 	const debug = false
@@ -258,7 +258,7 @@ func main() {
 		)
 
 		Option("[back]",
-			WithDisplay("<span color='"+colorBase4+"'>[back]</span>"),
+			WithDisplay("<span color='"+colorBase6+"'>[back]</span>"),
 		)
 	}
 }
