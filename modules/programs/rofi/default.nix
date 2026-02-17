@@ -83,6 +83,34 @@ let
       /* vi: ft=sass
        */
     '';
+
+  rofi = libx.builders.mkWrapper (cfg.package.override {
+    plugins = [
+      pkgs.rofi-emoji
+    ];
+  }) { } ''
+    for bin in "$out/bin/"* ; do
+      if [ -f "$bin" ]; then
+        wrapProgram "$bin" \
+          --set ROFI_CUSTOM_COLOR_BASE0 ${escapeShellArg (toHEXColor theme.colors.base0.color)} \
+          --set ROFI_CUSTOM_COLOR_BASE1 ${escapeShellArg (toHEXColor theme.colors.base1.color)} \
+          --set ROFI_CUSTOM_COLOR_BASE2 ${escapeShellArg (toHEXColor theme.colors.base2.color)} \
+          --set ROFI_CUSTOM_COLOR_BASE3 ${escapeShellArg (toHEXColor theme.colors.base3.color)} \
+          --set ROFI_CUSTOM_COLOR_BASE4 ${escapeShellArg (toHEXColor theme.colors.base4.color)} \
+          --set ROFI_CUSTOM_COLOR_BASE5 ${escapeShellArg (toHEXColor theme.colors.base5.color)} \
+          --set ROFI_CUSTOM_COLOR_BASE6 ${escapeShellArg (toHEXColor theme.colors.base6.color)} \
+          --set ROFI_CUSTOM_COLOR_BASE7 ${escapeShellArg (toHEXColor theme.colors.base7.color)} \
+          --set ROFI_CUSTOM_COLOR_BASE8 ${escapeShellArg (toHEXColor theme.colors.base8.color)} \
+          --set ROFI_CUSTOM_COLOR_BLACK ${escapeShellArg (toHEXColor theme.colors.black.color)} \
+          --set ROFI_CUSTOM_COLOR_RED ${escapeShellArg (toHEXColor theme.colors.red.color)} \
+          --set ROFI_CUSTOM_COLOR_GREEN ${escapeShellArg (toHEXColor theme.colors.green.color)} \
+          --set ROFI_CUSTOM_COLOR_YELLOW ${escapeShellArg (toHEXColor theme.colors.yellow.color)} \
+          --set ROFI_CUSTOM_COLOR_BLUE ${escapeShellArg (toHEXColor theme.colors.blue.color)} \
+          --set ROFI_CUSTOM_COLOR_MAGENTA ${escapeShellArg (toHEXColor theme.colors.magenta.color)} \
+          --set ROFI_CUSTOM_COLOR_CYAN ${escapeShellArg (toHEXColor theme.colors.cyan.color)}
+      fi
+    done
+  '';
 in
 
 {
@@ -163,11 +191,7 @@ in
     (mkIf cfg.enable {
       modules = {
         users.packages = [
-          (cfg.package.override {
-            plugins = [
-              pkgs.rofi-emoji
-            ];
-          })
+          rofi
         ];
 
         home.configFiles = {

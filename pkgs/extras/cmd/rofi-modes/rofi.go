@@ -220,6 +220,13 @@ func Option(value string, opts ...RowOption) {
 	fmt.Printf("\n")
 }
 
+func ParseRofiColor(v string) string {
+	if v == "" {
+		return "inherit"
+	}
+	return v
+}
+
 func bool2String(v bool) string {
 	if v {
 		return "true"
