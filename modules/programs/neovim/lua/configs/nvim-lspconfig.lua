@@ -311,6 +311,12 @@ M.config = function()
     },
   })
 
+  -- Nickel
+  lspconfig.nickel_ls.setup({
+    capabilities = capabilities,
+    on_attach = create_on_attach({}),
+  })
+
   -- Nix
   -- lspconfig.rnix.setup({
   --   capabilities = capabilities,

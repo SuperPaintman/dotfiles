@@ -15,6 +15,17 @@ let
 
   mkBin = package: name: if standalone then name else "${package}/bin/${name}";
 
+  mkConfigFileSymlink = source:
+    let
+      sourceStr = toString source;
+    in
+    pkgs.runCommandLocal sourceStr { } ''ln -s ${escapeShellArg sourceStr} $out'';
+  mkConfigFileCopy = source: {
+    inherit source;
+    recursive = true;
+  };
+  mkConfigFile = mkConfigFileCopy;
+
   mkNeovimEnv = { dependencies ? [ ] }: stdenv.mkDerivation {
     name = "neovim-env";
 
@@ -181,6 +192,7 @@ let
     "lua"
     "luadoc"
     "make"
+    "nickel"
     "nix"
     "proto"
     "python"
@@ -282,6 +294,7 @@ let
       { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-html-language-server" ]; } # HTML
       { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-json-language-server" ]; } # JSON
       { package = lua-language-server; bins = [ "lua-language-server" ]; } # Lua
+      { package = nickel.nls; bins = [ "nls" ]; } # Nickel
       # { package = rnix-lsp; bins = [ "rnix-lsp" ]; } # Nix
       # { package = nixd; bins = [ "nixd" ]; } # Nix
       { package = rust-analyzer; bins = [ "rust-analyzer" ]; } # Rust
@@ -355,34 +368,20 @@ in
       };
 
       home.configFiles = {
-        "nvim/init.lua".source = ./init.lua;
-        "nvim/ftplugin" = {
-          source = ./ftplugin;
-          recursive = true;
-        };
-        "nvim/lua/configs" = {
-          source = ./lua/configs;
-          recursive = true;
-        };
-        "nvim/lua/core" = {
-          source = ./lua/core;
-          recursive = true;
-        };
-        "nvim/lua/modules" = {
-          source = ./lua/modules;
-          recursive = true;
-        };
-        "nvim/lua/snippets" = {
-          source = ./lua/snippets;
-          recursive = true;
-        };
-        "nvim/lua/theme/init.lua".source = ./lua/theme/init.lua;
+        "nvim/init.lua" = mkConfigFile ./init.lua;
         "nvim/lua/init-native-extensions.lua".source = formatLua "nvim-lua-init-native-extensions.lua" ''
           package.cpath = table.concat({
             ${toLua "${nativeExtensions}/lib/lib?.so"},
             package.cpath,
           }, ";")
         '';
+        "nvim/ftdetect" = mkConfigFile ./ftdetect;
+        "nvim/ftplugin" = mkConfigFile ./ftplugin;
+        "nvim/lua/configs" = mkConfigFile ./lua/configs;
+        "nvim/lua/core" = mkConfigFile ./lua/core;
+        "nvim/lua/modules" = mkConfigFile ./lua/modules;
+        "nvim/lua/snippets" = mkConfigFile ./lua/snippets;
+        "nvim/lua/theme/init.lua" = mkConfigFile ./lua/theme/init.lua;
         "nvim/lua/theme/palette.lua".source = formatLua "nvim-lua-theme-colors.lua" ''
           --------------------------------------------------------------------------------
           -- Init
@@ -396,10 +395,7 @@ in
           --------------------------------------------------------------------------------
           return M
         '';
-        "nvim/lua/utils" = {
-          source = ./lua/utils;
-          recursive = true;
-        };
+        "nvim/lua/utils" = mkConfigFile ./lua/utils;
         "nvim/lua/lazylock.lua".source = formatLua "nvim-lua-lazylock.lua" ''
           --------------------------------------------------------------------------------
           -- Init
@@ -418,11 +414,8 @@ in
           --------------------------------------------------------------------------------
           return M
         '';
-        "nvim/lua/lazyinit.lua".source = ./lua/lazyinit.lua;
-        "nvim/queries" = {
-          source = ./queries;
-          recursive = true;
-        };
+        "nvim/lua/lazyinit.lua" = mkConfigFile ./lua/lazyinit.lua;
+        "nvim/queries" = mkConfigFile ./queries;
       } // lib.optionalAttrs (!standalone) {
         "nvim/jsonschemas".source = jsonschemas;
       };
