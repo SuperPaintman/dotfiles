@@ -18,8 +18,10 @@ let
   mkConfigFileSymlink = source:
     let
       sourceStr = toString source;
-    in
-    pkgs.runCommandLocal sourceStr { } ''ln -s ${escapeShellArg sourceStr} $out'';
+      link = pkgs.runCommandLocal sourceStr { } ''ln -s ${escapeShellArg sourceStr} $out'';
+    in {
+      source = link;
+    };
   mkConfigFileCopy = source: {
     inherit source;
     recursive = true;
@@ -175,10 +177,11 @@ let
     "c"
     "c_sharp"
     "css"
+    "dhall"
     "diff"
     "dockerfile"
-    # "gitignore" # BROKEN
     "gdscript"
+    # "gitignore" # BROKEN
     "go"
     "gomod"
     "gosum"
@@ -186,8 +189,6 @@ let
     "html"
     "http"
     "javascript"
-    "typescript"
-    "tsx"
     "json"
     "lua"
     "luadoc"
@@ -202,6 +203,8 @@ let
     "sql"
     "svelte"
     "terraform"
+    "tsx"
+    "typescript"
     "vim"
     "yaml"
     "zig"
@@ -290,6 +293,7 @@ let
       { package = clang-tools; bins = [ "clangd" ]; } # C / C++
       { package = omnisharp-roslyn; bins = [ "OmniSharp" ]; } # C#
       { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-css-language-server" ]; } # CSS
+      { package = dhall-lsp-server; bins = [ "dhall-lsp-server" ]; } # Dhall
       # { package = gopls; bins = [ "gopls" ]; } # Go
       { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-html-language-server" ]; } # HTML
       { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-json-language-server" ]; } # JSON

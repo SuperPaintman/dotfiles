@@ -240,6 +240,12 @@ M.config = function()
     on_attach = create_on_attach({}),
   })
 
+  -- Dhall
+  lspconfig.dhall_lsp_server.setup({
+    capabilities = capabilities,
+    on_attach = create_on_attach({}),
+  })
+
   -- Go
   lspconfig.gopls.setup({
     capabilities = capabilities,
