@@ -11,6 +11,7 @@ local RELOADABLE = {
   "configs.lsp_signature-nvim",
   "configs.luasnip",
   "configs.nvim-cmp",
+  "configs.bufferline-nvim",
   "configs.nvim-tree-lua",
   "configs.nvim-treesitter",
   "configs.telescope-nvim",

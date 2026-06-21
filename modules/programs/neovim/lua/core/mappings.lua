@@ -2,6 +2,7 @@
 -- Imports
 --------------------------------------------------------------------------------
 local neogit = require("configs.neogit").mappings
+local bufferline = require("configs.bufferline-nvim").mappings
 local telescope = require("configs.telescope-nvim").mappings
 local luasnip = require("configs.luasnip").mappings
 local lspsaga = require("configs.lspsaga-nvim").mappings
@@ -160,10 +161,8 @@ vim.g.maplocalleader = "\\"
 --------------------------------------------------------------------------------
 -- Go to.
 M.mappings["gd"] = { "n", vim.lsp.buf.definition, "Go to the definition" }
-M.mappings["gD"] =
-  { "n", vim.lsp.buf.type_definition, "Go to the type definition" }
-M.mappings["gI"] =
-  { "n", vim.lsp.buf.implementation, "Go to the implementation" }
+M.mappings["gD"] = { "n", vim.lsp.buf.type_definition, "Go to the type definition" }
+M.mappings["gI"] = { "n", vim.lsp.buf.implementation, "Go to the implementation" }
 M.mappings["gr"] = { "n", vim.lsp.buf.references, "Go to references" }
 
 -- Hover.
@@ -194,6 +193,17 @@ M.mappings["<C-k>"] = {
 
 -- Leader
 --- Debug
+M.groups.b = {
+  name = "buffers",
+  prefix = "<leader>b",
+  mappings = {
+    b = { "n", bufferline.pick(), "Pick buffer" },
+    x = { "n", bufferline.close_with_pick(), "Pick buffer to close" },
+    X = { "n", bufferline.close_others(), "Pick other buffers" },
+  },
+}
+
+--- Debug
 M.groups.d = {
   name = "debug",
   prefix = "<leader>d",
@@ -210,7 +220,7 @@ M.groups.d = {
 
     -- NOTE(SuperPaintman): here we mimic the Vim movements.
     l = { "n", [[:DapStepInto<CR>]], "Step into" }, -- ->
-    h = { "n", [[:DapStepOut<CR>]], "Step out" }, -- <-
+    h = { "n", [[:DapStepOut<CR>]], "Step out" },   -- <-
     j = { "n", [[:DapStepOver<CR>]], "Step over" }, -- v
     -- k = { "n", ???, "Step back" }, -- ^
   },
@@ -263,10 +273,8 @@ M.groups.t = {
 M.mappings["<leader>y"] = { { "n", "v" }, [["+y]], "Yank to clipboard" }
 
 --- Put
-M.mappings["<leader>p"] =
-  { { "n", "v" }, [["+p]], "Put from clipboard after cursor" }
-M.mappings["<leader>P"] =
-  { { "n", "v" }, [["+P]], "Put from clipboard before cursot" }
+M.mappings["<leader>p"] = { { "n", "v" }, [["+p]], "Put from clipboard after cursor" }
+M.mappings["<leader>P"] = { { "n", "v" }, [["+P]], "Put from clipboard before cursot" }
 
 --------------------------------------------------------------------------------
 -- Register
