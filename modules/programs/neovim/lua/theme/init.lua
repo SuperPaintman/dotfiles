@@ -590,6 +590,10 @@ M.setup = function(opts)
   -- Modules.
   --- ContextSigns.
   h("ContextSign", { fg = palette.colors.base8 })
+
+  -- StatusColumn.
+  h("StatusColumnMark", { fg = palette.colors.blue, bold = true })
+  h("StatusColumnMarkLineNr", { fg = palette.colors.blue })
 end
 
 M.reload = function()

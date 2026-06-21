@@ -16,9 +16,10 @@ local RELOADABLE = {
   "configs.nvim-treesitter",
   "configs.telescope-nvim",
 
-  "modules.contextsigns",
-  "modules.lsp",
   "modules.statuscolumn",
+  "modules.marks",
+  "modules.lsp",
+  "modules.contextsigns",
 
   "theme",
 }

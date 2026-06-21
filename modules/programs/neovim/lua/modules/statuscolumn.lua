@@ -2,10 +2,20 @@
 -- See: https://neovim.io/doc/user/diagnostic.html
 -- TODO(SuperPaintman): try https://github.com/rebelot/heirline.nvim
 --------------------------------------------------------------------------------
+-- Imports
+--------------------------------------------------------------------------------
+local utils = require("utils.utils")
+
+--------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
+local autocmd = vim.api.nvim_create_autocmd
+local augroup = vim.api.nvim_create_augroup
+
 ---@class modules.statuscolumn.Module
-local M = {}
+local M = {
+  _initialized = false,
+}
 
 --------------------------------------------------------------------------------
 -- Types
@@ -87,7 +97,7 @@ local function get_signs()
 
   local buf = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
   local buf_signs =
-    vim.fn.sign_getplaced(buf, { group = "*", lnum = vim.v.lnum })[1]
+      vim.fn.sign_getplaced(buf, { group = "*", lnum = vim.v.lnum })[1]
   if buf_signs == nil then
     return {}
   end
@@ -99,18 +109,97 @@ local function get_signs()
   return signs
 end
 
+---@param buf number
+---@param lnum number
+---@return modules.statuscolumn.Sign?
+local function get_mark_sign(buf, lnum)
+  for _, m in ipairs(vim.fn.getmarklist(buf)) do
+    local letter = m.mark:sub(2)
+    if letter:match("^%l$") and m.pos[2] == lnum then
+      return { name = "Mark", text = letter, texthl = "StatusColumnMark" }
+    end
+  end
+
+  local name = vim.api.nvim_buf_get_name(buf)
+  for _, m in ipairs(vim.fn.getmarklist()) do
+    local letter = m.mark:sub(2)
+    if
+        letter:match("^%u$")
+        and m.pos[2] == lnum
+        and vim.fn.fnamemodify(m.file, ":p") == name
+    then
+      return { name = "Mark", text = letter, texthl = "StatusColumnMark" }
+    end
+  end
+
+  return nil
+end
+
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
 ---@param opts table?
 M.setup = function(opts)
+  if not M._initialized then
+    vim.api.nvim_set_hl(0, "StatusColumnMark", { link = "Special", default = true })
+    vim.api.nvim_set_hl(0, "StatusColumnMarkLineNr", { link = "StatusColumnMark", default = true })
+  end
+
   if vim.fn.has("nvim-0.9") == 1 then
     -- Debug
     -- require("utils.modules").unload("core.statuscolumn")
 
-    vim.opt.statuscolumn =
-      [[%!v:lua.require("modules.statuscolumn").statuscolumn()]]
+    vim.opt.statuscolumn = [[%!v:lua.require("modules.statuscolumn").statuscolumn()]]
   end
+
+  -- Debounced refresh.
+  ---@type { [integer]: { [1]: (fun(): nil), [2]: (fun(): nil) } }
+  local debounced_refresh = {}
+
+  ---@param buf integer
+  local refresh = function(buf)
+    if buf == nil or buf == 0 then
+      M.refresh()
+      return
+    end
+
+    local debounced = debounced_refresh[buf]
+    if debounced == nil then
+      local fn, cancel = utils.debounce(function()
+        M.refresh(buf)
+      end, 50)
+      debounced = { fn, cancel }
+      debounced_refresh[buf] = debounced
+    end
+
+    local fn = debounced[1]
+    fn()
+  end
+
+  refresh(0)
+
+  if vim.fn.exists("##MarkSet") == 1 then
+    autocmd("MarkSet", {
+      group = augroup("StatusColumnMarks", { clear = true }),
+      desc = "Refresh statuscolumn when a mark is set or deleted",
+      callback = function(ev) refresh(ev.buf) end,
+    })
+  end
+
+  autocmd("User", {
+    group = augroup("StatusColumnUserMarks", { clear = true }),
+    pattern = { "MarksSet", "MarksDelete" },
+    callback = function(ev) refresh((ev.data or {}).buf or 0) end,
+  })
+
+  M._initialized = true
+end
+
+---@param buf number?
+M.refresh = function(buf)
+  buf = buf or 0
+
+  pcall(vim.api.nvim__redraw, { buf = buf, statuscolumn = true })
 end
 
 M.reload = function()
@@ -132,14 +221,22 @@ M.statuscolumn = function()
   local function insert_padding(padding)
     insert(
       "%{(&filetype == 'NvimTree' || &filetype == 'help') ? '' : '"
-        .. padding
-        .. "'}"
+      .. padding
+      .. "'}"
     )
   end
 
   ---@param sign modules.statuscolumn.Sign
   local function insert_sign(sign)
     insert("%#" .. sign.texthl .. "#" .. sign.text .. "%*")
+  end
+
+  -- Marks.
+  ---@type modules.statuscolumn.Sign?
+  local mark_sign = nil
+  if vim.g.statusline_winid ~= nil then
+    local buf = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
+    mark_sign = get_mark_sign(buf, vim.v.lnum)
   end
 
   -- Find signs.
@@ -201,6 +298,8 @@ M.statuscolumn = function()
     insert_sign(diagnostic_sign)
   elseif code_action_sign ~= nil then
     insert_sign(code_action_sign)
+  elseif mark_sign ~= nil then
+    insert_sign(mark_sign)
   else
     insert_padding("   ")
   end
@@ -218,7 +317,10 @@ M.statuscolumn = function()
   local cur_line = unpack(vim.api.nvim_win_get_cursor(0))
   local close_line_color = false
   if vim.o.number and vim.v.lnum ~= cur_line then
-    if context_sign ~= nil then
+    if mark_sign ~= nil then
+      insert("%#" .. "StatusColumnMarkLineNr" .. "#")
+      close_line_color = true
+    elseif context_sign ~= nil then
       insert("%#" .. context_sign.texthl .. "#")
       close_line_color = true
     end
