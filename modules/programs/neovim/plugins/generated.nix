@@ -393,14 +393,14 @@
 
   telescope-nvim = {
     pname = "telescope-nvim";
-    version = "0.0.0+rev=776b509";
+    version = "0.0.0+rev=f04ab73";
     src = fetchFromGitHub {
       owner = "nvim-telescope";
       repo = "telescope.nvim";
-      rev = "776b509f80dd49d8205b9b0d94485568236d1192";
-      sha256 = "sha256-fV3LLRwAPykVGc4ImOnUSP+WTrPp9Ad9OTfBJ6wqTMk=";
+      rev = "f04ab730b8f9c6bf3f54a206d0dcddfd70c52d59";
+      sha256 = "sha256-M5cAQe0VxKwiOsLqXmlxNzd8xvLW+J1+Hd31PFmK+S8=";
     };
-    commit = "776b509f80dd49d8205b9b0d94485568236d1192";
+    commit = "f04ab730b8f9c6bf3f54a206d0dcddfd70c52d59";
     plugin = "nvim-telescope/telescope.nvim";
   };
 

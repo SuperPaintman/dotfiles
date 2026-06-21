@@ -28,8 +28,7 @@ packages:
         extraAttrs:
             plugin: nvim-telescope/telescope.nvim
             # branch: master
-            # version: "0.1.2"
-            commit: &commit 776b509f80dd49d8205b9b0d94485568236d1192
+            commit: &commit f04ab730b8f9c6bf3f54a206d0dcddfd70c52d59
         args:
             owner: nvim-telescope
             repo: telescope.nvim
