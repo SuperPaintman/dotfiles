@@ -683,6 +683,10 @@ local function create_updater(bufnr)
       return
     end
 
+    if not vim.api.nvim_buf_is_valid(bufnr) then
+      return
+    end
+
     vim.fn.sign_unplace(SIGN_GROUP, {
       buffer = bufnr,
     })
