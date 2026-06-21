@@ -14,10 +14,14 @@ local command = vim.api.nvim_create_user_command
 ---@class modules.marks.Module
 local M = {}
 
+local CHEATSHEET_SEP = "➜"
+local CHEATSHEET_NS = vim.api.nvim_create_namespace("marks_cheatsheet")
+
 --------------------------------------------------------------------------------
 -- Types
 --------------------------------------------------------------------------------
 ---@alias modules.marks.Entry {bufnr?: integer, lnum: integer, col: integer}
+---@alias modules.marks.CheatsheetEntry {name: string, label: string}
 
 --------------------------------------------------------------------------------
 -- Helpers
@@ -58,6 +62,17 @@ local function is_upper(name)
   return name:match("^%u$") ~= nil
 end
 
+---@param names string[]
+---@return string|nil
+local function hlname(names)
+  for _, name in ipairs(names) do
+    if vim.fn.hlexists(name) == 1 then
+      return name
+    end
+  end
+  return nil
+end
+
 -- Stable per-project key, matching the shada naming scheme.
 ---@param root string
 ---@return string
@@ -81,11 +96,22 @@ M.defaults = {
   shada_projects_dir = vim.fn.stdpath("state") .. "/shada-projects",
 }
 
+
 ---@type modules.marks.Config
 M.options = vim.tbl_deep_extend("force", M.defaults, {})
 
 M._active = false
 M._root = nil ---@type string?
+M._cheatsheet_win = nil ---@type integer?
+M._styles = {
+  normal = "",
+  border = "",
+  title = "",
+
+  key = "",
+  sep = "",
+  desc = "",
+}
 
 --- Resolves a mark to a position.
 ---@param name string
@@ -103,7 +129,7 @@ local function resolve(name)
     }
   elseif is_lower(name) then
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-      if vim.api.nvim_buf_is_loaded(buf) then
+      if vim.api.nvim_buf_is_valid(buf) then
         local pos = vim.api.nvim_buf_get_mark(buf, name)
         if pos[1] > 0 then
           return {
@@ -127,7 +153,7 @@ M.set = function(name)
     return
   end
 
-  -- Keep the mark unique across loaded buffers.
+  -- Keep the mark unique across buffers.
   local cur = vim.api.nvim_get_current_buf()
 
   if is_upper(name) then
@@ -137,16 +163,18 @@ M.set = function(name)
     })
   elseif is_lower(name) then
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-      local pos = vim.api.nvim_buf_get_mark(buf, name)
-      if pos[1] > 0 then
-        if buf ~= cur then
-          vim.api.nvim_buf_del_mark(buf, name)
-        end
+      if vim.api.nvim_buf_is_valid(buf) then
+        local pos = vim.api.nvim_buf_get_mark(buf, name)
+        if pos[1] > 0 then
+          if buf ~= cur then
+            vim.api.nvim_buf_del_mark(buf, name)
+          end
 
-        emit("MarksDelete", {
-          name = name,
-          buf = buf,
-        })
+          emit("MarksDelete", {
+            name = name,
+            buf = buf,
+          })
+        end
       end
     end
   end
@@ -183,7 +211,11 @@ local function goto_mark(entry, exact)
   local win = buf_window(entry.bufnr)
   if win ~= nil then
     vim.api.nvim_set_current_win(win)
-  elseif entry.bufnr ~= nil and vim.api.nvim_buf_is_loaded(entry.bufnr) then
+  elseif entry.bufnr ~= nil then
+    if not vim.api.nvim_buf_is_loaded(entry.bufnr) then
+      vim.fn.bufload(entry.bufnr)
+      vim.bo[entry.bufnr].buflisted = true
+    end
     vim.api.nvim_set_current_buf(entry.bufnr)
   end
 
@@ -231,22 +263,166 @@ M.delete = function(name)
     })
   elseif is_lower(name) then
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-      local pos = vim.api.nvim_buf_get_mark(buf, name)
-      if pos[1] > 0 then
-        vim.api.nvim_buf_del_mark(buf, name)
+      if vim.api.nvim_buf_is_valid(buf) then
+        local pos = vim.api.nvim_buf_get_mark(buf, name)
+        if pos[1] > 0 then
+          vim.api.nvim_buf_del_mark(buf, name)
 
-        emit("MarksDelete", {
-          name = name,
-          buf = buf,
-        })
+          emit("MarksDelete", {
+            name = name,
+            buf = buf,
+          })
+        end
       end
     end
   end
 end
 
---------------------------------------------------------------------------------
--- Activation
---------------------------------------------------------------------------------
+--- Collects all marks.
+---@return modules.marks.CheatsheetEntry[]
+function M._collect_marks()
+  local items = {}
+
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_valid(buf) then
+      local bufname = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ":~:.")
+
+      for c = ("a"):byte(), ("z"):byte() do
+        local name = string.char(c)
+        local pos = vim.api.nvim_buf_get_mark(buf, name)
+        if pos[1] > 0 then
+          items[#items + 1] = {
+            name = name,
+            label = string.format(
+              "%s:%d",
+              bufname ~= "" and bufname or "[No Name]",
+              pos[1]
+            ),
+          }
+        end
+      end
+    end
+  end
+
+  for _, m in ipairs(vim.fn.getmarklist()) do
+    local name = m.mark:sub(2)
+    if is_upper(name) or m.mark == "'" then
+      items[#items + 1] = {
+        name = name,
+        label = string.format("%s:%d", vim.fn.fnamemodify(m.file, ":~:."), m.pos[2]),
+      }
+    end
+  end
+
+  -- table.sort(items, function(a, b)
+  --   return a.name < b.name
+  -- end)
+
+  return items
+end
+
+---@param items modules.marks.CheatsheetEntry[]
+---@return string[], integer[][]
+function M._cheatsheet_layout(items)
+  if #items == 0 then
+    return { " no marks" }, {}
+  end
+
+  local lines = {}
+  local hls = {}
+
+  for r, it in ipairs(items) do
+    local key = it.name
+
+    local text = " "
+    local hstart = 1
+    local hend = hstart
+
+    text = text .. key
+    hend = hend + #key
+    hls[#hls + 1] = { r - 1, hstart, hend, M._styles.key }
+    hstart = hend + 1
+
+    text = text .. " " .. CHEATSHEET_SEP
+    hend = hstart + #CHEATSHEET_SEP
+    hls[#hls + 1] = { r - 1, hstart, hend, M._styles.sep }
+    hstart = hend + 1
+
+    text = text .. " " .. it.label
+    hend = hstart + #it.label
+    hls[#hls + 1] = { r - 1, hstart, hend, M._styles.desc }
+    hstart = hend + 1
+
+    text = text .. " "
+
+    lines[#lines + 1] = text
+  end
+
+  return lines, hls
+end
+
+function M._close_cheatsheet()
+  if M._cheatsheet_win ~= nil and vim.api.nvim_win_is_valid(M._cheatsheet_win) then
+    vim.api.nvim_win_close(M._cheatsheet_win, true)
+  end
+  M._cheatsheet_win = nil
+end
+
+---@param items modules.marks.CheatsheetEntry[]
+function M._open_cheatsheet(items)
+  local lines, hls = M._cheatsheet_layout(items)
+
+  local buf = vim.api.nvim_create_buf(false, true)
+  vim.api.nvim_buf_set_lines(buf, 0, -1, false, lines)
+  for _, h in ipairs(hls) do
+    vim.api.nvim_buf_set_extmark(buf, CHEATSHEET_NS, h[1], h[2], {
+      end_col = h[3],
+      hl_group = h[4],
+    })
+  end
+  vim.bo[buf].bufhidden = "wipe"
+  vim.bo[buf].modifiable = false
+
+  local height = #lines
+  local margin_bottom = 1
+
+  M._cheatsheet_win = vim.api.nvim_open_win(buf, false, {
+    relative = "editor",
+    width = vim.o.columns,
+    height = #lines,
+    row = vim.o.lines - height - vim.o.cmdheight - margin_bottom,
+    col = 0,
+    style = "minimal",
+    border = "none",
+    -- title = " marks ",
+    -- title_pos = "center",
+    focusable = false,
+    noautocmd = true,
+    zindex = 200,
+  })
+
+  vim.wo[M._cheatsheet_win].winhighlight = table.concat({
+    "Normal:" .. M._styles.normal,
+    "FloatBorder:" .. M._styles.border,
+    "FloatTitle:" .. M._styles.title,
+  }, ",")
+end
+
+--- Prompts for a mark.
+---@return string
+function M._prompt()
+  if M._active then
+    local marks = M._collect_marks()
+    M._open_cheatsheet(marks)
+    vim.cmd("redraw")
+  end
+
+  local ok, char = pcall(vim.fn.getcharstr)
+  M._close_cheatsheet()
+
+  return ok and char or ""
+end
+
 M.attach = function()
   local root = normalize(M.options.root_dir())
   if root == nil then
@@ -280,12 +456,19 @@ M.detach = function()
   M._root = nil
 end
 
---------------------------------------------------------------------------------
--- Setup
---------------------------------------------------------------------------------
 ---@param opts modules.marks.Config?
 M.setup = function(opts)
   M.options = vim.tbl_deep_extend("force", M.defaults, opts or {})
+
+  M._styles = {
+    normal = hlname({ "MarksCheatsheetNormal", "WhichKeyNormal", "NormalFloat" }),
+    border = hlname({ "MarksCheatsheetBorder", "WhichKeyBorder", "FloatBorder" }),
+    title = hlname({ "MarksCheatsheetTitle", "WhichKeyTitle", "FloatTitle" }),
+
+    key = hlname({ "MarksCheatsheetKey", "WhichKey", "Function" }),
+    sep = hlname({ "MarksCheatsheetSeparator", "WhichKeySeparator", "Comment" }),
+    desc = hlname({ "MarksCheatsheetDesc", "WhichKeyDesc", "Identifier" }),
+  }
 
   autocmd({ "VimEnter", "DirChanged" }, {
     group = augroup("MarksDetect", { clear = true }),
@@ -300,11 +483,17 @@ M.setup = function(opts)
   end, { desc = "Set mark" })
 
   vim.keymap.set("n", "`", function()
-    M.jump(vim.fn.getcharstr(), true)
+    local c = M._prompt()
+    if c ~= "" then
+      M.jump(c, true)
+    end
   end, { desc = "Jump to mark (exact)" })
 
   vim.keymap.set("n", "'", function()
-    M.jump(vim.fn.getcharstr(), false)
+    local c = M._prompt()
+    if c ~= "" then
+      M.jump(c, false)
+    end
   end, { desc = "Jump to mark (line)" })
 
   command("MarksDelete", function(event)
@@ -315,6 +504,9 @@ M.setup = function(opts)
 end
 
 M.reload = function()
+  M._close_cheatsheet()
+  vim.cmd("wshada")
+
   M.setup(M.options)
 end
 
