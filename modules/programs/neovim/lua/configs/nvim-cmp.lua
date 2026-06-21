@@ -19,7 +19,7 @@ local function has_treesitter()
   end
 
   return vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()]
-    ~= nil
+      ~= nil
 end
 
 ---Check if cursor is in syntax group
@@ -72,7 +72,7 @@ local function in_treesitter_capture(capture)
   end
 
   if
-    type(capture) == "string" and vim.tbl_contains(captures_at_cursor, capture)
+      type(capture) == "string" and vim.tbl_contains(captures_at_cursor, capture)
   then
     return true
   end
@@ -120,7 +120,6 @@ M.dependencies = {
   "hrsh7th/cmp-path",
   "saadparwaiz1/cmp_luasnip",
   "L3MON4D3/LuaSnip",
-  "zbirenbaum/copilot-cmp",
 }
 
 M.event = "InsertEnter"
@@ -280,7 +279,6 @@ M.config = function()
         --   return true
         -- end,
       },
-      { name = "copilot" },
     }),
   })
 end

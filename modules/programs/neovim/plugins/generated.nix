@@ -131,32 +131,6 @@
     plugin = "numToStr/Comment.nvim";
   };
 
-  copilot-cmp = {
-    pname = "copilot-cmp";
-    version = "0.0.0+rev=72fbaa0";
-    src = fetchFromGitHub {
-      owner = "zbirenbaum";
-      repo = "copilot-cmp";
-      rev = "72fbaa03695779f8349be3ac54fa8bd77eed3ee3";
-      sha256 = "sha256-srgNohm/aJpswNJ5+T7p+zi9Jinp9e5FA8/wdk6VRiY=";
-    };
-    commit = "72fbaa03695779f8349be3ac54fa8bd77eed3ee3";
-    plugin = "zbirenbaum/copilot-cmp";
-  };
-
-  copilot-lua = {
-    pname = "copilot-lua";
-    version = "0.0.0+rev=858bbfa";
-    src = fetchFromGitHub {
-      owner = "zbirenbaum";
-      repo = "copilot.lua";
-      rev = "858bbfa6fa81c88fb1f64107d7981f1658619e0a";
-      sha256 = "sha256-x6ylgVR7nrMhvSvtwbh7CufOJO/q+30G+Tvrj3/wgZY=";
-    };
-    commit = "858bbfa6fa81c88fb1f64107d7981f1658619e0a";
-    plugin = "zbirenbaum/copilot.lua";
-  };
-
   diffview-nvim = {
     pname = "diffview-nvim";
     version = "0.0.0+rev=766a4f2";
