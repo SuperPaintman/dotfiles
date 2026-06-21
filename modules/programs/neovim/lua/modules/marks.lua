@@ -17,7 +17,7 @@ local M = {}
 --------------------------------------------------------------------------------
 -- Types
 --------------------------------------------------------------------------------
----@alias modules.marks.Entry {bufnr: integer, lnum: integer, col: integer}
+---@alias modules.marks.Entry {bufnr?: integer, lnum: integer, col: integer}
 
 --------------------------------------------------------------------------------
 -- Helpers
@@ -97,7 +97,7 @@ local function resolve(name)
       return nil
     end
     return {
-      bufnr = m[3] ~= 0,
+      bufnr = m[3] ~= 0 and m[3] or nil,
       lnum = m[1],
       col = m[2],
     }
@@ -158,11 +158,15 @@ M.set = function(name)
 end
 
 --- Find a window in the current tabpage for the bufnr.
----@param bufnr integer
+---@param buf integer|nil
 ---@return integer|nil
-local function buf_window(bufnr)
+local function buf_window(buf)
+  if buf == nil then
+    return nil
+  end
+
   for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-    if vim.api.nvim_win_get_buf(win) == bufnr then
+    if vim.api.nvim_win_get_buf(win) == buf then
       return win
     end
   end
