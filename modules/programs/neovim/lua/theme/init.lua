@@ -292,6 +292,11 @@ M.setup = function(opts)
   l("@text.diff.index", "Comment")
 
   -- Language Specific / Treesitter / LSP
+  --- Go
+  unset("@lsp.type.variable.go")
+  unset("@lsp.type.namespace.go")
+  unset("@module.go")
+
   --- Rust
   l("@lsp.type.macro.rust", "@function.macro")
   l("@lsp.type.enumMember.rust", "Type")

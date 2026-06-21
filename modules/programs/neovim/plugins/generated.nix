@@ -185,27 +185,27 @@
 
   lsp-signature-nvim = {
     pname = "lsp-signature-nvim";
-    version = "0.0.0+rev=33250c8";
+    version = "0.0.0+rev=b7ace9d";
     src = fetchFromGitHub {
       owner = "ray-x";
       repo = "lsp_signature.nvim";
-      rev = "33250c84c7a552daf28ac607d9d9e82f88cd0907";
-      sha256 = "sha256-UEgCImIGDFcyujwyN7GMs3NBcZiUNWQxygkMqZjJ7jE=";
+      rev = "b7ace9ddb1640ce266012a45a672dfdaedfa5ec6";
+      sha256 = "sha256-ov4K/u5S8kf4Bm4KGKJJxhwPYcGEjzymxp8CGtMy2C4=";
     };
-    commit = "33250c84c7a552daf28ac607d9d9e82f88cd0907";
+    commit = "b7ace9ddb1640ce266012a45a672dfdaedfa5ec6";
     plugin = "ray-x/lsp_signature.nvim";
   };
 
   lspsaga-nvim = {
     pname = "lspsaga-nvim";
-    version = "0.0.0+rev=7ebd0cc";
+    version = "0.0.0+rev=d8511e7";
     src = fetchFromGitHub {
       owner = "nvimdev";
       repo = "lspsaga.nvim";
-      rev = "7ebd0cc5923c81516c1c050fc9aea70bec23fd02";
-      sha256 = "sha256-VF7zuxxHVs0uSDNGzswrBsKSmATC7byyEG+LZSEwTxM=";
+      rev = "d8511e7a40c93af74305268668ef206dff8e224c";
+      sha256 = "sha256-kH/+hJbOf0GaWQlUPyKN4cF4535CLhSzTxAJsD4LXKc=";
     };
-    commit = "7ebd0cc5923c81516c1c050fc9aea70bec23fd02";
+    commit = "d8511e7a40c93af74305268668ef206dff8e224c";
     plugin = "nvimdev/lspsaga.nvim";
   };
 
@@ -328,14 +328,14 @@
 
   nvim-lspconfig = {
     pname = "nvim-lspconfig";
-    version = "0.0.0+rev=0011c43";
+    version = "0.0.0+rev=229b790";
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "nvim-lspconfig";
-      rev = "0011c435282f043a018e23393cae06ed926c3f4a";
-      sha256 = "sha256-17n6Vxp+HOUpdmWB6EI4QyTowVi0tILJRFISJP96YYk=";
+      rev = "229b79051b380377664edc4cbd534930154921a1";
+      sha256 = "sha256-RDhwY+C2ZHZPPRe1yvgJqonLcez77dVYvTIttVnFPis=";
     };
-    commit = "0011c435282f043a018e23393cae06ed926c3f4a";
+    commit = "229b79051b380377664edc4cbd534930154921a1";
     plugin = "neovim/nvim-lspconfig";
   };
 
@@ -445,14 +445,14 @@
 
   trouble-nvim = {
     pname = "trouble-nvim";
-    version = "0.0.0+rev=e7805dc";
+    version = "0.0.0+rev=748ca27";
     src = fetchFromGitHub {
       owner = "folke";
       repo = "trouble.nvim";
-      rev = "e7805dc3448f28599e022dc7a0e58060dfdeeb9a";
-      sha256 = "sha256-16036o4yQQH4/acPucdQfys+ozLrVAnhFrN1xPIFdUI=";
+      rev = "748ca2789044607f19786b1d837044544c55e80a";
+      sha256 = "sha256-F3LSA1iAF8TEI7ecyuWVe3FrpSddUf3OjJA/KGfdW/8=";
     };
-    commit = "e7805dc3448f28599e022dc7a0e58060dfdeeb9a";
+    commit = "748ca2789044607f19786b1d837044544c55e80a";
     plugin = "folke/trouble.nvim";
   };
 

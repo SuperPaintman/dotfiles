@@ -143,10 +143,8 @@ M.dependencies = {
 }
 
 M.config = function()
-  local lspconfig = require("lspconfig")
-  local lspconfig_util = require("lspconfig.util")
-
   local capabilities = get_default_client_capabilities()
+
   local function create_on_attach(opts)
     opts = vim.tbl_deep_extend("force", {
       semantic = true,
@@ -179,77 +177,51 @@ M.config = function()
     return on_attach
   end
 
-  vim.api.nvim_create_autocmd("LspAttach", {
-    group = vim.api.nvim_create_augroup("ForceLspConfig", { clear = true }),
-    desc = "Force LSP config (call on_attach function)",
-    callback = function(ev)
-      local bufnr = ev.buf
-      local client = vim.lsp.get_client_by_id(ev.data.client_id)
-
-      local ok, err = pcall(function()
-        if type(client.config._on_attach) == "function" then
-          client.config._on_attach(client, bufnr)
-        end
-      end)
-      if not ok then
-        vim.api.nvim_notify(
-          "nvim-lspconfig: failed to call on_attach: " .. (err or ""),
-          vim.log.levels.ERROR,
-          {}
-        )
-      end
-    end,
-  })
-
-  -- Arduino
-  lspconfig.arduino_language_server.setup({
-    -- capabilities = capabilities,
-    on_attach = create_on_attach({}),
+  -- Global defaults applied to every server.
+  vim.lsp.config("*", {
+    capabilities = capabilities,
   })
 
   -- C / C++
-  local clangd_default_cmd =
-      require("lspconfig.server_configurations.clangd").default_config.cmd[1]
-  lspconfig.clangd.setup({
-    cmd = { clangd_default_cmd, "--background-index" },
-    capabilities = capabilities,
+  vim.lsp.config("clangd", {
+    cmd = { "clangd", "--background-index" },
     on_attach = create_on_attach({}),
   })
+  vim.lsp.enable("clangd")
 
   -- C#
-  lspconfig.omnisharp.setup({
-    capabilities = capabilities,
+  vim.lsp.config("omnisharp", {
     on_attach = create_on_attach({ semantic = false }),
     handlers = {
       ["textDocument/definition"] = require("omnisharp_extended").handler,
     },
   })
+  -- vim.lsp.enable("omnisharp")
 
   -- GDscript
-  -- lspconfig.gdscript.setup({
-  --   capabilities = capabilities,
-  --   on_attach = create_on_attach({}),
-  --   handlers = {
-  --     ["textDocument/hover"] = gdscript_hover_handler,
-  --   },
-  -- })
+  vim.lsp.config("gdscript", {
+    on_attach = create_on_attach({}),
+    handlers = {
+      ["textDocument/hover"] = gdscript_hover_handler,
+    },
+  })
+  -- vim.lsp.enable("gdscript")
 
   -- CSS
-  lspconfig.cssls.setup({
-    capabilities = capabilities,
+  vim.lsp.config("cssls", {
     on_attach = create_on_attach({}),
   })
+  vim.lsp.enable("cssls")
 
   -- Dhall
-  lspconfig.dhall_lsp_server.setup({
-    capabilities = capabilities,
+  vim.lsp.config("dhall_lsp_server", {
     on_attach = create_on_attach({}),
   })
+  vim.lsp.enable("dhall_lsp_server")
 
   -- Go
-  lspconfig.gopls.setup({
-    capabilities = capabilities,
-    on_attach = create_on_attach({}),
+  vim.lsp.config("gopls", {
+    on_attach = create_on_attach({ semantic = false }),
 
     -- See: https://github.com/golang/tools/blob/master/gopls/doc/settings.md
     settings = {
@@ -262,18 +234,19 @@ M.config = function()
       },
     },
   })
+  vim.lsp.enable("gopls")
 
   -- HTML
-  lspconfig.html.setup({
-    capabilities = capabilities,
+  vim.lsp.config("html", {
     on_attach = create_on_attach({}),
   })
+  vim.lsp.enable("html")
 
   -- JSON
-  lspconfig.jsonls.setup({
-    capabilities = capabilities,
+  vim.lsp.config("jsonls", {
     on_attach = create_on_attach({}),
   })
+  vim.lsp.enable("jsonls")
 
   -- Lua
   local lua_ls_blacklist_runtime_files = {
@@ -281,8 +254,7 @@ M.config = function()
     [vim.fs.normalize(HOME .. "/.config/nvim")] = true,
   }
 
-  lspconfig.lua_ls.setup({
-    capabilities = capabilities,
+  vim.lsp.config("lua_ls", {
     on_attach = create_on_attach({ semantic = false }),
 
     -- See: https://github.com/LuaLS/lua-language-server/wiki/Settings
@@ -316,32 +288,17 @@ M.config = function()
       },
     },
   })
+  vim.lsp.enable("lua_ls")
 
   -- Nickel
-  lspconfig.nickel_ls.setup({
+  vim.lsp.config("nickel_ls", {
     capabilities = capabilities,
     on_attach = create_on_attach({}),
   })
-
-  -- Nix
-  -- lspconfig.rnix.setup({
-  --   capabilities = capabilities,
-  --   on_attach = create_on_attach({}),
-  -- })
-
-  -- lspconfig.nixd.setup({
-  --   root_dir = function(fname)
-  --     return lspconfig_util.root_pattern(unpack({ ".nixd.json", "flake.nix" }))(
-  --       fname
-  --     )
-  --     -- or lspconfig_util.find_git_ancestor(fname)
-  --   end,
-  --   capabilities = capabilities,
-  --   on_attach = create_on_attach({ semantic = false }),
-  -- })
+  vim.lsp.enable("nickel_ls")
 
   -- Rust
-  lspconfig.rust_analyzer.setup({
+  vim.lsp.config("rust_analyzer", {
     capabilities = capabilities,
     on_attach = create_on_attach({}),
 
@@ -354,39 +311,39 @@ M.config = function()
       },
     },
   })
+  vim.lsp.enable("rust_analyzer")
 
   -- Svelte.
-  lspconfig.svelte.setup({
-    capabilities = capabilities,
+  vim.lsp.config("svelte", {
     on_attach = create_on_attach({ semantic = false }),
   })
+  vim.lsp.enable("svelte")
 
   -- TypeScript / JavaScript.
-  lspconfig.tsserver.setup({
-    capabilities = capabilities,
+  vim.lsp.config("ts_ls", {
     on_attach = create_on_attach({}),
   })
+  vim.lsp.enable("ts_ls")
 
   -- Terraform.
-  lspconfig.terraformls.setup({
-    capabilities = capabilities,
+  vim.lsp.config("terraformls", {
     on_attach = create_on_attach({ semantic = false }),
   })
+  vim.lsp.enable("terraformls")
 
-  lspconfig.tflint.setup({
-    capabilities = capabilities,
+  vim.lsp.config("tflint", {
     on_attach = create_on_attach({}),
   })
+  vim.lsp.enable("tflint")
 
   -- TOML
-  lspconfig.taplo.setup({
-    capabilities = capabilities,
+  vim.lsp.config("taplo", {
     on_attach = create_on_attach({}),
   })
+  vim.lsp.enable("taplo")
 
   -- YAML
-  lspconfig.yamlls.setup({
-    capabilities = capabilities,
+  vim.lsp.config("yamlls", {
     on_attach = create_on_attach({}),
     handlers = {
       ["textDocument/hover"] = yamlls_hover_handler,
@@ -423,12 +380,13 @@ M.config = function()
       redhat = { telemetry = { enabled = false } },
     },
   })
+  vim.lsp.enable("yamlls")
 
   -- Zig
-  lspconfig.zls.setup({
-    capabilities = capabilities,
+  vim.lsp.config("zls", {
     on_attach = create_on_attach({ semantic = false }),
   })
+  vim.lsp.enable("zls")
 end
 
 --------------------------------------------------------------------------------

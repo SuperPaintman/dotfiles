@@ -52,7 +52,8 @@ packages:
         extraAttrs:
             plugin: neovim/nvim-lspconfig
             # branch: master
-            commit: &commit 0011c435282f043a018e23393cae06ed926c3f4a
+            # version: "2.10.0"
+            commit: &commit 229b79051b380377664edc4cbd534930154921a1
         args:
             owner: neovim
             repo: nvim-lspconfig
@@ -63,7 +64,7 @@ packages:
         extraAttrs:
             plugin: nvimdev/lspsaga.nvim
             # branch: main
-            commit: &commit 7ebd0cc5923c81516c1c050fc9aea70bec23fd02
+            commit: &commit d8511e7a40c93af74305268668ef206dff8e224c
         args:
             owner: nvimdev
             repo: lspsaga.nvim
@@ -217,7 +218,8 @@ packages:
         extraAttrs:
             plugin: folke/trouble.nvim
             # branch: main
-            commit: &commit e7805dc3448f28599e022dc7a0e58060dfdeeb9a
+            # version: "3.7.1"
+            commit: &commit 748ca2789044607f19786b1d837044544c55e80a
         args:
             owner: folke
             repo: trouble.nvim
@@ -327,7 +329,7 @@ packages:
         extraAttrs:
             plugin: ray-x/lsp_signature.nvim
             # branch: master
-            commit: &commit 33250c84c7a552daf28ac607d9d9e82f88cd0907
+            commit: &commit b7ace9ddb1640ce266012a45a672dfdaedfa5ec6
         args:
             owner: ray-x
             repo: lsp_signature.nvim
@@ -354,7 +356,6 @@ packages:
             owner: zbirenbaum
             repo: copilot-cmp
             rev: *commit
-
 
     nvim-nio:
         type: github
