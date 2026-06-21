@@ -40,19 +40,6 @@
     plugin = "akinsho/bufferline.nvim";
   };
 
-  catppuccin = {
-    pname = "catppuccin";
-    version = "0.0.0+rev=8338b02";
-    src = fetchFromGitHub {
-      owner = "catppuccin";
-      repo = "nvim";
-      rev = "8338b02e9a8ffcb999520de7f15943712618760f";
-      sha256 = "sha256-ALeldtRjaFcEbIfAMiPY85aUPFTk+M8LCdJeGz1kqns=";
-    };
-    commit = "8338b02e9a8ffcb999520de7f15943712618760f";
-    plugin = "catppuccin/nvim";
-  };
-
   cmp-buffer = {
     pname = "cmp-buffer";
     version = "0.0.0+rev=3022dbc";

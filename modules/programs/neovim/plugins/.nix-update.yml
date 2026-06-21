@@ -1,17 +1,5 @@
 output: generated.nix
 packages:
-    catppuccin:
-        type: github
-        extraAttrs:
-            plugin: catppuccin/nvim
-            # branch: main
-            # version: "1.2.0"
-            commit: &commit 8338b02e9a8ffcb999520de7f15943712618760f
-        args:
-            owner: catppuccin
-            repo: nvim
-            rev: *commit
-
     plenary-nvim:
         type: github
         extraAttrs:
