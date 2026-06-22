@@ -20,8 +20,7 @@ local CHEATSHEET_NS = vim.api.nvim_create_namespace("marks_cheatsheet")
 --------------------------------------------------------------------------------
 -- Types
 --------------------------------------------------------------------------------
----@alias modules.marks.Entry {bufnr?: integer, lnum: integer, col: integer}
----@alias modules.marks.CheatsheetEntry {name: string, label: string}
+---@alias modules.marks.Entry {name:string, bufnr?: integer, file?: string, lnum: integer, col: integer}
 
 --------------------------------------------------------------------------------
 -- Helpers
@@ -123,6 +122,8 @@ local function resolve(name)
       return nil
     end
     return {
+      name = name,
+      file = m[4] ~= "" and m[4] or nil,
       bufnr = m[3] ~= 0 and m[3] or nil,
       lnum = m[1],
       col = m[2],
@@ -130,9 +131,12 @@ local function resolve(name)
   elseif is_lower(name) then
     for _, buf in ipairs(vim.api.nvim_list_bufs()) do
       if vim.api.nvim_buf_is_valid(buf) then
+        local file = vim.api.nvim_buf_get_name(buf)
         local pos = vim.api.nvim_buf_get_mark(buf, name)
         if pos[1] > 0 then
           return {
+            name = name,
+            file = file ~= "" and file or nil,
             bufnr = buf,
             lnum = pos[1],
             col = pos[2],
@@ -284,14 +288,15 @@ M.delete = function(name)
   end
 end
 
---- Collects all marks.
----@return modules.marks.CheatsheetEntry[]
-M._collect_marks = function()
+--- List all marks.
+---@return modules.marks.Entry[]
+M.list = function()
+  ---@type modules.marks.Entry[]
   local items = {}
 
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
     if vim.api.nvim_buf_is_valid(buf) then
-      local bufname = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ":~:.")
+      local file = vim.api.nvim_buf_get_name(buf)
 
       for c = ("a"):byte(), ("z"):byte() do
         local name = string.char(c)
@@ -299,11 +304,10 @@ M._collect_marks = function()
         if pos[1] > 0 then
           items[#items + 1] = {
             name = name,
-            label = string.format(
-              "%s:%d",
-              bufname ~= "" and bufname or "[No Name]",
-              pos[1]
-            ),
+            bufnr = buf,
+            file = file ~= "" and file or nil,
+            lnum = pos[1],
+            col = pos[2],
           }
         end
       end
@@ -315,7 +319,9 @@ M._collect_marks = function()
     if is_upper(name) or m.mark == "'" then
       items[#items + 1] = {
         name = name,
-        label = string.format("%s:%d", vim.fn.fnamemodify(m.file, ":~:."), m.pos[2]),
+        file = vim.fn.fnamemodify(m.file, ":p"),
+        lnum = m.pos[2],
+        col = m.pos[3] - 1,
       }
     end
   end
@@ -327,7 +333,7 @@ M._collect_marks = function()
   return items
 end
 
----@param items modules.marks.CheatsheetEntry[]
+---@param items modules.marks.Entry[]
 ---@return string[], integer[][]
 M._cheatsheet_layout = function(items)
   if #items == 0 then
@@ -354,8 +360,10 @@ M._cheatsheet_layout = function(items)
     hls[#hls + 1] = { r - 1, hstart, hend, M._styles.sep }
     hstart = hend + 1
 
-    text = text .. " " .. it.label
-    hend = hstart + #it.label
+    local bufname = vim.fn.fnamemodify(it.file or "[No Name]", ":~:.")
+    local label = string.format("%s:%d", bufname, it.lnum)
+    text = text .. " " .. label
+    hend = hstart + #label
     hls[#hls + 1] = { r - 1, hstart, hend, M._styles.desc }
     hstart = hend + 1
 
@@ -374,7 +382,7 @@ M._close_cheatsheet = function()
   M._cheatsheet_win = nil
 end
 
----@param items modules.marks.CheatsheetEntry[]
+---@param items modules.marks.Entry[]
 M._open_cheatsheet = function(items)
   local lines, hls = M._cheatsheet_layout(items)
 
@@ -418,7 +426,7 @@ end
 ---@return string
 M._prompt = function()
   if M._active then
-    local marks = M._collect_marks()
+    local marks = M.list()
     M._open_cheatsheet(marks)
     vim.cmd("redraw")
   end

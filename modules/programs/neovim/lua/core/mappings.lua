@@ -236,6 +236,7 @@ M.groups.f = {
     h = { "n", telescope.find_help_tags(), "Find help tags" },
     r = { "n", telescope.find_recent_files(), "Find recent files" },
     w = { "n", telescope.find_words(), "Find words" },
+    m = { "n", telescope.find_marks(), "Find marks" },
   },
 }
 
