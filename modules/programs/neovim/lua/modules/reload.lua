@@ -16,6 +16,7 @@ local RELOADABLE = {
   "configs.nvim-treesitter",
   "configs.telescope-nvim",
 
+  "modules.tmux",
   "modules.statuscolumn",
   "modules.marks",
   "modules.lsp",

@@ -14,7 +14,7 @@ local ui = require("core.ui")
 local autocmd = vim.api.nvim_create_autocmd
 local augroup = vim.api.nvim_create_augroup
 
----@class module.diagnostic.Module
+---@class modules.diagnostic.Module
 local M = {}
 
 local OK = 5
@@ -45,7 +45,7 @@ local signs = {
 --------------------------------------------------------------------------------
 -- Types
 --------------------------------------------------------------------------------
----@class module.diagnostic.Diagnostic
+---@class modules.diagnostic.Diagnostic
 ---@field _tags table?
 ---@field bufnr number
 ---@field code string
@@ -78,7 +78,7 @@ M.setup = function(opts)
     virtual_text = {
       prefix = " " .. ui.icons.diagnostic.Virtual .. " ",
       suffix = " ",
-      ---@param diagnostic module.diagnostic.Diagnostic
+      ---@param diagnostic modules.diagnostic.Diagnostic
       format = function(diagnostic)
         local fmt = diagnostic.message
 
@@ -118,7 +118,7 @@ M.setup = function(opts)
       header = false,
       source = false,
       prefix = "",
-      ---@param diagnostic module.diagnostic.Diagnostic
+      ---@param diagnostic modules.diagnostic.Diagnostic
       format = function(diagnostic)
         diagnostic.user_data = diagnostic.user_data or {}
         diagnostic.user_data.orig_message = diagnostic.message
@@ -136,7 +136,7 @@ M.setup = function(opts)
 
         return icon .. "  "
       end,
-      ---@param diagnostic module.diagnostic.Diagnostic
+      ---@param diagnostic modules.diagnostic.Diagnostic
       suffix = function(diagnostic)
         local suffix = diagnostic.user_data.orig_message
 

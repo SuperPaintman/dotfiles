@@ -286,7 +286,7 @@ end
 
 --- Collects all marks.
 ---@return modules.marks.CheatsheetEntry[]
-function M._collect_marks()
+M._collect_marks = function()
   local items = {}
 
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
@@ -329,7 +329,7 @@ end
 
 ---@param items modules.marks.CheatsheetEntry[]
 ---@return string[], integer[][]
-function M._cheatsheet_layout(items)
+M._cheatsheet_layout = function(items)
   if #items == 0 then
     return { " no marks" }, {}
   end
@@ -367,7 +367,7 @@ function M._cheatsheet_layout(items)
   return lines, hls
 end
 
-function M._close_cheatsheet()
+M._close_cheatsheet = function()
   if M._cheatsheet_win ~= nil and vim.api.nvim_win_is_valid(M._cheatsheet_win) then
     vim.api.nvim_win_close(M._cheatsheet_win, true)
   end
@@ -375,7 +375,7 @@ function M._close_cheatsheet()
 end
 
 ---@param items modules.marks.CheatsheetEntry[]
-function M._open_cheatsheet(items)
+M._open_cheatsheet = function(items)
   local lines, hls = M._cheatsheet_layout(items)
 
   local buf = vim.api.nvim_create_buf(false, true)
@@ -416,7 +416,7 @@ end
 
 --- Prompts for a mark.
 ---@return string
-function M._prompt()
+M._prompt = function()
   if M._active then
     local marks = M._collect_marks()
     M._open_cheatsheet(marks)
@@ -486,21 +486,33 @@ M.setup = function(opts)
 
   vim.keymap.set("n", "m", function()
     M.set(vim.fn.getcharstr())
-  end, { desc = "Set mark" })
+  end, {
+    desc = "Set mark",
+    remap = false,
+    silent = true,
+  })
 
   vim.keymap.set("n", "`", function()
     local c = M._prompt()
     if c ~= "" then
       M.jump(c, true)
     end
-  end, { desc = "Jump to mark (exact)" })
+  end, {
+    desc = "Jump to mark (exact)",
+    remap = false,
+    silent = true,
+  })
 
   vim.keymap.set("n", "'", function()
     local c = M._prompt()
     if c ~= "" then
       M.jump(c, false)
     end
-  end, { desc = "Jump to mark (line)" })
+  end, {
+    desc = "Jump to mark (line)",
+    remap = false,
+    silent = true,
+  })
 
   command("MarksDelete", function(event)
     M.delete(event.fargs[1])
