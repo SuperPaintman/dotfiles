@@ -391,6 +391,19 @@
     plugin = "nvim-lua/plenary.nvim";
   };
 
+  quicker-nvim = {
+    pname = "quicker-nvim";
+    version = "0.0.0+rev=4a6883c";
+    src = fetchFromGitHub {
+      owner = "stevearc";
+      repo = "quicker.nvim";
+      rev = "4a6883cb13fe097a20a046eb55f6dffd239276e3";
+      sha256 = "sha256-CVW0GJhSD/J4iSFgGpXlTWViPePIlw+Wu3tF9urWMIE=";
+    };
+    commit = "4a6883cb13fe097a20a046eb55f6dffd239276e3";
+    plugin = "stevearc/quicker.nvim";
+  };
+
   telescope-nvim = {
     pname = "telescope-nvim";
     version = "0.0.0+rev=f04ab73";

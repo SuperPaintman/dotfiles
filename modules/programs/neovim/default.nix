@@ -266,6 +266,9 @@ let
       # Editing.
       p.comment-nvim.lazy
 
+      # QuickFix.
+      p.quicker-nvim.lazy
+
       # Sessions.
       p.auto-session.lazy
 

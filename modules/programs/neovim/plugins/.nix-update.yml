@@ -368,3 +368,15 @@ packages:
             owner: theHamsta
             repo: nvim-dap-virtual-text
             rev: *commit
+
+    quicker-nvim:
+        type: github
+        extraAttrs:
+            plugin: stevearc/quicker.nvim
+            # branch: master
+            # version: v1.5.1
+            commit: &commit 4a6883cb13fe097a20a046eb55f6dffd239276e3
+        args:
+            owner: stevearc
+            repo: quicker.nvim
+            rev: *commit

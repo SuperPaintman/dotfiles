@@ -137,7 +137,19 @@ M.setup = function(opts)
 
   -- Quick Fix.
   h("qfFileName", { fg = palette.colors.yellow })
+  l("QuickFixFilename", "qfFileName")
+
   h("qfLineNr", { fg = palette.colors.magenta })
+  l("QuickFixLineNr", "qfLineNr")
+
+  h("QuickFixNormal", {
+    fg = palette.colors.foreground,
+    bg = palette.colors.base2,
+  })
+
+  l("QuickFixNormalNC", "QuickFixNormal")
+
+  unset("QuickFixLine")
 
   -- Diagnostic
   h("DiagnosticVirtualTextError", {

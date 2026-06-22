@@ -312,6 +312,9 @@ setup({
   -- Editing.
   { "numToStr/Comment.nvim",   opts = {} },
 
+  -- QuickFix.
+  "stevearc/quicker.nvim",
+
   -- Sessions.
   "rmagatti/auto-session",
 

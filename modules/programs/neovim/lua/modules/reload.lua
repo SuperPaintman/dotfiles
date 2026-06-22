@@ -18,6 +18,7 @@ local RELOADABLE = {
 
   "modules.tmux",
   "modules.statuscolumn",
+  "modules.quickfix",
   "modules.marks",
   "modules.lsp",
   "modules.contextsigns",

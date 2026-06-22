@@ -6,6 +6,7 @@ local bufferline = require("configs.bufferline-nvim").mappings
 local telescope = require("configs.telescope-nvim").mappings
 local luasnip = require("configs.luasnip").mappings
 local lspsaga = require("configs.lspsaga-nvim").mappings
+local quickfix = require("modules.quickfix").mappings
 
 --------------------------------------------------------------------------------
 -- Init
@@ -249,7 +250,7 @@ M.groups.g = {
   },
 }
 
---- Refactoring.
+--- Refactoring
 M.groups.r = {
   name = "refactoring",
   prefix = "<leader>r",
@@ -269,6 +270,21 @@ M.groups.t = {
     r = { "n", [[:NvimTreeRefresh<CR>]], "Refresh" },
   },
 }
+
+--- QuickFix
+M.groups.q = {
+  name = "quickfix",
+  prefix = "<leader>q",
+  mappings = {
+    q = { "n", quickfix.open(), "Open" },
+    x = { "n", quickfix.close(), "Close" },
+    X = { "n", quickfix.clean(), "Clean and close" },
+    -- h = { "n", quickfix.prev(), "Prev" },
+    -- l = { "n", quickfix.next(), "Next" },
+  },
+}
+M.mappings["<C-n>"] = { { "n", quickfix.next(), "Next" } }
+M.mappings["<C-p>"] = { { "n", quickfix.prev(), "Prev" } }
 
 --- Yank
 M.mappings["<leader>y"] = { { "n", "v" }, [["+y]], "Yank to clipboard" }
