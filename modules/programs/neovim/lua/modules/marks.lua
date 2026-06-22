@@ -193,6 +193,12 @@ local function buf_window(buf)
     return nil
   end
 
+  -- Prefer the current window.
+  local cur = vim.api.nvim_get_current_win()
+  if vim.api.nvim_win_get_buf(cur) == buf then
+    return cur
+  end
+
   for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
     if vim.api.nvim_win_get_buf(win) == buf then
       return win
