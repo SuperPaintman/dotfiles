@@ -247,6 +247,7 @@ M.groups.g = {
   prefix = "<leader>g",
   mappings = {
     g = { "n", neogit.open(), "Open Neogit" },
+    d = { "n", [[:CodeDiff<CR>]], "Open diff view" },
   },
 }
 

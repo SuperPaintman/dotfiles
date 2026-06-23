@@ -1,0 +1,170 @@
+diff --git a/lua/codediff/commands.lua b/lua/codediff/commands.lua
+index f3c5634..43fa5c0 100644
+--- a/lua/codediff/commands.lua
++++ b/lua/codediff/commands.lua
+@@ -2,7 +2,8 @@
+ local M = {}
+ 
+ -- Subcommands available for :CodeDiff
+-M.SUBCOMMANDS = { "merge", "file", "dir", "history", "install" }
++-- M.SUBCOMMANDS = { "merge", "file", "dir", "history", "install" }
++M.SUBCOMMANDS = { "merge", "file", "dir", "history" } -- NIX PATCH: never install
+ 
+ local git = require("codediff.core.git")
+ local lifecycle = require("codediff.ui.lifecycle")
+@@ -769,23 +770,24 @@ function M.vscode_diff(opts)
+     end
+ 
+     handle_history(range, file_path, flags, line_range, global_opts)
+-  elseif subcommand == "install" or subcommand == "install!" then
+-    -- :CodeDiff install or :CodeDiff install!
+-    -- Handle both :CodeDiff! install and :CodeDiff install!
+-    local force = opts.bang or subcommand == "install!"
+-    local installer = require("codediff.core.installer")
+-
+-    if force then
+-      vim.notify("Reinstalling libvscode-diff...", vim.log.levels.INFO)
+-    end
+-
+-    local success, err = installer.install({ force = force, silent = false })
+-
+-    if success then
+-      vim.notify("libvscode-diff installation successful!", vim.log.levels.INFO)
+-    else
+-      vim.notify("Installation failed: " .. (err or "unknown error"), vim.log.levels.ERROR)
+-    end
++  -- NIX PATCH: never install
++  -- elseif subcommand == "install" or subcommand == "install!" then
++  --   -- :CodeDiff install or :CodeDiff install!
++  --   -- Handle both :CodeDiff! install and :CodeDiff install!
++  --   local force = opts.bang or subcommand == "install!"
++  --   local installer = require("codediff.core.installer")
++  --
++  --   if force then
++  --     vim.notify("Reinstalling libvscode-diff...", vim.log.levels.INFO)
++  --   end
++  --
++  --   local success, err = installer.install({ force = force, silent = false })
++  --
++  --   if success then
++  --     vim.notify("libvscode-diff installation successful!", vim.log.levels.INFO)
++  --   else
++  --     vim.notify("Installation failed: " .. (err or "unknown error"), vim.log.levels.ERROR)
++  --   end
+   else
+     -- :CodeDiff <revision> [revision2] - opens explorer mode
+     -- Check for triple-dot syntax: :CodeDiff main...
+diff --git a/lua/codediff/core/diff.lua b/lua/codediff/core/diff.lua
+index b2fbe1f..a1345c9 100644
+--- a/lua/codediff/core/diff.lua
++++ b/lua/codediff/core/diff.lua
+@@ -19,31 +19,34 @@ else
+ end
+ 
+ -- Build versioned library filename
+-local path_util = require("codediff.core.path")
+-local plugin_root = path_util.get_plugin_root()
+-local lib_name = string.format("libvscode_diff_%s.%s", VERSION, lib_ext)
+-local lib_path = plugin_root .. "/" .. lib_name
++-- NIX PATCH: no need to check the version
++-- local path_util = require("codediff.core.path")
++-- local plugin_root = path_util.get_plugin_root()
++-- local lib_name = string.format("libvscode_diff_%s.%s", VERSION, lib_ext)
++-- local lib_path = plugin_root .. "/" .. lib_name
++local lib_path = "{{ CODEDIFF_LIB_PATH }}"
+ 
+ -- Check if library exists or needs update, if so, install/update it
+ -- Skip auto-installation if explicitly disabled (e.g., in tests where library is already built)
+-local installer = require("codediff.core.installer")
+-if not vim.env.VSCODE_DIFF_NO_AUTO_INSTALL and installer.needs_update() then
+-  local success, err = installer.install({ silent = false })
+-  if not success then
+-    error(
+-      string.format(
+-        "libvscode-diff not found and automatic installation failed: %s\n"
+-          .. "Troubleshooting:\n"
+-          .. "1. Check that curl or wget is installed\n"
+-          .. "2. Verify internet connectivity to github.com\n"
+-          .. "3. Try manual install: :CodeDiff install!\n"
+-          .. "4. Or build from source: run 'make' (Unix) or 'build.cmd' (Windows)\n"
+-          .. "5. Download manually from: https://github.com/esmuellert/vscode-diff.nvim/releases",
+-        err or "unknown error"
+-      )
+-    )
+-  end
+-end
++-- NIX PATCH: never install
++-- local installer = require("codediff.core.installer")
++-- if not vim.env.VSCODE_DIFF_NO_AUTO_INSTALL and installer.needs_update() then
++--   local success, err = installer.install({ silent = false })
++--   if not success then
++--     error(
++--       string.format(
++--         "libvscode-diff not found and automatic installation failed: %s\n"
++--           .. "Troubleshooting:\n"
++--           .. "1. Check that curl or wget is installed\n"
++--           .. "2. Verify internet connectivity to github.com\n"
++--           .. "3. Try manual install: :CodeDiff install!\n"
++--           .. "4. Or build from source: run 'make' (Unix) or 'build.cmd' (Windows)\n"
++--           .. "5. Download manually from: https://github.com/esmuellert/vscode-diff.nvim/releases",
++--         err or "unknown error"
++--       )
++--     )
++--   end
++-- end
+ 
+ -- Try to load the library - fall back to unversioned name for local builds
+ local lib
+@@ -52,14 +55,16 @@ local load_ok, load_err = pcall(function()
+ end)
+ 
+ if not load_ok then
++  error("codediff.nvim: NIX PATCH: lib is missing: " .. load_err)
++
+   -- Try fallback to unversioned library (for local builds and tests)
+-  local fallback_lib_name = "libvscode_diff." .. lib_ext
+-  local fallback_path = plugin_root .. "/" .. fallback_lib_name
+-  if vim.fn.filereadable(fallback_path) == 1 then
+-    lib = ffi.load(fallback_path)
+-  else
+-    error(load_err)
+-  end
++  -- local fallback_lib_name = "libvscode_diff." .. lib_ext
++  -- local fallback_path = plugin_root .. "/" .. fallback_lib_name
++  -- if vim.fn.filereadable(fallback_path) == 1 then
++  --   lib = ffi.load(fallback_path)
++  -- else
++  --   error(load_err)
++  -- end
+ end
+ 
+ -- FFI type definitions matching C types.h
+diff --git a/lua/codediff/core/installer.lua b/lua/codediff/core/installer.lua
+index beb25af..cf0195c 100644
+--- a/lua/codediff/core/installer.lua
++++ b/lua/codediff/core/installer.lua
+@@ -1,3 +1,4 @@
++error("codediff.nvim: NIX PATCH: never install from the internet")
+ -- Automatic installer for libvscode-diff binary
+ -- Downloads pre-built binaries from GitHub releases
+ 
+@@ -563,4 +564,6 @@ function M.needs_update()
+   return current_version ~= installed_version
+ end
+ 
+-return M
++-- NIX PATCH: never install from the internet
++return {}
++-- return M
+diff --git a/lua/codediff/version.lua b/lua/codediff/version.lua
+index b49e279..f2d0efa 100644
+--- a/lua/codediff/version.lua
++++ b/lua/codediff/version.lua
+@@ -1,3 +1,8 @@
++-- NIX PATCH: no need to check version
++if true then
++  return { VERSION = "{{ CODEDIFF_VERSION }}" }
++end
++
+ -- Version management - single source of truth for VERSION
+ local M = {}

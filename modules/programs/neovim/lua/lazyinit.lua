@@ -307,7 +307,8 @@ setup({
   -- Git.
   { "lewis6991/gitsigns.nvim", opts = {}, event = "VeryLazy" },
   "NeogitOrg/neogit",
-  { "sindrets/diffview.nvim",  opts = {}, lazy = true },
+  -- { "sindrets/diffview.nvim", opts = {},  lazy = true, cmd = "DiffviewOpen" },
+  "esmuellert/codediff.nvim",
 
   -- Editing.
   { "numToStr/Comment.nvim",   opts = {} },

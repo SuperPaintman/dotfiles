@@ -427,6 +427,13 @@ M.setup = function(opts)
   h("NeogitNotificationWarning", { fg = palette.colors.yellow })
   h("NeogitNotificationError", { fg = palette.colors.red })
 
+  --- CodeDiff
+  h("CodeDiffExplorerNormal", {
+    fg = palette.colors.foreground,
+    bg = palette.colors.base2,
+  })
+  l("CodeDiffExplorerNormalNC", "CodeDiffExplorerNormal")
+
   --- NvimTree
   h("NvimTreeNormal", {
     fg = palette.colors.foreground,

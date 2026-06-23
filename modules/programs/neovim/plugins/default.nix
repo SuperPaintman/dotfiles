@@ -20,6 +20,8 @@ let
 in
 
 generatedPlugins // {
+  codediff-nvim = callPackage ./codediff-nvim { inherit neovim; };
+
   lazy-nvim = callPackage ./lazy-nvim { inherit neovim; };
 
   nvim-treesitter = callPackage ./nvim-treesitter { inherit neovim; };

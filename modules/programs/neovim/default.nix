@@ -225,7 +225,7 @@ let
       p.telescope-nvim.lazy
 
       # TreeSitter.
-      (nativePlugins.nvim-treesitter.withParsers
+      (p.nvim-treesitter.withParsers
         (p:
           (map (lang: p."tree-sitter-${lang}") treesitterLanguages)
           ++ [
@@ -262,6 +262,7 @@ let
       p.gitsigns-nvim.lazy
       p.neogit.lazy
       p.diffview-nvim.lazy
+      p.codediff-nvim.lazy
 
       # Editing.
       p.comment-nvim.lazy

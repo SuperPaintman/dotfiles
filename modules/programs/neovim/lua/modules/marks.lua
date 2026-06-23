@@ -455,7 +455,9 @@ M.attach = function()
 
   vim.fn.mkdir(M.options.shada_projects_dir, "p")
   vim.o.shadafile = M.options.shada_projects_dir .. "/" .. project_key(root) .. ".shada"
-  vim.cmd("rshada!")
+  pcall(function()
+    vim.cmd("rshada!")
+  end)
 end
 
 M.detach = function()
