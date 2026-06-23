@@ -16,14 +16,14 @@
 
   auto-session = {
     pname = "auto-session";
-    version = "0.0.0+rev=7afbb14";
+    version = "0.0.0+rev=f2d4aa4";
     src = fetchFromGitHub {
       owner = "rmagatti";
       repo = "auto-session";
-      rev = "7afbb149f87be279778689596c781882014f7eef";
-      sha256 = "sha256-bmNrQQnaA+c9DsSTChS87Ir9+xlhlue9yl4VmqXWaB8=";
+      rev = "f2d4aa475fe86995fcda0da877b873791af8d73e";
+      sha256 = "sha256-WeyPWr7HvXlgUe7NrWIhiSeve2AYtKUgqNVl0WY4Jr8=";
     };
-    commit = "7afbb149f87be279778689596c781882014f7eef";
+    commit = "f2d4aa475fe86995fcda0da877b873791af8d73e";
     plugin = "rmagatti/auto-session";
   };
 
@@ -133,14 +133,14 @@
 
   gitsigns-nvim = {
     pname = "gitsigns-nvim";
-    version = "0.0.0+rev=dc2962f";
+    version = "0.0.0+rev=a462f41";
     src = fetchFromGitHub {
       owner = "lewis6991";
       repo = "gitsigns.nvim";
-      rev = "dc2962f7fce953a2a98e7c6d3d7fc4c1d1f66758";
-      sha256 = "sha256-FomOBFwUrvE4QaQ49J86zIafvEde6cNsiNbJ3JzVK58=";
+      rev = "a462f416e2ce4744531c6256252dee99a7d34a83";
+      sha256 = "sha256-ETVmrlUXmCiekjd68mY8657wg9CdQk/rPRv5ABO9pxk=";
     };
-    commit = "dc2962f7fce953a2a98e7c6d3d7fc4c1d1f66758";
+    commit = "a462f416e2ce4744531c6256252dee99a7d34a83";
     plugin = "lewis6991/gitsigns.nvim";
   };
 

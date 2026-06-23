@@ -2,6 +2,7 @@
 -- Imports
 --------------------------------------------------------------------------------
 local neogit = require("configs.neogit").mappings
+local gitsigns = require("configs.gitsigns-nvim").mappings
 local bufferline = require("configs.bufferline-nvim").mappings
 local telescope = require("configs.telescope-nvim").mappings
 local luasnip = require("configs.luasnip").mappings
@@ -247,7 +248,7 @@ M.groups.g = {
   prefix = "<leader>g",
   mappings = {
     g = { "n", neogit.open(), "Open Neogit" },
-    d = { "n", [[:CodeDiff<CR>]], "Open diff view" },
+    d = { "n", gitsigns.diff(), "Toggle diff view" },
   },
 }
 

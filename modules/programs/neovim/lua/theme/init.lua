@@ -119,19 +119,23 @@ M.setup = function(opts)
 
   -- Diff
   h("DiffAdd", {
-    fg = palette.colors.green,
+    -- fg = palette.colors.green,
+    fg = "NONE",
     bg = colors.mix(palette.colors.background, palette.colors.green, 0.15),
   })
   h("DiffChange", {
-    fg = palette.colors.yellow,
+    -- fg = palette.colors.yellow,
+    fg = "NONE",
     bg = colors.mix(palette.colors.background, palette.colors.yellow, 0.15),
   })
   h("DiffText", {
-    fg = palette.colors.yellow,
+    -- fg = palette.colors.yellow,
+    fg = "NONE",
     bg = colors.mix(palette.colors.background, palette.colors.yellow, 0.3),
   })
   h("DiffDelete", {
-    fg = palette.colors.red,
+    -- fg = palette.colors.red,
+    fg = "NONE",
     bg = colors.mix(palette.colors.background, palette.colors.red, 0.15),
   })
 
@@ -404,6 +408,12 @@ M.setup = function(opts)
   h("GitSignsDelete", { fg = palette.colors.red })
   l("GitSignsAddPreview", "DiffAdd")
   l("GitSignsDeletePreview", "DiffDelete")
+  l("GitSignsDiffAddLeft", "DiffDelete")
+  h("GitSignsDiffDeleteLeft", {
+    fg = colors.mix(palette.colors.background, palette.colors.base3, 0.25),
+    bg = colors.mix(palette.colors.background, palette.colors.base2, 0.25),
+  })
+  -- l("GitSignsDiffDeleteLeft", "Folded")
 
   --- Neogit
   h("NeogitBranch", { fg = palette.colors.green })

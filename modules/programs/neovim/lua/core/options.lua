@@ -61,7 +61,7 @@ opt.expandtab = true
 
 -- Characters to fill the statuslines, vertical separators and special lines in
 -- the window.
-opt.fillchars = { eob = "~" }
+opt.fillchars = { eob = "~", diff = "/" }
 
 -- When off, all folds are open.
 --
@@ -176,8 +176,8 @@ opt.tabstop = 2
 
 -- Enables 24-bit RGB color in the TUI.
 if
-  (env.TERM or ""):sub(-1 * string.len("-256color")) == "-256color"
-  or env.COLORTERM == "truecolor"
+    (env.TERM or ""):sub(-1 * string.len("-256color")) == "-256color"
+    or env.COLORTERM == "truecolor"
 then
   opt.termguicolors = true
 end

@@ -46,7 +46,7 @@ local function button(sc, txt, keybind, keybind_opts)
   }
   if keybind then
     keybind_opts = keybind_opts
-      or { noremap = true, silent = true, nowait = true }
+        or { noremap = true, silent = true, nowait = true }
     opts.keymap = { "n", sc, keybind, keybind_opts }
   end
 

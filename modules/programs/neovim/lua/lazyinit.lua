@@ -305,13 +305,13 @@ setup({
   "mfussenegger/nvim-dap",
 
   -- Git.
-  { "lewis6991/gitsigns.nvim", opts = {}, event = "VeryLazy" },
+  "lewis6991/gitsigns.nvim",
   "NeogitOrg/neogit",
   -- { "sindrets/diffview.nvim", opts = {},  lazy = true, cmd = "DiffviewOpen" },
-  "esmuellert/codediff.nvim",
+  -- "esmuellert/codediff.nvim",
 
   -- Editing.
-  { "numToStr/Comment.nvim",   opts = {} },
+  { "numToStr/Comment.nvim", opts = {} },
 
   -- QuickFix.
   "stevearc/quicker.nvim",

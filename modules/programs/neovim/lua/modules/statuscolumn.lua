@@ -20,7 +20,7 @@ local M = {
 --------------------------------------------------------------------------------
 -- Types
 --------------------------------------------------------------------------------
----@alias modules.statuscolumn.Sign {name: string, text: string, texthl: string}
+---@alias modules.statuscolumn.Sign {name: string, text: string, texthl?: string, numhl?: string, priority?: integer}
 
 --------------------------------------------------------------------------------
 -- Helpers
@@ -91,20 +91,50 @@ end
 
 ---@return modules.statuscolumn.Sign[]
 local function get_signs()
-  if vim.g.statusline_winid == nil then
+  local win = vim.g.statusline_winid
+  if win == nil then
     return {}
   end
 
-  local buf = vim.api.nvim_win_get_buf(vim.g.statusline_winid)
-  local buf_signs =
-      vim.fn.sign_getplaced(buf, { group = "*", lnum = vim.v.lnum })[1]
-  if buf_signs == nil then
-    return {}
+  local buf = vim.api.nvim_win_get_buf(win)
+  local lnum = vim.v.lnum
+  local signs = {}
+
+  local placed = vim.fn.sign_getplaced(buf, { group = "*", lnum = lnum })[1]
+  if placed and placed.signs then
+    for _, s in ipairs(placed.signs) do
+      local def = vim.fn.sign_getdefined(s.name)[1]
+      if def then
+        table.insert(signs, {
+          name = s.name,
+          text = def.text,
+          texthl = def.texthl,
+          numhl = def.numhl,
+          priority = s.priority,
+        })
+      end
+    end
   end
 
-  local signs = vim.tbl_map(function(sign)
-    return vim.fn.sign_getdefined(sign.name)[1]
-  end, buf_signs.signs or {})
+  local extmarks = vim.api.nvim_buf_get_extmarks(
+    buf,
+    -1,
+    { lnum - 1, 0 },
+    { lnum - 1, -1 },
+    { details = true, type = "sign" }
+  )
+  for _, ext in ipairs(extmarks) do
+    local d = ext[4]
+    if d and d.sign_text then
+      table.insert(signs, {
+        name = d.sign_name or d.sign_hl_group or "",
+        text = d.sign_text or "",
+        texthl = d.sign_hl_group,
+        numhl = d.number_hl_group,
+        priority = d.priority or 0,
+      })
+    end
+  end
 
   return signs
 end
@@ -114,21 +144,21 @@ end
 ---@return modules.statuscolumn.Sign?
 local function get_mark_sign(buf, lnum)
   for _, m in ipairs(vim.fn.getmarklist(buf)) do
-    local letter = m.mark:sub(2)
-    if letter:match("^%l$") and m.pos[2] == lnum then
-      return { name = "Mark", text = letter, texthl = "StatusColumnMark" }
+    if m.pos[2] == lnum then
+      local letter = m.mark:sub(2)
+      if letter:match("^%l$") then
+        return { name = "Mark", text = letter, texthl = "StatusColumnMark", numhl = "StatusColumnMarkLineNr" }
+      end
     end
   end
 
   local name = vim.api.nvim_buf_get_name(buf)
   for _, m in ipairs(vim.fn.getmarklist()) do
-    local letter = m.mark:sub(2)
-    if
-        letter:match("^%u$")
-        and m.pos[2] == lnum
-        and vim.fn.fnamemodify(m.file, ":p") == name
-    then
-      return { name = "Mark", text = letter, texthl = "StatusColumnMark" }
+    if m.pos[2] == lnum then
+      local letter = m.mark:sub(2)
+      if letter:match("^%u$") and vim.fn.fnamemodify(m.file, ":p") == name then
+        return { name = "Mark", text = letter, texthl = "StatusColumnMark", numhl = "StatusColumnMarkLineNr" }
+      end
     end
   end
 
@@ -228,7 +258,11 @@ M.statuscolumn = function()
 
   ---@param sign modules.statuscolumn.Sign
   local function insert_sign(sign)
-    insert("%#" .. sign.texthl .. "#" .. sign.text .. "%*")
+    if sign.texthl ~= nil then
+      insert("%#" .. sign.texthl .. "#" .. sign.text .. "%*")
+    else
+      insert(sign.text)
+    end
   end
 
   -- Marks.
@@ -317,10 +351,10 @@ M.statuscolumn = function()
   local cur_line = unpack(vim.api.nvim_win_get_cursor(0))
   local close_line_color = false
   if vim.o.number and vim.v.lnum ~= cur_line then
-    if mark_sign ~= nil then
-      insert("%#" .. "StatusColumnMarkLineNr" .. "#")
+    if mark_sign ~= nil and mark_sign.numhl then
+      insert("%#" .. mark_sign.numhl .. "#")
       close_line_color = true
-    elseif context_sign ~= nil then
+    elseif context_sign ~= nil and context_sign.texthl ~= nil then
       insert("%#" .. context_sign.texthl .. "#")
       close_line_color = true
     end
