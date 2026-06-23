@@ -410,7 +410,7 @@ M.setup = function(opts)
   l("GitSignsDeletePreview", "DiffDelete")
   l("GitSignsDiffAddLeft", "DiffDelete")
   h("GitSignsDiffDeleteLeft", {
-    fg = colors.mix(palette.colors.background, palette.colors.base3, 0.25),
+    fg = colors.mix(palette.colors.background, palette.colors.base4, 0.25),
     bg = colors.mix(palette.colors.background, palette.colors.base2, 0.25),
   })
   -- l("GitSignsDiffDeleteLeft", "Folded")
