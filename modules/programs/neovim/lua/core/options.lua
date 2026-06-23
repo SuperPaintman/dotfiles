@@ -61,7 +61,7 @@ opt.expandtab = true
 
 -- Characters to fill the statuslines, vertical separators and special lines in
 -- the window.
-opt.fillchars = { eob = "~", diff = "/" }
+opt.fillchars = { eob = "~", diff = "╱" }
 
 -- When off, all folds are open.
 --
