@@ -64,11 +64,9 @@ M._toggle_diffthis = function()
 
   for _, win in ipairs(wins_all) do
     if vim.api.nvim_win_is_valid(win) then
-      vim.api.nvim_win_call(win, function()
-        if vim.wo.diff then
-          vim.cmd("diffoff")
-        end
-      end)
+      if vim.wo[win].diff then
+        vim.api.nvim_win_call(win, function() vim.cmd("diffoff") end)
+      end
     end
   end
 
