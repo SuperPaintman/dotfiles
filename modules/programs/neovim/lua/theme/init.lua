@@ -50,7 +50,7 @@ local function l(group, link, opts)
 end
 
 ---@param group string
-local function unset(group)
+local function u(group)
   h(group, {})
 end
 
@@ -153,7 +153,7 @@ M.setup = function(opts)
 
   l("QuickFixNormalNC", "QuickFixNormal")
 
-  unset("QuickFixLine")
+  u("QuickFixLine")
 
   -- Diagnostic
   for _, d in ipairs({
@@ -306,9 +306,9 @@ M.setup = function(opts)
 
   -- Language Specific / Treesitter / LSP
   --- Go
-  unset("@lsp.type.variable.go")
-  unset("@lsp.type.namespace.go")
-  unset("@module.go")
+  u("@lsp.type.variable.go")
+  u("@lsp.type.namespace.go")
+  u("@module.go")
 
   --- Rust
   l("@lsp.type.macro.rust", "@function.macro")
@@ -353,8 +353,8 @@ M.setup = function(opts)
   l("@type.selector.class.css", "@type.selector.css")
   h("@property.name.css", { fg = palette.colors.yellow })
   h("@constant.unit.css", { fg = palette.colors.red })
-  unset("@property.css")
-  unset("@punctuation.delimiter.css")
+  u("@property.css")
+  u("@punctuation.delimiter.css")
 
   --- Svelte
   l("@tag.svelte", "@tag.html")
