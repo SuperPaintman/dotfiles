@@ -1,1 +1,5 @@
 /.tests
+
+# Symlinks
+/lua/lazylock.lua
+/lua/theme/palette.lua
