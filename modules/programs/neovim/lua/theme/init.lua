@@ -156,25 +156,22 @@ M.setup = function(opts)
   unset("QuickFixLine")
 
   -- Diagnostic
-  h("DiagnosticVirtualTextError", {
-    fg = palette.colors.darkRed,
-    bg = colors.mix(palette.colors.background, palette.colors.darkRed, 0.15),
-  })
+  for _, d in ipairs({
+    { "Ok",    palette.colors.green },
+    { "Hint",  palette.colors.blue },
+    { "Info",  palette.colors.foreground },
+    { "Warn",  palette.colors.darkYellow },
+    { "Error", palette.colors.darkRed },
+  }) do
+    local level, color = d[1], d[2]
 
-  h("DiagnosticVirtualTextWarn", {
-    fg = palette.colors.darkYellow,
-    bg = colors.mix(palette.colors.background, palette.colors.darkYellow, 0.15),
-  })
+    h("Diagnostic" .. level, { fg = color })
 
-  h("DiagnosticVirtualTextInfo", {
-    fg = palette.colors.foreground,
-    bg = colors.mix(palette.colors.background, palette.colors.foreground, 0.15),
-  })
-
-  h("DiagnosticVirtualTextHint", {
-    fg = palette.colors.blue,
-    bg = colors.mix(palette.colors.background, palette.colors.blue, 0.15),
-  })
+    h("DiagnosticVirtualText" .. level, {
+      fg = color,
+      bg = colors.mix(palette.colors.background, color, 0.15),
+    })
+  end
 
   -- Sytax
   --- Comment.
@@ -509,13 +506,17 @@ M.setup = function(opts)
   }
   for kind, color in pairs(cmp_item_kinds) do
     if color ~= nil then
-      h("CmpItemKind" .. kind, { fg = color })
+      h("CmpItemKind" .. kind, {
+        fg = color,
+        -- bg = colors.mix(palette.colors.base2, palette.colors.green, 0.15),
+      })
     end
   end
   l("CmpDocNormal", "Pmenu")
   l("CmpDocBorder", "UIBorders")
 
   --- BufferLine
+  -- TODO(SuperPaintman): fix diganostic background, and bufferline colors in general.
   l("BufferLineErrorSelected", "BufferLineBufferSelected")
   l("BufferLineErrorDiagnosticSelected", "DiagnosticSignError")
   l("BufferLineWarningSelected", "BufferLineBufferSelected")

@@ -2,6 +2,11 @@
 --------------------------------------------------------------------------------
 -- Imports
 --------------------------------------------------------------------------------
+local ui = require("core.ui")
+
+--------------------------------------------------------------------------------
+-- Imports
+--------------------------------------------------------------------------------
 local autoformat = require("modules.autoformat")
 -- TODO(SuperPaintman): Use links instead of colors.
 local colors = require("theme.palette").colors
@@ -225,6 +230,9 @@ M.config = function()
   insert_left({
     const("▊"),
     color = { fg = colors.blue },
+    -- color = function()
+    --   return { fg = mode_color() }
+    -- end,
     padding = { right = 1 },
   })
 
@@ -334,7 +342,7 @@ M.config = function()
   --- Branch
   insert_right({
     "branch",
-    icon = "",
+    icon = ui.icons.git.Branch,
     color = { fg = colors.green, gui = "bold" },
   })
 
@@ -352,8 +360,12 @@ M.config = function()
   --- Diagnostics
   insert_right({
     "diagnostics",
-    -- TODO(SuperPaintman): Add custom symbols.
-    symbols = {},
+    symbols = {
+      error = ui.icons.diagnostic.Error .. " ", -- '󰅚 ',
+      warn = ui.icons.diagnostic.Warn .. " ",   -- '󰀪 ',
+      info = ui.icons.diagnostic.Info .. " ",   -- '󰋽 ',
+      hint = ui.icons.diagnostic.Hint .. " ",   -- '󰌶 ',
+    },
     cond = function()
       return not is_nvimtree_buffer()
     end,
@@ -363,6 +375,9 @@ M.config = function()
   insert_right({
     const("▊"),
     color = { fg = colors.blue },
+    -- color = function()
+    --   return { fg = mode_color() }
+    -- end,
     padding = { left = 1 },
   })
 

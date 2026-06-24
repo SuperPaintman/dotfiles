@@ -57,12 +57,16 @@ M.icons = {
   },
 
   diagnostic = {
-    Error = "",
-    Warn = "",
-    Info = "",
-    Hint = "",
-    Ok = "󰄳",
+    Error = "", -- "󱓻",
+    Warn = "", -- "󱓻",
+    Info = "", -- "󱓻",
+    Hint = "", -- "󱓻",
+    Ok = "󰄳", -- "󱓻",
     Virtual = "󱓻",
+  },
+
+  git = {
+    Branch = "",
   },
 
   debugger = {
