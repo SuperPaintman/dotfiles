@@ -20,6 +20,7 @@ math.randomseed(os.time())
 
 require("init-native-extensions")
 require("core.options")
+require("core.logger").setup({})
 require("theme").setup({})
 
 require("lazyinit")

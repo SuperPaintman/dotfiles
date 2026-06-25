@@ -117,6 +117,14 @@ M.setup = function(opts)
     bg = colors.mix(palette.colors.base2, palette.colors.base3, 0.5),
   })
 
+  h("MsgArea", { bg = palette.colors.base2 })
+  l("MsgSeparator", "MsgArea")
+  h("WarningMsg", { fg = palette.colors.yellow }) -- darkYellow
+  h("ErrorMsg", { fg = palette.colors.darkRed })
+  h("InfoMsg", { fg = palette.colors.blue })      -- Not a standard level.
+  h("DebugMsg", { fg = palette.colors.magenta })  -- Not a standard level.
+  h("TraceMsg", { fg = palette.colors.magenta })  -- Not a standard level.
+
   -- Diff
   h("DiffAdd", {
     -- fg = palette.colors.green,
@@ -390,7 +398,7 @@ M.setup = function(opts)
   --- Health
   h("healthSuccess", { fg = palette.colors.green, bold = true })
   h("healthWarning", { fg = palette.colors.yellow, bold = true })
-  h("healthError", { fg = palette.colors.red, bold = true })
+  h("healthError", { fg = palette.colors.darkRed, bold = true })
 
   -- Plugins.
   --- Telescope
@@ -432,7 +440,7 @@ M.setup = function(opts)
   })
   h("NeogitNotificationInfo", { fg = palette.colors.green })
   h("NeogitNotificationWarning", { fg = palette.colors.yellow })
-  h("NeogitNotificationError", { fg = palette.colors.red })
+  h("NeogitNotificationError", { fg = palette.colors.darkRed })
 
   --- CodeDiff
   h("CodeDiffExplorerNormal", {
@@ -576,7 +584,7 @@ M.setup = function(opts)
     fg = palette.colors.red,
   })
   h("DapUIWatchesError", {
-    fg = palette.colors.red,
+    fg = palette.colors.darkRed,
   })
   h("DapUIWatchesValue", {
     fg = palette.colors.green,
@@ -618,6 +626,30 @@ M.setup = function(opts)
   })
 
   -- Modules.
+  --- Logger.
+  -- l("LoggerTrace", "TraceMsg")
+  -- l("LoggerDebug", "DebugMsg")
+  -- l("LoggerInfo", "InfoMsg")
+  -- l("LoggerWarn", "WarningMsg")
+  -- l("LoggerError", "ErrorMsg")
+
+  for _, d in ipairs({
+    { "Trace", palette.colors.magenta,    palette.colors.black },
+    { "Debug", palette.colors.magenta,    palette.colors.black },
+    { "Info",  palette.colors.green,      palette.colors.black },
+    { "Warn",  palette.colors.darkYellow, palette.colors.black },
+    { "Error", palette.colors.darkRed,    palette.colors.white },
+  }) do
+    local level, bg, fg = d[1], d[2], d[3]
+
+    h("Logger" .. level, {
+      fg = fg,
+      -- fg = colors.mix(bg, fg, 0.5),
+      bg = bg,
+      bold = true,
+    })
+  end
+
   --- ContextSigns.
   h("ContextSign", { fg = palette.colors.base8 })
 
