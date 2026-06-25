@@ -70,7 +70,9 @@ M.defaults = vim.deepcopy(M.config)
 ---@param level vim.log.levels
 ---@param msg string
 ---@param ... any[]
-M.log = function(level, msg, ...) M._log(level, msg, { ... }) end
+M.log = function(level, msg, ...)
+  M._log(level, msg, { ... }, "Logger.log")
+end
 
 ---@param msg string
 ---@param ... any[]
@@ -96,7 +98,7 @@ M.error = function(msg, ...) M.log(LEVEL_ERROR, msg, ...) end
 ---@param fmt string
 ---@param ... any[]
 M.logf = function(level, fmt, ...)
-  M._log(level, string.format(fmt, ...))
+  M._log(level, string.format(fmt, ...), nil, "Logger.log")
 end
 
 ---@param fmt string
@@ -131,22 +133,38 @@ local log_level_map = {
 ---@private
 ---
 ---@param level vim.log.levels
----@param msg string
----@param args any[]?
+---@param chunks any[]
 ---@return any[]
-M._msg_to_chunks = function(level, msg, args)
+M._normalize_chunks = function(level, chunks)
   local mapping = log_level_map[level]
   if mapping == nil then
     error("modules.logger: unknown log level: " .. tostring(level))
   end
 
-  local chunks = {
+  local updated_chunks = {
     -- { ' ', nil },
     -- { ' ' .. mapping.label .. ' ', mapping.hl },
     { ' ' .. mapping.short_label .. ' ', mapping.hl },
     { ' ',                               nil },
-    { msg,                               nil },
   }
+
+  for _, chunk in ipairs(chunks) do
+    table.insert(updated_chunks, chunk)
+  end
+
+  return updated_chunks
+end
+
+---@private
+---
+---@param level vim.log.levels
+---@param msg string
+---@param args any[]?
+---@return any[]
+M._msg_to_chunks = function(level, msg, args)
+  local chunks = M._normalize_chunks(level, {
+    { msg, nil },
+  })
 
   if args ~= nil then
     table.insert(chunks, { '\n', nil })
@@ -166,7 +184,8 @@ end
 ---@param level vim.log.levels
 ---@param msg string
 ---@param args any[]?
-M._log = function(level, msg, args)
+---@param source string
+M._log = function(level, msg, args, source)
   if level < 0 or level >= LEVEL_OFF then
     return
   end
@@ -175,11 +194,11 @@ M._log = function(level, msg, args)
     M._msg_to_chunks(level, msg, args),
     true, -- add to `message-history.
     { err = level >= LEVEL_ERROR },
-    { level = level, msg = msg, args = args }
+    { level = level, msg = msg, args = args, source = source }
   )
 end
 
----@alias modules.logger.EchoContext { level: vim.log.levels, msg: string, args?: any[] }
+---@alias modules.logger.EchoContext { level: vim.log.levels, msg: string, args?: any[], source: string }
 
 ---@private
 ---
@@ -192,7 +211,12 @@ M._echo = function(chunks, history, opts, ctx)
     level = ctx.level,
     message = ctx.msg,
     args = ctx.args,
+    source = ctx.source or "Logger._echo",
   })
+
+  -- Debug.
+  -- table.insert(chunks, { " ::: " })
+  -- table.insert(chunks, { M._orig.vim_inspect(ctx, { newline = " " }) })
 
   M._orig.vim_api_nvim_echo(
     chunks,
@@ -253,7 +277,7 @@ M._patched_print = function(...)
     table.insert(msg, tostring(o))
   end
 
-  M._log(LEVEL_INFO, table.concat(msg, ' '))
+  M._log(LEVEL_INFO, table.concat(msg, ' '), nil, "_G.print")
 end
 
 ---@param msg string
@@ -267,12 +291,15 @@ M._patched_vim_notify = function(msg, level, opts)
   --   { err = level == vim.log.levels.ERROR, _truncate = opts and opts._truncate }
   -- )
 
-  level = level or LEVEL_INFO
+  if level == nil then
+    level = LEVEL_INFO
+  end
+
   M._echo(
     M._msg_to_chunks(level, msg, nil),
     true, -- add to `message-history.
     { err = level >= LEVEL_ERROR, _truncate = opts and opts._truncate },
-    { level = level, msg = msg, args = nil }
+    { level = level, msg = msg, args = nil, source = "vim.notify" }
   )
 end
 
@@ -289,7 +316,23 @@ M._patched_vim_api_nvim_echo = function(chunks, history, opts)
     end
   end
 
-  M._echo(chunks, history, opts, { level = LEVEL_INFO, msg = table.concat(msg, "\n"), args = nil })
+  local level = LEVEL_INFO
+  if #chunks >= 1 and #chunks[1] >= 2 and chunks[1][2] == "WarningMsg" then
+    -- Handle vim._truncated_echo_once
+    -- See: https://github.com/neovim/neovim/blob/4d9e5acfb5ee081b5b0761205c8a8c36ed7e49e5/runtime/lua/vim/_core/editor.lua#L1355
+    level = LEVEL_WARN
+  elseif #chunks >= 1 and #chunks[1] >= 2 and chunks[1][2] == "ErrorMsg" then
+    level = LEVEL_ERROR
+  elseif opts and opts.err then
+    level = LEVEL_ERROR
+  end
+
+  M._echo(
+    M._normalize_chunks(level, chunks),
+    history,
+    opts,
+    { level = level, msg = table.concat(msg, "\n"), args = nil, source = "vim.api.nvim_echo" }
+  )
 end
 
 ---@param opts modules.logger.Config?
