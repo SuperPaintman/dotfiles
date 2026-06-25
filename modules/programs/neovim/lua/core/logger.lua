@@ -7,6 +7,7 @@
 -- Init
 --------------------------------------------------------------------------------
 local vim = _G.vim
+local uv = vim.uv or vim.loop
 
 local LEVEL_TRACE = vim.log.levels.TRACE
 local LEVEL_DEBUG = vim.log.levels.DEBUG
@@ -16,6 +17,9 @@ local LEVEL_ERROR = vim.log.levels.ERROR
 local LEVEL_OFF = vim.log.levels.OFF
 
 local EVENT_LOG = "LoggerLog"
+
+-- local LOG_TIMESTAMP_FORMAT = "%Y-%m-%d %H:%M:%S"
+local LOG_TIMESTAMP_FORMAT = "%H:%M:%S"
 
 --------------------------------------------------------------------------------
 -- Helpers
@@ -30,6 +34,24 @@ local function emit(event, data)
     modeline = false,
     data = data or {},
   })
+end
+
+--- @return integer seconds, integer milliseconds
+local function timestamp()
+  local sec = 0
+  local usec = 0
+  if uv.gettimeofday ~= nil then
+    sec, usec = uv.gettimeofday()
+  end
+  return sec, math.floor((usec or 0) / 1000)
+end
+
+---@param format string
+---@param sec integer
+---@param ms integer
+---@return string
+local function format_log_timestamp(format, sec, ms)
+  return string.format("%s.%03d", os.date(format, sec), ms)
 end
 
 --------------------------------------------------------------------------------
@@ -71,7 +93,8 @@ M.defaults = vim.deepcopy(M.config)
 ---@param msg string
 ---@param ... any[]
 M.log = function(level, msg, ...)
-  M._log(level, msg, { ... }, "Logger.log")
+  local ts = { timestamp() }
+  M._log(level, msg, { ... }, ts, "Logger.log")
 end
 
 ---@param msg string
@@ -98,7 +121,8 @@ M.error = function(msg, ...) M.log(LEVEL_ERROR, msg, ...) end
 ---@param fmt string
 ---@param ... any[]
 M.logf = function(level, fmt, ...)
-  M._log(level, string.format(fmt, ...), nil, "Logger.log")
+  local ts = { timestamp() }
+  M._log(level, string.format(fmt, ...), nil, ts, "Logger.log")
 end
 
 ---@param fmt string
@@ -134,18 +158,23 @@ local log_level_map = {
 ---
 ---@param level vim.log.levels
 ---@param chunks any[]
+---@param ts number[]
 ---@return any[]
-M._normalize_chunks = function(level, chunks)
+M._normalize_chunks = function(level, chunks, ts)
   local mapping = log_level_map[level]
   if mapping == nil then
     error("modules.logger: unknown log level: " .. tostring(level))
   end
 
   local updated_chunks = {
+    { format_log_timestamp(LOG_TIMESTAMP_FORMAT, ts[1], ts[2]), 'LoggerTimestamp' },
+    { ' ',                                                      nil },
+
     -- { ' ', nil },
     -- { ' ' .. mapping.label .. ' ', mapping.hl },
-    { ' ' .. mapping.short_label .. ' ', mapping.hl },
-    { ' ',                               nil },
+    { ' ' .. mapping.short_label .. ' ',                        mapping.hl },
+
+    { ' ',                                                      nil },
   }
 
   for _, chunk in ipairs(chunks) do
@@ -160,11 +189,12 @@ end
 ---@param level vim.log.levels
 ---@param msg string
 ---@param args any[]?
+---@param ts number[]
 ---@return any[]
-M._msg_to_chunks = function(level, msg, args)
+M._msg_to_chunks = function(level, msg, args, ts)
   local chunks = M._normalize_chunks(level, {
     { msg, nil },
-  })
+  }, ts)
 
   if args ~= nil then
     table.insert(chunks, { '\n', nil })
@@ -185,20 +215,21 @@ end
 ---@param msg string
 ---@param args any[]?
 ---@param source string
-M._log = function(level, msg, args, source)
+---@param ts number[]
+M._log = function(level, msg, args, ts, source)
   if level < 0 or level >= LEVEL_OFF then
     return
   end
 
   M._echo(
-    M._msg_to_chunks(level, msg, args),
+    M._msg_to_chunks(level, msg, args, ts),
     true, -- add to `message-history.
     { err = level >= LEVEL_ERROR },
-    { level = level, msg = msg, args = args, source = source }
+    { level = level, msg = msg, args = args, source = source, timestamp = ts }
   )
 end
 
----@alias modules.logger.EchoContext { level: vim.log.levels, msg: string, args?: any[], source: string }
+---@alias modules.logger.EchoContext { level: vim.log.levels, msg: string, args?: any[], source: string, timestamp: number[] }
 
 ---@private
 ---
@@ -212,6 +243,7 @@ M._echo = function(chunks, history, opts, ctx)
     message = ctx.msg,
     args = ctx.args,
     source = ctx.source or "Logger._echo",
+    timestamp = ctx.timestamp or { 0, 0 }
   })
 
   -- Debug.
@@ -271,13 +303,15 @@ end
 
 ---@private
 M._patched_print = function(...)
+  local ts = { timestamp() }
+
   local msg = {}
   for i = 1, select('#', ...) do
     local o = select(i, ...)
     table.insert(msg, tostring(o))
   end
 
-  M._log(LEVEL_INFO, table.concat(msg, ' '), nil, "_G.print")
+  M._log(LEVEL_INFO, table.concat(msg, ' '), nil, ts, "_G.print")
 end
 
 ---@param msg string
@@ -291,15 +325,17 @@ M._patched_vim_notify = function(msg, level, opts)
   --   { err = level == vim.log.levels.ERROR, _truncate = opts and opts._truncate }
   -- )
 
+  local ts = { timestamp() }
+
   if level == nil then
     level = LEVEL_INFO
   end
 
   M._echo(
-    M._msg_to_chunks(level, msg, nil),
+    M._msg_to_chunks(level, msg, nil, ts),
     true, -- add to `message-history.
     { err = level >= LEVEL_ERROR, _truncate = opts and opts._truncate },
-    { level = level, msg = msg, args = nil, source = "vim.notify" }
+    { level = level, msg = msg, args = nil, source = "vim.notify", timestamp = ts }
   )
 end
 
@@ -309,6 +345,8 @@ end
 ---@param history boolean
 ---@param opts vim.api.keyset.echo_opts
 M._patched_vim_api_nvim_echo = function(chunks, history, opts)
+  local ts = { timestamp() }
+
   local msg = {}
   for _, chunk in ipairs(chunks) do
     if type(chunk) == "table" and #chunks >= 1 and type(chunk[1]) == "string" then
@@ -328,10 +366,10 @@ M._patched_vim_api_nvim_echo = function(chunks, history, opts)
   end
 
   M._echo(
-    M._normalize_chunks(level, chunks),
+    M._normalize_chunks(level, chunks, ts),
     history,
     opts,
-    { level = level, msg = table.concat(msg, "\n"), args = nil, source = "vim.api.nvim_echo" }
+    { level = level, msg = table.concat(msg, "\n"), args = nil, source = "vim.api.nvim_echo", timestamp = ts }
   )
 end
 

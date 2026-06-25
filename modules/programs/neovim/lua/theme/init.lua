@@ -650,6 +650,8 @@ M.setup = function(opts)
     })
   end
 
+  l("LoggerTimestamp", "Comment")
+
   --- ContextSigns.
   h("ContextSign", { fg = palette.colors.base8 })
 
