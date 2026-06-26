@@ -43,6 +43,9 @@ M.config = function()
     end,
     post_restore_cmds = {
       find_file_in_nvimtree,
+      function()
+        vim.wo.cursorline = true
+      end,
     },
   })
 end
