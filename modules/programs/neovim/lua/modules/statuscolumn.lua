@@ -248,18 +248,35 @@ M.statuscolumn = function()
   end
 
   ---@param padding string
-  local function insert_padding(padding)
-    insert(
-      "%{(&filetype == 'NvimTree' || &filetype == 'help') ? '' : '"
-      .. padding
-      .. "'}"
-    )
+  ---@param hl string?
+  local function insert_padding(padding, hl)
+    if hl ~= nil then
+      insert("%#")
+      insert(hl)
+      insert("#")
+    end
+
+    insert("%{")
+    insert("!(&filetype == 'NvimTree' || &filetype == 'help')")
+    insert(" ? '")
+    insert(padding)
+    insert("'")
+    insert(" : ''")
+    insert("}")
+
+    if hl ~= nil then
+      insert("%*")
+    end
   end
 
   ---@param sign modules.statuscolumn.Sign
   local function insert_sign(sign)
     if sign.texthl ~= nil then
-      insert("%#" .. sign.texthl .. "#" .. sign.text .. "%*")
+      insert("%#")
+      insert(sign.texthl)
+      insert("#")
+      insert(sign.text)
+      insert("%*")
     else
       insert(sign.text)
     end
@@ -352,10 +369,14 @@ M.statuscolumn = function()
   local close_line_color = false
   if vim.o.number and vim.v.lnum ~= cur_line then
     if mark_sign ~= nil and mark_sign.numhl then
-      insert("%#" .. mark_sign.numhl .. "#")
+      insert("%#")
+      insert(mark_sign.numhl)
+      insert("#")
       close_line_color = true
     elseif context_sign ~= nil and context_sign.texthl ~= nil then
-      insert("%#" .. context_sign.texthl .. "#")
+      insert("%#")
+      insert(context_sign.texthl)
+      insert("#")
       close_line_color = true
     end
   end
@@ -367,13 +388,14 @@ M.statuscolumn = function()
   end
 
   --- Padding.
-  insert_padding("  ")
+  insert_padding("   ")
 
   --- Git signs.
   if git_sign ~= nil then
     insert_sign(git_sign)
   else
-    insert_padding("   ")
+    insert_padding(" ┃ ", "StatusColumnBorder")
+    -- insert_padding(" ┆ ")
   end
 
   return table.concat(components, "")

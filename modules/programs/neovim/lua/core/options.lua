@@ -61,7 +61,26 @@ opt.expandtab = true
 
 -- Characters to fill the statuslines, vertical separators and special lines in
 -- the window.
-opt.fillchars = { eob = "~", diff = "╱" }
+opt.fillchars = {
+  eob = "~",
+  diff = "╱",
+
+  -- horiz = "━", -- "─", -- "-"
+  -- horizup = "┻", -- "┴", -- "-"
+  -- horizdown = "┳", -- "┬", -- "-"
+  -- vert = "┃", -- "│", -- "|"
+  -- vertleft = "┫", -- "┤", -- "|"
+  -- vertright = "┣", -- "├", -- "|"
+  -- verthoriz = "╋", -- "┼", -- "+"
+
+  horiz = "▬",
+  horizup = "█",
+  horizdown = "█",
+  vert = "█",
+  vertleft = "█",
+  vertright = "█",
+  verthoriz = "█",
+}
 
 -- When off, all folds are open.
 --

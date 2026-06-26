@@ -102,8 +102,17 @@ M.setup = function(opts)
   h("LineNr", { fg = palette.colors.base5 })
   h("CursorLineNr", { fg = palette.colors.cursor, bold = true })
 
-  -- h("VertSplit", { fg = palette.colors.base2 })
-  h("VertSplit", { fg = palette.colors.base1, bg = palette.colors.base2 }) -- Looks better with other dark windows.
+  h("EndofBuffer", {
+    fg = palette.colors.base4,
+    -- fg = colors.mix(palette.colors.background, palette.colors.base4, 0.25),
+    -- bg = colors.mix(palette.colors.background, palette.colors.base2, 0.25),
+  })
+
+  h("WinSeparator", { fg = palette.colors.base2 })
+  -- h("WinSeparator", { fg = palette.colors.base1, bg = palette.colors.base2 }) -- Looks better with other dark windows.
+
+  l("VertSplit", "WinSeparator")
+
   h("UIBorders", { fg = palette.colors.base2 })
   l("UIBordersThick", "UIBorders")
 
@@ -656,6 +665,8 @@ M.setup = function(opts)
   h("ContextSign", { fg = palette.colors.base8 })
 
   -- StatusColumn.
+  -- l("StatusColumnBorder", "UIBorders")
+  h("StatusColumnBorder", { fg = palette.colors.base2 })
   h("StatusColumnMark", { fg = palette.colors.blue, bold = true })
   h("StatusColumnMarkLineNr", { fg = palette.colors.blue })
 end
