@@ -257,7 +257,8 @@ M.statuscolumn = function()
     end
 
     insert("%{")
-    insert("!(&filetype == 'NvimTree' || &filetype == 'help' || &filetype == 'alpha')")
+    -- insert("!(&filetype == 'NvimTree' || &filetype == 'help' || &filetype == 'alpha')")
+    insert("(&number || &relativenumber)")
     insert(" ? '")
     insert(padding)
     insert("'")

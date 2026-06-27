@@ -45,10 +45,9 @@ end
 safe_add_mapping = function(mode, lhs, rhs, desc, opts)
   local ok, err = pcall(add_mapping, mode, lhs, rhs, desc, opts)
   if not ok then
-    vim.api.nvim_notify(
+    vim.notify(
       "mappings: failed to add mapping: " .. (err or ""),
-      vim.log.levels.ERROR,
-      {}
+      vim.log.levels.ERROR
     )
   end
 end
@@ -120,10 +119,9 @@ end
 safe_add_mappings = function(prefix, group)
   local ok, err = pcall(add_mappings, prefix, group)
   if not ok then
-    vim.api.nvim_notify(
+    vim.notify(
       "mappings: failed to add mappings: " .. (err or ""),
-      vim.log.levels.ERROR,
-      {}
+      vim.log.levels.ERROR
     )
   end
 end
@@ -294,6 +292,21 @@ M.mappings["<leader>y"] = { { "n", "v" }, [["+y]], "Yank to clipboard" }
 --- Put
 M.mappings["<leader>p"] = { { "n", "v" }, [["+p]], "Put from clipboard after cursor" }
 M.mappings["<leader>P"] = { { "n", "v" }, [["+P]], "Put from clipboard before cursot" }
+
+--- Execute
+M.groups.x = {
+  name = "execute",
+  prefix = "<leader>x",
+  mappings = {
+    f = {
+      { "n", [[:source %<CR>]], "Source file" },
+    },
+    x = {
+      { "n", [[:.source<CR>]],     "Source line" },
+      { "x", [[:'<,'>source<CR>]], "Source selection" },
+    }
+  },
+}
 
 --------------------------------------------------------------------------------
 -- Register
