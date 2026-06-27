@@ -53,10 +53,6 @@ M.setup = function(opts)
   M._initialized = true
 end
 
-M.reload = function()
-  M.setup(M.options)
-end
-
 M.mappings = {
   open = cb(function()
     for _, win in ipairs(vim.fn.getwininfo()) do

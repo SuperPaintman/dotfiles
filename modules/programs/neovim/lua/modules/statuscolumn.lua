@@ -232,10 +232,6 @@ M.refresh = function(buf)
   pcall(vim.api.nvim__redraw, { buf = buf, statuscolumn = true })
 end
 
-M.reload = function()
-  M.setup({})
-end
-
 M.statuscolumn = function()
   local signs = get_signs()
 

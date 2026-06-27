@@ -173,6 +173,8 @@ M.setup = function(opts)
   u("QuickFixLine")
 
   -- Diagnostic
+  u("DiagnosticUnnecessary") -- Do not highlight actual code as a comment.
+
   for _, d in ipairs({
     { "Ok",    palette.colors.green },
     { "Hint",  palette.colors.blue },
@@ -664,11 +666,14 @@ M.setup = function(opts)
   --- ContextSigns.
   h("ContextSign", { fg = palette.colors.base8 })
 
-  -- StatusColumn.
+  --- StatusColumn.
   -- l("StatusColumnBorder", "UIBorders")
   h("StatusColumnBorder", { fg = palette.colors.base2 })
   h("StatusColumnMark", { fg = palette.colors.blue, bold = true })
   h("StatusColumnMarkLineNr", { fg = palette.colors.blue })
+
+  --- VirtualColumn.
+  l("VirtualColumn", "NonText")
 end
 
 M.reload = function()

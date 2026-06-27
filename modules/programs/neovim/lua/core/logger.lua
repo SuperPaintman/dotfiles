@@ -83,11 +83,11 @@ for k in pairs(M._orig) do
 end
 
 ---@class modules.logger.Config
-M.config = {
+M.options = {
 }
 
 ---@type modules.logger.Config
-M.defaults = vim.deepcopy(M.config)
+M.defaults = vim.deepcopy(M.options)
 
 ---@param level vim.log.levels
 ---@param msg string

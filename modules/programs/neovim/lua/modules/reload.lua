@@ -59,10 +59,10 @@ end
 local M = {}
 
 ---@class modules.reload.Config
-M.config = {}
+M.options = {}
 
 ---@class modules.reload.Config
-M.defaults = vim.deepcopy(M.config)
+M.defaults = vim.deepcopy(M.options)
 
 ---@param opts? modules.reload.Config
 M.setup = function(opts)
@@ -112,6 +112,8 @@ M.setup = function(opts)
       if loaded ~= nil and type(loaded) == "table" then
         if type(loaded.options) == "table" then
           prev_config = loaded.options
+        elseif type(loaded.config) == "table" then
+          prev_config = loaded.config
         end
       end
 
@@ -121,7 +123,9 @@ M.setup = function(opts)
       if type(module) == "table" then
         if module.reload ~= nil then
           module.reload(prev_config)
-        elseif module.config ~= nil then
+        elseif module.setup ~= nil and type(module.setup) == "function" then
+          module.setup(prev_config)
+        elseif module.config ~= nil and type(module.config) == "function" then
           module.config(prev_config)
         else
           -- vimerror(f("Module %s cannot be reloaded", modname))

@@ -531,11 +531,12 @@ M.setup = function(opts)
   M.attach()
 end
 
-M.reload = function()
+---@param opts modules.marks.Config?
+M.reload = function(opts)
   M._close_cheatsheet()
   vim.cmd("wshada")
 
-  M.setup(M.options)
+  M.setup(opts)
 end
 
 --------------------------------------------------------------------------------
