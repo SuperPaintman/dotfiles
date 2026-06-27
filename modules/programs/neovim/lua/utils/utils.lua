@@ -1,12 +1,21 @@
--- See: https://lodash.com/docs/4.17.15
+---@see https://lodash.com/docs/4.17.15
+
 --------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
+local vim = _G.vim or {}
+local uv = vim.uv or vim.loop
+
+--------------------------------------------------------------------------------
+-- Module
+--------------------------------------------------------------------------------
+
 local M = {}
 
 --------------------------------------------------------------------------------
 -- Table
 --------------------------------------------------------------------------------
+
 ---@generic T1
 ---@generic T2
 ---@param left T1[]
@@ -46,118 +55,165 @@ end
 --------------------------------------------------------------------------------
 -- Function
 --------------------------------------------------------------------------------
+
+--- Binds `self` as the first argument to `f`.
+---@generic T : fun(): ...
+---@param f T
+---@param self any
+---@return T
+M.bind = function(f, self)
+  local bound = function(...) return f(self, ...) end
+  return bound
+end
+
 --- Returns a function that invokes f only once and returns the value returned
 --- by f.
----@generic T
----@param f fun(): T
----@return fun(): T
+---@generic T : fun(): ...
+---@param f T
+---@return T
 M.once = function(f)
   local initialized = false
   local valid = false
-  local value = nil
-  local err = nil
+  local results = nil ---@type any[]
 
-  return function()
-    if initialized then
-      if valid then
-        return value
-      else
-        error(err)
-      end
+  local wrapper = function()
+    if not initialized then
+      initialized = true
+      results = { pcall(f) }
+      valid = results[1]
     end
 
-    initialized = true
-    local ok, v = pcall(f)
-    if ok then
-      valid = true
-      value = v
-      return v
-    else
-      valid = false
-      err = v
-      error(v)
+    if not valid then
+      error(results[2])
     end
+
+    return unpack(results, 2)
   end
+
+  return wrapper
 end
 
----@generic T: fun(...): nil
+---@generic T : fun(...): ...
 ---@param f T
 ---@param wait number?
----@return T, (fun(): nil)
+---@return T -- debounced function
+---@return (fun(): nil) -- cancel
 M.debounce = function(f, wait)
   wait = wait or 0
 
   local running = false
-  local timer = vim.loop.new_timer()
+  local last_args = {}
+  local timer = nil
   local wrapper = function(...)
+    if timer == nil then
+      timer = uv.new_timer()
+    end
+
+    last_args = { ... }
+
     if running then
       return
     end
     running = true
 
-    local argv = { ... }
     timer:start(wait, 0, function()
       timer:stop()
-      vim.schedule_wrap(f)(unpack(argv))
-      running = false
+      vim.schedule(function()
+        running = false
+        f(unpack(last_args))
+      end)
     end)
   end
 
   local cancel = function()
+    if timer == nil then
+      return
+    end
+
     timer:stop()
+    timer:close()
+    timer = nil
+
+    running = false
   end
 
   return wrapper, cancel
+end
+
+--- Returns true if object `f` can be called as a function.
+---
+---@param f? any
+---@return boolean
+function M.is_callable(f)
+  if type(f) == "function" then
+    return true
+  end
+
+  local mt = getmetatable(f)
+  if mt == nil then
+    return false
+  end
+
+  return type(rawget(mt, "__call")) == "function"
 end
 
 ---@class utils.Lazy
 ---@field private _initialized boolean
 ---@field private _initializer fun(): unknown
 ---@field private _value unknown
----@field private _mt table
-local Lazy = { mt = {} }
+local Lazy = {}
 
 ---@generic T
----@param f fun() T
+---@param f fun(): T
 ---@return T
 function Lazy.new(f)
-  ---@type utils.Lazy
   local obj = {
     _initialized = false,
     _initializer = f,
     _value = {},
   }
 
-  return setmetatable(obj, Lazy.mt)
+  return setmetatable(obj, Lazy)
 end
 
-function Lazy.mt:__call(...)
+---@private
+function Lazy:__call(...)
   Lazy._init(self)
 
   return self._value(...)
 end
 
-function Lazy.mt:__index(key)
+---@private
+---@param self utils.Lazy
+function Lazy:__index(key)
   Lazy._init(self)
 
   local meta = getmetatable(self._value)
   if meta and meta.__index then
-    return meta.__index(self._value, key) or Lazy.mt[key]
+    return meta.__index(self._value, key) or Lazy[key]
   elseif type(self._value) == "table" then
-    return self._value[key] or Lazy.mt[key]
+    return self._value[key] or Lazy[key]
   else
-    return Lazy.mt[key]
+    return Lazy[key]
   end
 end
 
-function Lazy.mt:__newindex(key, value)
+---@private
+---@param self utils.Lazy
+function Lazy:__newindex(key, value)
   Lazy._init(self)
 
   self._value[key] = value
 end
 
-function Lazy.mt:__tostring()
-  return "Lazy"
+---@private
+---@param self utils.Lazy
+function Lazy:__tostring()
+  local t = "unknown"
+  if self._initialized then
+    t = type(self._value)
+  end
+  return "Lazy(" .. t .. ")"
 end
 
 ---@private
@@ -171,17 +227,7 @@ end
 ---@generic T
 ---@param f fun(): T
 ---@return T
-M.lazy = function(f)
-  return Lazy.new(f)
-end
-
----@param modname string
----@return unknown
-M.lazy_require = function(modname)
-  return M.lazy(function()
-    return require(modname)
-  end)
-end
+M.lazy = function(f) return Lazy.new(f) end
 
 --------------------------------------------------------------------------------
 -- Export

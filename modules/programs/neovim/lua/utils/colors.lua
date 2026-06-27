@@ -49,7 +49,6 @@ function RGB.new(r, g, b)
     b = clamp(math.floor(b), 0, 255)
   end
 
-  ---@type utils.colors.RGB
   local self = {
     r = r,
     g = g,
@@ -60,6 +59,7 @@ function RGB.new(r, g, b)
 end
 
 --- Returns the string representation of the RGB.
+---@private
 ---@return string
 function RGB:__tostring()
   return string.format("RGB(%d, %d, %d)", self.r, self.g, self.b)
