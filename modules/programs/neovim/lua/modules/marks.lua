@@ -82,8 +82,9 @@ end
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
+
 ---@class modules.marks.Config
-M.defaults = {
+M.options = {
   root_dir = function()
     local root = vim.fs.root(0, { ".git" })
     if not root then
@@ -95,9 +96,8 @@ M.defaults = {
   shada_projects_dir = vim.fn.stdpath("state") .. "/shada-projects",
 }
 
-
 ---@type modules.marks.Config
-M.options = vim.tbl_deep_extend("force", M.defaults, {})
+M.defaults = vim.deepcopy(M.options)
 
 M._active = false
 M._root = nil ---@type string?

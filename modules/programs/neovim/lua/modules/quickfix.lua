@@ -17,12 +17,13 @@ local cb = require("utils.mappings").create_callback_factory(
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
+
 ---@class modules.quickfix.Config
-M.defaults = {
+M.options = {
 }
 
 ---@type modules.quickfix.Config
-M.options = vim.tbl_deep_extend("force", M.defaults, {})
+M.defaults = vim.deepcopy(M.options)
 
 ---@param opts modules.quickfix.Config?
 M.setup = function(opts)
