@@ -8,9 +8,16 @@ local M = {}
 -- Helpers
 --------------------------------------------------------------------------------
 local function get_git_name()
-  local ok, output =
-    pcall(vim.fn.system, { "git", "config", "--get", "user.name" })
-  if not ok then
+  local output = nil ---@type string|nil
+  for _, field in ipairs({ "github.user", "user.name" }) do
+    local ok, o = pcall(vim.fn.system, { "git", "config", "--get", field })
+    if ok then
+      output = o
+      break
+    end
+  end
+
+  if not output then
     return nil
   end
 

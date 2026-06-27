@@ -41,8 +41,9 @@ end
 --------------------------------------------------------------------------------
 -- Modules
 --------------------------------------------------------------------------------
+
 ---@class LspLogConfig
-M.defaults = {
+M.options = {
   -- Truncate the log on setup if it exceeds `max_size`.
   auto = true,
   -- Maximum log size in bytes before automatic truncation kicks in.
@@ -52,7 +53,7 @@ M.defaults = {
 }
 
 ---@type LspLogConfig
-M.options = {}
+M.defaults = vim.deepcopy(M.options)
 
 ---@param opts? {force?:boolean, keep_lines?:integer}
 ---@return integer? kept
