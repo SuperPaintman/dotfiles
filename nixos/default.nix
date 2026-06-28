@@ -273,8 +273,6 @@ in
     audacity # Sound editor with graphical UI.
     scrot # A command-line screen capture utility.
     libnotify # A library that sends desktop notifications to a notification daemon.
-    localPkgs._1password # 1Password command-line tool.
-    # localPkgs.gh # GitHub CLI tool.
     anki-bin # Spaced repetition flashcard program
     (localPkgs.anki-desktop.override { anki-bin = anki-bin; }) # Spaced repetition flashcard program.
     wally-cli # CLI flashing tool for ZSA Moonlander.

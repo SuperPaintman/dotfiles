@@ -2,15 +2,7 @@
 
 with pkgs; rec {
   # Applications.
-  _1password = callPackage ./applications/misc/1password/default.nix { };
-
-  prusa-slicer = callPackage ./applications/misc/prusa-slicer/default.nix { };
-
-  rofi-blocks = callPackage ./applications/misc/rofi-blocks { };
-
   firefox-private = callPackage ./applications/networking/browsers/firefox { };
-
-  gh = callPackage ./applications/version-management/git-and-tools/gh/default.nix { };
 
   # Development.
   rustup-openssl = callPackage ./development/tools/rust/rustup-openssl { };
