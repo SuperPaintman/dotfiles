@@ -93,6 +93,7 @@ in
       };
       javascript.enable = true;
       lua.enable = true;
+      python.enable = true;
       ruby.enable = false;
       rust.enable = true;
       zig.enable = true;
@@ -206,13 +207,13 @@ in
     # delve
     # nodejs
     # python
-    (
-      python3.withPackages (
-        packages: with packages; [
-          telethon
-        ]
-      )
-    )
+    # (
+    #   python3.withPackages (
+    #     packages: with packages; [
+    #       telethon
+    #     ]
+    #   )
+    # )
     # ruby
     # localPkgs.rustup-openssl
     # rust-analyzer

@@ -28,6 +28,7 @@ in
     ./development/go
     ./development/javascript
     ./development/lua
+    ./development/python
     ./development/ruby
     ./development/rust
     ./development/zig
