@@ -3,7 +3,10 @@
 with lib;
 
 let
+  inherit (config.modules.home) standalone;
   cfg = config.modules.development.python;
+
+  mkBin = package: name: if standalone then name else "${package}/bin/${name}";
 
   PYTHONSTARTUP = "$XDG_CONFIG_HOME/python/pythonrc";
   PYTHONHISTFILE = "$XDG_STATE_HOME/python/python_history";
@@ -48,6 +51,11 @@ in
           PYTHON_HISTORY_SIZE
           # PYTHONPYCACHEPREFIX
           ;
+      };
+
+      shell.aliases = {
+        py = mkBin cfg.package "python";
+        py3 = mkBin cfg.package "python3";
       };
 
       home.configFiles = {
