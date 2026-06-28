@@ -6,5 +6,7 @@ let
 in
 
 rec {
+  firefox = callPackage ./firefox { inherit (prev) firefox; };
+
   rustup = callPackage ./rustup { inherit (prev) rustup; };
 }

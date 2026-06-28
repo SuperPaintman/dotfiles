@@ -175,7 +175,6 @@ in
 
     # Browsers.
     firefox
-    (localPkgs.firefox-private.override { firefox = firefox; })
     (
       localPkgs.firefox-install-extensions.override {
         firefox = firefox;

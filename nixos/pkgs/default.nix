@@ -1,9 +1,6 @@
 { pkgs, lib, ... }:
 
 with pkgs; rec {
-  # Applications.
-  firefox-private = callPackage ./applications/networking/browsers/firefox { };
-
   # Games.
   anki-desktop = callPackage ./games/anki-desktop { };
 

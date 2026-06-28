@@ -8,8 +8,8 @@ let
 in
 
 symlinkJoin {
-  # pname = "${unwrapped.pname}-with-openssl";
-  name = "${unwrapped.name}-with-openssl-${openssl.version}";
+  pname = "${unwrapped.pname}-with-openssl-${openssl.version}";
+  # name = "${unwrapped.name}-with-openssl-${openssl.version}";
   inherit (unwrapped) version;
 
   paths = [ unwrapped ];
