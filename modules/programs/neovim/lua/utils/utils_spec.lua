@@ -7,6 +7,56 @@ local utils = require("utils.utils")
 -- Tests
 --------------------------------------------------------------------------------
 describe("utils.utils", function()
+  describe("is_integer()", function()
+    it("should work", function()
+      local got = utils.is_integer(1)
+
+      assert.same(got, true)
+    end)
+
+    for _, tc in ipairs({
+      { "zero integer",     0,                    true },
+      { "positive integer", 1337,                 true },
+      { "negative integer", -1337,                true },
+      { "zero float",       0.0,                  true }, -- Technically not a float.
+      { "positive float",   3.14,                 false },
+      { "negative float",   -3.14,                false },
+      { "function",         function() end,       false },
+      { "nil",              nil,                  false },
+      { "boolean",          nil,                  false },
+      { "string",           "test",               false },
+      { "table",            { a = 10 },           false },
+      { "array",            { 10, 20, 30 },       false },
+      { "mt",               setmetatable({}, {}), false },
+    }) do
+      local msg = ("should return `%s` for %s"):format(tc[3], tc[1])
+      it(msg, function()
+        local got = utils.is_integer(tc[2])
+        local want = tc[3]
+
+        assert.same(got, want)
+      end)
+    end
+  end)
+
+  describe("map()", function()
+    it("should work", function()
+      local got = utils.map({ 10, 20, 30 }, function(v)
+        return tostring(v * 10) .. "!"
+      end)
+
+      assert.same(got, { "100!", "200!", "300!" })
+    end)
+
+    it("should only map over the array part of the table", function()
+      local got = utils.map({ a = 99, 10, 20, 30, b = 88 }, function(v)
+        return tostring(v * 10) .. "!"
+      end)
+
+      assert.same(got, { a = 99, "100!", "200!", "300!", b = 88 })
+    end)
+  end)
+
   describe("concat()", function()
     it("should work", function()
       local got = utils.concat({ 1, 2, 3 }, { "a", "b", "c" })
@@ -211,12 +261,6 @@ describe("utils.utils", function()
         assert.same(got, want)
       end)
     end
-
-    it("should work", function()
-      local got = utils.is_callable(function() end)
-
-      assert.same(got, true)
-    end)
   end)
 
   describe("lazy()", function()
@@ -320,6 +364,120 @@ describe("utils.utils", function()
         f()
 
         assert.same("Lazy(function)", tostring(f))
+      end)
+    end)
+  end)
+
+  describe("RingBuffer", function()
+    it("should work", function()
+      local p = utils.RingBuffer.new(5) ---@type utils.RingBuffer<integer>
+
+      p:push(10)
+      p:push(20)
+      p:push(30)
+
+      assert.same(p:cap(), 5)
+      assert.same(p:len(), 3)
+      assert.same(p:empty(), false)
+      assert.same(p:full(), false)
+      assert.same(tostring(p), "RingBuffer(3/5)")
+    end)
+
+    describe(":iter()", function()
+      it("should work", function()
+        local p = utils.RingBuffer.new(5) ---@type utils.RingBuffer<integer>
+
+        p:push(10)
+        p:push(20)
+        p:push(30)
+
+        local got = {}
+        for i, v in p:iter() do
+          got[i] = v
+        end
+
+        assert.same(got, { 10, 20, 30 })
+      end)
+
+
+      it("should iterate over a full buffer", function()
+        local p = utils.RingBuffer.new(5) ---@type utils.RingBuffer<integer>
+
+        p:push(10)
+        p:push(20)
+        p:push(30)
+        p:push(40)
+        p:push(50)
+
+        local got = {}
+        for i, v in p:iter() do
+          got[i] = v
+        end
+
+        assert.same(got, { 10, 20, 30, 40, 50 })
+      end)
+
+      it("should iterate over a overflown buffer", function()
+        local p = utils.RingBuffer.new(5) ---@type utils.RingBuffer<integer>
+
+        p:push(10)
+        p:push(20)
+        p:push(30)
+        p:push(40)
+        p:push(50)
+        p:push(60)
+        p:push(70)
+
+        local got = {}
+        for i, v in p:iter() do
+          got[i] = v
+        end
+
+        assert.same(got, { 30, 40, 50, 60, 70 })
+      end)
+
+      it("should not mutate the buffer", function()
+        local p = utils.RingBuffer.new(5) ---@type utils.RingBuffer<integer>
+
+        p:push(10)
+        p:push(20)
+        p:push(30)
+        p:push(40)
+        p:push(50)
+
+        local got1 = {}
+        for i, v in p:iter() do
+          got1[i] = v
+        end
+
+        local got2 = {}
+        do
+          -- Partial consumption.
+          local iter = p:iter()
+
+          for i = 0, 2 do
+            local k, v = iter(p, i)
+            got2[k] = v
+          end
+        end
+
+        local got3 = {}
+        for i, v in p:iter() do
+          got3[i] = v
+          if i >= 2 then
+            break
+          end
+        end
+
+        local got4 = {}
+        for i, v in p:iter() do
+          got4[i] = v
+        end
+
+        assert.same(got1, { 10, 20, 30, 40, 50 })
+        assert.same(got2, { 10, 20, 30 })
+        assert.same(got3, { 10, 20 })
+        assert.same(got4, { 10, 20, 30, 40, 50 })
       end)
     end)
   end)

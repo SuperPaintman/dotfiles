@@ -14,8 +14,40 @@ local uv = vim.uv or vim.loop
 local M = {}
 
 --------------------------------------------------------------------------------
+-- Number
+--------------------------------------------------------------------------------
+
+--- Returns true if `v` is an integer.
+---
+---@param v any
+---@return boolean
+M.is_integer = function(v)
+  return type(v) == "number" and (v % 1 == 0)
+end
+
+--------------------------------------------------------------------------------
 -- Table
 --------------------------------------------------------------------------------
+
+---@generic T
+---@generic R
+---@param arr T[]
+---@param f fun(v: T): R
+---@return R[]
+M.map = function(arr, f)
+  local res = {}
+
+  -- Preserve the non-array part of the table.
+  for k, v in pairs(arr) do
+    res[k] = v
+  end
+
+  for i, v in ipairs(arr) do
+    res[i] = f(v)
+  end
+
+  return res
+end
 
 ---@generic T1
 ---@generic T2
@@ -223,6 +255,136 @@ function Lazy._init(lazy)
 end
 
 M.lazy = Lazy.new
+
+--- A fixed-capacity ring buffer.
+---
+---@class utils.RingBuffer<T>
+---@field private _buf T[]
+---@field private _cap integer
+---@field private _head integer
+---@field private _count integer
+local RingBuffer = {}
+---@private
+RingBuffer.__index = RingBuffer
+M.RingBuffer = RingBuffer
+
+--- Creates a new ring buffer with the given capacity.
+---
+---@generic T
+---@param capacity integer
+---@return utils.RingBuffer<T>
+function RingBuffer.new(capacity)
+  assert(M.is_integer(capacity), "capacity must be an integer")
+  assert(capacity >= 1, "capacity must be a positive integer")
+
+  return setmetatable({
+    _buf   = {},
+    _cap   = capacity,
+    _head  = 1,
+    _count = 0,
+  }, RingBuffer)
+end
+
+--- Pushes a value into the buffer. If buffer is full then overwrites the
+--- oldest element.
+---
+---@generic T
+---@param self utils.RingBuffer<T>
+---@param value T
+function RingBuffer:push(value)
+  if value == nil then
+    return
+  end
+
+  if self._count == self._cap then
+    local pos = self._head
+    self._buf[pos] = value
+    self._head = self._head % self._cap + 1
+  else
+    local pos = (self._head + self._count - 1) % self._cap + 1
+    self._buf[pos] = value
+    self._count = self._count + 1
+  end
+end
+
+--- Removes and return the oldest element.
+---
+---@generic T
+---@return T? value -- nil if empty
+function RingBuffer:pop()
+  if self._count == 0 then
+    return nil
+  end
+
+  local value = self._buf[self._head]
+  self._buf[self._head] = nil
+  self._head = self._head % self._cap + 1
+  self._count = self._count - 1
+  return value
+end
+
+---@generic T
+---@private
+---@param i? integer
+---@return integer?
+---@return T?
+function RingBuffer:_iter_next(i)
+  i = i or 0
+  if i >= self._count then
+    return nil
+  end
+
+  i = i + 1
+  return i, self._buf[(self._head + i - 2) % self._cap + 1]
+end
+
+--- Returns an iterator over elements oldest-to-newest.
+---
+--- Doesn't modyfy the ring buffer.
+---
+---@generic T
+---@return fun(b: utils.RingBuffer<T>, i?: integer): integer, T
+---@return utils.RingBuffer<T>
+---@return integer
+function RingBuffer:iter()
+  return self._iter_next, self, 0
+end
+
+--- Returns the ring buffer capacity.
+---
+---@return integer
+function RingBuffer:cap() return self._cap end
+
+--- Returns the number of stored elements in the ring buffer.
+---
+---@return integer
+function RingBuffer:len() return self._count end
+
+--- Returns `true` when the ring buffer is empty.
+---
+---@return boolean
+function RingBuffer:empty() return self._count == 0 end
+
+--- Returns `true` when the ring buffer is full.
+---
+---@return boolean
+function RingBuffer:full() return self._count == self._cap end
+
+--- Removes all elements from the ring buffer.
+function RingBuffer:clear()
+  for k = 1, self._cap do
+    self._buf[k] = nil
+  end
+
+  self._head = 1
+  self._count = 0
+end
+
+---@private
+---@return string
+function RingBuffer:__tostring()
+  return string.format("RingBuffer(%d/%d)", self._count, self._cap)
+end
 
 --------------------------------------------------------------------------------
 -- Export
