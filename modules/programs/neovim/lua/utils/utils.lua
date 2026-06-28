@@ -3,6 +3,7 @@
 --------------------------------------------------------------------------------
 -- Init
 --------------------------------------------------------------------------------
+
 local vim = _G.vim or {}
 local uv = vim.uv or vim.loop
 
@@ -209,10 +210,7 @@ end
 ---@private
 ---@param self utils.Lazy
 function Lazy:__tostring()
-  local t = "unknown"
-  if self._initialized then
-    t = type(self._value)
-  end
+  local t = self._initialized and type(self._value) or "unknown"
   return "Lazy(" .. t .. ")"
 end
 
@@ -224,10 +222,7 @@ function Lazy._init(lazy)
   end
 end
 
----@generic T
----@param f fun(): T
----@return T
-M.lazy = function(f) return Lazy.new(f) end
+M.lazy = Lazy.new
 
 --------------------------------------------------------------------------------
 -- Export
