@@ -29,6 +29,7 @@ in
     ./development/go
     ./development/javascript
     ./development/lua
+    ./development/protobuf
     ./development/python
     ./development/ruby
     ./development/rust

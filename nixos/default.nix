@@ -94,6 +94,7 @@ in
       };
       javascript.enable = true;
       lua.enable = true;
+      protobuf.enable = true;
       python.enable = true;
       ruby.enable = false;
       rust.enable = true;
@@ -230,9 +231,9 @@ in
     terraform-lsp
     arduino
     # nodePackages.prettier
-    protobuf
-    protoc-gen-go
-    protoc-gen-go-grpc
+    # protobuf
+    # protoc-gen-go
+    # protoc-gen-go-grpc
     # zig
 
     # Docker.
