@@ -1,31 +1,56 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  # gopls breaks if it is compiled with a lower version than the one it is running against.
+  # This will affect users especially when project they work on bump go minor version before
+  # the update went through nixpkgs staging. Further, gopls is a central ecosystem component.
+  buildGoLatestModule,
+  fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
+}:
 
-buildGoModule rec {
+buildGoLatestModule (finalAttrs: {
   pname = "gopls";
-  # version = "0.7.5";
-  version = "845bb90a1df4ce4789c794479a29a4ea07e12414";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "tools";
-    # rev = "gopls/v${version}";
-    rev = version;
-    sha256 = "1nyrr8xynbl621aqpgfa11hql7l81sih9q14svw3d91jpz3q0knr";
+    rev = "gopls/v${finalAttrs.version}";
+    hash = "sha256-DYYitsrdH4nujDFJgdkObEpgElhXI7Yk2IpA/EVVLVo=";
   };
 
   modRoot = "gopls";
-  # vendorSha256 = "sha256-nKjJjtVHk/RLIHI/5v8tO3RcaLLZhr0A6llYGsB0ifQ=";
-  vendorSha256 = "1yjc8qr5y5hik2c5qfax4pbd8c1nmsnmlamzbdawcfambanasdn3";
+  vendorHash = "sha256-J6QcefSs4XtnktlzG+/+aY6fqkHGd9MMZqi24jAwcd0=";
+
+  # https://github.com/golang/tools/blob/9ed98faa/gopls/main.go#L27-L30
+  ldflags = [ "-X main.version=v${finalAttrs.version}" ];
 
   doCheck = false;
 
-  # Only build gopls, and not the integration tests or documentation generator.
-  subPackages = [ "." ];
+  # Only build gopls & modernize, not the integration tests or documentation generator.
+  subPackages = [
+    "."
+    "internal/analysis/modernize/cmd/modernize"
+  ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+  # nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
+
+  # passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=gopls/(.*)" ]; };
+
+  meta = {
+    changelog = "https://github.com/golang/tools/releases/tag/gopls/v${finalAttrs.version}";
     description = "Official language server for the Go language";
     homepage = "https://github.com/golang/tools/tree/master/gopls";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mic92 SuperSandro2000 zimbatm ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
+      mic92
+      rski
+      SuperSandro2000
+      zimbatm
+    ];
+    mainProgram = "gopls";
   };
-}
+})

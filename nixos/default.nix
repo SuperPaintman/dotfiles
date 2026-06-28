@@ -89,10 +89,7 @@ in
       dart.flutter.enable = false;
       go = {
         enable = true;
-
-        # TODO(SuperPaintman): patch in overlays.
-        package = localPkgs.go_1_25; 
-        gopls.package = localPkgs.gopls;
+        package = pkgs.go_latest; 
       };
       javascript.enable = true;
       ruby.enable = false;
@@ -204,11 +201,8 @@ in
     # llvm
     # ccls
     # go
-    # localPkgs.go_1_18beta1
-    # localPkgs.go_1_25
     # gotools
     # gopls
-    # localPkgs.gopls
     # godef
     # go-outline
     # gomodifytags

@@ -13,17 +13,6 @@ with pkgs; rec {
   gh = callPackage ./applications/version-management/git-and-tools/gh/default.nix { };
 
   # Development.
-  go_1_18beta1 = callPackage ./development/compilers/go/1.18beta1.nix ({
-    inherit (darwin.apple_sdk.frameworks) Security Foundation;
-  } // lib.optionalAttrs (stdenv.cc.isGNU && stdenv.isAarch64) {
-    stdenv = gcc8Stdenv;
-    buildPackages = buildPackages // { stdenv = buildPackages.gcc8Stdenv; };
-  });
-
-  buildGo118beta1Module = callPackage ./development/go-modules/generic {
-    go = go_1_18beta1;
-  };
-
   fennel = callPackage ./development/interpreters/fennel {
     lua = luajit;
   };
@@ -33,19 +22,7 @@ with pkgs; rec {
     lua = luajit;
   };
 
-  gopls = callPackage ./development/tools/gopls {
-    buildGoModule = buildGo118beta1Module;
-  };
-
   rustup-openssl = callPackage ./development/tools/rust/rustup-openssl { };
-
-  zig_0_11 = callPackage ./development/compilers/zig/0.11.nix {
-    llvmPackages = llvmPackages_16;
-  };
-
-  zig = zig_0_11;
-
-  zls = callPackage ./development/tools/language-servers/zls { inherit zig_0_11; };
 
   # Games.
   anki-desktop = callPackage ./games/anki-desktop { };
