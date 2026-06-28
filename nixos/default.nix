@@ -249,17 +249,9 @@ in
     steam
 
     # Misc.
-    (polybar.override { pulseSupport = true; })
     entr # Run arbitrary commands when files change.
     tldr # Simple man pages.
     # ripgrep # A utility that combines the usability of The Silver Searcher with the raw speed of grep.
-    # Window switcher, application launcher and dmenu replacement.
-    # (rofi.override {
-    #   plugins = [
-    #     pkgs.rofi-emoji
-    #     # localPkgs.rofi-blocks
-    #   ];
-    # })
     feh # Image viewer.
     arandr # Visual front end for XRandR.
     pavucontrol # PulseAudio Volume Control.

@@ -30,7 +30,7 @@ imports ([
   ./nixpkgs
   # ./npm
   # ./nvim
-  ./polybar
+  # ./polybar
   # ./prettier
   # ./rofi # TODO(SuperPaintman): migrate WiFi and VPM modes
   ./skhd
