@@ -87,6 +87,7 @@ in
       cc.enable = true;
       dart.enable = false;
       dart.flutter.enable = false;
+      essential.enable = true;
       go = {
         enable = true;
         package = pkgs.go_latest; 
@@ -190,7 +191,7 @@ in
     # skypeforlinux
 
     # Compilers, interpreters and dev packages.
-    gnumake
+    # gnumake
     # clang
     # clang-tools
     # gcc

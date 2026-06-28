@@ -25,6 +25,7 @@ in
 
     ./development/cc
     ./development/dart
+    ./development/essential
     ./development/go
     ./development/javascript
     ./development/lua
