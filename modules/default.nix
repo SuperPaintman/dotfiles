@@ -27,6 +27,7 @@ in
     ./development/dart
     ./development/go
     ./development/javascript
+    ./development/lua
     ./development/ruby
     ./development/rust
     ./development/zig

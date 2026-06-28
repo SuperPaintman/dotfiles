@@ -92,6 +92,7 @@ in
         package = pkgs.go_latest; 
       };
       javascript.enable = true;
+      lua.enable = true;
       ruby.enable = false;
       rust = {
         enable = true;
@@ -232,7 +233,6 @@ in
     terraform-lsp
     arduino
     # nodePackages.prettier
-    luajit
     protobuf
     protoc-gen-go
     protoc-gen-go-grpc
