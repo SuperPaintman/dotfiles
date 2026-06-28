@@ -32,7 +32,7 @@ imports ([
   # ./nvim
   ./polybar
   # ./prettier
-  ./rofi
+  # ./rofi # TODO(SuperPaintman): migrate WiFi and VPM modes
   ./skhd
   ./vim
   ./vscode
