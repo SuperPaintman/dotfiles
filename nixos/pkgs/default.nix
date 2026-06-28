@@ -4,9 +4,6 @@ with pkgs; rec {
   # Applications.
   firefox-private = callPackage ./applications/networking/browsers/firefox { };
 
-  # Development.
-  rustup-openssl = callPackage ./development/tools/rust/rustup-openssl { };
-
   # Games.
   anki-desktop = callPackage ./games/anki-desktop { };
 

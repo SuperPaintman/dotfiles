@@ -94,12 +94,7 @@ in
       javascript.enable = true;
       lua.enable = true;
       ruby.enable = false;
-      rust = {
-        enable = true;
-
-        # TODO(SuperPaintman): patch in overlays.
-        rustup.package = localPkgs.rustup-openssl;
-      };
+      rust.enable = true;
       zig.enable = true;
     };
 
@@ -128,6 +123,7 @@ in
     (import ../overlays/lib.nix)
     (import ../overlays/pkgs.nix)
     (import ../overlays/ports.nix)
+    (import ../overlays/patches.nix)
     (self: super: {
       unstable = unstable;
       local = localPkgs;
