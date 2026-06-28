@@ -129,6 +129,7 @@ in
   nixpkgs.overlays = [
     (import ../overlays/lib.nix)
     (import ../overlays/pkgs.nix)
+    (import ../overlays/ports.nix)
     (self: super: {
       unstable = unstable;
       local = localPkgs;
