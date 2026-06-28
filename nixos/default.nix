@@ -231,17 +231,8 @@ in
     # rnix-lsp
     terraform-lsp
     arduino
-    # localPkgs.difftastic
     # nodePackages.prettier
-    (
-      luajit.withPackages (
-        packages: [
-          localPkgs.fennel
-        ]
-      )
-    )
-    localPkgs.fennel
-    localPkgs.fnlfmt
+    luajit
     protobuf
     protoc-gen-go
     protoc-gen-go-grpc

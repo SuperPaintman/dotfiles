@@ -166,10 +166,6 @@ format-prettier:
 format-lua:
 	./scripts/lua-format.sh --config=./.lua-format -i $(LUA_FILES)
 
-.PHONY: format-fnl
-format-fnl:
-	fnlfmt --fix $(FNL_FILES)
-
 .PHONY: generate
 generate: generate-configs generate-vscode-extensions
 
