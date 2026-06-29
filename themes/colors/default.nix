@@ -4,7 +4,7 @@
 
 { callPackages, lib }:
 let
-  libColors = (callPackages ../../nixos/lib { }).colors;
+  libColors = (callPackages ../lib { }).colors;
 
   colors = with libColors; rec {
     base0 = { gui = "#1B2229"; };
