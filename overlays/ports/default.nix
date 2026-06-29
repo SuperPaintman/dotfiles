@@ -1,67 +1,79 @@
 { final, prev }:
 
 let
-  pkgs = final;
+  inherit (prev) callPackage lib;
+  inherit (builtins) compareVersions hasAttr;
+  inherit (lib) any filter concatStringsSep;
 
-  inherit (pkgs) callPackage stdenv lib;
-  inherit (lib) assertMsg trace traceVal traceValFn id isString;
-  inherit (builtins) typeOf hasAttr;
+  sources = import ./sources.nix { inherit (prev) fetchgit; };
 
-  sources = import ./sources.nix { inherit (pkgs) fetchgit; };
+  debug = false;
+  warn' = lib.warn;
+  warn = msg: warn' "[ports]: ${msg}";
+  trace' = msg: v: if debug then builtins.trace msg v else v;
+  trace = msg: trace' "[ports]: ${msg}";
 
-  debug = if false then trace else msg: id;
-
-  # Overlay package only if the current version is older.
-  ifNewerFn = name: overlay: fn:
-    let
-      overlayVersion = overlay.version;
-    in
+  port = name: pkg:
     if !(hasAttr name prev) then
-      debug "[overlays.ports]: current version of '${name}' does not exist: null >= ${overlayVersion}" (fn false overlay)
+      trace "${name}: not in prev, using overlay ${pkg.version}"
+      pkg
+    else if compareVersions prev.${name}.version pkg.version >= 0 then
+      warn "${name}: prev ${prev.${name}.version} >= overlay ${pkg.version}, overlay is redundant"
+      prev.${name}
     else
-      let
-        current = prev.${name};
-        currentVersion = current.version;
+      trace "${name}: prev ${prev.${name}.version} < overlay ${pkg.version}, upgrading"
+      pkg;
 
-        newer = builtins.compareVersions currentVersion overlayVersion >= 0;
-        msg = "[overlays.ports]: current version of '${name}' is ${if newer then "newer" else "older"}: ${currentVersion} >= ${overlayVersion}"
-          + (if newer then ": probably delete the overlay?" else "");
-      in
-      assert assertMsg (isString currentVersion)
-        "[overlays.ports]: current.version must be a string string, got ${typeOf currentVersion}";
-      assert assertMsg (isString overlayVersion)
-        "[overlays.ports]: overlay.version must be a string string, got ${typeOf overlayVersion}";
-      if newer then
-        trace msg (fn true current)
-      else
-        debug msg (fn false overlay);
+  pin = name: pkg:
+    trace "${name}: pinned to ${pkg.version}"
+    pkg;
 
-  ifNewer = name: overlay: ifNewerFn name overlay (_: id);
-in
+  ifDepsChanged = deps: name: pkg:
+    let
+      changed = n:
+        !(hasAttr n prev)
+        || final.${n}.version != prev.${n}.version;
+    in
+    if any changed deps then
+      trace "${name}: deps changed [${concatStringsSep ", " (filter changed deps)}], upgrading"
+      pkg
+    else if hasAttr name prev then
+      trace "${name}: deps unchanged, keeping"
+      prev.${name}
+    else
+      trace "${name}: deps unchanged but not in prev, using overlay"
+      pkg;
+in 
 
 rec {
-  lua-language-server = ifNewer "lua-language-server" (callPackage "${sources.lua-language-server}/pkgs/by-name/lu/lua-language-server/package.nix" { });
+  lua-language-server = port "lua-language-server"
+    (callPackage "${sources.lua-language-server}/pkgs/by-name/lu/lua-language-server/package.nix" { });
 
-  go_latest = ifNewer "go_latest" go_1_26;
-  buildGoLatestModule = ifNewerFn "go_latest" go_latest (newer: go: if newer then prev.buildGoLatestModule else callPackage "${sources.go}/pkgs/build-support/go/module.nix" {
-    inherit go;
-  });
+  go_latest = port "go_latest"
+    go_1_26;
+  buildGoLatestModule = ifDepsChanged [ "go_latest" ] "buildGoLatestModule"
+    buildGo126Module;
 
-  go_1_25 = ifNewer "go_1_25" (callPackage "${sources.go}/pkgs/development/compilers/go/1.25.nix" {
-    inherit buildGo125Module;
-  });
-  buildGo125Module = ifNewerFn "go_1_25" go_1_25 (newer: go: if newer then prev.buildGo125Module else callPackage "${sources.go}/pkgs/build-support/go/module.nix" {
-    inherit go;
-  });
+  go_1_25 = port "go_1_25"
+    (callPackage "${sources.go}/pkgs/development/compilers/go/1.25.nix" {
+      inherit buildGo125Module;
+    });
+  buildGo125Module = ifDepsChanged [ "go_1_25" ] "buildGo125Module"
+    (callPackage "${sources.go}/pkgs/build-support/go/module.nix" {
+      go = go_1_25;
+    });
 
-  go_1_26 = ifNewer "go_1_26" (callPackage "${sources.go}/pkgs/development/compilers/go/1.26.nix" {
-    inherit buildGo126Module;
-  });
-  buildGo126Module = ifNewerFn "go_1_26" go_1_26 (newer: go: if newer then prev.buildGo126Module else callPackage "${sources.go}/pkgs/build-support/go/module.nix" {
-    inherit go;
-  });
+  go_1_26 = port "go_1_26"
+    (callPackage "${sources.go}/pkgs/development/compilers/go/1.26.nix" {
+      inherit buildGo126Module;
+    });
+  buildGo126Module = ifDepsChanged [ "go_1_26" ] "buildGo126Module"
+    (callPackage "${sources.go}/pkgs/build-support/go/module.nix" {
+      go = go_1_26;
+    });
 
-  gopls = ifNewer "gopls" (callPackage "${sources.gopls}/pkgs/by-name/go/gopls/package.nix" {
-    inherit buildGoLatestModule;
-  });
+  gopls = port "gopls"
+    (callPackage "${sources.gopls}/pkgs/by-name/go/gopls/package.nix" {
+      inherit buildGoLatestModule;
+    });
 }
