@@ -258,8 +258,12 @@ in
           # Set status line style.
           set-option -g status-style ${escapeShellArg "bg=${toHEXColor theme.colors.base2.color}"}
 
+          # Set the type of characters used for drawing pane borders:
+          # single (default), double, heavy, simple, number
+          set-option -g pane-border-lines heavy
+
           # Set the pane border style for panes aside from the active pane.
-          set-option -g pane-border-style ${escapeShellArg "fg=${toHEXColor theme.colors.base5.color}"}
+          set-option -g pane-border-style ${escapeShellArg "fg=${toHEXColor theme.colors.base2.color}"}
 
           # Set the pane border style for the currently active pane.
           set-option -g pane-active-border-style ${escapeShellArg "fg=${toHEXColor theme.colors.blue.color}"}
