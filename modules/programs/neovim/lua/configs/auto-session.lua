@@ -45,6 +45,8 @@ M.config = function()
       find_file_in_nvimtree,
       function()
         vim.wo.cursorline = true
+
+        vim.cmd("silent! wincmd =")
       end,
     },
   })

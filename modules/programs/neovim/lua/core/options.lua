@@ -142,13 +142,13 @@ opt.sessionoptions = {
   -- options and mappings local to a window or buffer (not global values for local options).
   -- "localoptions",
   -- size of the Vim window: 'lines' and 'columns'.
-  "resize",
+  -- "resize",
   --all tab pages; without this only the current tab page is restored, so that you can make a session for each tab page separately.
   "tabpages",
   -- position of the whole Vim window.
   "winpos",
   -- window sizes.
-  "winsize",
+  -- "winsize",
 }
 
 -- Number of spaces to use for each step of (auto)indent.
