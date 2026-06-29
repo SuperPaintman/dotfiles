@@ -7,6 +7,8 @@ let
   inherit (lib) assertMsg trace traceVal traceValFn id isString;
   inherit (builtins) typeOf hasAttr;
 
+  sources = import ./sources.nix { inherit (pkgs) fetchgit; };
+
   debug = if false then trace else msg: id;
 
   # Overlay package only if the current version is older.
@@ -38,21 +40,28 @@ let
 in
 
 rec {
-  lua-language-server = ifNewer "lua-language-server" (callPackage ./nixpkgs/lua-language-server { });
+  lua-language-server = ifNewer "lua-language-server" (callPackage "${sources.lua-language-server}/pkgs/by-name/lu/lua-language-server/package.nix" { });
 
-  go_latest = ifNewer "go_latest" go_1_25;
-  buildGoLatestModule = ifNewerFn "go_latest" go_latest (newer: go: if newer then prev.buildGoLatestModule else callPackage ./nixpkgs/go-modules/generic {
+  go_latest = ifNewer "go_latest" go_1_26;
+  buildGoLatestModule = ifNewerFn "go_latest" go_latest (newer: go: if newer then prev.buildGoLatestModule else callPackage "${sources.go}/pkgs/build-support/go/module.nix" {
     inherit go;
   });
 
-  go_1_25 = ifNewer "go_1_25" (callPackage ./nixpkgs/go/1.25.nix {
+  go_1_25 = ifNewer "go_1_25" (callPackage "${sources.go}/pkgs/development/compilers/go/1.25.nix" {
     inherit buildGo125Module;
   });
-  buildGo125Module = ifNewerFn "go_1_25" go_1_25 (newer: go: if newer then prev.buildGo125Module else callPackage ./nixpkgs/go-modules/generic {
+  buildGo125Module = ifNewerFn "go_1_25" go_1_25 (newer: go: if newer then prev.buildGo125Module else callPackage "${sources.go}/pkgs/build-support/go/module.nix" {
     inherit go;
   });
 
-  gopls = ifNewer "gopls" (callPackage ./nixpkgs/gopls {
+  go_1_26 = ifNewer "go_1_26" (callPackage "${sources.go}/pkgs/development/compilers/go/1.26.nix" {
+    inherit buildGo126Module;
+  });
+  buildGo126Module = ifNewerFn "go_1_26" go_1_26 (newer: go: if newer then prev.buildGo126Module else callPackage "${sources.go}/pkgs/build-support/go/module.nix" {
+    inherit go;
+  });
+
+  gopls = ifNewer "gopls" (callPackage "${sources.gopls}/pkgs/by-name/go/gopls/package.nix" {
     inherit buildGoLatestModule;
   });
 }
