@@ -226,13 +226,15 @@ in
         "tmux/key-bindings.conf".source = ./key-bindings.conf;
         "tmux/key-bindings-extra.conf".text = ''
           # WTK.
-          unbind-key ?
-          bind-key ? split-window -Z ${escapeShellArg
-            "cat ${wtkConfig} | ${pkgs.wtk}/bin/wtk --color=always | ${pkgs.less}/bin/less"
-          }
+          bind-key ? display-message "'?' is not supported"
+          ${optionalString (!standalone) ''
+            bind-key ? split-window -Z ${escapeShellArg
+              "cat ${wtkConfig} | ${pkgs.wtk}/bin/wtk --color=always | ${pkgs.less}/bin/less -r"
+            }
+          ''}
 
           # Tmux Session Manager.
-          unbind-key -T custom-table-find s
+          bind-key -T custom-table-find s display-message "custom-table-find: 's' is not supported"
           ${optionalString (!standalone) ''
             bind-key -T custom-table-find s new-window -n 'tmux-session-manager' ${escapeShellArg
               "${tmux-session-manager}/bin/tmux-session-manager"
