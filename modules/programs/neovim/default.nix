@@ -177,7 +177,7 @@ let
     "c"
     "c_sharp"
     "css"
-    "dhall"
+    # "dhall"
     "diff"
     "dockerfile"
     "gdscript"
@@ -193,7 +193,7 @@ let
     "lua"
     "luadoc"
     "make"
-    "nickel"
+    # "nickel"
     "nix"
     "proto"
     "python"
@@ -288,17 +288,15 @@ let
       git
 
       # LSP-Config
-      { package = arduino-cli; bins = [ "arduino-cli" ]; } # Arduino
-      { package = arduino-language-server; bins = [ "arduino-language-server" ]; } # Arduino
       { package = clang-tools; bins = [ "clangd" ]; } # C / C++
-      { package = omnisharp-roslyn; bins = [ "OmniSharp" ]; } # C#
+      # { package = omnisharp-roslyn; bins = [ "OmniSharp" ]; } # C#
       { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-css-language-server" ]; } # CSS
-      { package = dhall-lsp-server; bins = [ "dhall-lsp-server" ]; } # Dhall
+      # { package = dhall-lsp-server; bins = [ "dhall-lsp-server" ]; } # Dhall
       # { package = gopls; bins = [ "gopls" ]; } # Go
       { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-html-language-server" ]; } # HTML
       { package = nodePackages.vscode-langservers-extracted; bins = [ "vscode-json-language-server" ]; } # JSON
       { package = lua-language-server; bins = [ "lua-language-server" ]; } # Lua
-      { package = nickel.nls; bins = [ "nls" ]; } # Nickel
+      # { package = nickel.nls; bins = [ "nls" ]; } # Nickel
       # { package = rnix-lsp; bins = [ "rnix-lsp" ]; } # Nix
       # { package = nixd; bins = [ "nixd" ]; } # Nix
       { package = rust-analyzer; bins = [ "rust-analyzer" ]; } # Rust
@@ -311,8 +309,7 @@ let
       { package = zls; bins = [ "zls" ]; } # Zig
 
       # Null-ls
-      { package = nodePackages.cspell; bins = [ "cspell" ]; }
-      { package = gdtoolkit_4; bins = [ "gdlint" "gdformat" ]; }
+      { package = gdtoolkit_4; bins = [ "gdformat" ]; }
       { package = go-tools; bins = [ "staticcheck" ]; }
       { package = gotools; bins = [ "goimports" ]; }
       { package = statix; bins = [ "statix" ]; }

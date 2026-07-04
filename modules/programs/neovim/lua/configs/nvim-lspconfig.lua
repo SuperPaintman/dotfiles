@@ -217,7 +217,7 @@ M.config = function()
   vim.lsp.config("dhall_lsp_server", {
     on_attach = create_on_attach({}),
   })
-  vim.lsp.enable("dhall_lsp_server")
+  -- vim.lsp.enable("dhall_lsp_server")
 
   -- Go
   vim.lsp.config("gopls", {
@@ -295,7 +295,7 @@ M.config = function()
     capabilities = capabilities,
     on_attach = create_on_attach({}),
   })
-  vim.lsp.enable("nickel_ls")
+  -- vim.lsp.enable("nickel_ls")
 
   -- Rust
   vim.lsp.config("rust_analyzer", {
