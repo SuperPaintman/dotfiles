@@ -16,7 +16,7 @@ let
 in
 imports ([
   # ./alacritty # Migrated to modules.
-  ./ansible
+  # ./ansible # Migrated to modules.
   ./awesome
   ./bash
   ./bin

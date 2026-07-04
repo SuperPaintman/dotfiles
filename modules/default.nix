@@ -4,6 +4,15 @@ with lib;
 
 let
   cfg = config.modules;
+
+  replaceHomeEnv' = replacement: str:
+    if hasPrefix "$HOME/" str then replacement + removePrefix "$HOME/" str
+    else if hasPrefix "\${HOME}/" str then replacement + removePrefix "\${HOME}/" str
+    else str;
+
+  replaceHomeEnv = replacement: replaceHomeEnv' (replacement + "/");
+
+  removeHomeEnv = replaceHomeEnv' "";
 in
 
 {
@@ -14,6 +23,7 @@ in
     ./themes
 
     ./programs/alacritty
+    ./programs/ansible
     ./programs/bat
     ./programs/essential
     ./programs/fzf
@@ -42,6 +52,69 @@ in
 
   # Options.
   options.modules = with types; {
+    xdg = {
+      cacheHome = mkOption {
+        type = string;
+        defaultText = "~/.cache";
+        default = "$HOME/.cache";
+        apply = toString;
+        description = ''
+          Absolute path to directory holding application caches.
+
+          Sets `XDG_CACHE_HOME` for the user.
+        '';
+      };
+
+      configHome = mkOption {
+        type = string;
+        defaultText = "~/.config";
+        default = "$HOME/.config";
+        apply = toString;
+        description = ''
+          Absolute path to directory holding application configurations.
+
+          Sets `XDG_CONFIG_HOME` for the user.
+        '';
+      };
+
+      dataHome = mkOption {
+        type = string;
+        defaultText = "~/.local/share";
+        default = "$HOME/.local/share";
+        apply = toString;
+        description = ''
+          Absolute path to directory holding application data.
+
+          Sets `XDG_DATA_HOME` for the user.
+        '';
+      };
+
+      stateHome = mkOption {
+        type = string;
+        defaultText = "~/.local/state";
+        default = "$HOME/.local/state";
+        apply = toString;
+        description = ''
+          Absolute path to directory holding application states.
+
+          Sets `XDG_STATE_HOME` for the user.
+        '';
+      };
+
+      # Non-standard XDG dirs.
+      fakeHome = mkOption {
+        type = string;
+        defaultText = "~/.local/user";
+        default = "$HOME/.local/user";
+        apply = toString;
+        description = ''
+          Absolute path to directory holding fake user home.
+
+          Sets `XDG_FAKE_HOME` for the user.
+        '';
+      };
+    };
+
     # User.
     #
     # Options and aliases for users and user-level packages.
@@ -155,29 +228,103 @@ in
     home-manager = {
       useUserPackages = true;
 
-      users = mkMerge [
-        # Files and XDG files.
+      users = let 
+        isFile = v:
+          isFunction v
+          || (isAttrs v
+          && (
+            (v ? text && (isFunction v.text || isString v.text))
+            || (v ? source && (isFunction v.source || isPath v.source || isDerivation v.source))
+          ));
+
+        normalizeHome = name: replaceHomeEnv config.home-manager.users.${name}.home.homeDirectory;
+
+        filterMapFiles = path: pred: f: v: let
+          walk = filterMapFiles;
+          fullPred = _: e: (!(isFile e)) || (pred e);
+        in
+          if isAttrs v then
+            if v ? _type then
+              if v._type == "merge" then
+                v // { contents = filterMapFiles "${path}.contents" pred f v.contents; }
+              else
+                assert assertMsg false "${path} unexpected _type in attrs: ${v._type}";
+                v
+            else if isFile v then
+              f v
+            else
+              mapAttrs (n: filterMapFiles "${path}.${builtins.toJSON n}" pred f) (filterAttrs fullPred v)
+          else if isList v then
+            imap0 (i: filterMapFiles "${path}[${toString i}]" pred f) (ifilter0 fullPred v)
+          else
+            assert assertMsg false "${path} unexpected type of value: ${typeOf v}";
+            v;
+
+        mapFiles = path: f: filterMapFiles path (_: true) f;
+
+        # filterFiles = path: pred: filterMapFiles path pred id;
+
+        applyFiles = path: username: let 
+          args = { 
+            inherit username;
+            home = config.home-manager.users.${username}.home.homeDirectory;
+            xdg = {
+              cacheHome = normalizeHome username cfg.xdg.cacheHome;
+              configHome = normalizeHome username cfg.xdg.configHome;
+              dataHome = normalizeHome username cfg.xdg.dataHome;
+              stateHome = normalizeHome username cfg.xdg.stateHome;
+              fakeHome = normalizeHome username cfg.xdg.fakeHome;
+            };
+          };
+          apply = f: f (intersectAttrs (functionArgs f) args);
+        in mapFiles
+          path
+          (f:
+            if isFunction f then
+              apply f
+            else
+              f
+              // optionalAttrs (f ? source && isFunction f.source) { source = apply f.source; }
+              // optionalAttrs (f ? text && isFunction f.text) { text = apply f.text; }
+          );
+      in mkMerge [
+        # XDG.
         (mapAttrs'
           (name: _: nameValuePair cfg.users.users.${name}.name {
-            home = {
-              file = mkAliasDefinitions options.modules.home.files;
-              activation = mkAliasDefinitions options.modules.home.activation;
-              stateVersion = config.system.stateVersion;
-            };
             xdg = {
-              configFile = mkAliasDefinitions options.modules.home.configFiles;
-              dataFile = mkAliasDefinitions options.modules.home.dataFiles;
+              enable = true;
+              cacheHome = normalizeHome name cfg.xdg.cacheHome;
+              configHome = normalizeHome name cfg.xdg.configHome;
+              dataHome = normalizeHome name cfg.xdg.dataHome;
+              stateHome = normalizeHome name cfg.xdg.stateHome;
             };
           })
           cfg.users.users)
 
-        # Non-standard XDG files.
+        # Files and XDG files.
+        (mapAttrs'
+          (name: _: nameValuePair cfg.users.users.${name}.name {
+            home = {
+              file = mkAliasAndWrapDefinitions (applyFiles "modules.home.files" name) options.modules.home.files;
+              activation = mkAliasDefinitions options.modules.home.activation;
+              stateVersion = config.system.stateVersion;
+            };
+            xdg = {
+              configFile = mkAliasAndWrapDefinitions (applyFiles "modules.home.configFiles" name) options.modules.home.configFiles;
+              # cacheFile = mkAliasAndWrapDefinitions (applyFiles "modules.home.cacheFiles" name) options.modules.home.cacheFiles;
+              dataFile = mkAliasAndWrapDefinitions (applyFiles "modules.home.dataFiles" name) options.modules.home.dataFiles;
+              # stateFile = mkAliasAndWrapDefinitions (applyFiles "modules.home.stateFiles" name) options.modules.home.stateFiles;
+            };
+          })
+          cfg.users.users)
+
+        # Non-standard XDG files: XDG_FAKE_HOME
         (mapAttrs'
           (name: _: nameValuePair cfg.users.users.${name}.name {
             home = {
               file = mapAttrs'
-                (k: v: nameValuePair ".local/user/${k}" v)
-                cfg.home.fakeFiles;
+                (k: v: nameValuePair "${removeHomeEnv cfg.xdg.fakeHome}/${k}" v)
+                ((applyFiles "modules.home.fakeFiles" name) cfg.home.fakeFiles);
             };
           })
           cfg.users.users)
@@ -189,13 +336,13 @@ in
 
     # Global environment variables.
     environment.sessionVariables = {
-      XDG_CACHE_HOME = "$HOME/.cache";
-      XDG_CONFIG_HOME = "$HOME/.config";
-      XDG_DATA_HOME = "$HOME/.local/share";
-      XDG_STATE_HOME = "$HOME/.local/state";
+      XDG_CACHE_HOME = cfg.xdg.cacheHome;
+      XDG_CONFIG_HOME = cfg.xdg.configHome;
+      XDG_DATA_HOME = cfg.xdg.dataHome;
+      XDG_STATE_HOME = cfg.xdg.stateHome;
 
       # Non-standard XDG dirs.
-      XDG_FAKE_HOME = "$HOME/.local/user";
+      XDG_FAKE_HOME = cfg.xdg.fakeHome;
 
       # See: https://github.com/Homebrew/brew/blob/master/docs/Analytics.md#opting-out
       HOMEBREW_NO_ANALYTICS = "1";

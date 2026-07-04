@@ -67,6 +67,7 @@ in
 
     programs = {
       alacritty.enable = true;
+      ansible.enable = true;
       bat.enable = true;
       essential.enable = true;
       essential.desktop.enable = true;
@@ -239,7 +240,7 @@ in
     # vagrant
 
     # Server configuration utils.
-    ansible
+    # ansible
     terraform
     awscli2 # Unified tool to manage your AWS services.
 
