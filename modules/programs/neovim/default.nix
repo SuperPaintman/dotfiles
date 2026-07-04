@@ -208,6 +208,9 @@ let
     "vim"
     "yaml"
     "zig"
+
+    # Custom.
+    "format_string"
   ];
 
   plugins =
@@ -225,13 +228,9 @@ let
       p.telescope-nvim.lazy
 
       # TreeSitter.
-      (p.nvim-treesitter.withParsers
-        (p:
-          (map (lang: p."tree-sitter-${lang}") treesitterLanguages)
-          ++ [
-            p.tree-sitter-format_string
-          ]
-        )).lazy
+      (p.nvim-treesitter.withParsers (p: 
+        (map (lang: p."tree-sitter-${lang}") treesitterLanguages)
+      )).lazy
       p.nvim-treesitter-playground.lazy
       p.nvim-treesitter-textobjects.lazy
 
