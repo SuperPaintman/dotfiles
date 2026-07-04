@@ -54,7 +54,7 @@ in
   options.modules = with types; {
     xdg = {
       cacheHome = mkOption {
-        type = string;
+        type = str;
         defaultText = "~/.cache";
         default = "$HOME/.cache";
         apply = toString;
@@ -66,7 +66,7 @@ in
       };
 
       configHome = mkOption {
-        type = string;
+        type = str;
         defaultText = "~/.config";
         default = "$HOME/.config";
         apply = toString;
@@ -78,7 +78,7 @@ in
       };
 
       dataHome = mkOption {
-        type = string;
+        type = str;
         defaultText = "~/.local/share";
         default = "$HOME/.local/share";
         apply = toString;
@@ -90,7 +90,7 @@ in
       };
 
       stateHome = mkOption {
-        type = string;
+        type = str;
         defaultText = "~/.local/state";
         default = "$HOME/.local/state";
         apply = toString;
@@ -103,7 +103,7 @@ in
 
       # Non-standard XDG dirs.
       fakeHome = mkOption {
-        type = string;
+        type = str;
         defaultText = "~/.local/user";
         default = "$HOME/.local/user";
         apply = toString;
