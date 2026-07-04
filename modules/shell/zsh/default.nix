@@ -72,6 +72,12 @@ in
       modules = {
         users.packages = [ cfg.package ];
 
+        shell.zsh.functions = ''
+          reload() {
+            source ~/.zshrc
+          }
+        '';
+
         home.configFiles = {
           "zsh/zshrc.zsh".source = pkgs.writeTextFile {
             name = "zshrc.zsh";

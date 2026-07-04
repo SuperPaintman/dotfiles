@@ -16,6 +16,8 @@ let
   BAT_CONFIG_DIR = "$XDG_CONFIG_HOME/bat";
   BAT_CONFIG_PATH = "${BAT_CONFIG_DIR}/bat.conf";
   BAT_CACHE_PATH = "$XDG_CACHE_HOME/bat";
+  BAT_THEME = "SuperPaintman";
+  # BAT_THEME = "TwoDark";
 in
 
 {
@@ -45,9 +47,11 @@ in
       users.packages = [ cfg.package ];
 
       shell.variables = {
-        inherit BAT_CONFIG_DIR;
-        inherit BAT_CONFIG_PATH;
-        inherit BAT_CACHE_PATH;
+        inherit 
+          BAT_CONFIG_DIR
+          BAT_CONFIG_PATH
+          BAT_CACHE_PATH
+          BAT_THEME;
       };
 
       shell.aliases = {
@@ -57,7 +61,7 @@ in
       home.configFiles = {
         "bat/bat.conf".text = ''
           # This is `bat`s configuration file.
-          --theme="SuperPaintman"
+          --theme="${BAT_THEME}"
         '';
         "bat/themes/SuperPaintman/SuperPaintman.tmTheme" = {
           source = themes.applications.textmate.writeTextmateThemeFile {

@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # Internal.
+# NOTE(SuperPaintman): don't want to migrate
 _get_funcname() {
     local funcname="$FUNCNAME[1]"
     [ "$funcname" = "" ] && funcname="$funcstack[2]"
@@ -9,6 +10,7 @@ _get_funcname() {
 }
 
 # Common.
+# NOTE(SuperPaintman): migrated
 reload() {
     source ~/.bashrc
 }
@@ -17,6 +19,7 @@ nicediff() {
     git difftool -y -x "diff -W $(tput cols) -y" | colordiff | less
 }
 
+# NOTE(SuperPaintman): migrated
 lfcd() {
     if ! which lf > /dev/null 2>&1; then
         echo "Please install lf" 1>&2
@@ -36,6 +39,7 @@ lfcd() {
     fi
 }
 
+# NOTE(SuperPaintman): migrated
 :q() {
     exit 0
 }

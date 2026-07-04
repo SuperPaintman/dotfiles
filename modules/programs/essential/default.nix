@@ -81,6 +81,9 @@ in
 
           wget = ''${mkBin pkgs.wget "wget"} --hsts-file="$XDG_DATA_HOME/wget-hsts"'';
 
+          # eza --color=auto
+          # gls --color=auto
+          # ls --color=auto
           ls = "${mkBin pkgs.eza "eza"} --color=auto";
         };
 

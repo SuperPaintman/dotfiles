@@ -10,6 +10,8 @@ let
   inherit (config.modules.home) standalone;
   cfg = config.modules.programs.lf;
 
+  mkBin = package: name: if standalone then name else "${package}/bin/${name}";
+
   lfpreview = pkgs.writeShellScriptBin "lfpreview" ''
     exec ${pkgs.bat}/bin/bat \
       --color=always \
@@ -62,7 +64,7 @@ in
           local dir
 
           tmp="$(umask 077 && mktemp)"
-          lf -last-dir-path="$tmp" "$@"
+          ${mkBin cfg.package "lf"} -last-dir-path="$tmp" "$@"
           if [ -f "$tmp" ]; then
             dir="$(cat "$tmp")"
             rm -f "$tmp"
@@ -131,46 +133,6 @@ in
         #   (concatStringsSep "\n")
         # ];
       };
-
-      # TODO(SuperPaintman):
-      #     I want to migrate the following files/snippets into this config.
-      #
-      #     Probably a custom option (like shell.functions.bash = ...).
-      /*
-      # from bash/functions.sh
-
-      lfcd() {
-          if ! which lf > /dev/null 2>&1; then
-              echo "Please install lf" 1>&2
-              return 1
-          fi
-
-          tmp="$(mktemp)"
-          lf -last-dir-path="$tmp" "$@"
-          if [ -f "$tmp" ]; then
-              dir="$(cat "$tmp")"
-              rm -f "$tmp"
-              if [ -d "$dir" ]; then
-                  if [ "$dir" != "$(pwd)" ]; then
-                      cd "$dir"
-                  fi
-              fi
-          fi
-      }
-
-      # from bash/aliases.sh
-
-      # Use `lfcd` (`lf`) as `cd` without arguments.
-      if can lfcd; then
-          cd() {
-              if [ "$#" = 0 ]; then
-                  lfcd
-              else
-                  builtin cd $@
-              fi
-          }
-      fi
-      */
     };
   };
 }

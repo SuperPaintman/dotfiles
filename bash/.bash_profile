@@ -28,6 +28,7 @@ if [ -x /usr/bin/lesspipe ]; then
     eval "$(SHELL=/bin/sh lesspipe)"
 fi
 
+# NOTE(SuperPaintman): migrated
 if [ -x /usr/bin/dircolors ]; then
     if [ -f ~/.dircolors ]; then
         eval "$(dircolors -b ~/.dircolors)"
@@ -64,13 +65,20 @@ if [ -n "$ZSH_VERSION" ]; then
 fi
 
 # Bash history
+# NOTE(SuperPaintman): migrated
 export HISTTIMEFORMAT='[%F %T] '
+# NOTE(SuperPaintman): migrated
 export HISTCONTROL=ignoreboth
+# NOTE(SuperPaintman): migrated
 export HISTSIZE=2000
+# NOTE(SuperPaintman): migrated
 export HISTFILESIZE="$HISTSIZE"
+# NOTE(SuperPaintman): migrated
 export HISTIGNORE="&:[ ]*:history:clear"
 
+# NOTE(SuperPaintman): migrated
 shopt -s histappend
+# NOTE(SuperPaintman): migrated
 shopt -s checkwinsize
 
 # Key bindings.

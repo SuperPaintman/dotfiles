@@ -16,12 +16,14 @@
 # Accepts the current `zsh-autosuggestions` suggestion.
 bindkey -M viins '^ ' autosuggest-accept
 
+# NOTE(SuperPaintman): migrated
 if can fzf-share && [ -f "$(fzf-share)/key-bindings.zsh" ]; then
     source "$(fzf-share)/key-bindings.zsh"
 elif can brew && brew --prefix fzf > /dev/null 2>&1 && [ -f "$(brew --prefix fzf)/shell/key-bindings.zsh" ]; then
     source "$(brew --prefix fzf)/shell/key-bindings.zsh"
 fi
 
+# NOTE(SuperPaintman): dont want to migrate
 if can git-fzf; then
     eval "$(git-fzf shell zsh status '^g^s')"
     eval "$(git-fzf shell zsh branch '^g^b')"
