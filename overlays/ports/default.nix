@@ -1,31 +1,31 @@
 { final, prev }:
 
 let
+  libx = (import ../../lib { pkgs = final; }).x;
+in
+
+let
   inherit (prev) callPackage lib;
   inherit (builtins) compareVersions hasAttr;
   inherit (lib) any filter concatStringsSep;
 
-  sources = import ./sources.nix { inherit (prev) fetchgit; };
+  log = libx.logger.makeLogger { domain = "overlays.ports"; trace = false; };
 
-  debug = false;
-  warn' = lib.warn;
-  warn = msg: warn' "[ports]: ${msg}";
-  trace' = msg: v: if debug then builtins.trace msg v else v;
-  trace = msg: trace' "[ports]: ${msg}";
+  sources = import ./sources.nix { inherit (prev) fetchgit; };
 
   port = name: pkg:
     if !(hasAttr name prev) then
-      trace "${name}: not in prev, using overlay ${pkg.version}"
+      log.trace "${name}: not in prev, using overlay ${pkg.version}"
       pkg
     else if compareVersions prev.${name}.version pkg.version >= 0 then
-      warn "${name}: prev ${prev.${name}.version} >= overlay ${pkg.version}, overlay is redundant"
+      log.warn "${name}: prev ${prev.${name}.version} >= overlay ${pkg.version}, overlay is redundant"
       prev.${name}
     else
-      trace "${name}: prev ${prev.${name}.version} < overlay ${pkg.version}, upgrading"
+      log.trace "${name}: prev ${prev.${name}.version} < overlay ${pkg.version}, upgrading"
       pkg;
 
   pin = name: pkg:
-    trace "${name}: pinned to ${pkg.version}"
+    log.trace "${name}: pinned to ${pkg.version}"
     pkg;
 
   ifDepsChanged = deps: name: pkg:
@@ -35,13 +35,13 @@ let
         || final.${n}.version != prev.${n}.version;
     in
     if any changed deps then
-      trace "${name}: deps changed [${concatStringsSep ", " (filter changed deps)}], upgrading"
+      log.trace "${name}: deps changed [${concatStringsSep ", " (filter changed deps)}], upgrading"
       pkg
     else if hasAttr name prev then
-      trace "${name}: deps unchanged, keeping"
+      log.trace "${name}: deps unchanged, keeping"
       prev.${name}
     else
-      trace "${name}: deps unchanged but not in prev, using overlay"
+      log.trace "${name}: deps unchanged but not in prev, using overlay"
       pkg;
 in 
 

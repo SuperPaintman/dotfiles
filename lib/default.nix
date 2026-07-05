@@ -14,5 +14,8 @@ pkgs.lib.makeExtensible (self:
 
       # Serialization.
       generators = callLibs ./generators.nix;
+
+      # Logger.
+      logger = callLibs ./logger.nix;
     };
   })

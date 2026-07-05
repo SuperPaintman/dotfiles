@@ -1,11 +1,11 @@
-{ pkgs, config, lib, ... }:
+{ pkgs, config, lib, libx, ... }:
 
 with lib;
 
 let
   cfg = config.modules.development.go;
 
-  warn = msg: lib.warn "[modules.development.go]: ${msg}";
+  log = libx.logger.makeLogger { domain = "modules.development.go"; };
 
   GOPATH = "$XDG_DATA_HOME/go";
   GOBIN = "${GOPATH}/bin";
@@ -65,12 +65,10 @@ in
         impl
         delve
       ]
-      ++ optionals (pkgs ? go-zsh-completions) (
-        if !(pathExists "${cfg.package}/share/zsh/site-functions/_golang") then
-          [ pkgs.go-zsh-completions ]
-        else
-          warn "_golang ZSH completion exists, pkgs.go-zsh-completions is redundant"
-          [ ]
+      ++ optional (pkgs ? go-zsh-completions) (
+        (log.warnIf (pathExists "${cfg.package}/share/zsh/site-functions/_golang")
+          "_golang ZSH completion exists, pkgs.go-zsh-completions is redundant")
+        pkgs.go-zsh-completions
       );
 
       shell.variables = {
