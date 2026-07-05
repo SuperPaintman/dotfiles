@@ -24,11 +24,11 @@ elif can brew && brew --prefix fzf > /dev/null 2>&1 && [ -f "$(brew --prefix fzf
 fi
 
 # NOTE(SuperPaintman): dont want to migrate
-if can git-fzf; then
-    eval "$(git-fzf shell zsh status '^g^s')"
-    eval "$(git-fzf shell zsh branch '^g^b')"
-    eval "$(git-fzf shell zsh log '^g^l')"
-fi
+# if can git-fzf; then
+#     eval "$(git-fzf shell zsh status '^g^s')"
+#     eval "$(git-fzf shell zsh branch '^g^b')"
+#     eval "$(git-fzf shell zsh log '^g^l')"
+# fi
 
 if can fzf-jump; then
     fzf-jump-cd-widget() {

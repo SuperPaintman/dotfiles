@@ -192,6 +192,7 @@ in
         github.user = "SuperPaintman";
 
         commit.gpgsign = true;
+        gpg.program = mkBin pkgs.gnupg "gpg";
 
         color.ui = true;
         color.status = {

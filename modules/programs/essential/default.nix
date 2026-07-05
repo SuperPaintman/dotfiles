@@ -44,6 +44,7 @@ in
           gnugrep # grep, fgrep, egrep
           bind # dig
           lsof
+          gnupg # gpg
 
           wget
           curl
