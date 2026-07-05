@@ -38,13 +38,6 @@ let
   };
 
   monitroidPkgs = pkgs.callPackage monitroid.path { };
-
-  # Check if config file exists.
-  vpnConfigs = builtins.filter (item: builtins.pathExists item.config) [
-    { name = "server"; config = "/home/superpaintman/.openvpn/server.conf"; }
-    { name = "sandbox1"; config = "/home/superpaintman/.openvpn/sandbox1.conf"; autoStart = true; }
-    { name = "moscow0"; config = "/home/superpaintman/.openvpn/moscow0.conf"; }
-  ];
 in
 {
   # Imports.
@@ -225,7 +218,7 @@ in
     nixpkgs-fmt
     # rnix-lsp
     terraform-lsp
-    arduino
+    # arduino
     # nodePackages.prettier
     # protobuf
     # protoc-gen-go
@@ -262,10 +255,6 @@ in
     anki-bin # Spaced repetition flashcard program
     (localPkgs.anki-desktop.override { anki-bin = anki-bin; }) # Spaced repetition flashcard program.
     wally-cli # CLI flashing tool for ZSA Moonlander.
-    mu
-    mutt # CLI email client.
-    notmuch
-    neomutt # CLI email client with some extras.
     prusa-slicer # Prusa Slicer.
     openscad # 3D parametric model compiler.
     freecad
@@ -497,21 +486,6 @@ in
     drivers = with pkgs; [ gutenprint ];
   };
 
-  services.openvpn.servers =
-    # Merge servicers into one set.
-    lib.mkMerge (
-      builtins.map
-        (
-          { name, config, autoStart ? false, up ? "", down ? "", ... }: {
-            "${name}" = {
-              inherit autoStart up down;
-              config = "config ${config}";
-            };
-          }
-        )
-        vpnConfigs
-    );
-
   services.udev.packages = [
     # Add rules for Moonlander.
     # See: https://github.com/zsa/wally/wiki/Linux-install
@@ -534,27 +508,6 @@ in
   #     };
   #   };
   # };
-
-  # Systemd.
-  # TODO(SuperPaintman): delete
-  systemd.services = {
-    # $ systemctl status greasemonkey-scripts.service.
-    greasemonkey-scripts =
-      let
-        bind = "127.0.0.1";
-        port = 29999;
-        directory = "/home/superpaintman/Projects/github.com/SuperPaintman/dotfiles/greasemonkey/scripts";
-      in
-      {
-        description = "Grease Monkey scrupts";
-        wantedBy = [ "multi-user.target" ];
-        serviceConfig = {
-          ExecStart = "${pkgs.python3}/bin/python3 -m http.server --bind '${bind}' ${toString port} --directory ${directory}";
-          Restart = "always";
-          RestartSec = "10s";
-        };
-      };
-  };
 
   # Virtualisation.
   virtualisation.docker = {
@@ -590,14 +543,7 @@ in
     wheelNeedsPassword = true;
 
     extraConfig =
-      let
-        vpnServices = builtins.map (item: item.name) vpnConfigs;
-        vpnCommands = [ "start" "stop" "restart" "status" ];
-      in
       ''
-        # No password for `nixos-rebuild`.
-        # %wheel ALL=(ALL:ALL) NOPASSWD: /run/current-system/sw/bin/nixos-rebuild switch
-
         # nmcli - device wifi.
         ${lib.concatMapStringsSep "\n"
           (command: ''
@@ -608,31 +554,6 @@ in
           '')
           [ "list" "connect" "rescan" ]
         }
-
-        # VPN.
-        ${lib.concatStringsSep "\n"
-        (
-          lib.lists.flatten
-          (
-            builtins.map
-            (
-              name: (
-                [ "# openvpn-${name}.service." ]
-                ++ (
-                  builtins.map
-                  (
-                    command: "%wheel ALL=(ALL:ALL) NOPASSWD: ${pkgs.systemd}/bin/systemctl ${command} openvpn-${name}.service"
-                  )
-                  vpnCommands
-                )
-              )
-            )
-            vpnServices
-          )
-        )}
-
-        # Arduino.
-        %wheel ALL=(ALL:ALL) NOPASSWD: ${pkgs.arduino}/bin/arduino
       '';
   };
 
@@ -724,20 +645,6 @@ in
             "${configPath}/${profilePath}/chrome/userContent.css".source = ../firefox/chrome/userContent.css;
           }
           { };
-
-      # batFiles = {
-      #   ".config/bat/themes/SuperPaintman/SuperPaintman.tmTheme" = {
-      #     source = themes.applications.textmate.writeTextmateThemeFile {
-      #       name = "SuperPaintman";
-      #       author = "SuperPaintman";
-      #       semanticClass = "theme.dark.superpaintman";
-      #       uuid = "ad17b280-ee9e-11ec-a8bd-43d0ce50926a";
-      #     };
-      #     onChange = ''
-      #       ${pkgs.bat}/bin/bat cache --build
-      #     '';
-      #   };
-      # };
     in
     {
       superpaintman = {
@@ -751,9 +658,6 @@ in
           files
           firefoxFiles
           # batFiles
-          {
-            ".dotfiles".source = mkSymlink "/home/superpaintman/Projects/github.com/SuperPaintman/dotfiles";
-          }
         ];
 
         home.stateVersion = "25.05";
