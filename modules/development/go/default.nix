@@ -62,7 +62,8 @@ in
         gomodifytags
         impl
         delve
-      ];
+      ]
+      ++ optional (pkgs ? go-zsh-completions) pkgs.go-zsh-completions;
 
       shell.variables = {
         inherit 

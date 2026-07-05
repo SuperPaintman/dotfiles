@@ -32,6 +32,6 @@ symlinkJoin {
     done
   '';
 
-  passthru.unwrapped = unwrapped;
+  passthru = unwrapped.passthru // { inherit unwrapped; };
   inherit (unwrapped) meta;
 }
