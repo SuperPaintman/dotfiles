@@ -32,7 +32,14 @@ in
   # Config.
   config = mkIf cfg.enable rec {
     modules = {
-      users.packages = [ cfg.package ];
+      users.packages = [
+        cfg.package
+        (pkgs.firefox-private.override { firefox = cfg.package; })
+        (pkgs.callPackage ./firefox-install-extensions.nix {
+          firefox = cfg.package;
+          extensions = import ./extensions.nix { inherit lib; };
+        })
+      ];
 
       # TODO(SuperPaintman): respect XDG.
       home.files = { username }: {

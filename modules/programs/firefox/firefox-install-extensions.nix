@@ -1,4 +1,5 @@
-{ lib, writeShellScriptBin, stdenv, unzip, firefox, extensions ? [ ] }:
+{ stdenvNoCC, lib, writeShellScriptBin, unzip, firefox, extensions ? [ ] }:
+
 let
   toExtensionPath' = out: x: "${out}/${x.pname}-${x.version}.xpi";
   toExtensionPath = x: toExtensionPath' x.out x;
@@ -15,7 +16,7 @@ let
     , sha256
     , meta ? { }
     }:
-    stdenv.mkDerivation rec {
+    stdenvNoCC.mkDerivation rec {
       inherit pname version meta;
 
       src = builtins.fetchurl { inherit url sha256; };
@@ -31,16 +32,13 @@ let
       '';
     };
 in
+
 writeShellScriptBin "firefox-install-extensions" ''
   set -e
   set -u
   set -o pipefail
 
-
-  ${lib.concatMapStringsSep
-  ""
-    (extension: ''
-      ${firefox}/bin/firefox ${toExtensionPath (toExtension extension)}
-    '')
-  extensions}
+  ${lib.concatMapStringsSep "\n"
+    (extension: ''${firefox}/bin/firefox ${toExtensionPath (toExtension extension)}'')
+    extensions}
 ''

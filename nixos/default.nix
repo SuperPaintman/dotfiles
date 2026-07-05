@@ -168,12 +168,12 @@ in
 
     # Browsers.
     # firefox
-    (
-      localPkgs.firefox-install-extensions.override {
-        firefox = firefox;
-        extensions = import ../firefox/extensions.nix args;
-      }
-    )
+    # (
+    #   localPkgs.firefox-install-extensions.override {
+    #     firefox = firefox;
+    #     extensions = import ../firefox/extensions.nix args;
+    #   }
+    # )
     chromium
 
     # Messengers.

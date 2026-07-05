@@ -1,19 +1,22 @@
-# A private window launcher for Firefox.
-{ firefox, symlinkJoin, makeDesktopItem }:
+{ stdenvNoCC, firefox, makeDesktopItem, copyDesktopItems }:
 
-let
-  unwrapped = firefox;
-in
+stdenvNoCC.mkDerivation rec {
+  pname = "firefox-private";
+  inherit (firefox) version;
 
-symlinkJoin {
-  pname = "${unwrapped.pname}-with-private";
-  inherit (unwrapped) version;
+  strictDeps = true;
 
-  paths = [ 
-    unwrapped
+  dontUnpack = true;
+  dontConfigure = true;
+  # dontBuild = true;
+  # dontInstall = true;
+
+  nativeBuildInputs = [ copyDesktopItems ];
+
+  desktopItems = [
     (makeDesktopItem {
       name = "firefox-private";
-      exec = "${unwrapped}/bin/firefox --private-window %U";
+      exec = "${firefox}/bin/firefox --private-window %U";
       desktopName = "Firefox (Private)";
       genericName = "Web Browser";
       icon = "firefox";
@@ -34,6 +37,6 @@ symlinkJoin {
     })
   ];
 
-  passthru.unwrapped = unwrapped;
-  inherit (unwrapped) meta;
+  passthru.firefox = firefox;
+  inherit (firefox) meta;
 }

@@ -7,6 +7,7 @@ in
 rec {
   bubblewrap-copilot = callPackage ./bubblewrap-copilot { };
   extras = callPackage ./extras { };
+  firefox-private = callPackage ./firefox-private { };
   gdsdecomp = callPackage ./gdsdecomp { };
   godot_3 = callPackage ./godot/3 { };
   godot_4 = callPackage ./godot/4 { };
