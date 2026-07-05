@@ -1,3 +1,9 @@
+# TODO(SuperPaintman):
+#   - [ ] Move ~/.mozilla to ~/.local/user/.mozilla
+#   - [ ] Convert user.js (preferences) to Nix
+#   - [ ] Review user.js
+#   - [ ] Set $BROWSER
+#
 # See: https://github.com/hlissner/dotfiles/blob/8fd49e4bb971f6035e4fd9c3e059f5dc2e8d87b9/modules/desktop/browsers/librewolf.nix
 { config, lib, pkgs, ... }:
 
