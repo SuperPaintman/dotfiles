@@ -29,15 +29,15 @@ let
 
   unstable = import <nixos-unstable> { config = { allowUnfree = true; }; };
 
-  monitroid = getLocalOrRemote {
-    local = /home/superpaintman/Projects/github.com/SuperPaintman/monitroid;
-    # TODO(SuperPaintman): fetch submodules.
-    remote = builtins.fetchGit {
-      url = "https://github.com/SuperPaintman/monitroid";
-    };
-  };
-
-  monitroidPkgs = pkgs.callPackage monitroid.path { };
+  # monitroid = getLocalOrRemote {
+  #   local = /home/superpaintman/Projects/github.com/SuperPaintman/monitroid;
+  #   # TODO(SuperPaintman): fetch submodules.
+  #   remote = builtins.fetchGit {
+  #     url = "https://github.com/SuperPaintman/monitroid";
+  #   };
+  # };
+  #
+  # monitroidPkgs = pkgs.callPackage monitroid.path { };
 in
 {
   # Imports.
@@ -46,9 +46,9 @@ in
     ../modules
     # / EXPERIMENTAL
 
-    ./modules/services/network-filesystems/rclone.nix
+    # ./modules/services/network-filesystems/rclone.nix
     (import "${home-manager}/nixos")
-    (import "${monitroid.path}/nixos")
+    # (import "${monitroid.path}/nixos")
     (if builtins.pathExists ../secrets then ../secrets/nixos else [ ])
   ];
 
