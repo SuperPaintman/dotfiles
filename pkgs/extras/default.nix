@@ -41,5 +41,13 @@ buildGoModule rec {
       --prefix PATH ':' ${lib.makeBinPath [
         nix-prefetch
       ]}
+
+    wrapProgram "$out/bin/tmux-session-manager" \
+      --prefix PATH ':' ${lib.makeBinPath [
+        fzf
+        fd
+        zoxide
+        tmux
+      ]}
   '';
 }
