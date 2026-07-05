@@ -5,6 +5,8 @@ with lib;
 let
   cfg = config.modules.development.go;
 
+  warn = msg: lib.warn "[modules.development.go]: ${msg}";
+
   GOPATH = "$XDG_DATA_HOME/go";
   GOBIN = "${GOPATH}/bin";
   GOCACHE = "$XDG_CACHE_HOME/go-build";
@@ -63,7 +65,13 @@ in
         impl
         delve
       ]
-      ++ optional (pkgs ? go-zsh-completions) pkgs.go-zsh-completions;
+      ++ optionals (pkgs ? go-zsh-completions) (
+        if !(pathExists "${cfg.package}/share/zsh/site-functions/_golang") then
+          [ pkgs.go-zsh-completions ]
+        else
+          warn "_golang ZSH completion exists, pkgs.go-zsh-completions is redundant"
+          [ ]
+      );
 
       shell.variables = {
         inherit 
