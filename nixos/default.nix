@@ -64,6 +64,7 @@ in
       bat.enable = true;
       essential.enable = true;
       essential.desktop.enable = true;
+      firefox.enable = true;
       fzf.enable = true;
       git.enable = true;
       lf.enable = true;
@@ -166,7 +167,7 @@ in
     # android-studio
 
     # Browsers.
-    firefox
+    # firefox
     (
       localPkgs.firefox-install-extensions.override {
         firefox = firefox;
@@ -619,32 +620,6 @@ in
           filesToSymlinks dotfilesFiles { }
         )
       ];
-
-      # TODO(SuperPaintman): replace it with nix function in the dotfiles.
-      firefoxFiles =
-        let
-          configPath = ".mozilla/firefox";
-          profileName = "superpaintman";
-          profilePath = "${profileName}.default";
-        in
-        filesToSymlinks
-          {
-            "${configPath}/profiles.ini".text = ''
-              [Profile0]
-              Name=default
-              IsRelative=1
-              Path=${profilePath}
-              Default=1
-
-              [General]
-              StartWithLastProfile=1
-              Version=2
-            '';
-            "${configPath}/${profilePath}/user.js".source = ../firefox/user.js;
-            "${configPath}/${profilePath}/chrome/userChrome.css".source = ../firefox/chrome/userChrome.css;
-            "${configPath}/${profilePath}/chrome/userContent.css".source = ../firefox/chrome/userContent.css;
-          }
-          { };
     in
     {
       superpaintman = {
@@ -656,7 +631,6 @@ in
 
         home.file = lib.mkMerge [
           files
-          firefoxFiles
           # batFiles
         ];
 
@@ -666,7 +640,6 @@ in
       root = {
         home.file = lib.mkMerge [
           files
-          firefoxFiles
           # batFiles
         ];
 

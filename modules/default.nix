@@ -26,6 +26,7 @@ in
     ./programs/ansible
     ./programs/bat
     ./programs/essential
+    ./programs/firefox
     ./programs/fzf
     ./programs/git
     ./programs/lf
@@ -256,6 +257,8 @@ in
               mapAttrs (n: filterMapFiles "${path}.${builtins.toJSON n}" pred f) (filterAttrs fullPred v)
           else if isList v then
             imap0 (i: filterMapFiles "${path}[${toString i}]" pred f) (ifilter0 fullPred v)
+          else if isFunction v then
+            f v
           else
             assert assertMsg false "${path} unexpected type of value: ${typeOf v}";
             v;
