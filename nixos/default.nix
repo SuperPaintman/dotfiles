@@ -130,7 +130,7 @@ in
     # coreutils
     # wget
     # curl
-    atop
+    # atop
     # htop
     btop
     # git
@@ -152,7 +152,7 @@ in
 
     # Shells.
     bash
-    fish
+    # fish
     zsh
 
     # Editors.
@@ -284,7 +284,7 @@ in
 
   # Programs.
   programs = {
-    fish.enable = true;
+    # fish.enable = true;
     zsh.enable = true;
   };
 
