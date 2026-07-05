@@ -376,6 +376,10 @@ in
           stdout = "$HOME/.cache/awesome/stdout";
           stderr = "$HOME/.cache/awesome/stderr";
         };
+        # TODO(SuperPaintman):
+        # awesome \
+        #     1> >(systemd-cat -t awesome -p info) \
+        #     2> >(systemd-cat -t awesome -p err)
 
         awesome = pkgs.awesome.override {
           lua = pkgs.luajit;
