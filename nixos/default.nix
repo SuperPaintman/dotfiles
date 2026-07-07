@@ -68,6 +68,7 @@ in
       fzf.enable = true;
       git.enable = true;
       lf.enable = true;
+      neofetch.enable = true;
       neovim.enable = true;
       rofi.enable = true;
       tmux.enable = true;

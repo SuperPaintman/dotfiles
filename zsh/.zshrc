@@ -39,7 +39,11 @@ if [ -f ~/.zsh/completions.zsh ]; then source ~/.zsh/completions.zsh; fi
 # Local (If we have one).
 if [ -f ~/.zshrc.local ]; then source ~/.zshrc.local; fi
 
+# Backword compatability until files are migrated.
+if [ -f ~/.zshrc.migration ]; then source ~/.zshrc.migration; fi
+
 # Show system information. Do not show it in tmux.
-if [ -z "$IN_NIX_SHELL" ] && [ -z "$TMUX" ] && can neofetch; then
-    neofetch --no_config --config ~/.config/neofetch/config.conf
-fi
+# NOTE(SuperPaintman): migrated
+# if [ -z "$IN_NIX_SHELL" ] && [ -z "$TMUX" ] && can neofetch; then
+#     neofetch --no_config --config ~/.config/neofetch/config.conf
+# fi

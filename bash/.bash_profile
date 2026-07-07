@@ -52,9 +52,6 @@ if [ -f ~/.bash/aliases.sh ]; then source ~/.bash/aliases.sh; fi
 # Theme.
 if [ -f ~/.bash/theme.sh ]; then source ~/.bash/theme.sh; fi
 
-# Backword compatability until files are migrated.
-if [ -f ~/.bash_profile.migration ]; then source ~/.bash_profile.migration; fi
-
 # Local (If we have one).
 if [ -f ~/.bash_profile.local ]; then source ~/.bash_profile.local; fi
 
@@ -87,7 +84,11 @@ if [ -f ~/.bash/key-bindings.sh ]; then source ~/.bash/key-bindings.sh; fi
 # Completions.
 if [ -f ~/.bash/completions.sh ]; then source ~/.bash/completions.sh; fi
 
+# Backword compatability until files are migrated.
+if [ -f ~/.bash_profile.migration ]; then source ~/.bash_profile.migration; fi
+
 # Show system information. Do not show it in tmux.
-if [ -z "$IN_NIX_SHELL" ] && [ -z "$TMUX" ] && can neofetch; then
-    neofetch --no_config --config ~/.config/neofetch/config.conf
-fi
+# NOTE(SuperPaintman): migrated
+# if [ -z "$IN_NIX_SHELL" ] && [ -z "$TMUX" ] && can neofetch; then
+#     neofetch --no_config --config ~/.config/neofetch/config.conf
+# fi

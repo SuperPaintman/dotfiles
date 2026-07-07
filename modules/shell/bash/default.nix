@@ -74,6 +74,9 @@ in
       '';
     };
     extras.theme = common.lib.mkExtraOption "theme" { };
+
+    # Entire config.
+    extras.config = common.lib.mkExtraOption "config" { };
   };
 
   # Config.
@@ -238,6 +241,11 @@ in
               # shellcheck disable=SC2120
 
               ################################################################################
+              # Extras Before
+              ################################################################################
+              ${cfg.extras.config.before}
+
+              ################################################################################
               # Variables.
               ################################################################################
               ${cfg.extras.variables.before}
@@ -275,9 +283,16 @@ in
               ################################################################################
               # Theme.
               ################################################################################
+              if [ "''${__DOTFILES_MIGRATION_BASH:-}" = "" ]; then
               ${cfg.extras.theme.before}
               ${cfg.theme}
               ${cfg.extras.theme.after}
+              fi
+
+              ################################################################################
+              # Extras After
+              ################################################################################
+              ${cfg.extras.config.after}
             '';
             checkPhase = ''
               # Verify syntax checking by parsing a script without running
@@ -293,26 +308,10 @@ in
           # TODO(SuperPaintman): delete later.
           # Backword compatability until files are migrated.
           ".bash_profile.migration".text = ''
-            ################################################################################
-            # Variables.
-            ################################################################################
-            ${cfg.extras.variables.before}
-            ${common.lib.mkExporedShEnvVars cfg.variables}
-            ${cfg.extras.variables.after}
-
-            ################################################################################
-            # Aliases.
-            ################################################################################
-            ${cfg.extras.aliases.before}
-            ${common.lib.mkShAliases cfg.aliases}
-            ${cfg.extras.aliases.after}
-
-            ################################################################################
-            # Functions.
-            ################################################################################
-            ${cfg.extras.functions.before}
-            ${cfg.functions}
-            ${cfg.extras.functions.after}
+            export __DOTFILES_MIGRATION_BASH=1
+            if [ -f ~/.config/bash/bashrc.sh ]; then
+              source ~/.config/bash/bashrc.sh
+            fi
           '';
         };
 
