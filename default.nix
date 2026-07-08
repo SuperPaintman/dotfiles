@@ -26,7 +26,7 @@ imports ([
   ./gtk
   ./htop
   # ./lf # Migrated to modules.
-  ./neofetch
+  # ./neofetch
   ./nixpkgs
   # ./npm
   # ./nvim
