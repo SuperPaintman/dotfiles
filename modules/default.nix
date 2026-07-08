@@ -30,6 +30,7 @@ in
     ./programs/fzf
     ./programs/git
     ./programs/lf
+    ./programs/neofetch
     ./programs/neovim
     ./programs/rofi
     ./programs/tmux
