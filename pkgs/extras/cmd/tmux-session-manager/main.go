@@ -142,7 +142,8 @@ func main() {
 	fd := commands.FD{
 		Hidden:   true,
 		MaxDepth: 5,
-		Type:     "directory",
+		// Git workdirs are regular files.
+		// Type: "directory",
 	}
 
 	projectDirs, err := fd.Find(ctx, "^\\.git$", projectsDir)
@@ -159,11 +160,9 @@ func main() {
 		name := pathToTmuxSessionName(pd, homedir, projectsDir, personalProjectsDir)
 
 		var session *Session
-		if session == nil {
-			if idx, ok := knownPath[pd]; ok {
-				session = &sessions[idx]
-				knownName[name] = idx
-			}
+		if idx, ok := knownPath[pd]; ok {
+			session = &sessions[idx]
+			knownName[name] = idx
 		}
 
 		if session == nil {
@@ -207,11 +206,9 @@ func main() {
 		name := pathToTmuxSessionName(zr.Path, homedir, "", "")
 
 		var session *Session
-		if session == nil {
-			if idx, ok := knownPath[zr.Path]; ok {
-				session = &sessions[idx]
-				knownName[name] = idx
-			}
+		if idx, ok := knownPath[zr.Path]; ok {
+			session = &sessions[idx]
+			knownName[name] = idx
 		}
 
 		if session == nil {
@@ -389,7 +386,7 @@ func replacePrefix(s, oldPrefix, newPrefix string) string {
 	return newPrefix + s[len(oldPrefix):]
 }
 
-var tmuxIlligalSessionSymbolsRe = regexp.MustCompile("[\\ \\.:]")
+var tmuxIlligalSessionSymbolsRe = regexp.MustCompile(`[\ \.:]`)
 
 func pathToTmuxSessionName(s, homedir, projectsDir, personalProjectsDir string) string {
 	projectsDir = replacePrefix(projectsDir, "~", homedir)

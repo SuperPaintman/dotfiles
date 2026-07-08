@@ -76,7 +76,8 @@ func main() {
 	fd := commands.FD{
 		Hidden:   true,
 		MaxDepth: 5,
-		Type:     "directory",
+		// Git workdirs are regular files.
+		// Type: "directory",
 	}
 
 	projectDirs, err := fd.Find(ctx, "^\\.git$", projectsDir)
