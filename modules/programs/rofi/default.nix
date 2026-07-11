@@ -11,6 +11,8 @@ let
   inherit (config.modules.home) standalone;
   cfg = config.modules.programs.rofi;
 
+  mkBin = package: name: if standalone then name else "${package}/bin/${name}";
+
   isHEXColor = value: isString value && match "^#[0-9a-fA-F]{6,8}$" value != null;
 
   isVariable = value: isString value && match "^@.+" value != null;
@@ -159,7 +161,7 @@ in
           "emoji"
           # "other:~/.config/rofi/modes/other"
           # "other:/home/superpaintman/Projects/github.com/SuperPaintman/dotfiles/pkgs/extras/rofi-modes"
-          "other:${pkgs.extras}/bin/rofi-modes"
+          "other:${mkBin pkgs.extras "rofi-modes"}"
         ];
 
         show-icons = true;

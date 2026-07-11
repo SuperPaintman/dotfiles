@@ -181,7 +181,7 @@ in
 
         diff.tool = "difft";
         difftool.prompt = false;
-        difftool.difft.cmd = ''${pkgs.difftastic}/bin/difft "$LOCAL" "$REMOTE"'';
+        difftool.difft.cmd = ''${mkBin pkgs.difftastic "difft"} "$LOCAL" "$REMOTE"'';
 
         # TODO(SuperPaintman): move into a global config.
         user = {
