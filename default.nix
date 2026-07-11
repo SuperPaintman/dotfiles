@@ -37,8 +37,8 @@ imports ([
   ./vim
   ./vscode
   ./xdg
-  ./xmodmap
-  # ./xresources
+  # ./xmodmap # Migrated to modules.
+  # ./xresources # Migrated to modules.
   ./yabai
   # ./yarn
   ./zsh

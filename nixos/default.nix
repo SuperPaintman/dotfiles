@@ -59,6 +59,7 @@ in
     };
 
     xsession.xresources.enable = true;
+    xsession.xmodmap.enable = true;
 
     programs = {
       alacritty.enable = true;
@@ -355,9 +356,10 @@ in
         ${numlockx}/bin/numlockx on
 
         # Load Xmodmap config.
-        if [ -f ~/.Xmodmap ]; then
-          ${xorg.xmodmap}/bin/xmodmap ~/.Xmodmap
-        fi
+        # NOTE(SuperPaintman): migrated
+        # if [ -f ~/.Xmodmap ]; then
+        #   ${xorg.xmodmap}/bin/xmodmap ~/.Xmodmap
+        # fi
 
         # Remove previous AwesomeWM state.
         ${coreutils}/bin/rm -f ~/.cache/awesome/state.json

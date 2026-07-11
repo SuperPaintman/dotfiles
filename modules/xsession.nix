@@ -20,6 +20,10 @@ let
     (name: value: if isAttrs value then mkDefaultAll value else mkDefault value)
     attrs;
 
+  assertion = cond: message: {
+    assertions = [ { assertion = cond; inherit message; } ];
+  };
+
   inherit (config.modules.themes) theme;
   cfg = config.modules.xsession;
 in
@@ -33,7 +37,7 @@ in
         type = bool;
         default = false;
         description = ''
-          Whenever to configure `xsession`.
+          Whenever to configure `xresources`.
         '';
       };
 
@@ -51,18 +55,31 @@ in
         '';
       };
     };
+
+    xmodmap = {
+      enable = mkOption {
+        type = bool;
+        default = false;
+        description = ''
+          Whenever to configure `xmodmap`.
+        '';
+      };
+    };
   };
 
   # Config.
   config = mkMerge [
     {
-      assertions = [
-        {
-          assertion = cfg.xresources.enable -> pkgs.stdenv.hostPlatform.isLinux;
-          message = "[modules.xsession]: xresources available only on Linux";
-        }
-      ];
+      home-manager.users = (mapAttrs'
+        (username: _: nameValuePair config.modules.users.users.${username}.name {
+          xresources.path = "${normalizeHome username config.modules.xdg.configHome}/x11/resources";
+          xsession.scriptPath = "${normalizeHome username config.modules.xdg.configHome}/x11/session";
+        })
+        config.modules.users.users);
     }
+
+    (assertion (cfg.xresources.enable -> pkgs.stdenv.hostPlatform.isLinux)
+      "[modules.xsession]: xresources available only on Linux")
     (mkIf cfg.xresources.enable {
       modules.xsession.xresources.properties = mkDefaultAll {
         # Colors.
@@ -96,7 +113,6 @@ in
     (mkIf cfg.xresources.enable {
       home-manager.users = (mapAttrs'
         (username: _: nameValuePair config.modules.users.users.${username}.name {
-          xresources.path = "${normalizeHome username config.modules.xdg.configHome}/x11/resources";
           xresources.properties = mkAliasDefinitions options.modules.xsession.xresources.properties;
         })
         config.modules.users.users);
@@ -107,5 +123,65 @@ in
       #   fi
       # '';
     })
+
+    (assertion (cfg.xmodmap.enable -> pkgs.stdenv.hostPlatform.isLinux)
+      "[modules.xsession]: xmodmap available only on Linux")
+    (mkIf cfg.xmodmap.enable (let
+      xmodmapScript = pkgs.writeShellScriptBin "xmodmap-setup" ''
+        set -euo pipefail
+
+        # Create a state dir. 
+        if [ ! -d "${config.modules.xdg.stateHome}/x11" ]; then
+          (umask 077 && mkdir "${config.modules.xdg.stateHome}/x11")
+        fi
+        chmod 0700 "${config.modules.xdg.stateHome}/x11"
+
+        # Load the previous state and save the current one.
+        if [ -f "${config.modules.xdg.stateHome}/x11/xmodmap.orig" ]; then
+          ${pkgs.xorg.xmodmap}/bin/xmodmap "${config.modules.xdg.stateHome}/x11/xmodmap.orig"
+        fi
+        (umask 077 && ${pkgs.xorg.xmodmap}/bin/xmodmap -pke > "${config.modules.xdg.stateHome}/x11/xmodmap.orig")
+
+        if [ -f "${config.modules.xdg.configHome}/x11/xmodmap" ]; then
+          ${pkgs.xorg.xmodmap}/bin/xmodmap "${config.modules.xdg.configHome}/x11/xmodmap"
+        fi
+      '';
+    in {
+      home-manager.users = (mapAttrs'
+        (username: _: nameValuePair config.modules.users.users.${username}.name {
+          xsession.initExtra = ''
+            ${xmodmapScript}/bin/xmodmap-setup
+          '';
+        })
+        config.modules.users.users);
+
+      services.xserver.displayManager.sessionCommands = ''
+        ${xmodmapScript}/bin/xmodmap-setup
+      '';
+
+      modules.home.configFiles = {
+        "x11/xmodmap" = {
+          # Refer the `xmodmap-setup` script to thigger the onChange.
+          text = ''
+            ! ${xmodmapScript}/bin/xmodmap-setup
+            !
+            ! See: xmodmap -pke
+            ! See: xev
+
+            ! Remap some russian symbols for Moonlander.
+
+            ! \ -> х
+            ! / -> Х
+            keycode  51 = backslash bar Cyrillic_ha Cyrillic_HA
+
+            ! Ь -> ъ
+            keycode  58 = m M Cyrillic_softsign Cyrillic_hardsign
+          '';
+          onChange = ''
+            ${xmodmapScript}/bin/xmodmap-setup
+          '';
+        };
+      };
+    }))
   ];
 }
