@@ -109,8 +109,8 @@ in
         ];
 
         shell.aliases = {
-          pbcopy = "${mkBin pkgs.gnugrep "xclip"} -selection clipboard";
-          pbpaste = "${mkBin pkgs.gnugrep "xclip"} -selection clipboard -o";
+          pbcopy = "${mkBin pkgs.xclip "xclip"} -selection clipboard";
+          pbpaste = "${mkBin pkgs.xclip "xclip"} -selection clipboard -o";
 
           open = mkBin pkgs.xdg-utils "xdg-open";
         };

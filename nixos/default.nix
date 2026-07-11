@@ -58,6 +58,8 @@ in
       users.superpaintman = { };
     };
 
+    xsession.xresources.enable = true;
+
     programs = {
       alacritty.enable = true;
       ansible.enable = true;
@@ -344,9 +346,10 @@ in
 
       sessionCommands = with pkgs; ''
         # Load X resources.
-        if [ -f ~/.Xresources ]; then
-          ${xorg.xrdb}/bin/xrdb -load ~/.Xresources
-        fi
+        # NOTE(SuperPaintman): migrated
+        # if [ -f ~/.Xresources ]; then
+        #   ${xorg.xrdb}/bin/xrdb -load ~/.Xresources
+        # fi
 
         # Turn NumLock on.
         ${numlockx}/bin/numlockx on

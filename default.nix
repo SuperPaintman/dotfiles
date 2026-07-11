@@ -38,7 +38,7 @@ imports ([
   ./vscode
   ./xdg
   ./xmodmap
-  ./xresources
+  # ./xresources
   ./yabai
   # ./yarn
   ./zsh

@@ -13,6 +13,8 @@ let
   replaceHomeEnv = replacement: replaceHomeEnv' (replacement + "/");
 
   removeHomeEnv = replaceHomeEnv' "";
+
+  normalizeHome = name: replaceHomeEnv config.home-manager.users.${name}.home.homeDirectory;
 in
 
 {
@@ -21,6 +23,8 @@ in
     ./lib.nix
 
     ./themes
+
+    ./xsession.nix
 
     ./programs/alacritty
     ./programs/ansible
@@ -238,8 +242,6 @@ in
             (v ? text && (isFunction v.text || isString v.text))
             || (v ? source && (isFunction v.source || isPath v.source || isDerivation v.source))
           ));
-
-        normalizeHome = name: replaceHomeEnv config.home-manager.users.${name}.home.homeDirectory;
 
         filterMapFiles = path: pred: f: v: let
           walk = filterMapFiles;
