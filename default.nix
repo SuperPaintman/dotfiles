@@ -33,13 +33,13 @@ imports ([
   # ./polybar
   # ./prettier
   # ./rofi # TODO(SuperPaintman): migrate WiFi and VPM modes
-  ./skhd
+  # ./skhd
   ./vim
   ./vscode
   ./xdg
   # ./xmodmap # Migrated to modules.
   # ./xresources # Migrated to modules.
-  ./yabai
+  # ./yabai
   # ./yarn
   ./zsh
 ] ++ (
