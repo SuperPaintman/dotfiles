@@ -3,7 +3,12 @@
 with lib;
 
 let
+  inherit (config.modules.home) standalone;
+  inherit (config.modules.themes) theme;
   inherit (libx.colors) toHEXColor;
+  cfg = config.modules.xsession;
+
+  mkBin = package: name: if standalone then name else "${package}/bin/${name}";
 
   replaceHomeEnv' = replacement: str:
     if hasPrefix "$HOME/" str then replacement + removePrefix "$HOME/" str
@@ -23,9 +28,6 @@ let
   assertion = cond: message: {
     assertions = [ { assertion = cond; inherit message; } ];
   };
-
-  inherit (config.modules.themes) theme;
-  cfg = config.modules.xsession;
 in
 
 {
@@ -78,7 +80,7 @@ in
         config.modules.users.users);
     }
 
-    (assertion (cfg.xresources.enable -> pkgs.stdenv.hostPlatform.isLinux)
+    (assertion (cfg.xresources.enable -> pkgs.stdenv.hostPlatform.isLinux || standalone)
       "[modules.xsession]: xresources available only on Linux")
     (mkIf cfg.xresources.enable {
       modules.xsession.xresources.properties = mkDefaultAll {
@@ -124,7 +126,7 @@ in
       # '';
     })
 
-    (assertion (cfg.xmodmap.enable -> pkgs.stdenv.hostPlatform.isLinux)
+    (assertion (cfg.xmodmap.enable -> pkgs.stdenv.hostPlatform.isLinux || standalone)
       "[modules.xsession]: xmodmap available only on Linux")
     (mkIf cfg.xmodmap.enable (let
       xmodmapScript = pkgs.writeShellScriptBin "xmodmap-setup" ''
@@ -163,7 +165,7 @@ in
         "x11/xmodmap" = {
           # Refer the `xmodmap-setup` script to thigger the onChange.
           text = ''
-            ! ${xmodmapScript}/bin/xmodmap-setup
+            ! ${mkBin xmodmapScript "xmodmap-setup"}
             !
             ! See: xmodmap -pke
             ! See: xev
