@@ -237,7 +237,7 @@ in
             AVAILABLE = { name = "AVAILABLE"; align = "right"; };
             RESTARTS = { name = "RESTARTS"; align = "right"; };
 
-            CPU = "CPU";
+            CPU = { name = "CPU"; align = "right"; };
             MEM = { name = "MEM"; align = "right"; };
             PCPU_R = { name = "%CPU/R"; align = "right"; };
             PCPU_L = { name = "%CPU/L"; align = "right"; };
