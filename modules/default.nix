@@ -34,6 +34,7 @@ in
     ./programs/firefox
     ./programs/fzf
     ./programs/git
+    ./programs/kubernetes
     ./programs/lf
     ./programs/neofetch
     ./programs/neovim

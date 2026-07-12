@@ -46,6 +46,8 @@ let
             # firefox.enable = true;
             fzf.enable = true;
             git.enable = true;
+            kubernetes.kubectl.enable = true;
+            kubernetes.k9s.enable = true;
             lf.enable = true;
             neofetch.enable = true;
             # neovim.enable = true;

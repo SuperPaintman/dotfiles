@@ -32,4 +32,18 @@ rec {
 
   /* */
   mkAllFakeHomeWrapper = mkAllFakeHomeWrapper' "\${XDG_FAKE_HOME:-$HOME}";
+
+  /* */
+  mkForceEnvsWrapper = envs: package: let
+    flags = pipe envs [
+      (mapAttrsToList (k: v: ''--set ${escapeShellArg k} ${escapeShellArg v}''))
+      (concatStringsSep " ")
+    ];
+  in mkWrapper' "force-envs" package { } ''
+    for bin in "$out/bin/"* ; do
+      if [ -f "$bin" ]; then
+        wrapProgram "$bin" ${flags}
+      fi
+    done
+  '';
 }
