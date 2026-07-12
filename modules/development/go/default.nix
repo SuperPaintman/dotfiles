@@ -83,6 +83,12 @@ in
           ;
         PATH = [ GOBIN ];
       };
+
+      home.configFiles = {
+        "go/telemetry/mode".text = ''
+          ${GOTELEMETRY} 1970-01-01
+        '';
+      };
     };
   };
 }
