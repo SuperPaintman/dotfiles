@@ -65,6 +65,7 @@ in
       alacritty.enable = true;
       ansible.enable = true;
       bat.enable = true;
+      discord.enable = false;
       essential.enable = true;
       essential.desktop.enable = true;
       firefox.enable = true;
@@ -182,7 +183,7 @@ in
 
     # Messengers.
     telegram-desktop # Telegram.
-    discord
+    # discord
     # skypeforlinux
 
     # Compilers, interpreters and dev packages.

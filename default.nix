@@ -21,7 +21,7 @@ imports ([
   ./bash
   ./bin
   # ./cargo
-  ./discord
+  # ./discord # Migrated to modules.
   # ./git # Migrated to modules.
   ./gtk
   ./htop

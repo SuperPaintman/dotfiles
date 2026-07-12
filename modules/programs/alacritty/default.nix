@@ -51,7 +51,7 @@ in
       users.packages = [ cfg.package ];
 
       home.configFiles = {
-        "alacritty/alacritty.toml".source = toml.generate "alacritty.toml" {
+        "alacritty/alacritty.toml".source = toml.generate "alacritty-alacritty.toml" {
           general = {
             import = [
               "~/.config/alacritty/default.toml"
@@ -66,7 +66,7 @@ in
             live_config_reload = true;
           };
         };
-        "alacritty/default.toml".source = toml.generate "default.toml" {
+        "alacritty/default.toml".source = toml.generate "alacritty-default.toml" {
           env = {
             # Alacritty is not supported over ssh.
             TERM = "xterm-256color";
@@ -97,7 +97,7 @@ in
             bindings = [ ];
           };
         };
-        "alacritty/colors.toml".source = toml.generate "colors.toml" {
+        "alacritty/colors.toml".source = toml.generate "alacritty-colors.toml" {
           colors.primary = {
             background = toHEXColor theme.colors.background.color;
             foreground = toHEXColor theme.colors.foreground.color;
@@ -130,7 +130,7 @@ in
             white = toHEXColor theme.colors.brightWhite.color;
           };
         };
-        "alacritty/macos.toml".source = toml.generate "macos.toml" {
+        "alacritty/macos.toml".source = toml.generate "alacritty-macos.toml" {
           # "\u0001" - ^A
           # "\u0002" - ^B
           # "\u0003" - ^C
@@ -180,7 +180,7 @@ in
             { key = "Left"; mods = "Command"; chars = "\\u001B[1;5D"; }
           ];
         };
-        "alacritty/extra.toml".source = toml.generate "extra.toml" cfg.extraConfig;
+        "alacritty/extra.toml".source = toml.generate "alacritty-extra.toml" cfg.extraConfig;
       };
     };
   };

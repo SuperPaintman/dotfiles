@@ -40,6 +40,7 @@ let
             alacritty.enable = true;
             # ansible.enable = true;
             bat.enable = true;
+            discord.enable = true;
             essential.enable = true;
             essential.desktop.enable = true;
             # firefox.enable = true;
