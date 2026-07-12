@@ -221,76 +221,103 @@ in
             mkColumns = map (column: if isString column then column else mkColumn column.name (removeAttrs column ["name"]));
 
             label = l: ".metadata.labels.${escape ["." "/"] l}";
+
+            NAMESPACE = "NAMESPACE";
+            NAME = "NAME";
+            SERVICE = "SERVICE";
+            STATUS = "STATUS";
+            PF = "PF";
+
+            VERSION = { name = "VERSION"; field = label "app.kubernetes.io/version"; align = "right"; };
+
+            DESIRED = { name = "DESIRED"; align = "right"; };
+            CURRENT = { name = "CURRENT"; align = "right"; };
+            READY = { name = "READY"; align = "right"; };
+            UP_TO_DATE = { name = "UP-TO-DATE"; align = "right"; };
+            AVAILABLE = { name = "AVAILABLE"; align = "right"; };
+            RESTARTS = { name = "RESTARTS"; align = "right"; };
+
+            CPU = "CPU";
+            MEM = { name = "MEM"; align = "right"; };
+            PCPU_R = { name = "%CPU/R"; align = "right"; };
+            PCPU_L = { name = "%CPU/L"; align = "right"; };
+            PMEM_R = { name = "%MEM/R"; align = "right"; };
+            PMEM_L = { name = "%MEM/L"; align = "right"; };
+
+            IP = { name = "IP"; };
+            NODE = "NODE";
+
+            AGE = { name = "AGE"; align = "right"; };
           in yaml.generate "k9s-views.yaml" {
             views = {
               "v1/pods" = {
                 sortColumn = "AGE:asc";
                 columns = mkColumns [
-                  "NAMESPACE"
-                  "NAME"
-                  "PF"
-                  { name = "VERSION"; field = label "app.kubernetes.io/version"; align = "right"; }
-                  { name = "READY"; align = "right"; }
-                  "STATUS"
-                  "RESTARTS"
-                  "CPU"
-                  { name = "MEM"; align = "right"; }
-                  { name = "%CPU/R"; align = "right"; }
-                  { name = "%CPU/L"; align = "right"; }
-                  { name = "%MEM/R"; align = "right"; }
-                  { name = "%MEM/L"; align = "right"; }
-                  { name = "IP"; hide = true; }
-                  "NODE"
-                  { name = "AGE"; align = "right"; }
+                  NAMESPACE
+                  NAME
+                  PF
+                  VERSION
+                  READY
+                  STATUS
+                  RESTARTS
+                  CPU
+                  MEM
+                  PCPU_R
+                  PCPU_L
+                  PMEM_R
+                  PMEM_L
+                  (IP // { hide = true; })
+                  NODE
+                  AGE
                 ];
               };
 
               "apps/v1/deployments" = {
                 sortColumn = "NAME:asc";
                 columns = mkColumns [
-                  "NAMESPACE"
-                  "NAME"
-                  { name = "VERSION"; field = label "app.kubernetes.io/version"; align = "right"; }
-                  { name = "READY"; align = "right"; }
-                  { name = "UP-TO-DATE"; align = "right"; }
-                  { name = "AVAILABLE"; align = "right"; }
-                  { name = "AGE"; align = "right"; }
+                  NAMESPACE
+                  NAME
+                  VERSION
+                  READY
+                  UP_TO_DATE
+                  AVAILABLE
+                  AGE
                 ];
               };
 
               "apps/v1/statefulsets" = {
                 sortColumn = "NAME:asc";
                 columns = mkColumns [
-                  "NAMESPACE"
-                  "NAME"
-                  { name = "VERSION"; field = label "app.kubernetes.io/version"; align = "right"; }
-                  { name = "READY"; align = "right"; }
-                  "SERVICE"
-                  { name = "AGE"; align = "right"; }
+                  NAMESPACE
+                  NAME
+                  VERSION
+                  READY
+                  SERVICE
+                  AGE
                 ];
               };
 
               "apps/v1/daemonsets" = {
                 sortColumn = "NAME:asc";
                 columns = mkColumns [
-                  "NAMESPACE"
-                  "NAME"
-                  { name = "VERSION"; field = label "app.kubernetes.io/version"; align = "right"; }
-                  { name = "DESIRED"; align = "right"; }
-                  { name = "CURRENT"; align = "right"; }
-                  { name = "READY"; align = "right"; }
-                  { name = "UP-TO-DATE"; align = "right"; }
-                  { name = "AVAILABLE"; align = "right"; }
-                  { name = "AGE"; align = "right"; }
+                  NAMESPACE
+                  NAME
+                  VERSION
+                  DESIRED
+                  CURRENT
+                  READY
+                  UP_TO_DATE
+                  AVAILABLE
+                  AGE
                 ];
               };
 
               "v1/namespaces" = {
                 sortColumn = "NAME:asc";
                 columns = mkColumns [
-                  "NAME"
-                  "STATUS"
-                  { name = "AGE"; align = "right"; }
+                  NAME
+                  STATUS
+                  AGE
                 ];
               };
             };
