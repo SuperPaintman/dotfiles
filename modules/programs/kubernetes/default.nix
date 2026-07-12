@@ -201,8 +201,98 @@ in
             };
           };
 
-          "k9s/views.yaml".source = yaml.generate "k9s-views.yaml" {
+          "k9s/views.yaml".source = let
+            mkColumn = name: { 
+              field ? null,
+              align ? null,
+              hide ? false,
+            }: let
+              field' = if field != null then ":${field}" else "";
+
+              attributes = []
+                ++ optional hide "H"
+                ++ optional (align == "left") "L"
+                ++ optional (align == "right") "R"
+                ;
+              attributes' = concatStringsSep "" attributes;
+              attributes'' = if stringLength attributes' > 0 then "|${attributes'}" else "";
+            in "${name}${field'}${attributes''}";
+
+            mkColumns = map (column: if isString column then column else mkColumn column.name (removeAttrs column ["name"]));
+
+            label = l: ".metadata.labels.${escape ["." "/"] l}";
+          in yaml.generate "k9s-views.yaml" {
             views = {
+              "v1/pods" = {
+                sortColumn = "AGE:asc";
+                columns = mkColumns [
+                  "NAMESPACE"
+                  "NAME"
+                  "PF"
+                  { name = "VERSION"; field = label "app.kubernetes.io/version"; align = "right"; }
+                  { name = "READY"; align = "right"; }
+                  "STATUS"
+                  "RESTARTS"
+                  "CPU"
+                  { name = "MEM"; align = "right"; }
+                  { name = "%CPU/R"; align = "right"; }
+                  { name = "%CPU/L"; align = "right"; }
+                  { name = "%MEM/R"; align = "right"; }
+                  { name = "%MEM/L"; align = "right"; }
+                  { name = "IP"; hide = true; }
+                  "NODE"
+                  { name = "AGE"; align = "right"; }
+                ];
+              };
+
+              "apps/v1/deployments" = {
+                sortColumn = "NAME:asc";
+                columns = mkColumns [
+                  "NAMESPACE"
+                  "NAME"
+                  { name = "VERSION"; field = label "app.kubernetes.io/version"; align = "right"; }
+                  { name = "READY"; align = "right"; }
+                  { name = "UP-TO-DATE"; align = "right"; }
+                  { name = "AVAILABLE"; align = "right"; }
+                  { name = "AGE"; align = "right"; }
+                ];
+              };
+
+              "apps/v1/statefulsets" = {
+                sortColumn = "NAME:asc";
+                columns = mkColumns [
+                  "NAMESPACE"
+                  "NAME"
+                  { name = "VERSION"; field = label "app.kubernetes.io/version"; align = "right"; }
+                  { name = "READY"; align = "right"; }
+                  "SERVICE"
+                  { name = "AGE"; align = "right"; }
+                ];
+              };
+
+              "apps/v1/daemonsets" = {
+                sortColumn = "NAME:asc";
+                columns = mkColumns [
+                  "NAMESPACE"
+                  "NAME"
+                  { name = "VERSION"; field = label "app.kubernetes.io/version"; align = "right"; }
+                  { name = "DESIRED"; align = "right"; }
+                  { name = "CURRENT"; align = "right"; }
+                  { name = "READY"; align = "right"; }
+                  { name = "UP-TO-DATE"; align = "right"; }
+                  { name = "AVAILABLE"; align = "right"; }
+                  { name = "AGE"; align = "right"; }
+                ];
+              };
+
+              "v1/namespaces" = {
+                sortColumn = "NAME:asc";
+                columns = mkColumns [
+                  "NAME"
+                  "STATUS"
+                  { name = "AGE"; align = "right"; }
+                ];
+              };
             };
           };
 
