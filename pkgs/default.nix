@@ -16,4 +16,5 @@ rec {
   pico8 = callPackage ./pico8 { };
   spine = callPackage ./spine { };
   wtk = callPackage ./wtk { };
+  zig-zsh-completions = callPackage ./zig-zsh-completions { };
 }

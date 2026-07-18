@@ -1,0 +1,134 @@
+#compdef zig
+
+#
+# For zig 0.14.1
+#
+#     $ fpath=($PWD/pkgs/zig-zsh-completions $fpath)
+#     $ unfunction _zig; unfunction -m '_zig_*'; rm -f ~/.zcompdump*; autoload -Uz compinit && compinit
+#
+# See: https://zsh.sourceforge.io/Doc/Release/Completion-Widgets.html
+#
+
+_zig_files() {
+  _files -g '*.(zig|zon)' "$@"
+}
+
+_zig_fetch() {
+  _arguments -s \
+    '(- *)'{-h,--help}'[print this help and exit]' \
+    '--global-cache-dir[pverride path to global Zig cache directory]:path:_directories' \
+    '--debug-hash[print verbose hash information to stdout]' \
+    '--save[add the fetched package to build.zig.zon]' \
+    '--save=[add the fetched package to build.zig.zon as name]:name' \
+    '--save-exact[add the fetched package to build.zig.zon, storing the URL verbatim]' \
+    '--save-exact=[add the fetched package to build.zig.zon as name, storing the URL verbatim]:name'
+}
+
+_zig_init() {
+  _arguments -s \
+    '(- *)'{-h,--help}'[print this help and exit]'
+}
+
+_zig_fmt() {
+  _arguments -s \
+    '(- *)'{-h,--help}'[print this help and exit]' \
+    '--color[enable or disable colored error messages]:color:(auto off on)' \
+    '--stdin[format code from stdin; output to stdout]' \
+    '--check[list non-conforming files and exit with an error if the list is non-empty]' \
+    '--ast-check[run zig ast-check on every file]' \
+    '*--exclude[exclude file or directory from formatting]:exclude:_zig_files' \
+    '--zon[treat all input files as ZON, regardless of file extensio]' \
+    '*:file:_zig_files'
+}
+
+_zig() {
+  local ret=1 state
+
+  _arguments -s -C \
+    '(- *)'{-h,--help}'[print command-specific usage]' \
+    '1:command:->command' \
+    '*::args:->args' \
+    && ret=0
+
+  case "$state" in
+    command)
+      local -a commands
+      commands=(
+        'build:build project from build.zig'
+        'fetch:copy a package into global cache and print its hash'
+        'init:initialize a Zig package in the current directory'
+
+        'build-exe:create executable from source or object files'
+        'build-lib:create library from source or object files'
+        'build-obj:create object from source or object files'
+        'test:perform unit testing'
+        'run:create executable and run immediately'
+
+        'ast-check:look for simple compile errors in any set of files'
+        'fmt:reformat Zig source into canonical form'
+        'reduce:minimize a bug report'
+        'translate-c:convert C code to Zig code'
+
+        'ar:use Zig as a drop-in archiver'
+        'cc:use Zig as a drop-in C compiler'
+        'c++:use Zig as a drop-in C++ compiler'
+        'dlltool:use Zig as a drop-in dlltool.exe'
+        'lib:use Zig as a drop-in lib.exe'
+        'ranlib:use Zig as a drop-in ranlib'
+        'objcopy:use Zig as a drop-in objcopy'
+        'rc:use Zig as a drop-in rc.exe'
+
+        'env:print lib path, std path, cache directory, and version'
+        'help:print this help and exit'
+        'std:view standard library documentation in a browser'
+        'libc:display native libc paths file or validate one'
+        'targets:list available compilation targets'
+        'version:print version number and exit'
+        'zen:print Zen of Zig and exit'
+      )
+      _describe -t commands 'zig command' commands && ret=0
+      ;;
+
+    args)
+      case "$line[1]" in
+        # build) _zig_build && ret=0 ;; # TODO
+        fetch) _zig_fetch && ret=0 ;;
+        init) _zig_init && ret=0 ;;
+
+        # build-exe) _zig_build-exe && ret=0 ;; # TODO
+        # build-lib) _zig_build-lib && ret=0 ;; # TODO
+        # build-obj) _zig_build-obj && ret=0 ;; # TODO
+        # test) _zig_test && ret=0 ;; # TODO
+        # run) _zig_run && ret=0 ;; # TODO
+
+        # ast-check) _zig_ast-check && ret=0 ;; # TODO
+        fmt) _zig_fmt && ret=0 ;;
+        # reduce) _zig_reduce && ret=0 ;; # TODO
+        # translate-c) _zig_translate-c && ret=0 ;; # TODO
+
+        # ar) _zig_ar && ret=0 ;; # TODO
+        # cc) _zig_cc && ret=0 ;; # TODO
+        # c++) _zig_c++ && ret=0 ;; # TODO
+        # dlltool) _zig_dlltool && ret=0 ;; # TODO
+        # lib) _zig_lib && ret=0 ;; # TODO
+        # ranlib) _zig_ranlib && ret=0 ;; # TODO
+        # objcopy) _zig_objcopy && ret=0 ;; # TODO
+        # rc) _zig_rc && ret=0 ;; # TODO
+
+        # env) _zig_env && ret=0 ;; # TODO
+        # help) _zig_help && ret=0 ;; # TODO
+        # std) _zig_std && ret=0 ;; # TODO
+        # libc) _zig_libc && ret=0 ;; # TODO
+        # targets) _zig_targets && ret=0 ;; # TODO
+        # version) _zig_version && ret=0 ;; # TODO
+        # zen) _zig_zen && ret=0 ;; # TODO
+      esac
+      ;;
+  esac
+
+  return ret
+}
+
+_zig "$@"
+
+# vim: ft=zsh sw=2 ts=2 et
