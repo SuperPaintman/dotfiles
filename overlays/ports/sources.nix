@@ -48,4 +48,22 @@ in
       "pkgs/by-name/go/gopls"
     ];
   };
+
+  # See: https://github.com/NixOS/nixpkgs/blob/nixos-26.05/pkgs/development/compilers/zig/default.nix
+  # Version: 0.16.0
+  zig = fetchNixpkgs "nixos-26.05" "1373ce18abcd332baa4fb43930a5cb35a95543bb" {
+    hash = "sha256-hIh40ZXZLic92xfdPXddoh2m31Hv5M6yfmqzdgd3Jf4=";
+    sparseCheckout = [
+      "pkgs/development/compilers/zig"
+    ];
+  };
+
+  # See: https://github.com/NixOS/nixpkgs/blob/nixos-26.05/pkgs/development/tools/zls/default.nix
+  # Version: 0.16.0
+  zls = fetchNixpkgs "nixos-26.05" "278d50f1344ff9b279e6a395927fc3d6cb5005bc" {
+    hash = "sha256-Rn1MnIfIqG2m1STFe0RX2FnzhQuYDVQ2ciQyW1UsX/M=";
+    sparseCheckout = [
+      "pkgs/development/tools/zls"
+    ];
+  };
 }

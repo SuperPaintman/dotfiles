@@ -95,7 +95,10 @@ in
       python.enable = true;
       ruby.enable = false;
       rust.enable = true;
-      zig.enable = true;
+      zig = {
+        enable = true;
+        package = pkgs.zig_latest;
+      };
     };
 
     shell = {

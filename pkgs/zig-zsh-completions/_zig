@@ -1,7 +1,7 @@
 #compdef zig
 
 #
-# For zig 0.14.1
+# For zig 0.16.0
 #
 #     $ fpath=($PWD/pkgs/zig-zsh-completions $fpath)
 #     $ unfunction _zig; unfunction -m '_zig_*'; rm -f ~/.zcompdump*; autoload -Uz compinit && compinit
@@ -26,7 +26,8 @@ _zig_fetch() {
 
 _zig_init() {
   _arguments -s \
-    '(- *)'{-h,--help}'[print this help and exit]'
+    '(- *)'{-h,--help}'[print this help and exit]' \
+    '(- *)'{-m,--minimal}'[use minimal init templat]'
 }
 
 _zig_fmt() {
@@ -62,6 +63,7 @@ _zig() {
         'build-lib:create library from source or object files'
         'build-obj:create object from source or object files'
         'test:perform unit testing'
+        'test-obj:create object for unit testing'
         'run:create executable and run immediately'
 
         'ast-check:look for simple compile errors in any set of files'
@@ -74,8 +76,9 @@ _zig() {
         'c++:use Zig as a drop-in C++ compiler'
         'dlltool:use Zig as a drop-in dlltool.exe'
         'lib:use Zig as a drop-in lib.exe'
-        'ranlib:use Zig as a drop-in ranlib'
         'objcopy:use Zig as a drop-in objcopy'
+        'objdump:print information about executables and relocatables'
+        'ranlib:use Zig as a drop-in ranlib'
         'rc:use Zig as a drop-in rc.exe'
 
         'env:print lib path, std path, cache directory, and version'
@@ -99,6 +102,7 @@ _zig() {
         # build-lib) _zig_build-lib && ret=0 ;; # TODO
         # build-obj) _zig_build-obj && ret=0 ;; # TODO
         # test) _zig_test && ret=0 ;; # TODO
+        # test-obj) _zig_test-obj && ret=0 ;; # TODO
         # run) _zig_run && ret=0 ;; # TODO
 
         # ast-check) _zig_ast-check && ret=0 ;; # TODO
