@@ -309,13 +309,15 @@ in
             # (style { bg = "magenta"; })
 
             # Session.
-            (style { fg = "magenta"; })
-            ""
-            (style { bg = "magenta"; fg = "brightWhite"; })
-            "  "
-            (style { bg = "magenta"; fg = "brightWhite"; bold = true; })
-            " #S "
-            (style { bg = "magenta"; })
+            # (style { fg = "green"; })
+            # ""
+            (style { fg = "green"; })
+            # "  "
+            " "
+            (style { fg = "green"; bold = true; })
+            # " #S "
+            "#S"
+            # (style { bg = "green"; })
 
             # End.
             " "
