@@ -38,7 +38,7 @@ in
       # TODO(SuperPaintman): make it configurable.
       shell.bash.extras.config.after = ''
         # Show system information.
-        if [ -z "''${IN_NIX_SHELL:-}" ] && [ -z "''${TMUX:-}" ]; then
+        if [ "''${SHLVL:-0}" -le "1" ] && [ -z "''${IN_NIX_SHELL:-}" ] && [ -z "''${TMUX:-}" ]; then
           ${mkBin cfg.package "bearfetch"}
         fi
       '';
