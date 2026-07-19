@@ -265,6 +265,7 @@ let
 
       # Editing.
       p.comment-nvim.lazy
+      p.mini-surround.lazy
 
       # QuickFix.
       p.quicker-nvim.lazy

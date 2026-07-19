@@ -312,6 +312,7 @@ setup({
 
   -- Editing.
   { "numToStr/Comment.nvim", opts = {} },
+  "nvim-mini/mini.surround",
 
   -- QuickFix.
   "stevearc/quicker.nvim",

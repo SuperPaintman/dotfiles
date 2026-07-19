@@ -383,3 +383,15 @@ packages:
             owner: stevearc
             repo: quicker.nvim
             rev: *commit
+
+    mini-surround:
+        type: github
+        extraAttrs:
+            plugin: nvim-mini/mini.surround
+            # branch: main
+            # version: v0.18.0
+            commit: &commit 580e4cb98c5900d9fe743865fb5a5b2178b4ab18
+        args:
+            owner: nvim-mini
+            repo: mini.surround
+            rev: *commit

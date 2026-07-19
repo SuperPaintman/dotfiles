@@ -196,6 +196,19 @@
     plugin = "L3MON4D3/LuaSnip";
   };
 
+  mini-surround = {
+    pname = "mini-surround";
+    version = "0.0.0+rev=580e4cb";
+    src = fetchFromGitHub {
+      owner = "nvim-mini";
+      repo = "mini.surround";
+      rev = "580e4cb98c5900d9fe743865fb5a5b2178b4ab18";
+      sha256 = "sha256-ILKwZ1+Dh4HH5DNnNwqH7xnDyCIEnxPRjLDCwqWOeXY=";
+    };
+    commit = "580e4cb98c5900d9fe743865fb5a5b2178b4ab18";
+    plugin = "nvim-mini/mini.surround";
+  };
+
   neodev-nvim = {
     pname = "neodev-nvim";
     version = "0.0.0+rev=80487e4";

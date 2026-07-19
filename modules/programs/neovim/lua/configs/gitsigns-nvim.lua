@@ -3,7 +3,7 @@
 -- Init
 --------------------------------------------------------------------------------
 local M = {
-  _initialized = true,
+  _initialized = false,
 }
 
 local autocmd = vim.api.nvim_create_autocmd

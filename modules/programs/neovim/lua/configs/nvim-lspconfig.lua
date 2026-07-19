@@ -300,7 +300,7 @@ M.config = function()
   -- Rust
   vim.lsp.config("rust_analyzer", {
     capabilities = capabilities,
-    on_attach = create_on_attach({}),
+    on_attach = create_on_attach({ semantic = false }),
 
     -- See: https://rust-analyzer.github.io/manual.html#configuration
     settings = {
