@@ -29,6 +29,7 @@ in
     ./programs/alacritty
     ./programs/ansible
     ./programs/bat
+    ./programs/bearfetch
     ./programs/discord
     ./programs/essential
     ./programs/firefox

@@ -65,6 +65,7 @@ in
       alacritty.enable = true;
       ansible.enable = true;
       bat.enable = true;
+      bearfetch.enable = pkgs ? bearfetch;
       discord.enable = false;
       essential.enable = true;
       essential.desktop.enable = true;
@@ -125,6 +126,7 @@ in
   nixpkgs.overlays = [
     (import ../overlays/lib.nix)
     (import ../overlays/pkgs.nix)
+    (import ../overlays/secrets.nix)
     (import ../overlays/ports.nix)
     (import ../overlays/patches.nix)
     (self: super: {
