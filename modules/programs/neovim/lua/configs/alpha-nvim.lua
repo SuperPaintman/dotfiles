@@ -104,12 +104,37 @@ local cats = {
   { [[(= ФェФ=)]] },
 }
 
+local bears = {
+  { [[ʕ  ·ᴥ·ʔ]] },
+  { [[ʕ ·ᴥ· ʔ]] },
+  { [[ʕ·ᴥ·  ʔ]] },
+  { [[ʕ－ᴥ－ʔ]] },
+  { [[ʕ  ᵔᴥᵔʔ]] },
+  { [[ʕ ᵔᴥᵔ ʔ]] },
+  { [[ʕᵔᴥᵔ  ʔ]] },
+  -- { [[ʕ ×ᴥ× ʔ]] },
+  -- { [[ʕ● ᴥ ●ʔ]] },
+}
+
 local function cat()
   local idx = math.floor(#cats * math.random()) + 1
 
   return {
     type = "text",
     val = cats[idx],
+    opts = {
+      position = "center",
+      hl = "Comment",
+    },
+  }
+end
+
+local function bear()
+  local idx = math.floor(#bears * math.random()) + 1
+
+  return {
+    type = "text",
+    val = bears[idx],
     opts = {
       position = "center",
       hl = "Comment",
@@ -202,7 +227,8 @@ M.config = function()
       { type = "padding", val = 10 },
       header(),
       { type = "padding", val = 1 },
-      cat(),
+      -- cat(),
+      bear(),
       { type = "padding", val = 1 },
       buttons(),
       { type = "padding", val = 10 },
