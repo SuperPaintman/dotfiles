@@ -272,12 +272,12 @@ in
           set-option -g status-left ${escapeShellArg (concatStringsSep "" [
             # Marker.
             "#{?client_prefix,"
-            (style { fg = "green"; })
+            (style { fg = "yellow"; })
             ","
             "#{?#{==:#{pane_mode},copy-mode},"
-            (style { fg = "blue"; })
+            (style { fg = "magenta"; })
             ","
-            (style { fg = "brightWhite"; })
+            (style { fg = "blue"; })
             "}"
             "}"
             "    "
