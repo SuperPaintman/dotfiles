@@ -43,10 +43,11 @@ declare -g __DOTFILES_THEME_CPWD="$__DOTFILES_THEME_CRED"
 declare -g __DOTFILES_THEME_CSTATUS="$__DOTFILES_THEME_CBRED"
 declare -g __DOTFILES_THEME_CCARET_FAILED="$__DOTFILES_THEME_CRED"
 declare -g __DOTFILES_THEME_CSHLVL="$__DOTFILES_THEME_CBLUE"
+declare -g __DOTFILES_THEME_CTIMER="$__DOTFILES_THEME_CBLUE"
 
 # declare -g __DOTFILES_THEME_SSHLVL=""
 declare -g __DOTFILES_THEME_SSHLVL=""
-
+declare -g __DOTFILES_THEME_STIMER=""
 
 # bash ./theme_benchmark_test.sh  3.18s user 0.72s system 101% cpu 3.850 total
 # zsh  ./theme_benchmark_test.sh  3.19s user 0.75s system 100% cpu 3.936 total
@@ -109,6 +110,49 @@ __dotfiles_theme_fishpwd() {
     # __dotfiles_theme_fishpwd_perl "$1" "$2"
 }
 
+
+__dotfiles_theme_now_ms() { 
+    local -i ms
+    (( ms = EPOCHREALTIME * 1000 ))
+    __DOTFILES_THEME_NOW_MS_RES="$ms"
+}
+
+declare -g __DOTFILES_THEME_FMT_MS_RES=''
+__dotfiles_theme_fmt_ms() {
+    local ms="$1"
+
+    if (( ms < 1000 )); then
+        __DOTFILES_THEME_FMT_MS_RES="${ms}ms"
+    elif (( ms < 60000 )); then
+        __DOTFILES_THEME_FMT_MS_RES="$(( ms / 1000 )).$(( ms % 1000 / 100 ))s"
+    elif (( ms < 3600000 )); then
+        __DOTFILES_THEME_FMT_MS_RES="$(( ms / 60000 ))m$(( ms % 60000 / 1000 ))s"
+    else
+        __DOTFILES_THEME_FMT_MS_RES="$(( ms / 3600000 ))h$(( ms % 3600000 / 60000 ))m"
+    fi
+}
+
+if [ -n "$ZSH_VERSION" ]; then
+    declare -g __DOTFILES_THEME_PREEXEC_RES=0
+else
+    declare -g __DOTFILES_THEME_PREEXEC_RES=
+fi
+__dotfiles_theme_preexec() {
+    # Don't measure some commands.
+    local cmd="$2"
+    cmd="${cmd##*/}"
+    cmd="${cmd%%' '*}"
+
+    case "$cmd" in
+    clear|pwd|reset|ls|exa|eza|man)
+        return 0 ;;
+    esac
+
+    __dotfiles_theme_now_ms
+    __DOTFILES_THEME_PREEXEC_RES="$__DOTFILES_THEME_NOW_MS_RES"
+}
+
+declare -g __DOTFILES_THEME_PREEXEC_LAST_DRAWN=0
 declare -g __DOTFILES_THEME_PS1_RES
 __dotfiles_theme_ps1() {
     local ret="$?"
@@ -130,6 +174,18 @@ __dotfiles_theme_ps1() {
         theme_shell_depth="$((theme_shell_depth - 2))"
     fi
 
+    local theme_timer=''
+    if [ -n "$__DOTFILES_THEME_PREEXEC_RES" ] && [[ "$__DOTFILES_THEME_PREEXEC_RES" != "$__DOTFILES_THEME_PREEXEC_LAST_DRAWN" ]]; then
+        __DOTFILES_THEME_PREEXEC_LAST_DRAWN="$__DOTFILES_THEME_PREEXEC_RES"
+
+        __dotfiles_theme_now_ms
+        local elapsed=$(( __DOTFILES_THEME_NOW_MS_RES - __DOTFILES_THEME_PREEXEC_RES ))
+        if (( elapsed >= 0 )); then
+            __dotfiles_theme_fmt_ms "$elapsed"
+            theme_timer=" ${__DOTFILES_THEME_STIMER} ${__DOTFILES_THEME_CTIMER}${__DOTFILES_THEME_FMT_MS_RES}${__DOTFILES_THEME_CR}"
+        fi
+    fi
+
     local theme_shell_deep=''
     for (( i = 0; i < theme_shell_depth; i++ )); do
         theme_shell_deep+=" ${__DOTFILES_THEME_CSHLVL}${__DOTFILES_THEME_SSHLVL}${__DOTFILES_THEME_CR}"
@@ -143,6 +199,7 @@ ${__DOTFILES_THEME_CHOST}${__DOTFILES_THEME_HOST}${__DOTFILES_THEME_CR}\
 ${__DOTFILES_THEME_CPWD}${__DOTFILES_THEME_FISHPWD_RES}${__DOTFILES_THEME_CR}\
 $theme_shell_deep\
 $theme_ret\
+$theme_timer\
  \
 ${theme_ccaret}${__DOTFILES_THEME_CARET}${__DOTFILES_THEME_CR}\
  \
