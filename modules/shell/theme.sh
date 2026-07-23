@@ -16,15 +16,15 @@ if [ -n "$ZSH_VERSION" ]; then
     declare -g __DOTFILES_THEME_CBLUE='%F{blue}'
     declare -g __DOTFILES_THEME_CBBLUE='%B%F{blue}'
 else
-    declare -g __DOTFILES_THEME_CR='\033[00m'
-    declare -g __DOTFILES_THEME_CRED='\033[00;31m'
-    declare -g __DOTFILES_THEME_CBRED='\033[01;31m'
-    declare -g __DOTFILES_THEME_CGREEN='\033[00;32m'
-    declare -g __DOTFILES_THEME_CBGREEN='\033[01;32m'
-    declare -g __DOTFILES_THEME_CYELLOW='\033[00;33m'
-    declare -g __DOTFILES_THEME_CBYELLOW='\033[01;33m'
-    declare -g __DOTFILES_THEME_CBLUE='\033[00;34m'
-    declare -g __DOTFILES_THEME_CBBLUE='\033[01;34m'
+    declare -g __DOTFILES_THEME_CR="$(printf '\033[00m')"
+    declare -g __DOTFILES_THEME_CRED="$(printf '\033[00;31m')"
+    declare -g __DOTFILES_THEME_CBRED="$(printf '\033[01;31m')"
+    declare -g __DOTFILES_THEME_CGREEN="$(printf '\033[00;32m')"
+    declare -g __DOTFILES_THEME_CBGREEN="$(printf '\033[01;32m')"
+    declare -g __DOTFILES_THEME_CYELLOW="$(printf '\033[00;33m')"
+    declare -g __DOTFILES_THEME_CBYELLOW="$(printf '\033[01;33m')"
+    declare -g __DOTFILES_THEME_CBLUE="$(printf '\033[00;34m')"
+    declare -g __DOTFILES_THEME_CBBLUE="$(printf '\033[01;34m')"
 fi
 
 declare -g __DOTFILES_THEME_USER="${USER:-"$(whoami)"}"
@@ -114,6 +114,10 @@ __dotfiles_theme_fishpwd() {
     # __dotfiles_theme_fishpwd_perl "$1" "$2"
 }
 
+__dotfiles_theme_fishpwd_update() {
+    __dotfiles_theme_fishpwd "${PWD:-/}" "${HOME:-/home/nobody}" \
+        || __DOTFILES_THEME_FISHPWD_RES="error($?)"
+}
 
 __dotfiles_theme_now_ms() { 
     local -i ms
@@ -156,26 +160,44 @@ __dotfiles_theme_preexec() {
     __DOTFILES_THEME_PREEXEC_RES="$__DOTFILES_THEME_NOW_MS_RES"
 }
 
+
+declare -g __DOTFILES_THEME_PART_NIX_SHELL
+declare -g __DOTFILES_THEME_PART_SHELL_DEEP
+declare -g __DOTFILES_THEME_PART_RET
+declare -g __DOTFILES_THEME_PART_TIMER
+declare -g __DOTFILES_THEME_PART_CCARET="$__DOTFILES_THEME_CCARET"
+
 declare -g __DOTFILES_THEME_PREEXEC_LAST_DRAWN=0
-declare -g __DOTFILES_THEME_PS1_RES
-__dotfiles_theme_ps1() {
+__dotfiles_theme_update() {
     local ret="${1:-0}"
 
-    # __dotfiles_theme_fishpwd "${PWD:-/}" "${HOME:-/home/nobody}" \
-    #     || __DOTFILES_THEME_FISHPWD_RES="error($?)"
-
-    local theme_ccaret="$__DOTFILES_THEME_CCARET"
-    local theme_ret=''
+    # Caret.
+    __DOTFILES_THEME_PART_CCARET="$__DOTFILES_THEME_CCARET"
+    __DOTFILES_THEME_PART_RET=''
     if [ "$ret" -ne 0 ]; then
-        theme_ccaret="$__DOTFILES_THEME_CCARET_FAILED"
-        theme_ret=" [${__DOTFILES_THEME_CSTATUS}${ret}${__DOTFILES_THEME_CR}]"
+        __DOTFILES_THEME_PART_CCARET="$__DOTFILES_THEME_CCARET_FAILED"
+        __DOTFILES_THEME_PART_RET=" [${__DOTFILES_THEME_CSTATUS}${ret}${__DOTFILES_THEME_CR}]"
     fi
 
-    local theme_nix_shell=''
+    __DOTFILES_THEME_PART_NIX_SHELL=''
     if [ -n "$IN_NIX_SHELL" ]; then
-        theme_nix_shell=" ${__DOTFILES_THEME_CNIXSHELL}${__DOTFILES_THEME_NIXSHELL}${__DOTFILES_THEME_CR}"
+        __DOTFILES_THEME_PART_NIX_SHELL=" ${__DOTFILES_THEME_CNIXSHELL}${__DOTFILES_THEME_NIXSHELL}${__DOTFILES_THEME_CR}"
     fi
 
+    # Timer.
+    __DOTFILES_THEME_PART_TIMER=''
+    if [ -n "$__DOTFILES_THEME_PREEXEC_RES" ] && [[ "$__DOTFILES_THEME_PREEXEC_RES" != "$__DOTFILES_THEME_PREEXEC_LAST_DRAWN" ]]; then
+        __DOTFILES_THEME_PREEXEC_LAST_DRAWN="$__DOTFILES_THEME_PREEXEC_RES"
+
+        __dotfiles_theme_now_ms
+        local elapsed="$(( __DOTFILES_THEME_NOW_MS_RES - __DOTFILES_THEME_PREEXEC_RES ))"
+        if (( elapsed >= 0 )); then
+            __dotfiles_theme_fmt_ms "$elapsed"
+            __DOTFILES_THEME_PART_TIMER=" ${__DOTFILES_THEME_STIMER} ${__DOTFILES_THEME_CTIMER}${__DOTFILES_THEME_FMT_MS_RES}${__DOTFILES_THEME_CR}"
+        fi
+    fi
+
+    # Shell Deep.
     local theme_shell_depth="${SHLVL:-1}"
     theme_shell_depth="$((theme_shell_depth - 1))"
     if [ -n "$TMUX" ] ; then
@@ -187,36 +209,23 @@ __dotfiles_theme_ps1() {
         theme_shell_depth="$((theme_shell_depth - 1))"
     fi
 
-    local theme_timer=''
-    if [ -n "$__DOTFILES_THEME_PREEXEC_RES" ] && [[ "$__DOTFILES_THEME_PREEXEC_RES" != "$__DOTFILES_THEME_PREEXEC_LAST_DRAWN" ]]; then
-        __DOTFILES_THEME_PREEXEC_LAST_DRAWN="$__DOTFILES_THEME_PREEXEC_RES"
-
-        __dotfiles_theme_now_ms
-        local elapsed=$(( __DOTFILES_THEME_NOW_MS_RES - __DOTFILES_THEME_PREEXEC_RES ))
-        if (( elapsed >= 0 )); then
-            __dotfiles_theme_fmt_ms "$elapsed"
-            theme_timer=" ${__DOTFILES_THEME_STIMER} ${__DOTFILES_THEME_CTIMER}${__DOTFILES_THEME_FMT_MS_RES}${__DOTFILES_THEME_CR}"
-        fi
-    fi
-
-    local theme_shell_deep=''
+    __DOTFILES_THEME_PART_SHELL_DEEP=''
     for (( i = 0; i < theme_shell_depth; i++ )); do
-        theme_shell_deep+=" ${__DOTFILES_THEME_CSHLVL}${__DOTFILES_THEME_SSHLVL}${__DOTFILES_THEME_CR}"
+        __DOTFILES_THEME_PART_SHELL_DEEP+=" ${__DOTFILES_THEME_CSHLVL}${__DOTFILES_THEME_SSHLVL}${__DOTFILES_THEME_CR}"
     done
-
-    __DOTFILES_THEME_PS1_RES="\
-${__DOTFILES_THEME_CUSER}${__DOTFILES_THEME_USER}${__DOTFILES_THEME_CR}\
-@\
-${__DOTFILES_THEME_CHOST}${__DOTFILES_THEME_HOST}${__DOTFILES_THEME_CR}\
- \
-${__DOTFILES_THEME_CPWD}${__DOTFILES_THEME_FISHPWD_RES}${__DOTFILES_THEME_CR}\
-$theme_nix_shell\
-$theme_shell_deep\
-$theme_ret\
-$theme_timer\
- \
-${theme_ccaret}${__DOTFILES_THEME_CARET}${__DOTFILES_THEME_CR}\
- \
-"
 }
+
+declare -g __DOTFILES_THEME_PS1=\
+'${__DOTFILES_THEME_CUSER}''${__DOTFILES_THEME_USER}''${__DOTFILES_THEME_CR}'\
+'@'\
+'${__DOTFILES_THEME_CHOST}''${__DOTFILES_THEME_HOST}''${__DOTFILES_THEME_CR}'\
+' '\
+'${__DOTFILES_THEME_CPWD}''${__DOTFILES_THEME_FISHPWD_RES}''${__DOTFILES_THEME_CR}'\
+'${__DOTFILES_THEME_PART_NIX_SHELL}'\
+'${__DOTFILES_THEME_PART_SHELL_DEEP}'\
+'${__DOTFILES_THEME_PART_RET}'\
+'${__DOTFILES_THEME_PART_TIMER}'\
+' '\
+'${__DOTFILES_THEME_PART_CCARET}''${__DOTFILES_THEME_CARET}''${__DOTFILES_THEME_CR}'\
+' '
 
