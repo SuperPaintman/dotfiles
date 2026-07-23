@@ -28,7 +28,7 @@ else
 fi
 
 declare -g __DOTFILES_THEME_USER="${USER:-"$(whoami)"}"
-declare -g __DOTFILES_THEME_HOST="${HOST:-"$(hostname)"}"
+declare -g __DOTFILES_THEME_HOST="${HOST:-"${HOSTNAME:-"$(hostname)"}"}"
 if [ "${UID:-1000}" = "0" ]; then
     declare -g __DOTFILES_THEME_CCARET="$__DOTFILES_THEME_CRED"
     declare -g __DOTFILES_THEME_CARET='#'
