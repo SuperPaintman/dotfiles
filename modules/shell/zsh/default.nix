@@ -68,7 +68,10 @@ in
         variables = mapAttrs (n: mkDefault) config.modules.shell.variables;
         aliases = mapAttrs (n: mkDefault) config.modules.shell.aliases;
         functions = config.modules.shell.functions;
-        theme = mkDefault (common.lib.mkTheme "zsh");
+        theme = ''
+          ${builtins.readFile ../theme.sh}
+          ${builtins.readFile ../theme.zsh}
+        '';
       };
     }
 
@@ -126,11 +129,9 @@ in
               ################################################################################
               # Theme.
               ################################################################################
-              if [ "''${__DOTFILES_MIGRATION_ZSH:-}" = "" ]; then
               ${cfg.extras.theme.before}
               ${cfg.theme}
               ${cfg.extras.theme.after}
-              fi
 
               ################################################################################
               # Extras After

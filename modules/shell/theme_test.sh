@@ -9,6 +9,8 @@ test_dotfiles_theme_fishpwd() {
     declare -ar tests=(
         "/" "/home/user" "/"
         "/tmp/mydir" "/home/user" "/t/mydir"
+        "/home/user" "/home/user" "~"
+        "/home/user/" "/home/user" "~"
         "/home/user/Projects/github.com/myuser/project" "/home/user" "~/P/g/m/project"
         "/a/b/c/d/e" "/home/user" "/a/b/c/d/e"
         "/a/b/c/d/e/" "/home/user" "/a/b/c/d/e"
@@ -26,10 +28,10 @@ test_dotfiles_theme_fishpwd() {
         __dotfiles_theme_fishpwd "$pwd" "$home" || code=1
         got="$__DOTFILES_THEME_FISHPWD_RES"
         if [[ "$got" != "$want" ]]; then
-            echo "FAILED: __dotfiles_theme_fishpwd \"$pwd\" \"$home\" = \"($got)\", want \"$want\"" >&2
+            echo "FAILED: __dotfiles_theme_fishpwd \"$pwd\" \"$home\" = \"$got\", want \"$want\"" >&2
             code=1
         else
-            echo "OK:     __dotfiles_theme_fishpwd \"$pwd\" \"$home\" = \"($got)\"" >&2
+            echo "OK:     __dotfiles_theme_fishpwd \"$pwd\" \"$home\" = \"$got\"" >&2
         fi
     done
 

@@ -87,7 +87,10 @@ in
         variables = mapAttrs (n: mkDefault) config.modules.shell.variables;
         aliases = mapAttrs (n: mkDefault) config.modules.shell.aliases;
         functions = config.modules.shell.functions;
-        theme = mkDefault (common.lib.mkTheme "bash");
+        theme = ''
+          ${builtins.readFile ../theme.sh}
+          ${builtins.readFile ../theme.bash}
+        '';
       };
     }
 
@@ -283,11 +286,9 @@ in
               ################################################################################
               # Theme.
               ################################################################################
-              if [ "''${__DOTFILES_MIGRATION_BASH:-}" = "" ]; then
               ${cfg.extras.theme.before}
               ${cfg.theme}
               ${cfg.extras.theme.after}
-              fi
 
               ################################################################################
               # Extras After

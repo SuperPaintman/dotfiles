@@ -71,16 +71,18 @@ __dotfiles_theme_fishpwd_native() {
     local home="${2:-/home/nobody}"
 
     local res=''
+    local prefix='/'
     local rest="$1"
     if [[ "$pwd" = "$home"* ]]; then
         rest="${pwd:${#home}}"
         res='~'
+        prefix='~'
     fi
     rest="${rest#/}"
     rest="${rest%/}"
 
     if [[ "$rest" == '' ]]; then
-        res='/'
+        res="$prefix"
     else
         local last=''
         local code=0
@@ -155,10 +157,10 @@ __dotfiles_theme_preexec() {
 declare -g __DOTFILES_THEME_PREEXEC_LAST_DRAWN=0
 declare -g __DOTFILES_THEME_PS1_RES
 __dotfiles_theme_ps1() {
-    local ret="$?"
+    local ret="${1:-0}"
 
-    __dotfiles_theme_fishpwd "${PWD:-/}" "${HOME:-/home/nobody}" \
-        || __DOTFILES_THEME_FISHPWD_RES="error($?)"
+    # __dotfiles_theme_fishpwd "${PWD:-/}" "${HOME:-/home/nobody}" \
+    #     || __DOTFILES_THEME_FISHPWD_RES="error($?)"
 
     local theme_ccaret="$__DOTFILES_THEME_CCARET"
     local theme_ret=''
