@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+# NOTE(SuperPaintman): mostly migrated. Needs to migrate resizing
+
 # Git prompt info settings.
 ZSH_THEME_GIT_PROMPT_PREFIX=" on %{$fg[magenta]%}\uE0A0 "
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"

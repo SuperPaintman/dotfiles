@@ -42,9 +42,11 @@ declare -g __DOTFILES_THEME_CHOST="$__DOTFILES_THEME_CBGREEN"
 declare -g __DOTFILES_THEME_CPWD="$__DOTFILES_THEME_CRED"
 declare -g __DOTFILES_THEME_CSTATUS="$__DOTFILES_THEME_CBRED"
 declare -g __DOTFILES_THEME_CCARET_FAILED="$__DOTFILES_THEME_CRED"
+declare -g __DOTFILES_THEME_CNIXSHELL="$__DOTFILES_THEME_CBLUE"
 declare -g __DOTFILES_THEME_CSHLVL="$__DOTFILES_THEME_CBLUE"
 declare -g __DOTFILES_THEME_CTIMER="$__DOTFILES_THEME_CBLUE"
 
+declare -g __DOTFILES_THEME_NIXSHELL="󱄅"
 # declare -g __DOTFILES_THEME_SSHLVL=""
 declare -g __DOTFILES_THEME_SSHLVL=""
 declare -g __DOTFILES_THEME_STIMER=""
@@ -169,11 +171,20 @@ __dotfiles_theme_ps1() {
         theme_ret=" [${__DOTFILES_THEME_CSTATUS}${ret}${__DOTFILES_THEME_CR}]"
     fi
 
+    local theme_nix_shell=''
+    if [ -n "$IN_NIX_SHELL" ]; then
+        theme_nix_shell=" ${__DOTFILES_THEME_CNIXSHELL}${__DOTFILES_THEME_NIXSHELL}${__DOTFILES_THEME_CR}"
+    fi
+
     local theme_shell_depth="${SHLVL:-1}"
     theme_shell_depth="$((theme_shell_depth - 1))"
     if [ -n "$TMUX" ] ; then
         theme_shell_depth="${SHLVL:-2}"
         theme_shell_depth="$((theme_shell_depth - 2))"
+    fi
+
+    if [ -n "$IN_NIX_SHELL" ]; then
+        theme_shell_depth="$((theme_shell_depth - 1))"
     fi
 
     local theme_timer=''
@@ -199,6 +210,7 @@ ${__DOTFILES_THEME_CUSER}${__DOTFILES_THEME_USER}${__DOTFILES_THEME_CR}\
 ${__DOTFILES_THEME_CHOST}${__DOTFILES_THEME_HOST}${__DOTFILES_THEME_CR}\
  \
 ${__DOTFILES_THEME_CPWD}${__DOTFILES_THEME_FISHPWD_RES}${__DOTFILES_THEME_CR}\
+$theme_nix_shell\
 $theme_shell_deep\
 $theme_ret\
 $theme_timer\
