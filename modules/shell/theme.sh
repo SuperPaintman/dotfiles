@@ -40,6 +40,13 @@ fi
 declare -g __DOTFILES_THEME_CUSER="$__DOTFILES_THEME_CBGREEN"
 declare -g __DOTFILES_THEME_CHOST="$__DOTFILES_THEME_CBGREEN"
 declare -g __DOTFILES_THEME_CPWD="$__DOTFILES_THEME_CRED"
+declare -g __DOTFILES_THEME_CSTATUS="$__DOTFILES_THEME_CBRED"
+declare -g __DOTFILES_THEME_CCARET_FAILED="$__DOTFILES_THEME_CRED"
+declare -g __DOTFILES_THEME_CSHLVL="$__DOTFILES_THEME_CBLUE"
+
+# declare -g __DOTFILES_THEME_SSHLVL=""
+declare -g __DOTFILES_THEME_SSHLVL=""
+
 
 # bash ./theme_benchmark_test.sh  3.18s user 0.72s system 101% cpu 3.850 total
 # zsh  ./theme_benchmark_test.sh  3.19s user 0.75s system 100% cpu 3.936 total
@@ -104,16 +111,40 @@ __dotfiles_theme_fishpwd() {
 
 declare -g __DOTFILES_THEME_PS1_RES
 __dotfiles_theme_ps1() {
+    local ret="$?"
+
     __dotfiles_theme_fishpwd "${PWD:-/}" "${HOME:-/home/nobody}" \
         || __DOTFILES_THEME_FISHPWD_RES="error($?)"
+
+    local theme_ccaret="$__DOTFILES_THEME_CCARET"
+    local theme_ret=''
+    if [ "$ret" -ne 0 ]; then
+        theme_ccaret="$__DOTFILES_THEME_CCARET_FAILED"
+        theme_ret=" [${__DOTFILES_THEME_CSTATUS}${ret}${__DOTFILES_THEME_CR}]"
+    fi
+
+    local theme_shell_depth="${SHLVL:-1}"
+    theme_shell_depth="$((theme_shell_depth - 1))"
+    if [ -n "$TMUX" ] ; then
+        theme_shell_depth="${SHLVL:-2}"
+        theme_shell_depth="$((theme_shell_depth - 2))"
+    fi
+
+    local theme_shell_deep=''
+    for (( i = 0; i < theme_shell_depth; i++ )); do
+        theme_shell_deep+=" ${__DOTFILES_THEME_CSHLVL}${__DOTFILES_THEME_SSHLVL}${__DOTFILES_THEME_CR}"
+    done
+
     __DOTFILES_THEME_PS1_RES="\
 ${__DOTFILES_THEME_CUSER}${__DOTFILES_THEME_USER}${__DOTFILES_THEME_CR}\
 @\
 ${__DOTFILES_THEME_CHOST}${__DOTFILES_THEME_HOST}${__DOTFILES_THEME_CR}\
  \
 ${__DOTFILES_THEME_CPWD}${__DOTFILES_THEME_FISHPWD_RES}${__DOTFILES_THEME_CR}\
+$theme_shell_deep\
+$theme_ret\
  \
-${__DOTFILES_THEME_CCARET}${__DOTFILES_THEME_CARET}${__DOTFILES_THEME_CR}\
+${theme_ccaret}${__DOTFILES_THEME_CARET}${__DOTFILES_THEME_CR}\
  \
 "
 }
