@@ -32,17 +32,18 @@ fi
 
 if can fzf-jump; then
     fzf-jump-cd-widget() {
+        local code=0
+
         local dir="$(fzf-jump)"
         if [ "$dir" = "" ]; then
-            return
+            return "$code"
         fi
 
-        cd "$dir"
-        local ret="$?"
+        builtin cd -- "$dir" || code="$?"
 
         zle reset-prompt
 
-        return "$ret"
+        return "$code"
     }
 
     zle -N fzf-jump-cd-widget

@@ -79,6 +79,95 @@ in
       modules = {
         users.packages = [ cfg.package ];
 
+        shell.zsh.keyBindings = let 
+          ifInteractive = text: ''
+            if [[ -o interactive ]]; then
+            ${text}
+            fi
+          '';
+        in mkMerge [
+          (ifInteractive ''
+            # Vim-like jumplist: Ctrl-I and Ctrl-O
+            autoload -Uz add-zsh-hook
+
+            typeset -ga __JUMPLIST_BACK
+            typeset -ga __JUMPLIST_FORWARD
+            typeset -gi __JUMPLIST_MAX=100
+            typeset -gi __JUMPLIST_LOCK=0
+
+            __jumplist_cd() {
+              local code=0
+              if (( __JUMPLIST_LOCK != 0 )); then
+                return "$code"
+              fi
+
+              __JUMPLIST_LOCK=1
+              builtin cd -- "$1" || code="$?"
+              __JUMPLIST_LOCK=0
+
+              return "$code"
+            }
+
+            __jumplist_record_hook() {
+              if (( __JUMPLIST_LOCK != 0 )); then
+                return 0
+              fi
+
+              [[ -n "$OLDPWD" && "$OLDPWD" != "$PWD" ]] || return
+              if (( "''${#__JUMPLIST_BACK}" >= __JUMPLIST_MAX )); then
+                shift __JUMPLIST_BACK
+              fi
+              __JUMPLIST_BACK+=( "$OLDPWD" )
+              __JUMPLIST_FORWARD=()
+
+              return 0
+            }
+            add-zsh-hook chpwd __jumplist_record_hook
+
+            jumplist-back() {
+              local dst
+
+              while (( "''${#__JUMPLIST_BACK}" )); do
+                dst="''${__JUMPLIST_BACK[-1]}"
+
+                __JUMPLIST_BACK[-1]=()
+                [[ -d "$dst" && "$dst" != "$PWD" ]] || continue
+                if (( "''${#__JUMPLIST_FORWARD}" >= __JUMPLIST_MAX )); then
+                  shift __JUMPLIST_FORWARD
+                fi
+                __JUMPLIST_FORWARD+=( "$PWD" )
+                __jumplist_cd "$dst"
+
+                break
+              done
+
+              zle reset-prompt
+            }
+            zle -N jumplist-back
+
+            jumplist-forward() {
+              local dst
+
+              while (( "''${#__JUMPLIST_FORWARD}" )); do
+                dst="''${__JUMPLIST_FORWARD[-1]}"
+
+                __JUMPLIST_FORWARD[-1]=()
+                [[ -d "$dst" && "$dst" != "$PWD" ]] || continue
+                __JUMPLIST_BACK+=( "$PWD" )
+                __jumplist_cd "$dst"
+
+                break
+              done
+
+              zle reset-prompt
+            }
+            zle -N jumplist-forward
+
+            bindkey '^O' jumplist-back # Ctrl-o
+            bindkey '^[[105;5u' jumplist-forward # Ctrl-i
+          '')
+        ];
+
         shell.zsh.functions = ''
           reload() {
             source ~/.zshrc

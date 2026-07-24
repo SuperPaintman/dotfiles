@@ -229,6 +229,21 @@ in
           sourcepath = true;
         };
 
+        shell.bash.keyBindings = let 
+          ifInteractive = text: ''
+            if [[ "$-" =~ i ]]; then
+            ${text}
+            fi
+          '';
+        in mkMerge [
+          (ifInteractive ''
+            # Vim-like jumplist: Ctrl-I and Ctrl-O
+            # Not supported yet in Bash.
+            bind '"\C-o": ""' # Ctrl-o: jumplist-back
+            bind '"\e[105;5u": ""' # Ctrl-i: jumplist-forward
+          '')
+        ];
+
         shell.bash.functions = ''
           reload() {
             source ~/.bashrc
