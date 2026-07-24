@@ -239,6 +239,9 @@ in
           (ifInteractive ''
             # Vim-like jumplist: Ctrl-I and Ctrl-O
             # Not supported yet in Bash.
+
+            # 5 - Ctrl
+            # 6 - Shift+Ctrl
             bind '"\C-o": ""' # Ctrl-o: jumplist-back
             bind '"\e[105;5u": ""' # Ctrl-i: jumplist-forward
           '')

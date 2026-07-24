@@ -14,6 +14,11 @@ let
   cfg = config.modules.programs.alacritty;
 
   toml = pkgs.formats.toml { };
+
+  fixChars = v: builtins.fromJSON ''"${v}"'';
+  fixKeyboardBindings = map (flip pipe [
+    (b: if hasAttr "chars" b && isString b.chars then (b // { chars = fixChars b.chars; }) else b)
+  ]);
 in
 
 {
@@ -93,9 +98,19 @@ in
             ];
           };
 
-          keyboard = {
-            bindings = [ ];
-          };
+          keyboard.bindings = fixKeyboardBindings [
+            # See: https://blog.fsck.com/agent-blog/2026/02/26/terminal-keyboard-protocol/
+            { key = "Return"; mods = "Shift"; chars = "\\u001B[13;2u"; }
+            { key = "Return"; mods = "Alt"; chars = "\\u001B[13;3u"; }
+            { key = "Return"; mods = "Control"; chars = "\\u001B[13;5u"; }
+            { key = "Return"; mods = "Control|Shift"; chars = "\\u001B[13;6u"; }
+            # 5 - Ctrl
+            # 6 - Ctrl-Shift
+            { key = "["; mods = "Control"; chars = "\\u001B[91;5u" ; } # Ctrl+[ vs Escape
+            { key = "H"; mods = "Control"; chars = "\\u001B[104;5u"; } # Ctrl+h vs Backspace
+            { key = "I"; mods = "Control"; chars = "\\u001B[105;5u"; } # Ctrl+i vs Tab
+            { key = "M"; mods = "Control"; chars = "\\u001B[109;5u"; } # Ctrl+m vs Enter
+          ];
         };
         "alacritty/colors.toml".source = toml.generate "alacritty-colors.toml" {
           colors.primary = {
@@ -142,11 +157,7 @@ in
           #  - 'control' is 'command' (`control')
           #  - 'option' is 'control' (`super')
           #  - 'command' is 'option' (`meta')
-          bindings = let 
-            fixChars = v: builtins.fromJSON ''"${v}"'';
-          in map (flip pipe [
-            (b: if hasAttr "chars" b && isString b.chars then (b // { chars = fixChars b.chars; }) else b)
-          ]) [
+          keyboard.bindings = fixKeyboardBindings [
             { key = "C"; mods = "Command|Shift"; action = "Copy"; }
             { key = "V"; mods = "Command|Shift"; action = "Paste"; }
 

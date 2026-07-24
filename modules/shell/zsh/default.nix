@@ -163,6 +163,8 @@ in
             }
             zle -N jumplist-forward
 
+            # 5 - Ctrl
+            # 6 - Shift+Ctrl
             bindkey '^O' jumplist-back # Ctrl-o
             bindkey '^[[105;5u' jumplist-forward # Ctrl-i
           '')
