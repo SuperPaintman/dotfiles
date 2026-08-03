@@ -459,6 +459,18 @@ in
             naturalSort
             (concatMapStringsSep " \\\n    " escapeShellArg)
           ];
+
+          # See: https://zsh.sourceforge.io/Doc/Release/Completion-System.html
+          mkZStyle = context: style: value: let
+            context' = if isString context then context else concatStringsSep ":" context;
+            value' = if isString value then value else concatMapStringsSep " " escapeShellArg value;
+          in
+            "zstyle ${escapeShellArg context'} ${escapeShellArg style} ${value'}";
+
+          mkZStyles = flip pipe [
+            (map ({ context, style, value }: mkZStyle context style value))
+            (concatStringsSep "\n")
+          ];
         in ''
           ## Colors ############################################################
           autoload -U colors && colors
@@ -472,46 +484,117 @@ in
 
           zmodload -i zsh/complist
 
-          zstyle ':completion:*:*:*:*:*' menu select
+          ${mkZStyles [
+            # :completion:function:completer:command:argument:tag
+            {
+              context = [ "" "completion" "*" "*" "*" "*" "*" ];
+              style = "menu";
+              value = [ "select" ];
+            }
 
-          # Case insensitive (all), partial-word and substring completion.
-          zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+            # Case insensitive (all), partial-word and substring completion.
+            {
+              context = [ "" "completion" "*" ];
+              style = "matcher-list";
+              value = [ "m:{a-zA-Z}={A-Za-z}" "r:|=*" "l:|=* r:|=*" ];
+            }
 
-          # Complete . and .. special directories.
-          zstyle ':completion:*' special-dirs true
+            # Complete . and .. special directories.
+            {
+              context = [ "" "completion" "*" ];
+              style = "special-dirs";
+              value = [ "true" ];
+            }
 
-          # Processes.
-          zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+            # Processes.
+            {
+              context = [ "" "completion" "*" "*" "*" "*" "processes" ];
+              style = "command";
+              value = "\"ps -u $USER -o pid,user,comm -w -w\"";
+            }
 
-          # Disable named-directories autocompletion.
-          zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
+            # Disable named-directories autocompletion.
+            {
+              context = [ "" "completion" "*" "cd" "*" ];
+              style = "tag-order";
+              value = [ "local-directories" "directory-stack" "path-directories" ];
+            }
 
-          # Make.
-          # Outputs all possible results for make targets.
-          zstyle ':completion:*:make:*:targets' call-command on
-          # Show only targets.
-          zstyle ':completion:*:make:*' tag-order targets
+            # Make.
+            # Outputs all possible results for make targets.
+            {
+              context = [ "" "completion" "*" "make" "*" "targets" ];
+              style = "call-command";
+              value = [ "on" ];
+            }
+            # Show only targets.
+            {
+              context = [ "" "completion" "*" "make" "*" ];
+              style = "tag-order";
+              value = [ "targets" ];
+            }
 
-          # Use caching so that commands like apt and dpkg complete are useable.
-          zstyle ':completion::complete:*' use-cache 1
-          zstyle ':completion::complete:*' cache-path "$ZSH_CACHE_DIR"
+            # Use caching so that commands like apt and dpkg complete are useable.
+            {
+              context = [ "" "completion" "" "complete" "*" ];
+              style = "use-cache";
+              value = [ "1" ];
+            }
+            {
+              context = [ "" "completion" "" "complete" "*" ];
+              style = "cache-path";
+              value = "\"$ZSH_CACHE_DIR\"";
+            }
 
-          # Ignore system users.
-          zstyle ':completion:*:*:*:users' ignored-patterns ${mkIgnoredPatterns ignoredUsers}
+            # Ignore system users.
+            {
+              context = [ "" "completion" "*" "*" "*" "users" ];
+              style = "ignored-patterns";
+              value = mkIgnoredPatterns ignoredUsers;
+            }
 
-          # Ignore some variables.
-          zstyle ':completion:*:*:*:*:parameters' ignored-patterns ${mkIgnoredPatterns ignoredVariables}
+            # Ignore some variables.
+            {
+              context = [ "" "completion" "*" "*" "*" "*" "parameters" ];
+              style = "ignored-patterns";
+              value = mkIgnoredPatterns ignoredVariables;
+            }
 
-          # Ignore some functions.
-          zstyle ':completion:*:functions' ignored-patterns ${mkIgnoredPatterns ignoredFunctions}
+            # Ignore some functions.
+            {
+              context = [ "" "completion" "*" "functions" ];
+              style = "ignored-patterns";
+              value = mkIgnoredPatterns ignoredFunctions;
+            }
 
-          zstyle '*' single-ignored show
+            {
+              context = [ "*" ];
+              style = "single-ignored";
+              value = [ "show" ];
+            }
 
-          zstyle ':completion:*' format '%F{242}[%d]%f'
+            {
+              context = [ "" "completion" "*" ];
+              style = "format";
+              value = [ "%F{242}[%d]%f" ];
+            }
 
-          zstyle ':completion:*' list-colors '''
-          zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
-          zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
+            {
+              context = [ "" "completion" "*" ];
+              style = "list-colors";
+              value = [ "" ];
+            }
+            {
+              context = [ "" "completion" "*" ];
+              style = "list-colors";
+              value = "\"\${(s.:.)LS_COLORS}\"";
+            }
+            {
+              context = [ "" "completion" "*" "*" "kill" "*" "processes" ];
+              style = "list-colors";
+              value = [ "=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01" ];
+            }
+          ]}
 
           autoload -U +X bashcompinit && bashcompinit
         '';
