@@ -637,6 +637,8 @@ in
               bindkey "''${terminfo[kdch1]}" delete-char # Delete - delete forward.
             fi
 
+            bindkey '^[^?' backward-kill-word # Alt-Backspace - delete word backward.
+
             # Edit the current command line in $EDITOR.
             autoload -U edit-command-line
             zle -N edit-command-line
