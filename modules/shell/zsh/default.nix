@@ -715,6 +715,12 @@ in
             autoload -U edit-command-line
             zle -N edit-command-line
             bindkey '^e' edit-command-line
+
+            # Vim.
+            bindkey -M viins '^ ' autosuggest-accept
+
+            # Unbind.
+            bindkey -r '^s' # Ctrl-s - history-incremental-search-forward
           '')
 
           (ifInteractive ''
@@ -798,6 +804,33 @@ in
             # 6 - Shift+Ctrl
             bindkey '^O' jumplist-back # Ctrl-o
             bindkey '^[[105;5u' jumplist-forward # Ctrl-i
+          '')
+
+          # TODO(SuperPaintman): migrate fzf-jump to modules.
+          (ifInteractive ''
+            # fzf-jump
+            # Unbind .
+            bindkey -r '\ep' # Escape p - fzf-jump-cd
+
+            if command -v fzf-jump >/dev/null ; then
+              fzf-jump-cd() {
+                  local code=0
+
+                  local dir="$(fzf-jump)"
+                  if [ "$dir" = "" ]; then
+                      return "$code"
+                  fi
+
+                  builtin cd -- "$dir" || code="$?"
+
+                  zle reset-prompt
+
+                  return "$code"
+              }
+
+              zle -N fzf-jump-cd
+              bindkey '\ep' fzf-jump-cd # Escape p
+            fi
           '')
         ];
 
@@ -895,10 +928,13 @@ in
         };
 
         home.files = {
-          # TODO(SuperPaintman): delete later.
-          # Backword compatability until files are migrated.
-          ".zshrc.migration".text = ''
-            export __DOTFILES_MIGRATION_ZSH=1
+          # TODO(SuperPaintman): fully replace with XDG.
+          ".zshrc".text = ''
+            # TODO(SuperPaintman): remove once Bash is migrated.
+            if [ -f ~/.bashrc ]; then 
+              source ~/.bashrc
+            fi
+
             if [ -f ~/.config/zsh/zshrc.zsh ]; then
               source ~/.config/zsh/zshrc.zsh
             fi

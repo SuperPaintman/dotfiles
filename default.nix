@@ -41,7 +41,7 @@ imports ([
   # ./xresources # Migrated to modules.
   # ./yabai
   # ./yarn
-  ./zsh
+  # ./zsh # Migrated to modules.
 ] ++ (
   if pathExists ./secrets
   then import ./secrets (args // { inherit linuxOnly macOSOnly optional; })
