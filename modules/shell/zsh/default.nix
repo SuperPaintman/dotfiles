@@ -497,6 +497,8 @@ in
             command = reset;
             separator = brightBlack;
             description = brightBlack;
+            pid = boldMagenta;
+            user = boldGreen;
           };
 
           sep = "·";
@@ -628,6 +630,23 @@ in
                 }
               ])
               [ "files" "all-files" "directories" "local-directories" "globbed-files" "other-files" ])
+
+            (map
+              (tag: [
+                {
+                  context = [ "" "completion" "*" "*" "kill" "*" tag ];
+                  style = "list-colors";
+                  value = [ "" ];
+                }
+                {
+                  context = [ "" "completion" "*" "*" "kill" "*" tag ];
+                  style = "list-colors";
+                  value = [
+                    "=(#b)[ ]#([0-9]##)[ ]##([^ ]##)[ ]##(*)=${styles.reset}=${styles.pid}=${styles.user}=${styles.command}"
+                  ];
+                }
+              ])
+              [ "processes" ])
 
             (map
               (tag: [
