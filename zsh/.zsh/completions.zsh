@@ -19,19 +19,24 @@ fi
 
 # ZStyle
 # Use caching to make completion for commands.
-zstyle ':completion::complete:*' use-cache on
+# NOTE(SuperPaintman): migrated
+# zstyle ':completion::complete:*' use-cache on
 
 # Add groups names.
+# NOTE(SuperPaintman): migrated
 # zstyle ':completion:*' format '%F{yellow}[%d]%f'
-zstyle ':completion:*' format "$(printf "\x1b[90m")"'[%d]'"$(printf "\x1b[0m")"
+# zstyle ':completion:*' format "$(printf "\x1b[90m")"'[%d]'"$(printf "\x1b[0m")"
 
 # Do not complete unavailable commands.
-zstyle ':completion:*:functions' ignored-patterns '(_*)'
+# NOTE(SuperPaintman): migrated
+# zstyle ':completion:*:functions' ignored-patterns '(_*)'
 
 ## Make
+# NOTE(SuperPaintman): migrated
 # Outputs all possible results for make targets.
-zstyle ':completion:*:make:*:targets' call-command on
+# zstyle ':completion:*:make:*:targets' call-command on
 
 # Show only targets.
-zstyle ':completion:*:make:*' tag-order targets
+# NOTE(SuperPaintman): migrated
+# zstyle ':completion:*:make:*' tag-order targets
 # zstyle ':completion:*:make:*' tag-order targets,variables

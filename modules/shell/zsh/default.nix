@@ -450,6 +450,10 @@ in
             "^[A-Z][A-Za-z0-9_]#"
           ];
 
+          ignoredFunctions = [
+            "_*"
+          ];
+
           mkIgnoredPatterns = flip pipe [
             unique
             naturalSort
@@ -476,12 +480,17 @@ in
           # Complete . and .. special directories.
           zstyle ':completion:*' special-dirs true
 
-          zstyle ':completion:*' list-colors '''
-          zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
+          # Processes.
           zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
 
           # Disable named-directories autocompletion.
           zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
+
+          # Make.
+          # Outputs all possible results for make targets.
+          zstyle ':completion:*:make:*:targets' call-command on
+          # Show only targets.
+          zstyle ':completion:*:make:*' tag-order targets
 
           # Use caching so that commands like apt and dpkg complete are useable.
           zstyle ':completion::complete:*' use-cache 1
@@ -493,9 +502,16 @@ in
           # Ignore some variables.
           zstyle ':completion:*:*:*:*:parameters' ignored-patterns ${mkIgnoredPatterns ignoredVariables}
 
+          # Ignore some functions.
+          zstyle ':completion:*:functions' ignored-patterns ${mkIgnoredPatterns ignoredFunctions}
+
           zstyle '*' single-ignored show
 
+          zstyle ':completion:*' format '%F{242}[%d]%f'
+
+          zstyle ':completion:*' list-colors '''
           zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
+          zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
 
           autoload -U +X bashcompinit && bashcompinit
         '';
