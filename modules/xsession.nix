@@ -119,11 +119,11 @@ in
         })
         config.modules.users.users);
 
-      # services.xserver.displayManager.sessionCommands = ''
-      #   if [ -f "${config.modules.xdg.configHome}/x11/resources" ]; then
-      #     ${pkgs.xorg.xrdb}/bin/xrdb -merge "${config.modules.xdg.configHome}/x11/resources"
-      #   fi
-      # '';
+      services.xserver.displayManager.sessionCommands = ''
+        if [ -f "${config.modules.xdg.configHome}/x11/resources" ]; then
+          ${pkgs.xorg.xrdb}/bin/xrdb -merge "${config.modules.xdg.configHome}/x11/resources"
+        fi
+      '';
     })
 
     (assertion (cfg.xmodmap.enable -> pkgs.stdenv.hostPlatform.isLinux || standalone)
