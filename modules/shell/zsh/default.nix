@@ -471,6 +471,35 @@ in
             (map ({ context, style, value }: mkZStyle context style value))
             (concatStringsSep "\n")
           ];
+
+          styles = rec {
+            reset = "0";
+            black = "30";
+            red = "31";
+            green = "32";
+            yellow = "33";
+            blue = "34";
+            magenta = "35";
+            cyan = "36";
+            white = "37";
+
+            boldBlack = "1;30";
+            boldRed = "1;31";
+            boldGreen = "1;32";
+            boldYellow = "1;33";
+            boldBlue = "1;34";
+            boldMagenta = "1;35";
+            boldCyan = "1;36";
+            boldWhite = "1;37";
+
+            brightBlack = "90";
+
+            command = reset;
+            separator = brightBlack;
+            description = brightBlack;
+          };
+
+          sep = "·";
         in ''
           ## Colors ############################################################
           autoload -U colors && colors
@@ -484,12 +513,18 @@ in
 
           zmodload -i zsh/complist
 
-          ${mkZStyles [
+          ${mkZStyles (flatten [
             # :completion:function:completer:command:argument:tag
             {
               context = [ "" "completion" "*" "*" "*" "*" "*" ];
               style = "menu";
               value = [ "select" ];
+            }
+
+            {
+              context = [ "" "completion" "*" ];
+              style = "list-separator";
+              value = [ sep ];
             }
 
             # Case insensitive (all), partial-word and substring completion.
@@ -579,22 +614,40 @@ in
               value = [ "%F{242}[%d]%f" ];
             }
 
-            {
-              context = [ "" "completion" "*" ];
-              style = "list-colors";
-              value = [ "" ];
-            }
-            {
-              context = [ "" "completion" "*" ];
-              style = "list-colors";
-              value = "\"\${(s.:.)LS_COLORS}\"";
-            }
-            {
-              context = [ "" "completion" "*" "*" "kill" "*" "processes" ];
-              style = "list-colors";
-              value = [ "=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01" ];
-            }
-          ]}
+            (map
+              (tag: [
+                {
+                  context = [ "" "completion" "*" "*" "*" "*" tag ];
+                  style = "list-colors";
+                  value = [ "" ];
+                }
+                {
+                  context = [ "" "completion" "*" "*" "*" "*" tag ];
+                  style = "list-colors";
+                  value = "\"\${(s.:.)LS_COLORS}\"";
+                }
+              ])
+              [ "files" "all-files" "directories" "local-directories" "globbed-files" "other-files" ])
+
+            (map
+              (tag: [
+                {
+                  context = [ "" "completion" "*" "*" "*" "*" tag ];
+                  style = "list-colors";
+                  value = [ "" ];
+                }
+                {
+                  context = [ "" "completion" "*" "*" "*" "*" tag ];
+                  style = "list-colors";
+                  value = [
+                    "=(#b)([^${sep}]##)( ##${sep} ##)(*)=${styles.reset}=${styles.command}=${styles.separator}=${styles.description}"
+                    "=(#b)( #${sep})(*)=${styles.reset}=${styles.separator}=${styles.description}"
+                    # "=(#b)(*)=${styles.reset}=${styles.command}" # NOTE(SuperPaintman): changes the color of ANY completion.
+                  ];
+                }
+              ])
+              [ "*" ])
+          ])}
 
           autoload -U +X bashcompinit && bashcompinit
         '';
