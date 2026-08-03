@@ -83,6 +83,16 @@ in
     };
     extras.theme = common.lib.mkExtraOption "theme" { };
 
+    plugins = mkOption {
+      type = lines;
+      default = "";
+      description = ''
+        ZSH plugins.
+      '';
+    };
+    extras.plugins = common.lib.mkExtraOption "plugins" { };
+
+
     # Entire config.
     extras.config = common.lib.mkExtraOption "config" { };
   };
@@ -402,11 +412,48 @@ in
             else 
               [];
 
-          ignoredUsers' = if standalone then ignoredHardcodedUsers else ignoredSystemUsers;
+          ignoredUsers = if standalone then ignoredHardcodedUsers else ignoredSystemUsers;
 
-          ignoredUsers = pipe ignoredUsers' [
+          ignoredVariables = [
+            "_*"
+
+            "fg"
+            "fg_bold"
+            "fg_no_bold"
+            "bg"
+            "bg_bold"
+            "bg_no_bold"
+            "bold_color"
+            "color"
+            "colour"
+            "reset_color"
+
+            "PS1"
+            "PS2"
+            "PS3"
+            "PS4"
+
+            "PROMPT"
+            "PROMPT2"
+            "PROMPT3"
+            "PROMPT4"
+            "RPROMPT"
+
+            "prompt_*"
+
+            "ZSH_AUTOSUGGEST_*"
+            "zsh_highlight_*"
+            "ZSH_HIGHLIGHT_*"
+            "ZSH_THEME_*"
+
+            # Ignore any variable that doesnt start with [A-Z].
+            "^[A-Z][A-Za-z0-9_]#"
+          ];
+
+          mkIgnoredPatterns = flip pipe [
             unique
             naturalSort
+            (concatMapStringsSep " \\\n    " escapeShellArg)
           ];
         in ''
           ## Colors ############################################################
@@ -439,9 +486,12 @@ in
           # Use caching so that commands like apt and dpkg complete are useable.
           zstyle ':completion::complete:*' use-cache 1
           zstyle ':completion::complete:*' cache-path "$ZSH_CACHE_DIR"
-          
-          # Don't complete uninteresting users.
-          zstyle ':completion:*:*:*:users' ignored-patterns ${concatMapStringsSep " \\\n    " escapeShellArg ignoredUsers}
+
+          # Ignore system users.
+          zstyle ':completion:*:*:*:users' ignored-patterns ${mkIgnoredPatterns ignoredUsers}
+
+          # Ignore some variables.
+          zstyle ':completion:*:*:*:*:parameters' ignored-patterns ${mkIgnoredPatterns ignoredVariables}
 
           zstyle '*' single-ignored show
 
@@ -588,6 +638,12 @@ in
           }
         '';
 
+        shell.zsh.plugins = optionalString (!standalone) ''
+          source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+          source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+        '';
+
         home.configFiles = {
           "zsh/zshrc.zsh".source = pkgs.writeTextFile {
             name = "zshrc.zsh";
@@ -642,6 +698,13 @@ in
               ${cfg.extras.theme.before}
               ${cfg.theme}
               ${cfg.extras.theme.after}
+
+              ################################################################################
+              # Plugins.
+              ################################################################################
+              ${cfg.extras.plugins.before}
+              ${cfg.plugins}
+              ${cfg.extras.plugins.after}
 
               ################################################################################
               # Extras After
