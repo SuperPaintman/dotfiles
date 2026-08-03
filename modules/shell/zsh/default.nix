@@ -4,9 +4,23 @@
 with lib;
 
 let
+  inherit (config.modules.home) standalone;
+
   cfg = config.modules.shell.zsh;
 
   common = pkgs.callPackage ../common.nix { inherit config; };
+
+  mkZSHOptions = flip pipe [
+    (filterAttrs (n: v: v != null))
+    (mapAttrs (n: v: if v then "setopt" else "unsetopt"))
+    (mapAttrsToList (n: cmd: ''${cmd} ${n}''))
+    (concatStringsSep "\n")
+  ];
+
+  ZSH_VERSION = if standalone then "\${ZSH_VERSION}" else cfg.package.version;
+
+  ZSH_CACHE_DIR = "\${XDG_CACHE_HOME:-\"$HOME\"/.cache}/zsh";
+  ZSH_COMPDUMP = "${ZSH_CACHE_DIR}/zcompdump-${ZSH_VERSION}";
 in
 
 {
@@ -31,6 +45,19 @@ in
 
     variables = common.options.variables;
     extras.variables = common.lib.mkExtraOption "variables" { };
+
+    options = mkOption {
+      type = attrsOf (nullOr bool);
+      default = { };
+      description = ''
+        The set of bash options.
+      '';
+      apply =
+        flip pipe [
+          (filterAttrs (n: v: v != null))
+        ];
+    };
+    extras.options = common.lib.mkExtraOption "options" { };
 
     aliases = common.options.aliases;
     extras.aliases = common.lib.mkExtraOption "aliases" { };
@@ -79,6 +106,350 @@ in
       modules = {
         users.packages = [ cfg.package ];
 
+        # See: https://zsh.sourceforge.io/Doc/Release/Parameters.html#Parameters-Used-By-The-Shell.html
+        shell.zsh.variables = {
+          # The maximum number of history events to save in the history file.
+          #
+          # If this is made local, it is not implicitly set to 0, but may be
+          # explicitly set locally.
+          SAVEHIST = "10000";
+
+          # The maximum number of events stored in the internal history list.
+          # If you use the HIST_EXPIRE_DUPS_FIRST option, setting this value
+          # larger than the SAVEHIST size will give you the difference as a
+          # cushion for saving duplicated history events.
+          #
+          # If this is made local, it is not implicitly set to 0, but may be
+          # explicitly set locally.
+          HISTSIZE = "50000";
+
+          # The file to save the history in when an interactive shell exits.
+          # If unset, the history is not saved.
+          HISTFILE = "$XDG_STATE_HOME/zsh/history";
+
+          # A list of non-alphanumeric characters considered part of a word by
+          # the line editor.
+          WORDCHARS = "";
+
+          # Non-standard.
+          inherit ZSH_CACHE_DIR ZSH_COMPDUMP;
+        };
+
+        # See: https://zsh.sourceforge.io/Doc/Release/Options.html
+        shell.zsh.options = {
+          ## 16.2.1 Changing Directories #######################################
+
+          # If a command is issued that can’t be executed as a normal command,
+          # and the command is the name of a directory, perform the cd command
+          # to that directory. This option is only applicable if the option
+          # SHIN_STDIN is set, i.e. if commands are being read from standard
+          # input. The option is designed for interactive use; it is
+          # recommended that cd be used explicitly in scripts to avoid
+          # ambiguity.
+          AUTO_CD = true;
+
+          # Make cd push the old directory onto the directory stack.
+          AUTO_PUSHD = true;
+
+          # Don’t push multiple copies of the same directory onto the directory
+          # stack.
+          PUSHD_IGNORE_DUPS = true;
+
+          # Exchanges the meanings of ‘+’ and ‘-’ when used with a number to
+          # specify a directory in the stack.
+          PUSHD_MINUS = true;
+
+
+          ## 16.2.2 Completion #################################################
+
+          # If a completion is performed with the cursor within a word, and a
+          # full completion is inserted, the cursor is moved to the end of the
+          # word. That is, the cursor is moved to the end of the word if either
+          # a single match is inserted or menu completion is performed.
+          ALWAYS_TO_END = true;
+
+          # Automatically use menu completion after the second consecutive
+          # request for completion, for example by pressing the tab key
+          # repeatedly. This option is overridden by MENU_COMPLETE.
+          AUTO_MENU = true;
+
+          # If unset, the cursor is set to the end of the word if completion
+          # is started. Otherwise it stays there and completion is done from
+          # both ends.
+          COMPLETE_IN_WORD = true;
+
+          # On an ambiguous completion, instead of listing possibilities or
+          # beeping, insert the first match immediately. Then when completion
+          # is requested again, remove the first match and insert the second
+          # match, etc. When there are no more matches, go back to the first
+          # one again. reverse-menu-complete may be used to loop through the
+          # list in the other direction. This option overrides AUTO_MENU.
+          MENU_COMPLETE = false;
+
+
+          ## 16.2.4 History ####################################################
+
+          # Save each command’s beginning timestamp (in seconds since the
+          # epoch) and the duration (in seconds) to the history file.
+          # The format of this prefixed data is:
+          #
+          # ‘: <beginning time>:<elapsed seconds>;<command>’.
+          EXTENDED_HISTORY = true;
+
+          # If the internal history needs to be trimmed to add the current
+          # command line, setting this option will cause the oldest history
+          # event that has a duplicate to be lost before losing a unique event
+          # from the list. You should be sure to set the value of HISTSIZE to
+          # a larger number than SAVEHIST in order to give you some room for
+          # the duplicated events, otherwise this option will behave just like
+          # HIST_IGNORE_ALL_DUPS once the history fills up with unique events.
+          HIST_EXPIRE_DUPS_FIRST = true;
+
+          # When writing out the history file, by default zsh uses ad-hoc file
+          # locking to avoid known problems with locking on some operating
+          # systems. With this option locking is done by means of the system’s
+          # fcntl call, where this method is available. On recent operating
+          # systems this may provide better performance, in particular avoiding
+          # history corruption when files are stored on NFS. 
+          HIST_FCNTL_LOCK = true;
+
+          # Do not enter command lines into the history list if they are 
+          # duplicates of the previous event.
+          HIST_IGNORE_DUPS = true;
+
+          # Remove command lines from the history list when the first
+          # character on the line is a space, or when one of the expanded
+          # aliases contains a leading space. Only normal aliases (not global
+          # or suffix aliases) have this behaviour. Note that the command
+          # lingers in the internal history until the next command is entered
+          # before it vanishes, allowing you to briefly reuse or edit the line.
+          # If you want to make it vanish right away without entering another
+          # command, type a space and press return.
+          HIST_IGNORE_SPACE = true;
+
+          # This option both imports new commands from the history file,
+          # and also causes your typed commands to be appended to the history 
+          # file (the latter is like specifying INC_APPEND_HISTORY, which 
+          # should be turned off if this option is in effect). 
+          #
+          # The history lines are also output with timestamps ala 
+          # EXTENDED_HISTORY (which makes it easier to find the spot where we
+          # left off reading the file after it gets re-written). 
+          SHARE_HISTORY = true;
+
+          # Whenever the user enters a line with history expansion, don’t
+          # execute the line directly; instead, perform history expansion
+          # and reload the line into the editing buffer.
+          HIST_VERIFY = true;
+
+          # This option works like APPEND_HISTORY except that new history lines
+          # are added to the $HISTFILE incrementally (as soon as they are
+          # entered), rather than waiting until the shell exits. The file will
+          # still be periodically re-written to trim it when the number of
+          # lines grows 20% beyond the value specified by $SAVEHIST (see also
+          # the HIST_SAVE_BY_COPY option).
+          INC_APPEND_HISTORY = true;
+
+
+          ## 16.2.6 Input/Output ###############################################
+
+          # Allow comments even in interactive shells.
+          INTERACTIVE_COMMENTS = true;
+
+          # If this option is unset, output flow control via start/stop
+          # characters (usually assigned to ^S/^Q) is disabled in the shell’s
+          # editor.
+          FLOW_CONTROL = false;
+
+
+          ## 16.2.7 Job Control ################################################
+
+          # Print job notifications in the long format by default.
+          LONG_LIST_JOBS = true;
+
+          ## 16.2.8 Prompting ##################################################
+
+          # Attempt to preserve a partial line (i.e. a line that did not end
+          # with a newline) that would otherwise be covered up by the command
+          # prompt due to the PROMPT_CR option. This works by outputting some
+          # cursor-control characters, including a series of spaces, that should
+          # make the terminal wrap to the next line when a partial line is
+          # present (note that this is only successful if your terminal has
+          # automatic margins, which is typical).
+          PROMPT_SP = true;
+
+          # If set, parameter expansion, command substitution and arithmetic
+          # expansion are performed in prompts. Substitutions within prompts
+          # do not affect the command status.
+          PROMPT_SUBST = true;
+
+
+          ## 16.2.9 Scripts and Functions ######################################
+
+          # Perform implicit tees or cats when multiple redirections are 
+          # attempted (see Redirection).
+          MULTIOS = true;
+        };
+
+        shell.zsh.extras.options.after = let 
+          ignoredHardcodedUsers = [
+            # Oh-My-ZSH
+            "adm"
+            "amanda"
+            "apache"
+            "at"
+            "avahi"
+            "avahi-autoipd"
+            "beaglidx"
+            "bin"
+            "cacti"
+            "canna"
+            "clamav"
+            "daemon"
+            "dbus"
+            "distcache"
+            "dnsmasq"
+            "dovecot"
+            "fax"
+            "ftp"
+            "games"
+            "gdm"
+            "gkrellmd"
+            "gopher"
+            "hacluster"
+            "haldaemon"
+            "halt"
+            "hsqldb"
+            "ident"
+            "junkbust"
+            "kdm"
+            "ldap"
+            "lp"
+            "mail"
+            "mailman"
+            "mailnull"
+            "man"
+            "messagebus"
+            "mldonkey"
+            "mysql"
+            "nagios"
+            "named"
+            "netdump"
+            "news"
+            "nfsnobody"
+            "nobody"
+            "nscd"
+            "ntp"
+            "nut"
+            "nx"
+            "obsrun"
+            "openvpn"
+            "operator"
+            "pcap"
+            "polkitd"
+            "postfix"
+            "postgres"
+            "privoxy"
+            "pulse"
+            "pvm"
+            "quagga"
+            "radvd"
+            "rpc"
+            "rpcuser"
+            "rpm"
+            "rtkit"
+            "scard"
+            "shutdown"
+            "squid"
+            "sshd"
+            "statd"
+            "svn"
+            "sync"
+            "tftp"
+            "usbmux"
+            "uucp"
+            "vcsa"
+            "wwwrun"
+            "xfs"
+            "_*"
+
+            # Custom.
+            "nixbld*"
+            "systemd-*"
+          ];
+
+          isSystemUser = u:
+            u.isSystemUser
+            || !u.isNormalUser;
+            # || u.uid < 1000;
+
+          ignoredSystemUsers =
+            if config ? users && config.users ? users
+            then
+              (pipe config.users.users [
+                (filterAttrs (n: u:
+                  (n != "root")
+                  && !(hasPrefix "nixbld" n)
+                  && !(hasPrefix "systemd-" n)
+                  && (isSystemUser u)
+                ))
+                attrNames
+              ]) ++ [
+                "nixbld*"
+                "systemd-*"
+                "_*"
+              ]
+            else 
+              [];
+
+          ignoredUsers' = if standalone then ignoredHardcodedUsers else ignoredSystemUsers;
+
+          ignoredUsers = pipe ignoredUsers' [
+            unique
+            naturalSort
+          ];
+        in ''
+          ## Colors ############################################################
+          autoload -U colors && colors
+
+          ## Completions #######################################################
+          autoload -U compaudit
+          autoload -U compinit
+
+          # -C - dump file is only created if none exists.
+          compinit -C -d "$ZSH_COMPDUMP"
+
+          zmodload -i zsh/complist
+
+          zstyle ':completion:*:*:*:*:*' menu select
+
+          # Case insensitive (all), partial-word and substring completion.
+          zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|=*' 'l:|=* r:|=*'
+
+          # Complete . and .. special directories.
+          zstyle ':completion:*' special-dirs true
+
+          zstyle ':completion:*' list-colors '''
+          zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#) ([0-9a-z-]#)*=01;34=0=01'
+          zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+
+          # Disable named-directories autocompletion.
+          zstyle ':completion:*:cd:*' tag-order local-directories directory-stack path-directories
+
+          # Use caching so that commands like apt and dpkg complete are useable.
+          zstyle ':completion::complete:*' use-cache 1
+          zstyle ':completion::complete:*' cache-path "$ZSH_CACHE_DIR"
+          
+          # Don't complete uninteresting users.
+          zstyle ':completion:*:*:*:users' ignored-patterns ${concatMapStringsSep " \\\n    " escapeShellArg ignoredUsers}
+
+          zstyle '*' single-ignored show
+
+          zstyle ':completion:*' list-colors "''${(s.:.)LS_COLORS}"
+
+          autoload -U +X bashcompinit && bashcompinit
+        '';
+
         shell.zsh.keyBindings = let 
           ifInteractive = text: ''
             if [[ -o interactive ]]; then
@@ -86,6 +457,43 @@ in
             fi
           '';
         in mkMerge [
+          (ifInteractive ''
+            bindkey ' ' magic-space # Space - do history expansion.
+
+            bindkey '^r' history-incremental-search-backward # Ctrl-r - Search backward incrementally for a specified string.
+
+            # Start typing + Up-Arrow - fuzzy find history forward.
+            if [[ "''${terminfo[kcuu1]}" != "" ]]; then
+              autoload -U up-line-or-beginning-search
+              zle -N up-line-or-beginning-search
+              bindkey "''${terminfo[kcuu1]}" up-line-or-beginning-search
+            fi
+
+            # start typing + Down-Arrow - fuzzy find history backward.
+            if [[ "''${terminfo[kcud1]}" != "" ]]; then
+              autoload -U down-line-or-beginning-search
+              zle -N down-line-or-beginning-search
+              bindkey "''${terminfo[kcud1]}" down-line-or-beginning-search
+            fi
+
+            bindkey '^[[1;5C' forward-word # Ctrl-RightArrow - move forward one word.
+            bindkey '^[[1;5D' backward-word # Ctrl-LeftArrow - move backward one word.
+            
+            if [[ "''${terminfo[kcbt]}" != "" ]]; then
+              bindkey "''${terminfo[kcbt]}" reverse-menu-complete # Shift-Tab - move through the completion menu backwards.
+            fi
+
+            bindkey '^?' backward-delete-char # Backspace - delete backward.
+            if [[ "''${terminfo[kdch1]}" != "" ]]; then
+              bindkey "''${terminfo[kdch1]}" delete-char # Delete - delete forward.
+            fi
+
+            # Edit the current command line in $EDITOR.
+            autoload -U edit-command-line
+            zle -N edit-command-line
+            bindkey '^e' edit-command-line
+          '')
+
           (ifInteractive ''
             # Vim-like jumplist: Ctrl-I and Ctrl-O
             autoload -Uz add-zsh-hook
@@ -170,6 +578,10 @@ in
           '')
         ];
 
+        shell.zsh.aliases = {
+          history = "builtin history -t '%Y-%m-%dT%H-%M-%S%z'";
+        };
+
         shell.zsh.functions = ''
           reload() {
             source ~/.zshrc
@@ -195,6 +607,13 @@ in
               ${cfg.extras.variables.before}
               ${common.lib.mkExporedShEnvVars cfg.variables}
               ${cfg.extras.variables.after}
+
+              ################################################################################
+              # Options.
+              ################################################################################
+              ${cfg.extras.options.before}
+              ${mkZSHOptions cfg.options}
+              ${cfg.extras.options.after}
 
               ################################################################################
               # Aliases.
@@ -249,6 +668,28 @@ in
             fi
           '';
         };
+
+        home.activation.zshXDGDirs = ''
+          if [ ! -d "$XDG_CACHE_HOME/zsh" ]; then
+            mkdir "$XDG_CACHE_HOME/zsh"
+          fi
+
+          if [ ! -d "$XDG_DATA_HOME/zsh" ]; then
+            mkdir "$XDG_DATA_HOME/zsh"
+          fi
+
+          if [ ! -d "$XDG_STATE_HOME/zsh" ]; then
+            mkdir "$XDG_STATE_HOME/zsh"
+          fi
+        '';
+
+        home.activation.zshDeleteCompdump = ''
+          if [ -f "${ZSH_COMPDUMP}" ]; then
+            rm "${ZSH_COMPDUMP}"
+
+            # NOTE(SuperPaintman): do not recreate the compdump here.
+          fi
+        '';
       };
     })
   ];

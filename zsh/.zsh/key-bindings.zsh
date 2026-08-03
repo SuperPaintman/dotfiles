@@ -51,38 +51,39 @@ if can fzf-jump; then
 fi
 
 ## Edit buffer in $EDITOR.
-edit-zsh-buffer() {
-    local temp_file="/tmp/edit-zsh-buffer.$$.zsh"
-    rm -f "$temp_file"
-    (umask 077 && touch "$temp_file")
-    echo "$LBUFFER" > "$temp_file"
-
-    local editor="$EDITOR"
-    if [ -z "$editor" ]; then
-        editor="vim"
-    fi
-
-    local options=()
-    case "$editor" in
-        nvim | vim)
-            # Auto enter into INSERT mode.
-            options=('-c' 'set syntax=zsh | set filetype=zsh | call feedkeys("\<Esc>GA")')
-            ;;
-    esac
-
-    $editor $options "$temp_file" < /dev/tty > /dev/tty || {
-        local ret="$?"
-        rm -f "$temp_file"
-        return "$ret"
-    }
-
-    LBUFFER="$(cat "$temp_file")"
-    rm -r "$temp_file"
-    # Apply colors.
-    zle redisplay
-}
-zle -N edit-zsh-buffer
-bindkey '^e' edit-zsh-buffer
+# NOTE(SuperPaintman): migrated
+# edit-zsh-buffer() {
+#     local temp_file="/tmp/edit-zsh-buffer.$$.zsh"
+#     rm -f "$temp_file"
+#     (umask 077 && touch "$temp_file")
+#     echo "$LBUFFER" > "$temp_file"
+#
+#     local editor="$EDITOR"
+#     if [ -z "$editor" ]; then
+#         editor="vim"
+#     fi
+#
+#     local options=()
+#     case "$editor" in
+#         nvim | vim)
+#             # Auto enter into INSERT mode.
+#             options=('-c' 'set syntax=zsh | set filetype=zsh | call feedkeys("\<Esc>GA")')
+#             ;;
+#     esac
+#
+#     $editor $options "$temp_file" < /dev/tty > /dev/tty || {
+#         local ret="$?"
+#         rm -f "$temp_file"
+#         return "$ret"
+#     }
+#
+#     LBUFFER="$(cat "$temp_file")"
+#     rm -r "$temp_file"
+#     # Apply colors.
+#     zle redisplay
+# }
+# zle -N edit-zsh-buffer
+# bindkey '^e' edit-zsh-buffer
 # bindkey '\ee' edit-zsh-buffer
 
 # Unbindings.

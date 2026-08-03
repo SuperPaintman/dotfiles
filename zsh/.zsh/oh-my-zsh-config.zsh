@@ -10,13 +10,28 @@ ZSH_CUSTOM="$HOME/.oh-my-zsh-custom"
 DISABLE_AUTO_UPDATE="true"
 
 # Plugins.
-plugins=()
-
-plugins+=(colored-man-pages)
+# plugins=()
+#
+# plugins+=(colored-man-pages)
 # plugins+=(sudo)
 
-plugins+=(zsh-autosuggestions)
-plugins+=(zsh-syntax-highlighting)
+# plugins+=(zsh-autosuggestions)
+# plugins+=(zsh-syntax-highlighting)
 
 # Init.
-source "$ZSH/oh-my-zsh.sh"
+# source "$ZSH/oh-my-zsh.sh"
+
+# Migration.
+
+if [ -f "$HOME/.oh-my-zsh/plugins/colored-man-pages/colored-man-pages.plugin.zsh" ]; then
+    source "$HOME/.oh-my-zsh/plugins/colored-man-pages/colored-man-pages.plugin.zsh"
+fi
+
+if [ -f "$HOME/.oh-my-zsh-custom/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh" ]; then
+    source "$HOME/.oh-my-zsh-custom/plugins/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh"
+fi
+
+if [ -f "$HOME/.oh-my-zsh-custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh" ]; then
+    source "$HOME/.oh-my-zsh-custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh"
+fi
+
